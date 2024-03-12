@@ -1,12 +1,5 @@
+#Requires -Version 7.2
 $powerlineFontsUrl = 'https://github.com/powerline/fonts.git'
-
-#Check version
-if ($version -le 7.2) {
-    Write-Host "PowerShell version must be at least 7.2 or newer"
-    Write-Host "You can download the latest version here:"
-    Write-Host "https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4"
-    exit
-}
 
 #Check for latest wsl version
 write-host "Installing PSGitHub. This is required to determine the latest version of NixOS-WSL"
