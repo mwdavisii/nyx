@@ -2,16 +2,6 @@
 with pkgs;
 with userConf;
 {
-  #secrets config
-  nyx.modules = {
-    secrets = {
-        enable = true;
-        awsKeys.enable = false;
-        awsConfig.enable = true;
-        userKeys.enable = true;
-    };
-  };
-
   wsl = {
     enable = true;
     wslConf.automount.root = "/mnt";
