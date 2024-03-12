@@ -4,22 +4,16 @@ with pkgs;
 with inputs;
 with lib;
 let
-  dock = import  ../dock;
+  dock = import  ../../dock;
 in
-{
-    nyx.modules = {
-        secrets = {
-            enable = true;
-            includeAWSKeys = true;
-            includeAWSKeys = true;
-        };
-    };
+{   
+    
     config = {
         # Auto upgrade nix package and the daemon service.
         homebrew = {
             enable = true;
-            casks = pkgs.callPackage ../casks.nix {};
-            brews = pkgs.callPackage ../brews.nix {};
+            casks = pkgs.callPackage ../../casks.nix {};
+            brews = pkgs.callPackage ../../brews.nix {};
 
             # These app IDs are from using the mas CLI app
             # mas = mac app store

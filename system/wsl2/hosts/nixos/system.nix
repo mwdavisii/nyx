@@ -1,4 +1,4 @@
-{ agenix, config, pkgs, userConf, inputs, hostname, ... }: 
+{ config, pkgs, userConf, inputs, hostname, ... }: 
 with pkgs;
 with userConf;
 {

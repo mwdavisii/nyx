@@ -252,40 +252,39 @@ rec {
         let
             pkgs = inputs.self.legacyPackages."${system}";
             userConf = import (strToFile user ../users);
-            #specialArgs = argDefaults // {inherit userConf ;} // args;
-
         in
         inputs.darwin.lib.darwinSystem {
             inherit system;            
             modules = [
-                (agenix.nixosModules.default)
+                (agenix.darwinModules.default)
                 (
                   {
                     environment.systemPackages = [ agenix.packages.${system}.default ];
+                    age.identityPaths = [ "/home/${userConf.userName}/.ssh/id_rsa" ];
                   }
                 )
                 (
-                    { pkgs, ... }: {
-                      # Don't rely on the configuration to enable a flake-compatible version of Nix.
-                      nix = {
-                        package = pkgs.nixVersions.stable;
-                        extraOptions = "experimental-features = nix-command flakes";
+                  { inputs, ... }: {
+                      # Re-expose self and nixpkgs as flakes.
+                      nix.registry = {
+                          self.flake = inputs.self;
+                          nixpkgs = {
+                          from = { id = "nixpkgs"; type = "indirect"; };
+                          flake = inputs.nixpkgs;
+                          };
                       };
-                      services.nix-daemon.enable = true;
-                      # users.nix.configureBuildUsers = true; # Not sure I am ready for this
                     }
                 )
                 (
-                    { inputs, ... }: {
-                        # Re-expose self and nixpkgs as flakes.
-                        nix.registry = {
-                            self.flake = inputs.self;
-                            nixpkgs = {
-                            from = { id = "nixpkgs"; type = "indirect"; };
-                            flake = inputs.nixpkgs;
-                            };
-                        };
-                    }
+                  { pkgs, ... }: {
+                    # Don't rely on the configuration to enable a flake-compatible version of Nix.
+                    nix = {
+                      package = pkgs.nixVersions.stable;
+                      extraOptions = "experimental-features = nix-command flakes";
+                    };
+                    services.nix-daemon.enable = true;
+                    # users.nix.configureBuildUsers = true; # Not sure I am ready for this
+                  }
                 )
                 (inputs.home-manager.darwinModules.home-manager)
                 (
@@ -301,8 +300,8 @@ rec {
                         };
                     }
                 )
-                /*(
-                    { config, ... }: {
+                (
+                  { config, ... }: {
                     system.activationScripts.applications.text = pkgs.lib.mkForce (
                         ''
                             echo "setting up ~/Applications/Nix..."
@@ -316,8 +315,8 @@ rec {
                         done
                         ''
                     );
-                    }
-                )*/
+                  }
+                )
                 (import ../system/common/modules)
                 (import ../system/common/profiles)
                 (import ../system/darwin/modules)
@@ -329,7 +328,7 @@ rec {
                 self = inputs.self;
                 user = userConf;
             in
-            { inherit inputs name self system user userConf pkgs; };
+            { inherit inputs name self system user userConf secrets pkgs; };
         }
     );
 }

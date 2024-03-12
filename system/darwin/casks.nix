@@ -9,7 +9,7 @@ _:
   "wireshark"
   "mysqlworkbench"
   "postman"
-
+  "powershell"
   # Communication Tools
   "telegram"
   "zoom"
