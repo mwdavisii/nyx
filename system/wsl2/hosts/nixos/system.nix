@@ -2,7 +2,16 @@
 with pkgs;
 with userConf;
 {
-   wsl = {
+  #secrets config
+  nyx.modules = {
+        secrets = {
+            enable = true;
+            includeAWSKeys.enable = false;
+            includeAWSConfig.enable = true;
+        };
+  };
+
+  wsl = {
     enable = true;
     wslConf.automount.root = "/mnt";
     wslConf.interop.appendWindowsPath = false;
