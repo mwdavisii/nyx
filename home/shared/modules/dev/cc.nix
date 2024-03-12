@@ -13,6 +13,7 @@ in
       # clang compiler
       # clang
       # clang-tidy, clang-format clang-check
+      gcc
       clang-tools
       # cross platform makefile generator
       # cmake

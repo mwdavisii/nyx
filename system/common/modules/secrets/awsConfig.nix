@@ -3,11 +3,11 @@
 with self.lib;
 
 let 
-    cfg = config.nyx.modules.secrets.includeAWSConfig;
+    cfg = config.nyx.modules.secrets.awsConfig;
     homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
-    options.nyx.modules.secrets.includeAWSConfig = {
+    options.nyx.modules.secrets.awsConfig = {
         enable = mkEnableOption "Enable AWS Config Decryption";
     };
 

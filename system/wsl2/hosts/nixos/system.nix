@@ -4,11 +4,12 @@ with userConf;
 {
   #secrets config
   nyx.modules = {
-        secrets = {
-            enable = true;
-            includeAWSKeys.enable = false;
-            includeAWSConfig.enable = true;
-        };
+    secrets = {
+        enable = true;
+        awsKeys.enable = false;
+        awsConfig.enable = true;
+        userKeys.enable = true;
+    };
   };
 
   wsl = {
