@@ -13,6 +13,32 @@ These public repositories heavily influenced my configuration. You'll see bit of
 - https://github.com/EdenEast/nyx
 
 
+### Secrets Configuration
+
+This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository. 
+
+The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/hosts/<darwin or wsl2>/hostname/system.nix are all marked false as shown below.
+```nix
+  nyx.modules = {
+    secrets = {
+        enable = false;
+        awsKeys.enable = false;
+        awsConfig.enable = false;
+        userKeys.enable = false;
+    };
+  };
+```
+This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
+
+If you want to actually build and decrypt secrets, here is what my secrets repository looks like:
+
+```Markdown
+.
+├─ secrets.nix    # The secrets file you're instructed to create in this tutorial => https://github.com/ryantm/agenix?tab=readme-ov-file#tutorial
+├─ encrypted      # Subdirectory to hold encrypted files
+├─── id_ed25519.age files  # Example encrypted file
+```
+
 
 ### WSL2 Installation
 

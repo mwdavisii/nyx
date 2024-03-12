@@ -3,12 +3,12 @@
 with self.lib;
 
 let 
-    cfg = config.nyx.modules.secrets;
+    cfg = config.nyx.modules.secrets.userKeys;
     homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
-    options.nyx.modules.secrets = {
-        enable = mkEnableOption "Enable Secrets Decryption";
+    options.nyx.modules.secrets.userKeys = {
+        enable = mkEnableOption "Enable User Key Decryption";
         identityPath = mkOption {
             description = "Path to SSH Decryption Key";
             type = with types; nullOr str;
@@ -17,11 +17,6 @@ in
     };
 
     config = mkIf cfg.enable {
-        
-        age.identityPaths = [
-            cfg.identityPath
-        ];
-
         age.secrets.id_ed25519 = {
             symlink = true;
             file = "${secrets}/encrypted/id_ed25519.age";
