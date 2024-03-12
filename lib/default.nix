@@ -72,7 +72,7 @@ rec {
     { ... }: {
       imports = [
         (agenix.homeManagerModules.default)
-        #(import ../home/darwin/modules)
+        (import ../home/darwin/modules)
         (import ../home/wsl2/modules)
         (import config )
       ];
