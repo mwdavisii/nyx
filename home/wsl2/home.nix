@@ -1,4 +1,5 @@
-{ config, pkgs, lib, userConf, ... }:
+{ config, pkgs, ... }:
+
 {
   # Manage home-manager with home-manager (inception)
   programs.home-manager.enable = true;
@@ -6,7 +7,8 @@
   programs.man.enable = true;
 
   manual.manpages.enable = true;
-  home = {
+  
+  home = {      
     #packages = pkgs.callPackage ./packages.nix {};
     stateVersion = "23.11";
     packages = with pkgs; [
