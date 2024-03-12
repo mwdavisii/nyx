@@ -1,33 +1,31 @@
 { config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    rustup
-    vhs
-    coreutils-full
-    gnupg
-    moreutils
-    ripgrep
-    fd
-    sd
-    dua
-    vhs
-    just
-    comma
-    nix-index
-    tuxmux
-    wget
-    vim
-  ];
-  home.stateVersion = "23.11";
-  # Manage home-manager with home-manager (inception)
   programs.home-manager.enable = true;
-
-  # Install home-manager manpages.
+  programs.man.enable = true;
   manual.manpages.enable = true;
 
-  # Install man output for any Nix packages.
-  programs.man.enable = true;
+  home = {
+    stateVersion = "23.11";
+    packages = with pkgs; [
+      rustup
+      vhs
+      coreutils-full
+      gnupg
+      moreutils
+      ripgrep
+      fd
+      sd
+      dua
+      vhs
+      just
+      comma
+      nix-index
+      tuxmux
+      wget
+      vim
+    ];
+  };
   
   nyx.modules = {
     secrets = {
