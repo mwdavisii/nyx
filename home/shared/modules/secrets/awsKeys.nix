@@ -10,11 +10,35 @@ in
     };
 
     config = mkIf cfg.enable {
-        age.secrets.aws_config = {
+        age.secrets.ulab_2017 = {
             symlink = true;
-            file = "${secrets}/encrypted/aws.config.age";
-            mode = "770";
-            path =  "${homePath}/.ssh/aws";
+            file = "${secrets}/encrypted/ulab-2017-02-07.age";
+            mode = "400";
+            path =  "${homePath}/.ssh/aws/ulab-2017-02-07.pem";
+        }; 
+        age.secrets.us-dev-us-west-2 = {
+            symlink = true;
+            file = "${secrets}/encrypted/us-dev-us-west-2.age";
+            mode = "400";
+            path =  "${homePath}/.ssh/aws/us-dev-us-west-2.pem";
+        }; 
+        age.secrets.us-prod-us-west-2 = {
+            symlink = true;
+            file = "${secrets}/encrypted/us-dev-us-west-2.age";
+            mode = "400";
+            path =  "${homePath}/.ssh/aws/us-dev-us-west-2.pem";
+        }; 
+        age.secrets.us-qa-us-west-2 = {
+            symlink = true;
+            file = "${secrets}/encrypted/us-qa-us-west-2.age";
+            mode = "400";
+            path =  "${homePath}/.ssh/aws/us-qa-us-west-2.pem";
+        }; 
+        age.secrets.us-shared-us-west-2 = {
+            symlink = true;
+            file = "${secrets}/encrypted/us-shared-us-west-2.age";
+            mode = "400";
+            path =  "${homePath}/.ssh/aws/us-shared-us-west-2.pem";
         }; 
     };
 }
