@@ -7,7 +7,13 @@ let
   dock = import  ../dock;
 in
 {
-    
+    nyx.modules = {
+        secrets = {
+            enable = true;
+            includeAWSKeys = true;
+            includeAWSKeys = true;
+        };
+    };
     config = {
         # Auto upgrade nix package and the daemon service.
         homebrew = {
