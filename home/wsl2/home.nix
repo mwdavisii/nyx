@@ -7,7 +7,6 @@
 
   manual.manpages.enable = true;
   home = {
-    enableNixpkgsReleaseCheck = false;
     #packages = pkgs.callPackage ./packages.nix {};
     stateVersion = "23.11";
     packages = with pkgs; [
@@ -36,6 +35,12 @@
   };
 
   nyx.modules = {
+    secrets = {
+        enable = true;
+        awsKeys.enable = false;
+        awsConfig.enable = true;
+        userKeys.enable = true;
+    };
     app = {
       alacritty = {
         enable = false;

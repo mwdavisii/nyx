@@ -71,6 +71,7 @@ rec {
     mkUserHome = { config, userConf, system ? "aarch64-darwin" }:
     { ... }: {
       imports = [
+        (agenix.homeManagerModules.default)
         (import ../home/darwin/modules)
         (import config )
       ];
@@ -160,7 +161,6 @@ rec {
         nixosSystem {
         inherit system;
         modules = [
-          (agenix.nixosModules.default)
           (
             {
               environment.systemPackages = [ agenix.packages.${system}.default ];
@@ -168,7 +168,7 @@ rec {
               
             }
           )
-          (nixos-wsl.nixosModules.wsl)
+          (inputs.nixos-wsl.nixosModules.wsl)
           (
             { name, ... }: {
               networking.hostName = name;
@@ -216,6 +216,7 @@ rec {
               services.vscode-server.enable = true;
             }
           )
+            (inputs.agenix.nixosModules.default)
           (inputs.home-manager.nixosModules.home-manager)
           (
             {
@@ -228,7 +229,7 @@ rec {
                     user = userConf;
                   in
                   # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
-                  { inherit inputs self system user secrets; };
+                  { inherit inputs self system user userConf secrets; };
               };
             }
           )
@@ -256,11 +257,9 @@ rec {
         inputs.darwin.lib.darwinSystem {
             inherit system;            
             modules = [
-                (agenix.darwinModules.default)
                 (
                   {
                     environment.systemPackages = [ agenix.packages.${system}.default ];
-                    age.identityPaths = [ "/home/${userConf.userName}/.ssh/id_rsa" ];
                   }
                 )
                 (
@@ -286,6 +285,7 @@ rec {
                     # users.nix.configureBuildUsers = true; # Not sure I am ready for this
                   }
                 )
+                (inputs.agenix.darwinModules.default)
                 (inputs.home-manager.darwinModules.home-manager)
                 (
                     {
@@ -296,7 +296,7 @@ rec {
                                 self = inputs.self;
                                 user = userConf;
                             in
-                            { inherit inputs pkgs self system user; };
+                            { inherit inputs pkgs self system user userConf secrets; };
                         };
                     }
                 )

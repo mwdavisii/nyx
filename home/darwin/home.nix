@@ -30,6 +30,11 @@
   programs.man.enable = true;
   
   nyx.modules = {
+    secrets = {
+        awsKeys.enable = false;
+        awsConfig.enable = true;
+        userKeys.enable = true;
+    };
     app = {
       alacritty = {
         enable = true;

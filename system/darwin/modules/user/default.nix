@@ -1,8 +1,9 @@
-{ config, pkgs, self, userConf, ... }:
+{ config, pkgs, self, userConf, secrets, ... }:
 
 with self.lib;
 let
   cfg = config.nyx.modules.user;
+  homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
   options.nyx.modules.user = { };

@@ -1,13 +1,11 @@
-{ config, self, pkgs, agenix, secrets, userConf, ... }:
-
-with self.lib;
-
+{ config, lib, pkgs, userConf, agenix, secrets, ... }:
+with lib;
 let 
-    cfg = config.nyx.modules.secrets.awsConfig;
+    cfg = config.nyx.modules.secrets.awsKeys;
     homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
-    options.nyx.modules.secrets.awsConfig = {
+    options.nyx.modules.secrets.awsKeys = {
         enable = mkEnableOption "Enable AWS Config Decryption";
     };
 
@@ -16,9 +14,7 @@ in
             symlink = true;
             file = "${secrets}/encrypted/aws.config.age";
             mode = "770";
-            path =  "/home/${userConf.userName}/.aws/config";
-            owner = "${userConf.userName}";
-            group = "keys";
+            path =  "${homePath}/.ssh/aws";
         }; 
     };
 }
