@@ -1,0 +1,64 @@
+scan_timeout = 10
+add_newline = false
+
+# Define order to make prompt on one line
+# https://starship.rs/config/#default-prompt-order
+
+[aws]
+format = "on [$symbol($profile )($region) )]($style)"
+style = "bold blue"
+symbol = "🅰"
+[aws.region_aliases]
+ap-northeast-1 = "jp"
+us-west-2 = "Oregon"
+
+[conda]
+format = "[$symbol$environment](dimmed green)"
+
+[nodejs]
+format = "via [🤖 $version](bold green) "
+
+[git_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = "…"
+
+[git_commit] 
+commit_hash_length = 4
+tag_symbol = "🔖 "
+
+[git_status]
+conflicted = "🏳"
+ahead = "⇡$count"
+diverged = "⇕⇡$ahead_count⇣$behind_count"
+behind = "⇣$count"
+untracked = "🤷"
+stashed = "📦"
+modified = "📝"
+staged = "[++($count)](green)"
+renamed = "👅"
+deleted = "🗑"
+
+[golang]
+format = "via [🏎💨 $version](bold cyan) "
+
+[kubernetes]
+format = "on [⛵ ($user on )($cluster in )$context ($namespace)](dimmed green) "
+disabled = false
+detect_files = ["gitops", "eks"]
+[kubernetes.context_aliases] 
+"dev.local.cluster.k8s" = "dev"
+
+[python]
+symbol = "👾 "
+pyenv_version_name = true
+
+[shlvl]
+disabled = false
+threshold = 3
+format = "[$shlvl]($style) "
+
+[time]
+disabled = false
+time_format = "%R"# Hour:Minute Format
+format = "🕙 $time "

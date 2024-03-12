@@ -1,0 +1,2 @@
+home/config/.config/wallpapers/*.png filter=lfs diff=lfs merge=lfs -text
+home/config/.config/wallpapers/*.jpg filter=lfs diff=lfs merge=lfs -text
