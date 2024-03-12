@@ -29,7 +29,7 @@
   
   nyx.modules = {
     secrets = {
-        awsKeys.enable = false;
+        awsKeys.enable = true;
         awsConfig.enable = true;
         userKeys.enable = false;
     };
