@@ -73,6 +73,7 @@ rec {
       imports = [
         (agenix.homeManagerModules.default)
         (import ../home/darwin/modules)
+        (import ../home/wsl2/modules)
         (import config )
       ];
       
@@ -115,9 +116,6 @@ rec {
             }
           ];
       };
-
-      # TODO: Note sure where this should go
-      #home.sessionPath = [ "$HOME/.local/nyx/bin" "$XDG_BIN_HOME" ];
       home.stateVersion = "23.11";
     };
 
@@ -216,7 +214,7 @@ rec {
               services.vscode-server.enable = true;
             }
           )
-            (inputs.agenix.nixosModules.default)
+          (inputs.agenix.nixosModules.default)
           (inputs.home-manager.nixosModules.home-manager)
           (
             {

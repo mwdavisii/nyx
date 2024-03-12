@@ -33,7 +33,6 @@
     neovim-flake.url        = "github:neovim/neovim?dir=contrib";
     neovim-flake.inputs.nixpkgs.follows = "nixpkgs";
     ghostty-module.url      = "github:clo4/ghostty-hm-module";
-  
   };
 
   outputs = { self, ... }@inputs:
