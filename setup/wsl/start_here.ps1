@@ -1,5 +1,21 @@
-$nixOSWSLdownloadUrl = 'https://github.com/nix-community/NixOS-WSL/releases/download/2311.5.3/nixos-wsl.tar.gz'
 $powerlineFontsUrl = 'https://github.com/powerline/fonts.git'
+
+#Check version
+if ($version -le 7.2) {
+    Write-Host "PowerShell version must be at least 7.2 or newer"
+    Write-Host "You can download the latest version here:"
+    Write-Host "https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4"
+    exit
+}
+
+#Check for latest wsl version
+write-host "Installing PSGitHub. This is required to determine the latest version of NixOS-WSL"
+Install-Module -Name PSGitHub
+$release = Get-GitHubRelease -Owner nix-community -Repository NixOS-WSL
+$version = $release.tag_name.Split(" ")[0]
+Write-Host "The latest release for NixOS-WSL is v$version"
+$nixOSWSLdownloadUrl = 'https://github.com/nix-community/NixOS-WSL/releases/download/$version/nixos-wsl.tar.gz'
+
 
 write-host "Updating WSL to the latest version."
 wsl --update

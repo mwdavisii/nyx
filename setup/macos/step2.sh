@@ -1,0 +1,1 @@
+darwin-rebuild switch --flake .

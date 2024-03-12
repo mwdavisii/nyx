@@ -1,15 +1,13 @@
 {
   inputs = {
+    # Core
     nixpkgs.url             = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url    = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url      = "github:NixOS/nixpkgs/master";
-    home-manager.url        = "github:nix-community/home-manager";
-    impermanence.url        = "github:nix-community/impermanence";
+    home-manager.url        = "github:nix-community/home-manager/release-23.11";
     nur.url                 = "github:nix-community/NUR";
-    nix-index-database.url  = "github:Mic92/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     
-    #macos
+    # MacOS
     nixpkgs-darwin.url      = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
     darwin.url              = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -21,17 +19,12 @@
     homebrew-cask.url       = "github:homebrew/homebrew-cask";
     homebrew-cask.flake     = false;
     
-    ##nix os deps
-    nixos-hardware.url      = "github:NixOS/nixos-hardware/master";
-    disko.url               = "github:nix-community/disko";
-    disko.inputs.nixpkgs.follows = "nixpkgs";
-    
-    #wsl
+    # WSL
     vscode-server.url       = "github:nix-community/nixos-vscode-server";
     nixos-wsl.url           = "github:nix-community/NixOS-WSL";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
-    ## Secrets
+    # Secrets
     agenix.url              = "github:ryantm/agenix";
     secrets.url             = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
     secrets.flake           = false;
@@ -60,7 +53,6 @@
     rec {
       lib = import ./lib { inherit self inputs config; } // inputs.nixpkgs.lib;
       devShell = foreachSystem (system: import ./shell.nix { pkgs = pkgsBySystem."${system}"; });
-
       legacyPackages = pkgsBySystem;
       packages = foreachSystem (system: import ./nix/pkgs self system);
       overlay = foreachSystem (system: _final: _prev: self.packages."${system}");
@@ -76,7 +68,7 @@
       );
 
       homeManagerConfigurations = mapAttrs' mkHome {
-        eden = { };
+        mwdavisii = { };
       };
 
       darwinConfigurations = mapAttrs' mkDarwinConfiguration{
