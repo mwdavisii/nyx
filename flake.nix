@@ -25,8 +25,11 @@
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
     #Droid
-    nix-on-droid.url        = "github:nix-community/nix-on-droid/release-23.11";
-    nix-on-droid.inputs.nixpkgs.follows = "nixpkgs";
+    nix-on-droid = {
+      url = "github:nix-community/nix-on-droid/release-23.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
 
     # Secrets
     agenix.url              = "github:ryantm/agenix";
@@ -50,8 +53,8 @@
           inherit system;
           config = import ./nix/config.nix;
           overlays = [
-            self.overlays."${system}"
-            nix-on-droid.overlays.default
+            #self.overlays."${system}"
+            self.nix-on-droid.overlays.default
           ];
         }
       );
