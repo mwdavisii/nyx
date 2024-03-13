@@ -9,7 +9,6 @@
   manual.manpages.enable = true;
   
   home = {      
-    #packages = pkgs.callPackage ./packages.nix {};
     stateVersion = "23.11";
     packages = with pkgs; [
       rustup
