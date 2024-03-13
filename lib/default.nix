@@ -154,10 +154,18 @@ rec {
     mkNixOnDroidConfiguration = name: {config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? {}, }: 
       nameValuePair name(
         let
-            pkgs = inputs.self.legacyPackages."${system}";
+            pkgs = import nixpkgs {
+              system = "aarch64-linux";
+
+              overlays = [
+                nix-on-droid.overlays.default
+                # add other overlays
+              ];
+            };
             userConf = import (strToFile user ../users);
             #userConf.username = ""; #this is unfortunately necessary because 
         in
+        
         nix-on-droid.lib.nixOnDroidConfiguration {
         inherit system;
         modules = [
