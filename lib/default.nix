@@ -156,7 +156,6 @@ rec {
         let
             pkgs = import nixpkgs {
               system = "aarch64-linux";
-
               overlays = [
                 nix-on-droid.overlays.default
                 # add other overlays
@@ -168,17 +167,9 @@ rec {
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
           modules = [
-            (../system/droid/hosts/nix-on-droid.nix)
+            (../system/droid/hosts/nix-on-droid)
             ({ nix.registry.nixpkgs.flake = nixpkgs; })
-
-            # list of extra special args for Nix-on-Droid modules
-            (
-              {
-                extraSpecialArgs = {
-                  rootPath = ./.;
-                };
-              }
-            )
+/*
             (
               {
                 # set nixpkgs instance, it is recommended to apply `nix-on-droid.overlays.default`
@@ -191,13 +182,17 @@ rec {
                 };
               }
             )
+*/
+/*
             (
               {
-                environment.systemPackages = [ agenix.packages.${system}.default ];
-                age.identityPaths = [ "/home/.ssh/id_rsa" ];
+                #environment.systemPackages = [ agenix.packages.${system}.default ];
+                #age.identityPaths = [ "/home/.ssh/id_rsa" ];
                 
               }
             )
+  */
+  /*
             (
             { inputs, ... }: {
               # Use the nixpkgs from the flake.
@@ -208,6 +203,8 @@ rec {
               nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
             }
           )
+*/
+/*
           (
             { pkgs, ... }: {
               # Don't rely on the configuration to enable a flake-compatible version of Nix.
@@ -217,6 +214,8 @@ rec {
               };
             }
           )
+*/
+/*
           (
             { inputs, ... }: {
               # Re-expose self and nixpkgs as flakes.
@@ -229,13 +228,15 @@ rec {
               };
             }
           )
+*/
+/*
           (
             { ... }: {
               environment.etcBackupExtension = ".bak";
               system.stateVersion = "23.11";
             }
           )
-          /*
+/*
           (inputs.agenix.nixosModules.default)
           (inputs.home-manager.nixosModules.home-manager)
           (
@@ -253,6 +254,8 @@ rec {
               };
             }
           )
+*/
+/*
           (import ../system/common/modules)
           (import ../system/common/profiles)
           (import ../system/droid/modules)
