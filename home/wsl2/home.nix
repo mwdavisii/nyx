@@ -78,6 +78,10 @@
         enable = true;
         signing.signByDefault = true;
       };
+      gnupg = {
+        enable = true;
+        enableService = true;
+      };
       jq.enable = true;
       k8sTooling.enable = true;
       lf.enable = true;
