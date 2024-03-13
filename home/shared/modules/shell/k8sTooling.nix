@@ -16,6 +16,7 @@ in
       kubectl
       kustomize
       flux
+      open-policy-agent
     ];
   };
 }
