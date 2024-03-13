@@ -155,7 +155,7 @@ rec {
         let
             pkgs = inputs.self.legacyPackages."${system}";
             userConf = import (strToFile user ../users);
-            userConf.username = ""; #this is unfortunately necessary because 
+            #userConf.username = ""; #this is unfortunately necessary because 
         in
         nix-on-droid.lib.nixOnDroidConfiguration {
         inherit system;
