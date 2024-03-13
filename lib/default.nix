@@ -167,7 +167,6 @@ rec {
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
           modules = [
-            ({ nix.registry.nixpkgs.flake = nixpkgs; })
 /*
             (
               {
