@@ -31,7 +31,7 @@
     secrets = {
         awsKeys.enable = true;
         awsConfig.enable = true;
-        userKeys.enable = false;
+        userKeys.enable = true;
     };
     app = {
       alacritty = {
