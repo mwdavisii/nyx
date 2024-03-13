@@ -154,13 +154,6 @@ rec {
     mkNixOnDroidConfiguration = name: {config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? {}, }: 
       nameValuePair name(
         let
-            pkgs = import nixpkgs {
-              system = "aarch64-linux";
-              overlays = [
-                nix-on-droid.overlays.default
-                # add other overlays
-              ];
-            };
             userConf = import (strToFile user ../users);
             #userConf.username = ""; #this is unfortunately necessary because 
         in
@@ -169,6 +162,17 @@ rec {
           modules = [
             (../system/droid/hosts/nix-on-droid)
             ({ nix.registry.nixpkgs.flake = nixpkgs; })
+            (
+              {
+                pkgs = import nixpkgs {
+                  system = "aarch64-linux";
+                  overlays = [
+                    nix-on-droid.overlays.default
+                    # add other overlays
+                  ];
+                };
+              }
+            )
 /*
             (
               {
