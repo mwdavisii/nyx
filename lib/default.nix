@@ -166,9 +166,9 @@ rec {
             #userConf.username = ""; #this is unfortunately necessary because 
         in
         nix-on-droid.lib.nixOnDroidConfiguration {
-          inherit system inputs;
+          inherit system;
           modules = [
-            (./nix-on-droid.nix)
+            (../system/droid/hosts/nix-on-droid.nix)
             ({ nix.registry.nixpkgs.flake = nixpkgs; })
 
             # list of extra special args for Nix-on-Droid modules
