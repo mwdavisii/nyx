@@ -26,7 +26,6 @@ in
         nord
         prefix-highlight
         tmux-fzf
-        pkgs.tmux-modal
         vim-tmux-navigator
       ];
       extraConfig = ''
@@ -56,11 +55,3 @@ in
     };
   };
 }
-
-# extra plugins to look at
-# - https://github.com/rothgar/awesome-tmux
-#
-# - https://github.com/wfxr/tmux-fzf-url
-# - https://github.com/roosta/tmux-fuzzback
-# - https://github.com/whame/tmux-modal
-# - https://github.com/evnp/tmex
