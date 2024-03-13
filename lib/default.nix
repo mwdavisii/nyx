@@ -159,20 +159,16 @@ rec {
         in
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
+          pkgs = import nixpkgs {
+            system = "aarch64-linux";
+            overlays = [
+              nix-on-droid.overlays.default
+              # add other overlays
+            ];
+          };
           modules = [
             (../system/droid/hosts/nix-on-droid)
             ({ nix.registry.nixpkgs.flake = nixpkgs; })
-            (
-              {
-                pkgs = import nixpkgs {
-                  system = "aarch64-linux";
-                  overlays = [
-                    nix-on-droid.overlays.default
-                    # add other overlays
-                  ];
-                };
-              }
-            )
 /*
             (
               {
