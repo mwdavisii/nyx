@@ -155,17 +155,17 @@ rec {
       nameValuePair name(
         let
             userConf = import (strToFile user ../users);
+            pkgs = import nixpkgs {
+              system = "aarch64-linux";
+              overlays = [
+                nix-on-droid.overlays.default
+                # add other overlays
+              ];
+            };
             #userConf.username = ""; #this is unfortunately necessary because 
         in
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
-          pkgs = import nixpkgs {
-            system = "aarch64-linux";
-            overlays = [
-              nix-on-droid.overlays.default
-              # add other overlays
-            ];
-          };
           modules = [
             ({ nix.registry.nixpkgs.flake = nixpkgs; })
 /*
