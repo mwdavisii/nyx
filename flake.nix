@@ -24,6 +24,10 @@
     nixos-wsl.url           = "github:nix-community/NixOS-WSL";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
+    #Droid
+    nix-on-droid.url        = "github:nix-community/nix-on-droid/release-23.11";
+    nix-on-droid.inputs.nixpkgs.follows = "nixpkgs";
+
     # Secrets
     agenix.url              = "github:ryantm/agenix";
     secrets.url             = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
@@ -38,7 +42,7 @@
   outputs = { self, ... }@inputs:
     with self.lib;
     let
-      systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
       foreachSystem = genAttrs systems;
       pkgsBySystem = foreachSystem (
         system:
@@ -52,6 +56,11 @@
     rec {
       lib = import ./lib { inherit self inputs config; } // inputs.nixpkgs.lib;
       legacyPackages = pkgsBySystem;
+
+      droidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
+        nix-on-Droid = {};
+        default = {}
+      };
 
       homeManagerConfigurations = mapAttrs' mkHome {
         mwdavisii = { };
