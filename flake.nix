@@ -49,7 +49,10 @@
         import inputs.nixpkgs {
           inherit system;
           config = import ./nix/config.nix;
-          #overlays = self.overlays."${system}";
+          overlays = [
+            self.overlays."${system}"
+            nix-on-droid.overlays.default
+          ];
         }
       );
     in 
@@ -59,7 +62,7 @@
 
       droidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
         nix-on-Droid = {};
-        default = {}
+        default = {};
       };
 
       homeManagerConfigurations = mapAttrs' mkHome {
