@@ -45,26 +45,13 @@
         import inputs.nixpkgs {
           inherit system;
           config = import ./nix/config.nix;
-          overlays = self.overlays."${system}";
+          #overlays = self.overlays."${system}";
         }
       );
     in 
     rec {
       lib = import ./lib { inherit self inputs config; } // inputs.nixpkgs.lib;
-      devShell = foreachSystem (system: import ./shell.nix { pkgs = pkgsBySystem."${system}"; });
       legacyPackages = pkgsBySystem;
-      packages = foreachSystem (system: import ./nix/pkgs self system);
-      overlay = foreachSystem (system: _final: _prev: self.packages."${system}");
-      overlays = foreachSystem (
-        system: with inputs; let
-          ovs = attrValues (import ./nix/overlays self);
-        in
-        [
-          (self.overlay."${system}")
-          (nur.overlay)
-          # (_:_: { inherit (eww.packages."${system}") eww; })
-        ] ++ ovs
-      );
 
       homeManagerConfigurations = mapAttrs' mkHome {
         mwdavisii = { };
@@ -76,7 +63,6 @@
 
       nixosConfigurations = mapAttrs' mkNixosWSLConfiguration {
         nixos = {};
-        wsl = { user="nixos";};
       };
       
       top =
