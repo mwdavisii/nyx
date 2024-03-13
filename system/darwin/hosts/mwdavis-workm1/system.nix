@@ -30,7 +30,7 @@ in
         # Enable fonts dir
         fonts.fontDir.enable = true;
         system = {
-            stateVersion = 4;
+            #stateVersion = 4;
             defaults = {
                 LaunchServices = {
                     LSQuarantine = false;
