@@ -124,6 +124,7 @@ rec {
           allowUnfree = true;
         };
         overlays = [
+          nix-on-droid.overlays.default
           nur.overlay
           (_final: prev: {
             # this allows us to reference pkgs.unstable
