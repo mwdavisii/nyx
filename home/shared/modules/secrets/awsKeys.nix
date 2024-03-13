@@ -21,9 +21,9 @@ in
             path =  "${homePath}/.ssh/aws/us-dev-us-west-2.pem";
         }; 
         age.secrets.us-prod-us-west-2 = {
-            file = "${secrets}/encrypted/us-dev-us-west-2.age";
+            file = "${secrets}/encrypted/us-prod-us-west-2.age";
             mode = "400";
-            path =  "${homePath}/.ssh/aws/us-dev-us-west-2.pem";
+            path =  "${homePath}/.ssh/aws/us-prod-us-west-2.pem";
         }; 
         age.secrets.us-qa-us-west-2 = {
             file = "${secrets}/encrypted/us-qa-us-west-2.age";
