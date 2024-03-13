@@ -154,7 +154,6 @@ rec {
     mkNixOnDroidConfiguration = name: {config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? {}, }: 
       nameValuePair name(
         let
-            userConf = import (strToFile user ../users);
             pkgs = import nixpkgs {
               system = "aarch64-linux";
               overlays = [
@@ -247,7 +246,15 @@ rec {
       extraSpecialArgs =
         let
           self = inputs.self;
-          userConf = import (strToFile user ../users);
+          userConf = {
+            {
+              userName = "mwdavisii";
+              email = "mwdavisii@gmail.com";
+              displayName = "Mike D.";
+              signingKey = "5A60221930345909";
+              windowsUserDirName = "";
+            }
+          };
         in
         { inherit inputs self system user userConf secrets; };
       }
