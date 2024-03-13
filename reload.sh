@@ -7,4 +7,5 @@ if [[ $osName == "Darwin" ]]; then
   darwin-rebuild switch --flake .
 else
   sudo nixos-rebuild switch --flake .
+  pkill gpg-agent #force any changes to gpg
 fi
