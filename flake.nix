@@ -73,8 +73,8 @@
       lib = import ./lib { inherit self inputs config; } // inputs.nixpkgs.lib;
       legacyPackages = pkgsBySystem;
 
-      droidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
-        nix-on-Droid = {};
+      nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
+        nix-on-droid = {};
         default = {};
       };
 
@@ -92,6 +92,9 @@
       
       top =
         let
+          droidtop = genAttrs
+            (builtins.attrNames inputs.self.nixOnDroidConfiguration)
+            (attr: inputs.self.nixOnDroidConfiguration.${attr}.config.system.build.toplevel);
           nixtop = genAttrs
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
@@ -102,6 +105,6 @@
              (builtins.attrNames inputs.self.darwinConfigurations)
              (attr: inputs.self.darwinConfigurations.${attr}.system);
         in
-        nixtop // hometop // darwintop;
+        droidtop // nixtop // hometop // darwintop;
   };
 }
