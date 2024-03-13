@@ -12,7 +12,7 @@ return {
       -- NOTE: Had issues with clang and nix installed build-essentials and gcc and it works
       -- require("nvim-treesitter.install").compilers = { "gcc", "clang", "cl" }
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "c", "lua", "rust", "vim", "vimdoc", "query" },
+        ensure_installed = { "c", "lua", "go", "python", "rust", "vim", "vimdoc", "query" },
 
         sync_install = false,
         auto_install = true,

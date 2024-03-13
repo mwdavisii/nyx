@@ -74,7 +74,10 @@
       eza.enable = true;
       fzf.enable = true;
       gcp.enable = true;
-      git.enable = true;
+      git = {
+        enable = true;
+        signing.signByDefault = true;
+      };
       jq.enable = true;
       k8sTooling.enable = true;
       lf.enable = true;

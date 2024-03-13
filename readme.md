@@ -6,7 +6,7 @@ This is my personal configuration that I use for WSL on Windows and MacOS. The W
 
 ## Influences & Inspirations
 
-These public repositories heavily influenced my configuration. You'll see bit of stuff from each.
+These public repositories heavily influenced my configuration. You'll see bit of stuff from each. In fact, most of the dot files in this project are directly pulled from EdenEast's public nix configuration. What he's done with [neovim/neovim](https://github.com/neovim/neovim) is mind blowing.
 
 - [EdenEast/nyx](https://github.com/EdenEast/nyx)
 - [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
@@ -65,6 +65,7 @@ cd ./nyx/setup/wsl
 
 - **displayName** => Display Name used in GitHub config
 - **email** => Display Name used in GitHub config`
+- **signingKey** => The key used to sign git commits. (you can leave blank)`
 - **windowsUserDirName** => This is the folder name of your windows profile. It is used to create the symlink from WSL to VS Code and add it to your path.
 
 ****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL. As of now, it requires building from [nix-community/NixOS-WSL](https://github.com/nix-community/NixOS-WSL) which is more than I can care to tackle at the moment.
@@ -74,8 +75,7 @@ cd ./nyx/setup/wsl
   userName = "nixos";
   email = "mwdavisii@gmail.com";
   displayName = "Mike D.";
-  signingKey = "";
-  hashedPassword = "";
+  signingKey = "5A60221930345909";
   windowsUserDirName = "mwdav";
 }
 ```
@@ -112,14 +112,14 @@ cd ./nyx/macos
 
 - **displayName** => Display Name used in GitHub config
 - **email** => Display Name used in GitHub config`
+- **signingKey** => The key used to sign git commits. (you can leave blank)`
 
 ```haskell
 {
   userName = "mwdavisii";
   email = "mwdavisii@gmail.com";
   displayName = "Mike D.";
-  signingKey = "";
-  hashedPassword = "";
+  signingKey = "5A60221930345909";
   windowsUserDirName = "";
 }
 

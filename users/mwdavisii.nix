@@ -2,7 +2,6 @@
   userName = "mwdavisii";
   email = "mwdavisii@gmail.com";
   displayName = "Mike D.";
-  signingKey = "";
-  hashedPassword = "";
+  signingKey = "5A60221930345909";
   windowsUserDirName = "";
 }

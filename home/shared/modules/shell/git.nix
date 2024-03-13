@@ -30,6 +30,18 @@ in
 {
   options.nyx.modules.shell.git = {
     enable = mkEnableOption "git configuration";
+    
+    inheritUser = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Inherit username, email and signingKey from user";
+    };
+
+    signing = mkOption {
+      type = signModule;
+      default = { };
+      description = "Options related to signing commits using GnuPG.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -42,16 +54,34 @@ in
       gitAndTools.git-filter-repo
       gitAndTools.git-open
     ];
-    home.file.".gitconfig".text = with userConf; ''
-      [user]
-        email = ${user.email}
-        name = ${user.displayName}
+    
+    home.file.".gitconfig".text=
+    let
+      firstOrDefault = x: y: if !isNull x then x else if cfg.inheritUser then y else null;
+      username = user.displayName;
+      email = user.email;
+      signkey = firstOrDefault cfg.signing.key (if hasAttr "signingKey" user then user.signingKey else null);
+      signByDefault = (!isNull signkey) || cfg.signing.signByDefault;      
+  in
+      ''  
+      [init]
+        defaultBranch = main
       [url "ssh://git@github.com/uLabSystems/"]
         insteadOf = https://github.com/uLabSystems/
       [url "ssh://git@github.com/mwdavisii/"]
         insteadOf = https://github.com/mwdavisii/
-      [init]
-        defaultBranch = main
-      '';  
+      [user]
+        name = "${username}"
+        email = "${email}"
+      ${if isNull signkey then "" else ''
+        signingKey = "${signkey}"''}
+      ${if !signByDefault then "" else ''
+      [commit]
+        gpgSign = true
+      [tag]
+        gpgSign = true''}
+      [gpg]
+        program = ${cfg.signing.gpgPath}
+      '';
   };
 }
