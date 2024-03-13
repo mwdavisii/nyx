@@ -102,6 +102,7 @@ in
           enableExtraSocket = true;
           enableScDaemon = false;
           enableSshSupport = true;
+          pinentryFlavor = "gtk2";
           verbose = true;
         };
       })
