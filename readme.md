@@ -144,17 +144,3 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 ```shell
 ./reload.sh #Rebuilds and switches to the home environment.
 ```
-
-### Project Information
-
-#### Directory Structure
-
-```Markdown
-.
-├─ home        # Home manager configurations
-├─ lib         # Shared Functions
-├─ nix         # Configs and overlays
-├─ setup       # Contains Installation Scripts
-├─ system      # MacOS and nix-darwin, wsl2, and shared system configurations
-├─ users       # User Settings
-```
