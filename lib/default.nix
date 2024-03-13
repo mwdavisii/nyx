@@ -172,20 +172,6 @@ rec {
 /*
             (
               {
-                # set nixpkgs instance, it is recommended to apply `nix-on-droid.overlays.default`
-                pkgs = import nixpkgs {
-                  system = "aarch64-linux";
-                  overlays = [
-                    nix-on-droid.overlays.default
-                    # add other overlays
-                  ];
-                };
-              }
-            )
-*/
-/*
-            (
-              {
                 #environment.systemPackages = [ agenix.packages.${system}.default ];
                 #age.identityPaths = [ "/home/.ssh/id_rsa" ];
                 
@@ -263,7 +249,12 @@ rec {
           (import (strToPath config ../system/droid/hosts))
           x
         */
-        ];
+      ];
+      specialArgs =
+        let
+          self = inputs.self;
+        in
+        { inherit inputs ;};
       }
     );
 
