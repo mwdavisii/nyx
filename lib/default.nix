@@ -165,43 +165,40 @@ rec {
             userConf = import (strToFile user ../users);
             #userConf.username = ""; #this is unfortunately necessary because 
         in
-        
         nix-on-droid.lib.nixOnDroidConfiguration {
-        inherit system;
-        modules = [
-          ./nix-on-droid.nix
+          inherit system inputs;
+          modules = [
+            (./nix-on-droid.nix)
+            ({ nix.registry.nixpkgs.flake = nixpkgs; })
 
-            # list of extra modules for Nix-on-Droid system
-          { nix.registry.nixpkgs.flake = nixpkgs; }
-            # ./path/to/module.nix
-
-            # or import source out-of-tree modules like:
-            # flake.nixOnDroidModules.module
-          ];
-
-          # list of extra special args for Nix-on-Droid modules
-          extraSpecialArgs = {
-            rootPath = ./.;
-          };
-
-          # set nixpkgs instance, it is recommended to apply `nix-on-droid.overlays.default`
-          pkgs = import nixpkgs {
-            system = "aarch64-linux";
-
-            overlays = [
-              nix-on-droid.overlays.default
-              # add other overlays
-            ];
-          };
-          /*
-          (
-            {
-              environment.systemPackages = [ agenix.packages.${system}.default ];
-              age.identityPaths = [ "/home/.ssh/id_rsa" ];
-              
-            }
-          )
-          (
+            # list of extra special args for Nix-on-Droid modules
+            (
+              {
+                extraSpecialArgs = {
+                  rootPath = ./.;
+                };
+              }
+            )
+            (
+              {
+                # set nixpkgs instance, it is recommended to apply `nix-on-droid.overlays.default`
+                pkgs = import nixpkgs {
+                  system = "aarch64-linux";
+                  overlays = [
+                    nix-on-droid.overlays.default
+                    # add other overlays
+                  ];
+                };
+              }
+            )
+            (
+              {
+                environment.systemPackages = [ agenix.packages.${system}.default ];
+                age.identityPaths = [ "/home/.ssh/id_rsa" ];
+                
+              }
+            )
+            (
             { inputs, ... }: {
               # Use the nixpkgs from the flake.
               nixpkgs = { inherit pkgs; };
@@ -238,6 +235,7 @@ rec {
               system.stateVersion = "23.11";
             }
           )
+          /*
           (inputs.agenix.nixosModules.default)
           (inputs.home-manager.nixosModules.home-manager)
           (
@@ -260,7 +258,8 @@ rec {
           (import ../system/droid/modules)
           (import ../system/droid/profiles)
           (import (strToPath config ../system/droid/hosts))
-          */
+          x
+        */
         ];
       }
     );
