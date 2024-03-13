@@ -17,7 +17,7 @@ These public repositories heavily influenced my configuration. You'll see bit of
 
 This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository.
 
-The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/hosts/$darwin or $wsl2>/hostname/system.nix are all marked false as shown below.
+The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/home/$darwin or $wsl2>/home.mix are all marked false as shown below. This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
 
 ```nix
   nyx.modules = {
@@ -29,8 +29,6 @@ The easiest way to run this is to create an empty secrets repository and update 
     };
   };
 ```
-
-This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
 
 If you want to actually build and decrypt secrets, here is what my secrets repository looks like:
 
