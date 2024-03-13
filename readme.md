@@ -113,8 +113,6 @@ cd ./nyx/macos
 - **displayName** => Display Name used in GitHub config
 - **email** => Display Name used in GitHub config`
 
-****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL.
-
 ```haskell
 {
   userName = "mwdavisii";
