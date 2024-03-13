@@ -177,29 +177,26 @@ rec {
               }
             )
   */
-  /*
+  
             (
-            { inputs, ... }: {
-              # Use the nixpkgs from the flake.
-              nixpkgs = { inherit pkgs; };
+              { inputs, ... }: {
+                # Use the nixpkgs from the flake.
+                nixpkgs = { inherit pkgs; };
 
-              # For compatibility with nix-shell, nix-build, etc.
-              environment.etc.nixpkgs.source = inputs.nixpkgs;
-              nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
-            }
-          )
-*/
-/*
-          (
-            { pkgs, ... }: {
-              # Don't rely on the configuration to enable a flake-compatible version of Nix.
-              nix = {
-                package = pkgs.nixVersions.stable;
-                extraOptions = "experimental-features = nix-command flakes";
-              };
-            }
-          )
-*/
+                # For compatibility with nix-shell, nix-build, etc.
+                environment.etc.nixpkgs.source = inputs.nixpkgs;
+                nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
+              }
+            )
+            (
+              { pkgs, ... }: {
+                # Don't rely on the configuration to enable a flake-compatible version of Nix.
+                nix = {
+                  package = pkgs.nixVersions.stable;
+                  extraOptions = "experimental-features = nix-command flakes";
+                };
+              }
+            )
 /*
           (
             { inputs, ... }: {
@@ -243,11 +240,10 @@ rec {
 /*
           (import ../system/common/modules)
           (import ../system/common/profiles)
-          (import ../system/droid/modules)
-          (import ../system/droid/profiles)
 */
+          (import ../system/droid/modules)
           (import (strToPath config ../system/droid/hosts))
-          
+
       ];
       extraSpecialArgs =
         let
@@ -343,7 +339,6 @@ rec {
           (import ../system/common/modules)
           (import ../system/common/profiles)
           (import ../system/wsl2/modules)
-          (import ../system/wsl2/profiles)
           (import (strToPath config ../system/wsl2/hosts))
         ];
         specialArgs =
@@ -427,7 +422,6 @@ rec {
                 (import ../system/common/modules)
                 (import ../system/common/profiles)
                 (import ../system/darwin/modules)
-                (import ../system/darwin/profiles)
                 (import (strToPath config ../system/darwin/hosts))
         ];
             specialArgs =
