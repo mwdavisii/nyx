@@ -175,7 +175,6 @@ rec {
                 
               }
             )
-  */
   
             (
               { inputs, ... }: {
@@ -187,6 +186,7 @@ rec {
                 nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
               }
             )
+*/
             (
               { pkgs, ... }: {
                 # Don't rely on the configuration to enable a flake-compatible version of Nix.
