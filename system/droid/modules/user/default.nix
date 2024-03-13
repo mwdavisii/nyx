@@ -11,7 +11,7 @@ in
     {
       users.users.${userConf.userName} = {
         name = "${userConf.userName}";
-        home = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
+        home = "/data/data/com.termux.nix/files/home/nyx";
         shell = pkgs.zsh;
     };
     }
