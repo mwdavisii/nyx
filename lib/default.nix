@@ -167,7 +167,6 @@ rec {
             ];
           };
           modules = [
-            (../system/droid/hosts/nix-on-droid)
             ({ nix.registry.nixpkgs.flake = nixpkgs; })
 /*
             (
@@ -246,15 +245,16 @@ rec {
           (import ../system/common/profiles)
           (import ../system/droid/modules)
           (import ../system/droid/profiles)
+*/
           (import (strToPath config ../system/droid/hosts))
-          x
-        */
+          
       ];
-      specialArgs =
+      extraSpecialArgs =
         let
           self = inputs.self;
+          userConf = import (strToFile user ../users);
         in
-        { inherit inputs ;};
+        { inherit inputs self system user userConf secrets; };
       }
     );
 
