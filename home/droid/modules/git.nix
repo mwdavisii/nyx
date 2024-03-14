@@ -25,9 +25,5 @@
     [user]
       name = "${username}"
       email = "${email}"
-    [commit]
-      gpgSign = true
-    [tag]
-      gpgSign = true''}
     '';
 }
