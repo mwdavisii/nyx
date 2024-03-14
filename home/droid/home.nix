@@ -12,15 +12,21 @@
       moreutils
       comma
       zsh
-      kubectl
-      fluxcd
+      jq 
       k9s
+      fluxcd
+      kubectl
+      kustomize
+      flux
       open-policy-agent
       awscli2
-      jq
       eza
       starship
+      nvim
     ];
+    #files
+    file.".zshenv".source = ../../../config/.zshenv;
+    file.".config/zsh".source = ../../../config/.config/zsh;
   };
 /*
   nyx.modules = {
