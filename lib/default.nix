@@ -174,7 +174,7 @@ rec {
                 
               }
             )
-  
+*/  
             (
               { inputs, ... }: {
                 # Use the nixpkgs from the flake.
@@ -185,7 +185,6 @@ rec {
                 nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
               }
             )
-*/
             (
               { pkgs, ... }: {
                 # Don't rely on the configuration to enable a flake-compatible version of Nix.
@@ -195,7 +194,6 @@ rec {
                 };
               }
             )
-/*
           (
             { inputs, ... }: {
               # Re-expose self and nixpkgs as flakes.
@@ -208,7 +206,6 @@ rec {
               };
             }
           )
-*/
           (
             { ... }: {
               environment.etcBackupExtension = ".bak";
@@ -216,7 +213,7 @@ rec {
             }
           )
 #          (inputs.agenix.nixosModules.default)
-          (inputs.home-manager.nixosModules.home-manager)
+          (inputs.home-manager)
           (
             {
               home-manager = {
