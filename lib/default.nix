@@ -211,7 +211,7 @@ rec {
             }
           )
           (inputs.agenix.nixosModules.default)
-          (inputs.home-manager.nix-on-droid.home-manager)
+          (inputs.home-manager.home-manager)
           (
             {
               home-manager = {
