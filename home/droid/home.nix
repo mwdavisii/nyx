@@ -16,9 +16,13 @@
       fluxcd
       k9s
       open-policy-agent
+      awscli2
+      jq
+      eza
+      starship
     ];
   };
-
+/*
   nyx.modules = {
     dev = {
       cc.enable = false;
@@ -63,5 +67,5 @@
       zsh.enable = true;
     };
   };
-  
+  */
 }
