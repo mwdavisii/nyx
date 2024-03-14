@@ -76,7 +76,7 @@
       gcp.enable = true;
       git = {
         enable = true;
-        signing.signByDefault = true;
+        signing.signByDefault = false;
       };
       gnupg = {
         enable = true;

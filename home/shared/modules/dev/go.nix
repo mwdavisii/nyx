@@ -14,8 +14,9 @@ in
         # linters and static analysis
         go-tools
         delve
+        ginkgo
       ];
-
+    
       sessionVariables = {
         GOPATH = "${config.xdg.dataHome}/go";
         GOBIN = "${config.xdg.dataHome}/go/bin";
