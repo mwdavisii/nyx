@@ -32,7 +32,7 @@ in
             symlink = true;
             file = "${secrets}/encrypted/gpg_key.age";
             mode = "400";
-            path =  "${homePath}/.gnupg/gpg_pvt.asc";
+            path =  "${homePath}/.gnupg/gpg_pvt.key";
             #owner = "${userConf.userName}";
             #group = "wheel";
         };
@@ -41,7 +41,7 @@ in
             symlink = true;
             file = "${secrets}/encrypted/gpg_key.pub.age";
             mode = "400";
-            path =  "${homePath}/.gnupg/gpg_pub.asc";
+            path =  "${homePath}/.gnupg/gpg_pub.key";
             #owner = "${userConf.userName}";
             #group = "wheel";
         };
