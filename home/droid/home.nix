@@ -8,17 +8,9 @@
     packages = with pkgs; [
       git
       vim
-      vhs
-      bat
-      bash
-      coreutils-full
-      fd
-      sd
-      dua
-      vhs
-      just
+      coreutils
+      moreutils
       comma
-      nix-index
       zsh
       kubectl
       fluxcd
