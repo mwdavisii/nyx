@@ -212,7 +212,7 @@ rec {
               system.stateVersion = "23.11";
             }
           )
-#          (inputs.agenix.nixosModules.default)
+          (inputs.agenix.nixosModules.default)
           (inputs.home-manager.nixosModules.home-manager)
           (
             {
@@ -240,7 +240,7 @@ rec {
           self = inputs.self;
           user = userConf;
         in
-        { inherit inputs self system user userConf secrets; };
+        { inherit inputs self system user userConf secrets agenix; };
       }
     );
 
