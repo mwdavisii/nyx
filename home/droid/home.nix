@@ -34,10 +34,17 @@
     ];
     #files
   };
+    programs.starship = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      package = pkgs.starship;
+    };
+    xdg.configFile."starship".source = ../../../config/.config/starship;
+    
     home.file.".zshenv".source = ../config/.zshenv;
     home.file.".config/zsh".source = ../config/.config/zsh;
     home.file.".config/nvim".source = ../config/.config/nvim;
-    home.file.".config/starship/starship.toml".source = ../config/.config/starship/starship.toml;
     xdg.dataFile = with pkgs.tree-sitter-grammars; 
     let
       grammars = with pkgs.tree-sitter-grammars; [
