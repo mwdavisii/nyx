@@ -2,5 +2,5 @@
 
 {
     home.packages = [ pkgs.zellij ];
-    xdg.configFile."zellij".source = ../../../config/.config/zellij;
+    xdg.configFile."zellij".source = ../../config/.config/zellij;
 }

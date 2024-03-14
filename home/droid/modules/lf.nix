@@ -12,7 +12,7 @@ in
 
   home.packages = [ pkgs.lf ] ++ additionalPkgs;
   xdg.configFile."lf" = {
-    source = ../../../config/.config/lf;
+    source = ../../config/.config/lf;
     executable = true;
     recursive = true;
   };

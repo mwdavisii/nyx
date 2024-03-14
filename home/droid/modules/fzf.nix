@@ -3,7 +3,7 @@
 with lib;
 {
     home.packages = [ pkgs.fzf ];
-    xdg.configFile."fzf".source = ../../../config/.config/fzf;
+    xdg.configFile."fzf".source = ../../config/.config/fzf;
     /*
     nyx.modules.shell.bash.initExtra =
       mkIf config.nyx.modules.shell.bash.enable ''

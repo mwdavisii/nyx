@@ -26,7 +26,7 @@ let
     ];
 in
 {
-  xdg.configFile."nvim".source = ../../../config/.config/nvim;
+  xdg.configFile."nvim".source = ../../config/.config/nvim;
   home.packages = with pkgs;
     let
       package = neovim;

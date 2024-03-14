@@ -8,5 +8,5 @@
     package = pkgs.starship;
   };
 
-  xdg.configFile."starship".source = ../../../config/.config/starship;
+  xdg.configFile."starship".source = ../../config/.config/starship;
 }

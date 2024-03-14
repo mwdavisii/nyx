@@ -7,6 +7,6 @@
           nix-zsh-completions
         ];
 
-      home.file.".zshenv".source = ../../../config/.zshenv;
-      xdg.configFile."zsh".source = ../../../config/.config/zsh;
+      home.file.".zshenv".source = ../../config/.zshenv;
+      xdg.configFile."zsh".source = ../../config/.config/zsh;
 }

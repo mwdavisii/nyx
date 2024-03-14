@@ -6,7 +6,7 @@
   ];
   home.file = {
     ".config/vale" = {
-      source = ../../../config/.config/vale;
+      source = ../../config/.config/vale;
       recursive = true;
     };
   };

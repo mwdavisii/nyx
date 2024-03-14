@@ -35,12 +35,12 @@
   };
 
   xdg.configFile."tmux/scripts" = {
-    source = ../../../config/.config/tmux/scripts;
+    source = ../../config/.config/tmux/scripts;
     recursive = true;
     executable = true;
   };
   xdg.configFile."tmux/conf" = {
-    source = ../../../config/.config/tmux/conf;
+    source = ../../config/.config/tmux/conf;
     recursive = true;
     executable = true;
   };
