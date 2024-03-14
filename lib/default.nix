@@ -17,7 +17,6 @@ in
 rec {
     firstOrDefault = first: default: if !isNull first then first else default;
     existsOrDefault = x: set: default: if hasAttr x set then getAttr x set else default;
-    
     mkHome = name: { config ? name, user ? "mwdavisii", system ? "aarch64-darwin" }:
     let
       #pkgs = inputs.self.legacyPackages."${system}";
@@ -122,6 +121,9 @@ rec {
     nixpkgsWithOverlays = with inputs; rec {
         config = {
           allowUnfree = true;
+          permittedInsecurePackages = [
+            "nix-2.15.3"
+          ];
         };
         overlays = [
           nix-on-droid.overlays.default
