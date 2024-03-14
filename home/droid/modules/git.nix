@@ -18,10 +18,6 @@
     ''  
     [init]
       defaultBranch = main
-    [url "ssh://git@github.com/uLabSystems/"]
-      insteadOf = https://github.com/uLabSystems/
-    [url "ssh://git@github.com/mwdavisii/"]
-      insteadOf = https://github.com/mwdavisii/
     [user]
       name = "${username}"
       email = "${email}"
