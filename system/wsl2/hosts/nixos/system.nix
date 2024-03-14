@@ -22,9 +22,9 @@ with userConf;
 
   system.stateVersion = "23.11";
   programs.zsh.enable = true;
-  environment.pathsToLink = ["/share/zsh/"];
+  #environment.pathsToLink = ["/share/zsh/"];
   environment.shells = [pkgs.zsh];
-  environment.enableAllTerminfo = true;
+  #environment.enableAllTerminfo = true;
   security.sudo.wheelNeedsPassword = false;
 
   # Turn on flag for proprietary software
