@@ -1,5 +1,3 @@
-#!/run/current-system/sw/bin/bash
-
 osName=$(uname -s)
 hostName=$(uname -n)
 userName=$(whoami)
