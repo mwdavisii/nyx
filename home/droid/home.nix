@@ -25,6 +25,12 @@
       neovim
       marksman
       nodejs
+      gcc
+      clang-tools
+      cmakeCurses
+      cmake-format
+      gnumake
+      ninja
     ];
     #files
   };
