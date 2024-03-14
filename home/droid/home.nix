@@ -40,7 +40,7 @@
       enableZshIntegration = true;
       package = pkgs.starship;
     };
-    xdg.configFile."starship".source = ../../../config/.config/starship;
+    xdg.configFile."starship".source = ../config/.config/starship;
     
     home.file.".zshenv".source = ../config/.zshenv;
     home.file.".config/zsh".source = ../config/.config/zsh;
