@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-    home.packages = with pkgs;[ 
-        coreutils-full
+    home.packages = with pkgs;[
+        inetutils
     ];
 }
