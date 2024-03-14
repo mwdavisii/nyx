@@ -211,7 +211,7 @@ rec {
             }
           )
           (inputs.agenix.nixosModules.default)
-          (inputs.home-manager.home-manager)
+          (inputs.home-manager.nixosModules.home-manager)
           (
             {
               home-manager = {
