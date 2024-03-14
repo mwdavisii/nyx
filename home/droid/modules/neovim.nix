@@ -8,7 +8,6 @@ let
         nodePackages.typescript-language-server
         nodePackages.vim-language-server
         nodePackages.write-good
-        rnix-lsp
     ];
     
     debugAdaptors = [
