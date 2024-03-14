@@ -12,6 +12,8 @@
     stateVersion = "23.11";
     packages = with pkgs; [
       rustup
+      git
+      vim
       vhs
       bat
       bash
@@ -34,7 +36,7 @@
       vim
     ];
   };
-
+/*
   nyx.modules = {
     secrets = {
         awsKeys.enable = false;
@@ -99,4 +101,5 @@
       zsh.enable = true;
     };
   };
+  */
 }
