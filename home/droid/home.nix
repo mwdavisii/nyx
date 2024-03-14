@@ -35,6 +35,7 @@
     ];
     #files
   };
+    xdg.configFile."nixpkgs/config.nix".source = ../../nix/config.nix;
     programs.starship = {
       enable = true;
       enableBashIntegration = true;
