@@ -4,7 +4,7 @@ userName=$(whoami)
 
 if [[ $osName == "Darwin" ]]; then
   darwin-rebuild switch --flake .
-elif [[ $userName == "nix-on-droid"]] them
+elif [[ $userName == "nix-on-droid" ]] then
   nix-on-droid switch --flake .
 else
   sudo nixos-rebuild switch --flake .
