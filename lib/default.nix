@@ -166,15 +166,13 @@ rec {
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
           modules = [
-/*
             (
               {
-                #environment.systemPackages = [ agenix.packages.${system}.default ];
+                environment.systemPackages = [ agenix.packages.${system}.default ];
                 #age.identityPaths = [ "/home/.ssh/id_rsa" ];
                 
               }
-            )
-*/  
+            ) 
             (
               { inputs, ... }: {
                 # Use the nixpkgs from the flake.
@@ -229,9 +227,9 @@ rec {
               };
             }
           )
-          (import ../system/common/modules)
+          #(import ../system/common/modules)
           #(import ../system/common/profiles)
-          (import ../system/droid/modules)
+          #(import ../system/droid/modules)
           (import (strToPath config ../system/droid/hosts))
 
       ];
