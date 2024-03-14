@@ -22,7 +22,7 @@
       awscli2
       eza
       starship
-      nvim
+      neovim
     ];
     #files
     file.".zshenv".source = ../../../config/.zshenv;
