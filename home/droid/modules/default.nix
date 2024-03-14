@@ -1,11 +1,6 @@
 { ... }:
 
 {
-  
-}
-{ ... }:
-
-{
   imports = [
     ./awscliv2.nix
     ./bash.nix
