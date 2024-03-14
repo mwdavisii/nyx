@@ -121,9 +121,6 @@ rec {
     nixpkgsWithOverlays = with inputs; rec {
         config = {
           allowUnfree = true;
-          permittedInsecurePackages = [
-            "nix-2.15.3"
-          ];
         };
         overlays = [
           nix-on-droid.overlays.default
