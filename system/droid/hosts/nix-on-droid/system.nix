@@ -7,13 +7,14 @@ with userConf;
   #environment.pathsToLink = ["/share/zsh/"];
   #environment.shells = [pkgs.zsh];
   #security.sudo.wheelNeedsPassword = false;
-
   # Turn on flag for proprietary software
   nix = {
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-
+    permittedInsecurePackages = [
+      "nix-2.15.3"
+    ];
     registry = {
       nixpkgs = {
         flake = inputs.nixpkgs;
