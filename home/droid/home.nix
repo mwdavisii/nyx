@@ -25,9 +25,9 @@
       neovim
     ];
     #files
-    file.".zshenv".source = ../../../config/.zshenv;
-    file.".config/zsh".source = ../../../config/.config/zsh;
   };
+    home.file.".zshenv".source = ../../../config/.zshenv;
+    home.file.".config/zsh".source = ../../../config/.config/zsh;
 /*
   nyx.modules = {
     dev = {
