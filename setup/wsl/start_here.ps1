@@ -7,7 +7,7 @@ Install-Module -Name PSGitHub
 $release = Get-GitHubRelease -Owner nix-community -Repository NixOS-WSL
 $version = $release.tag_name.Split(" ")[0]
 Write-Host "The latest release for NixOS-WSL is v$version"
-$nixOSWSLdownloadUrl = 'https://github.com/nix-community/NixOS-WSL/releases/download/$version/nixos-wsl.tar.gz'
+$nixOSWSLdownloadUrl = "https://github.com/nix-community/NixOS-WSL/releases/download/$version/nixos-wsl.tar.gz"
 
 
 write-host "Updating WSL to the latest version."
