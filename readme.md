@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is my personal configuration that I use for WSL on Windows and MacOS. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile.
+This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile.
 
 ## Influences & Inspirations
 
@@ -144,3 +144,14 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 ```shell
 ./reload.sh #Rebuilds and switches to the home environment.
 ```
+
+
+### Android Installation
+
+1. You will need to install [Nix-on-Droid from f-droid](https://f-droid.org/en/packages/com.termux.nix/)
+2. Go into the root of the initial installation and edit `~/.config/nixpkgs/nix-on-droid.nix` to add 'git' to the packages
+3. run `nix-on-droid switch --flake .` from the directory with `flake.nix` in it.
+4. Once complete, run `git clone https://github.com/mwdavisii/nyx.git`
+5. run `cd nyx` and the run `nix-on-droid switch --flake .`
+
+Note that NixOnDroid is still rudimentary and doesn't have full support for attrs and other utilities yet. This install still runs bash, but it does have neovim and several other functional tools.
