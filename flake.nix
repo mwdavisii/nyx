@@ -75,7 +75,7 @@
 
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
         nix-on-droid = {user = "droid";};
-        default = {};
+        default = {user = "droid";};
       };
 
       homeManagerConfigurations = mapAttrs' mkHome {
