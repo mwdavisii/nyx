@@ -18,28 +18,8 @@
       open-policy-agent
     ];
   };
-/*
+
   nyx.modules = {
-    secrets = {
-        awsKeys.enable = false;
-        awsConfig.enable = false;
-        userKeys.enable = true;
-    };
-    app = {
-      alacritty = {
-        enable = false;
-        package = null;
-      };
-      kitty.enable = false;
-      discord.enable = false;
-      firefox.enable = false;
-      obs.enable = true;
-      wezterm = {
-        enable = false;
-        package = null;
-        fontSize = 14;
-      };
-    };
     dev = {
       cc.enable = false;
       rust.enable = false;
