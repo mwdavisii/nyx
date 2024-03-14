@@ -166,7 +166,6 @@ rec {
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
           modules = [
-/*
             (
               { inputs, ... }: {
                 # Use the nixpkgs from the flake.
@@ -177,7 +176,6 @@ rec {
                 nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
               }
             )
-*/
             (
               { pkgs, ... }: {
                 # Don't rely on the configuration to enable a flake-compatible version of Nix.
