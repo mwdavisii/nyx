@@ -74,7 +74,7 @@
       legacyPackages = pkgsBySystem;
 
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
-        nix-on-droid = {};
+        nix-on-droid = {user = "droid";};
         default = {};
       };
 
