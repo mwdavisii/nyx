@@ -14,9 +14,8 @@
       cmake-format
       gnumake
     ];
-    
-    imports = [
-      ./modules
-    ];
   };
+  imports = [
+    ./modules
+  ];
 }
