@@ -211,7 +211,7 @@ rec {
             }
           )
           (inputs.agenix.nixosModules.default)
-          (inputs.home-manager.nixosModules.home-manager)
+          #(inputs.home-manager.nixosModules.home-manager)
           (
             {
               home-manager = {
@@ -238,7 +238,7 @@ rec {
           self = inputs.self;
           user = userConf;
         in
-        { inherit inputs self system user userConf secrets agenix; };
+        { inherit inputs self system user userConf secrets agenix home-manager; };
       }
     );
 
