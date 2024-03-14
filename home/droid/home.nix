@@ -31,9 +31,50 @@
       cmake-format
       gnumake
       ninja
+      zsh-syntax-highlighting
+      zsh-autosuggestions
+      fzf
+
     ];
     #files
   };
+    #gpg
+    programs.gpg = {
+      enable = true;
+      settings = {
+        personal-cipher-preferences = "AES256 AES192 AES";
+        personal-digest-preferences = "SHA512 SHA384 SHA256";
+        personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
+        default-preference-list =
+          "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
+        cert-digest-algo = "SHA512";
+        s2k-digest-algo = "SHA512";
+        s2k-cipher-algo = "AES256";
+        charset = "utf-8";
+        fixed-list-mode = true;
+        no-comments = true;
+        no-emit-version = true;
+        no-greeting = true;
+        keyid-format = "0xlong";
+        list-options = "show-uid-validity";
+        verify-options = "show-uid-validity";
+        with-fingerprint = true;
+        require-cross-certification = true;
+        no-symkey-cache = true;
+        use-agent = true;
+        throw-keyids = true;
+      };
+    };
+    services.gpg-agent = {
+      enable = true;
+      enableExtraSocket = true;
+      enableScDaemon = false;
+      enableSshSupport = true;
+      pinentryFlavor = "gtk2";
+      verbose = true;
+    };
+    #fzf
+    xdg.configFile."fzf".source = ../config/.config/fzf;
     xdg.configFile."nixpkgs/config.nix".source = ../../nix/config.nix;
     programs.starship = {
       enable = true;
@@ -41,8 +82,18 @@
       enableZshIntegration = true;
       package = pkgs.starship;
     };
+
+    xdg.dataFile."zsh/nyx_zshrc".text = ''
+        "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"}
+        "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"}
+      '';
+
     xdg.configFile."starship".source = ../config/.config/starship;
-    
+    xdg.configFile."shell".source = ../config/.config/shell;
+    home.file.".bash_profile".source = ../config/.bash_profile;
+    home.file.".bashrc".source = ../config/.bashrc;
+    home.file.".inputrc".source = ../config/.inputrc;
+    home.file.".profile".source = ../config/.profile;
     home.file.".zshenv".source = ../config/.zshenv;
     home.file.".config/zsh".source = ../config/.config/zsh;
     home.file.".config/nvim".source = ../config/.config/nvim;
@@ -60,9 +111,6 @@
         tree-sitter-json
         tree-sitter-lua
         tree-sitter-make
-        # Currently this does not point to the correct markdown parser
-        # Correct one is: https://github.com/MDeiml/tree-sitter-markdown
-        # tree-sitter-markdown
         tree-sitter-nix
         tree-sitter-regex
         tree-sitter-rust
