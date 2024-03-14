@@ -12,7 +12,6 @@
       bat
       bash
       coreutils-full
-      moreutils
       fd
       sd
       dua
