@@ -210,8 +210,6 @@ rec {
               system.stateVersion = "23.11";
             }
           )
-          (inputs.agenix.nixosModules.default)
-          #(inputs.home-manager.nixosModules.home-manager)
           (
             {
               home-manager = {
@@ -229,7 +227,7 @@ rec {
           )
           #(import ../system/common/modules)
           #(import ../system/common/profiles)
-          #(import ../system/droid/modules)
+          (import ../system/droid/modules)
           #(import (strToPath config ../system/droid/hosts))
 
       ];
