@@ -3,15 +3,9 @@
 {
   # Manage home-manager with home-manager (inception)
   programs.home-manager.enable = true;
-  # Install man output for any Nix packages.
-  programs.man.enable = true;
-
-  manual.manpages.enable = true;
-  
   home = {      
     stateVersion = "23.11";
     packages = with pkgs; [
-      rustup
       git
       vim
       vhs
@@ -19,8 +13,6 @@
       bash
       coreutils-full
       moreutils
-      ripgrep
-      gnupg
       fd
       sd
       dua
@@ -28,12 +20,11 @@
       just
       comma
       nix-index
-      tuxmux
       zsh
       kubectl
       fluxcd
-      wget
-      vim
+      k9s
+      open-policy-agent
     ];
   };
 /*
