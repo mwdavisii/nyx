@@ -161,7 +161,7 @@ rec {
                 # add other overlays
               ];
             };
-            #userConf.username = ""; #this is unfortunately necessary because 
+            userConf = import (strToFile user ../users);
         in
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
@@ -246,15 +246,7 @@ rec {
       extraSpecialArgs =
         let
           self = inputs.self;
-          userConf = {
-            {
-              userName = "mwdavisii";
-              email = "mwdavisii@gmail.com";
-              displayName = "Mike D.";
-              signingKey = "5A60221930345909";
-              windowsUserDirName = "";
-            }
-          };
+          user = userConf;
         in
         { inherit inputs self system user userConf secrets; };
       }
