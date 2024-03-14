@@ -26,8 +26,9 @@
     ];
     #files
   };
-    home.file.".zshenv".source = ../config/.zshenv;
-    home.file.".config/zsh".source = ../config/.config/zsh;
+    home.file.".config/.zshenv".source = ../config/.zshenv;
+    home.file.".config/zsh".source = ../config/zsh;
+    home.file.".config/starship/starship.toml".source = ../config/.config/starship.toml;
 /*
   nyx.modules = {
     dev = {
