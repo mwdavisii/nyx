@@ -31,10 +31,6 @@ fi
 mkdir -p $HOME/.cache/zsh
 export ZSH_COMPDUMP=$HOME/.cache/zsh/zcompdump
 autoload -Uz compinit
-if [ ! -f $ZSH_COMPDUMP ] || [ "$(find $ZSH_COMPDUMP -mtime +1)" ]; then
-    # Either the compdump file does not exist or is older then a day, regen
-    compinit -d "$ZSH_COMPDUMP"
-fi
 compinit -C -d $ZSH_COMPDUMP
 
 # Load shared shell -----------------------------------------------------------

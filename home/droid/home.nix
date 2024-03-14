@@ -38,6 +38,7 @@
     ];
     #files
   };
+    home.shell = pkgs.zsh;
     xdg.configFile."zellij".source = ../config/.config/zellij;
     #gpg
     programs.gpg = {
