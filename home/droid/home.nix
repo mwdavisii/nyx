@@ -34,10 +34,11 @@
       zsh-syntax-highlighting
       zsh-autosuggestions
       fzf
-
+      zellij
     ];
     #files
   };
+    xdg.configFile."zellij".source = ../config/.config/zellij;
     #gpg
     programs.gpg = {
       enable = true;
