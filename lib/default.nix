@@ -124,6 +124,7 @@ rec {
           allowUnfree = true;
         };
         overlays = [
+          nix-on-droid.overlays.default
           nur.overlay
           (_final: prev: {
             # this allows us to reference pkgs.unstable
@@ -150,6 +151,92 @@ rec {
         };
     };
     
+    mkNixOnDroidConfiguration = name: {config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? {}, }: 
+      nameValuePair name(
+        let
+            pkgs = import nixpkgs {
+              system = "aarch64-linux";
+              overlays = [
+                nix-on-droid.overlays.default
+                # add other overlays
+              ];
+            };
+            userConf = import (strToFile user ../users);
+        in
+        nix-on-droid.lib.nixOnDroidConfiguration {
+          inherit system;
+          modules = [
+/*
+            (
+              { inputs, ... }: {
+                # Use the nixpkgs from the flake.
+                nixpkgs = { inherit pkgs; };
+
+                # For compatibility with nix-shell, nix-build, etc.
+                environment.etc.nixpkgs.source = inputs.nixpkgs;
+                nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
+              }
+            )
+*/
+            (
+              { pkgs, ... }: {
+                # Don't rely on the configuration to enable a flake-compatible version of Nix.
+                nix = {
+                  package = pkgs.nixVersions.stable;
+                  extraOptions = "experimental-features = nix-command flakes";
+                };
+              }
+            )
+          (
+            { inputs, ... }: {
+              # Re-expose self and nixpkgs as flakes.
+              nix.registry = {
+                self.flake = inputs.self;
+                nixpkgs = {
+                  from = { id = "nixpkgs"; type = "indirect"; };
+                  flake = inputs.nixpkgs;
+                };
+              };
+            }
+          )
+          (
+            { ... }: {
+              environment.etcBackupExtension = ".bak";
+              system.stateVersion = "23.11";
+            }
+          )
+          (
+            {
+              home-manager = {
+                # useUserPackages = true;
+                config = ../home/droid/home.nix;
+                useGlobalPkgs = true;
+                extraSpecialArgs =
+                  let
+                    self = inputs.self;
+                    user = userConf;
+                  in
+                  # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
+                  { inherit inputs self system user userConf secrets; };
+              };
+            }
+          )
+          #(import ../system/common/modules)
+          #(import ../system/common/profiles)
+          #(import ../system/droid/modules)
+          (import (strToPath config ../system/droid/hosts))
+
+      ];
+      extraSpecialArgs =
+        let
+          self = inputs.self;
+          user = userConf;
+        in
+        { inherit inputs self system user userConf secrets agenix home-manager; };
+      }
+    );
+
+
     mkNixosWSLConfiguration = name: {config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", args ? {}, }: 
     nameValuePair name(
         let
@@ -234,7 +321,6 @@ rec {
           (import ../system/common/modules)
           (import ../system/common/profiles)
           (import ../system/wsl2/modules)
-          (import ../system/wsl2/profiles)
           (import (strToPath config ../system/wsl2/hosts))
         ];
         specialArgs =
@@ -318,7 +404,6 @@ rec {
                 (import ../system/common/modules)
                 (import ../system/common/profiles)
                 (import ../system/darwin/modules)
-                (import ../system/darwin/profiles)
                 (import (strToPath config ../system/darwin/hosts))
         ];
             specialArgs =
