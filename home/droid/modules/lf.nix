@@ -10,7 +10,7 @@ let
 in
 {
 
-  home.packages = [ lf ] ++ additionalPkgs;
+  home.packages = [ pkg.lf ] ++ additionalPkgs;
   xdg.configFile."lf" = {
     source = ../../../config/.config/lf;
     executable = true;
