@@ -61,7 +61,7 @@ in
       username = user.displayName;
       email = user.email;
       signkey = firstOrDefault cfg.signing.key (if hasAttr "signingKey" user then user.signingKey else null);
-      signByDefault = (!isNull signkey) || cfg.signing.signByDefault;      
+      signByDefault = cfg.signing.signByDefault;      
   in
       ''  
       [init]
