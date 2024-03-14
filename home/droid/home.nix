@@ -46,6 +46,13 @@
     home.file.".config/zsh".source = ../config/.config/zsh;
     home.file.".config/nvim".source = ../config/.config/nvim;
     home.file.".config/starship/starship.toml".source = ../config/.config/starship/starship.toml;
+    xdg.configFile."nix/nix.conf".text =
+    let
+      nixConf = import ../../nix/conf.nix;
+    in
+    ''
+      experimental-features = nix-command flakes
+    '';
     xdg.dataFile = with pkgs.tree-sitter-grammars; 
     let
       grammars = with pkgs.tree-sitter-grammars; [
