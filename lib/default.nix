@@ -209,6 +209,7 @@ rec {
             {
               home-manager = {
                 # useUserPackages = true;
+                user.home = ../../../../home/droid/home.nix;
                 useGlobalPkgs = true;
                 extraSpecialArgs =
                   let
