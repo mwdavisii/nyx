@@ -31,7 +31,6 @@
       cmake-format
       gnumake
       ninja
-      rnix-lsp
     ];
     #files
   };
