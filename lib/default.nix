@@ -209,15 +209,13 @@ rec {
             }
           )
 */
-/*
           (
             { ... }: {
               environment.etcBackupExtension = ".bak";
               system.stateVersion = "23.11";
             }
           )
-/*
-          (inputs.agenix.nixosModules.default)
+#          (inputs.agenix.nixosModules.default)
           (inputs.home-manager.nixosModules.home-manager)
           (
             {
@@ -234,7 +232,6 @@ rec {
               };
             }
           )
-*/
 /*
           (import ../system/common/modules)
           (import ../system/common/profiles)
