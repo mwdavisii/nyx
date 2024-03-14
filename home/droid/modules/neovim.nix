@@ -29,7 +29,7 @@ in
   xdg.configFile."nvim".source = ../../../config/.config/nvim;
   home.packages = with pkgs;
     let
-      package = if cfg.useNightly then neovim-nightly else neovim;
+      package = neovim;
     in
     [ package xclip ] ++ lspServers ++ debugAdaptors ++ formatters;
 
