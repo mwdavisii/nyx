@@ -70,6 +70,7 @@
       gcp.enable = true;
       git = {
         enable = true;
+        signing.signByDefault = false;
       };
       jq.enable = true;
       k8sTooling.enable = true;
