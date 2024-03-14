@@ -42,6 +42,7 @@
       discord.enable = true;
       firefox.enable = false;
       obs.enable = false;
+      scrcpy.enable = true;
       wezterm = {
         enable = true;
         package = null;
@@ -49,6 +50,7 @@
       };
     };
     dev = {
+      androidSDK.enable = true;
       cc.enable = true;
       rust.enable = true;
       go.enable = true;

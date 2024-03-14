@@ -8,6 +8,7 @@ let
 in
 {   
     
+    
     config = {
         # Auto upgrade nix package and the daemon service.
         homebrew = {
@@ -28,6 +29,7 @@ in
             };
         };
         # Enable fonts dir
+        
         fonts.fontDir.enable = true;
         system = {
             #stateVersion = 4;

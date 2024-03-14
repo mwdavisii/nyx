@@ -7,6 +7,7 @@
     ./discord.nix 
     ./firefox.nix 
     ./kitty.nix 
-    ./obs.nix 
+    ./obs.nix
+    ./scrcpy.nix
     ./wezterm.nix ];
 }
