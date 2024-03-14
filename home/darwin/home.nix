@@ -10,9 +10,7 @@
     packages = with pkgs; [
       rustup
       vhs
-      coreutils-full
       gnupg
-      moreutils
       ripgrep
       fd
       sd
