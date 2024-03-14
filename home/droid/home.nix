@@ -5,6 +5,7 @@
   programs.home-manager.enable = true;
   home = {      
     stateVersion = "23.11";
+    
     packages = with pkgs; [
       vim
       gcc
@@ -13,8 +14,9 @@
       cmake-format
       gnumake
     ];
+    
     imports = [
       ./modules
-    ]
+    ];
   };
 }
