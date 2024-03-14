@@ -165,7 +165,6 @@ rec {
         in
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
-          xdg.configFile."nixpkgs/config.nix".source = ../nix/config.nix;
           modules = [
 /*
             (
