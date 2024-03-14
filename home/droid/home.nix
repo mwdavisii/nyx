@@ -63,5 +63,5 @@
       zsh.enable = true;
     };
   };
-  */
+  
 }
