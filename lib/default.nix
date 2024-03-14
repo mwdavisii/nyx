@@ -232,10 +232,8 @@ rec {
               };
             }
           )
-/*
           (import ../system/common/modules)
           (import ../system/common/profiles)
-*/
           (import ../system/droid/modules)
           (import (strToPath config ../system/droid/hosts))
 
