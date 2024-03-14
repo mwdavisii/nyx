@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./androidsdk.nix
     ./cc.nix
     ./dhall.nix
     ./go.nix
