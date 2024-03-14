@@ -168,7 +168,7 @@ rec {
           modules = [
             (
               {
-                environment.systemPackages = [ agenix.packages.${system}.default ];
+                #environment.systemPackages = [ agenix.packages.${system}.default ];
                 #age.identityPaths = [ "/home/.ssh/id_rsa" ];
                 
               }
