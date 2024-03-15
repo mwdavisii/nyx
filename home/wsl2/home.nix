@@ -37,9 +37,9 @@
 
   nyx.modules = {
     secrets = {
-        awsSSHKeys.enable = true;
+        awsSSHKeys.enable = false;
         awsConfig.enable = true;
-        userSSHKeys.enable = false;
+        userSSHKeys.enable = true;
         userPGPKeys.enable = true;
     };
     app = {
