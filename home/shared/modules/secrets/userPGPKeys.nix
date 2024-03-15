@@ -15,7 +15,6 @@ in
             file = "${secrets}/encrypted/gnugp_public_key.age";
             mode = "400";
             path =  "${homePath}/.for-import/gnugp_public.key";
-            #owner = "${userConf.userName}";
         };
 
         age.secrets.gnugp_private_key = {
@@ -23,8 +22,6 @@ in
             file = "${secrets}/encrypted/gnugp_private_key.age";
             mode = "400";
             path =  "${homePath}/.for-import/gnugp_private.key";
-            #owner = "${userConf.userName}";
         };
-        
     };
 }
