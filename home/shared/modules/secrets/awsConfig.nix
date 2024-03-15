@@ -16,6 +16,7 @@ in
             file = "${secrets}/encrypted/aws.config.age";
             mode = "770";
             path =  "${homePath}/.aws/config";
+            #owner = "${userConf.userName}";
         }; 
     };
 }

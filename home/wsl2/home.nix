@@ -37,9 +37,10 @@
 
   nyx.modules = {
     secrets = {
-        awsKeys.enable = false;
+        awsSSHKeys.enable = true;
         awsConfig.enable = true;
-        userKeys.enable = true;
+        userSSHKeys.enable = false;
+        userPGPKeys.enable = true;
     };
     app = {
       alacritty = {
