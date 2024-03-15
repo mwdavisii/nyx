@@ -3,11 +3,8 @@
 with pkgs;
 with inputs;
 with lib;
-let
-  dock = import  ../../dock;
-in
 {   
-    
+    ## Dock Configuration
     
     config = {
         # Auto upgrade nix package and the daemon service.
@@ -50,15 +47,6 @@ in
                     "com.apple.mouse.tapBehavior" = 1;
                     "com.apple.sound.beep.volume" = 0.0;
                     "com.apple.sound.beep.feedback" = 0;
-                };
-
-                dock = {
-                    autohide = false;
-                    show-recents = false;
-                    launchanim = true;
-                    mouse-over-hilite-stack = true;
-                    orientation = "bottom";
-                    tilesize = 48;
                 };
 
                 finder = {

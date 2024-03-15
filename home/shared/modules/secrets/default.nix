@@ -3,7 +3,8 @@
 {
   imports = [
     ./awsConfig.nix 
-    ./userKeys.nix 
-    ./awsKeys.nix
+    ./userSSHKeys.nix 
+    ./userPGPKeys.nix 
+    ./awsSSHKeys.nix
   ];
 }
