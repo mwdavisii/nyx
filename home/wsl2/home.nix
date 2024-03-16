@@ -82,6 +82,9 @@
       gnupg = {
         enable = true;
         enableService = true;
+        publicKeys = [{
+            key = ../config/.gnupg/public.key;
+          }];
       };
       jq.enable = true;
       k8sTooling.enable = true;
