@@ -17,6 +17,7 @@ in
 rec {
     firstOrDefault = first: default: if !isNull first then first else default;
     existsOrDefault = x: set: default: if hasAttr x set then getAttr x set else default;
+    ### Top Level Home - Designed for Home-Manager Only Systems (Like Ubunutu)
     mkHome = name: { config ? name, user ? "mwdavisii", system ? "aarch64-darwin" }:
     let
       #pkgs = inputs.self.legacyPackages."${system}";
@@ -67,6 +68,7 @@ rec {
       }
     );
 
+    # This make the user home directory. It is usually invoked from the system/host file or mkHome
     mkUserHome = { config, userConf, system ? "aarch64-darwin" }:
     { ... }: {
       imports = [
@@ -83,9 +85,9 @@ rec {
         EDITOR = "nvim";
         VISUAL = "nvim";
         COLORTERM = "truecolor"; 
-        PATH = "$PATH:/mnt/c/Users/${userConf.windowsUserDirName}/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows";
+        PATH = if !(userConf.windowsUserDirName=="") then "$PATH:/mnt/c/Users/${userConf.windowsUserDirName}/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows" else "$PATH";
       };
-
+      
       # Use the same Nix configuration for the user
       xdg.configFile."nixpkgs/config.nix".source = ../nix/config.nix;
 

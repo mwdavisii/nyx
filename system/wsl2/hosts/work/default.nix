@@ -1,7 +1,9 @@
 { config, pkgs, ... }:
 
 {
-  imports = [../../shared/system.nix]; 
+  imports = [
+    ../../shared/system
+    ]; 
   nyx = {
     modules = {
       user.home = ../../shared/home.nix;

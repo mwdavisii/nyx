@@ -10,6 +10,10 @@
   
   home = {   
     stateVersion = "23.11";
+    sessionVariables = 
+    home.sessionVariables = {
+            PATH = if !(userConf.windowsUserDirName=="") then "$PATH:/mnt/c/Users/${userConf.windowsUserDirName}/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows" else "$PATH";
+        };
     packages = with pkgs; [
       rustup
       vhs
