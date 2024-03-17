@@ -9,7 +9,7 @@ This is my personal configuration that I use for WSL on Windows, MacOS, and my P
 .
 ├─ home    # Home-manager and user configrations
 ├─ lib     # Shared functions that generate attribute sets
-├─ nix     # Default Nic Configurations
+├─ nix     # Default Nix Configurations
 ├─ setup   # Intitial Install/Configure Scripts
 ├─ system  # System / Host / Global configurations
 ```
