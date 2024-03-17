@@ -5,7 +5,7 @@ with inputs;
 with lib;
 {   
     imports = [
-        ../../dock
+        ../../modules/dock
     ];
 
     config = {
