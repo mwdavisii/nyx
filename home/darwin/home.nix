@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   programs.home-manager.enable = true;
@@ -73,7 +73,7 @@
       };
       gnupg = {
         enable = true;
-        enableService = true;
+        enableService = pkgs.hostPlatform.isLinux;
         publicKeys = [{
             key = ../config/.gnupg/public.key;
           }];
