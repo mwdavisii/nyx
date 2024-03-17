@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile.
+This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile. The general approach here is to isolate my user configuration into `home` folder and system configurations in the `system` folder. There are some deviations from this. For instance, all of the secrets are user based, but they are decrypted from the system configuration because we get more control from agenix (owner and group permissions) and I have found this approach does not require any custom activations or a restart of wsl.
 
 ## General Project Structure
 ```Markdown
@@ -16,7 +16,7 @@ This is my personal configuration that I use for WSL on Windows, MacOS, and my P
 
 ## Influences & Inspirations
 
-These public repositories heavily influenced my configuration. You'll see bit of stuff from each. In fact, most of the dot files in this project are directly pulled from EdenEast's public nix configuration. What he's done with [neovim/neovim](https://github.com/neovim/neovim) is mind blowing.
+These public repositories heavily influenced my configuration. You'll see bit of stuff from each. In fact, most of the dot files in this project are directly pulled from EdenEast's public nix configuration. What they've done with [neovim/neovim](https://github.com/neovim/neovim) is mind blowing.
 
 - [EdenEast/nyx](https://github.com/EdenEast/nyx)
 - [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
@@ -27,7 +27,7 @@ These public repositories heavily influenced my configuration. You'll see bit of
 
 This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository.
 
-The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/home/$darwin or $wsl2>/home.mix are all marked false as shown below. This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
+The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/$darwin or $wsl2>/hosts/$hostname/home.nix are all marked false as shown below. This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
 
 ```nix
   nyx.modules = {
@@ -49,7 +49,7 @@ If you want to actually build and decrypt secrets, here is what my secrets repos
 ├─── id_ed25519.age files  # Example encrypted file
 ```
 
-* Not that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
+* Note that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
 
 ### WSL2 Installation
 
@@ -80,7 +80,7 @@ cd ./nyx/setup/wsl
 
 ****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL. As of now, it requires building from [nix-community/NixOS-WSL](https://github.com/nix-community/NixOS-WSL) which is more than I can care to tackle at the moment.
 
-```haskell
+```nix
 {
   userName = "nixos";
   email = "mwdavisii@gmail.com";
@@ -99,7 +99,7 @@ cd ./nyx/setup/wsl
 Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script. 
 
 ``` shell
-./reload.sh #Rebuilds and switches to the home environment.
+./switch.sh #Rebuilds and switches to the home environment.
 ```
 
 ### MacOS Installation
@@ -137,7 +137,7 @@ cd ./nyx/macos
 
 5. Edit the `./flake.nix` file and look for the following lines. Change the user to the user you created above and if you are running an intel mac, change `aarch64-darwin` to `x86_64-darwin`.
 
-```haskel
+```nix
 darwinConfigurations = mapAttrs' mkDarwinConfiguration{
         mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii";};
       };
@@ -152,7 +152,7 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 7. Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script.
 
 ```shell
-./reload.sh #Rebuilds and switches to the home environment.
+./switch.sh #Rebuilds and switches to the home environment.
 ```
 
 
