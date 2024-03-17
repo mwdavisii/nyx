@@ -318,8 +318,8 @@ rec {
               };
             }
           )
-          (import ../system/common/modules)
-          (import ../system/common/profiles)
+          (import ../system/shared/modules)
+          (import ../system/shared/profiles)
           (import ../system/wsl2/modules)
           (import (strToPath config ../system/wsl2/hosts))
         ];
@@ -401,8 +401,8 @@ rec {
                     );
                   }
                 )
-                (import ../system/common/modules)
-                (import ../system/common/profiles)
+                (import ../system/shared/modules)
+                (import ../system/shared/profiles)
                 (import ../system/darwin/modules)
                 (import (strToPath config ../system/darwin/hosts))
         ];
