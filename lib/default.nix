@@ -207,7 +207,7 @@ rec {
             {
               home-manager = {
                 # useUserPackages = true;
-                config = ../home/droid/home.nix;
+                config = ../system/droid/default/home.nix;
                 useGlobalPkgs = true;
                 extraSpecialArgs =
                   let
