@@ -27,15 +27,25 @@ These public repositories heavily influenced my configuration. You'll see bit of
 
 This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository.
 
-The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/$darwin or $wsl2>/hosts/$hostname/home.nix are all marked false as shown below. This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
+The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/$darwin or $wsl2>/hosts/$hostname/default.nix are all marked false as shown below. This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
 
 ```nix
-  nyx.modules = {
+  nyx = {
+    modules = {
+      user.home = ../../shared/home.nix;
+    };
+
     secrets = {
-        enable = false;
-        awsKeys.enable = false;
-        awsConfig.enable = false;
-        userKeys.enable = false;
+      awsSSHKeys.enable = false;
+      awsConfig.enable = false;
+      userSSHKeys.enable = false;
+      userPGPKeys.enable = false;
+    };
+
+    profiles = {
+      desktop = {
+        enable = true;
+      };
     };
   };
 ```

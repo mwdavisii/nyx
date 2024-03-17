@@ -1,11 +1,11 @@
 { config, lib, pkgs, userConf, agenix, secrets, ... }:
 with lib;
 let  
-    cfg = config.nyx.modules.secrets.userPGPKeys;
+    cfg = config.nyx.secrets.userPGPKeys;
     homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
-    options.nyx.modules.secrets.userPGPKeys = {
+    options.nyx.secrets.userPGPKeys = {
         enable = mkEnableOption "Enable User GPG Key Decryption";
     };
 

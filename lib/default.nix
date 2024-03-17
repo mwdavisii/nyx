@@ -119,9 +119,7 @@ rec {
     };
 
     nixpkgsWithOverlays = with inputs; rec {
-        config = {
-          allowUnfree = true;
-        };
+        config = import ../nix/config.nix;
         overlays = [
           nix-on-droid.overlays.default
           nur.overlay
@@ -320,6 +318,7 @@ rec {
           )
           (import ../system/shared/modules)
           (import ../system/shared/profiles)
+          (import ../system/shared/secrets)
           (import ../system/wsl2/modules)
           (import (strToPath config ../system/wsl2/hosts))
         ];
@@ -401,8 +400,7 @@ rec {
                     );
                   }
                 )
-                (import ../system/shared/modules)
-                (import ../system/shared/profiles)
+                (import ../system/shared)
                 (import ../system/darwin/modules)
                 (import (strToPath config ../system/darwin/hosts))
         ];

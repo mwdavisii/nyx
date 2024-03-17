@@ -1,11 +1,11 @@
 { config, lib, pkgs, userConf, agenix, secrets, ... }:
 with lib;
 let 
-    cfg = config.nyx.modules.secrets.awsSSHKeys;
+    cfg = config.nyx.secrets.awsSSHKeys;
     homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
-    options.nyx.modules.secrets.awsSSHKeys = {
+    options.nyx.secrets.awsSSHKeys = {
         enable = mkEnableOption "Enable AWS Config Decryption";
     };
 

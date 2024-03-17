@@ -20,12 +20,6 @@
 
   nyx = {
     modules = {
-      secrets = {
-          awsSSHKeys.enable = false;
-          awsConfig.enable = true;
-          userSSHKeys.enable = true;
-          userPGPKeys.enable = true;
-      };
       app = {
         alacritty = {
           enable = false;
@@ -66,9 +60,6 @@
         gnupg = {
           enable = true;
           enableService = true;
-          publicKeys = [{
-              key = ../../../../home/config/.gnupg/public.key;
-            }];
         };
         jq.enable = true;
         k8sTooling.enable = true;
