@@ -162,6 +162,6 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 2. Go into the root of the initial installation and edit `~/.config/nixpkgs/nix-on-droid.nix` to add 'git' to the packages
 3. run `nix-on-droid switch --flake .` from the directory with `flake.nix` in it.
 4. Once complete, run `git clone https://github.com/mwdavisii/nyx.git`
-5. run `cd nyx` and the run `nix-on-droid switch --flake .`
+5. Run `cd nyx` and the run `nix-on-droid switch --flake .`
 
 Note that NixOnDroid is still rudimentary and doesn't have full support for attrs and other utilities yet. This install still runs bash, but it does have neovim and several other functional tools.
