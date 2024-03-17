@@ -17,14 +17,12 @@ in
             path =  "${homePath}/.ssh/id_ed25519";
             owner= "${userConf.userName}";
         };
-        
-        age.secrets.id_ed25519_pub = {
-            symlink = true;
-            file = "${secrets}/encrypted/id_ed25519_pub.age";
-            mode = "400";
-            path =  "${homePath}/.ssh/id_ed25519.pub";
-            owner= "${userConf.userName}";
-        };
+        home.file = {
+            ".config/vale" = {
+                source = ../../../config/.config/vale;
+                recursive = true;
+            };
+    };
     };
 }
 

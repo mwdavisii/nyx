@@ -8,8 +8,8 @@
     };
 
     secrets = {
-      awsSSHKeys.enable = true;
-      awsConfig.enable = false;
+      awsConfig.enable = true;
+      awsSSHKeys.enable = false;  
       userSSHKeys.enable = false;
       userPGPKeys.enable = false;
     };
