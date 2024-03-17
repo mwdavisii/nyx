@@ -17,12 +17,6 @@ in
             path =  "${homePath}/.ssh/id_ed25519";
             owner= "${userConf.userName}";
         };
-        home.file = {
-            ".config/vale" = {
-                source = ../../../config/.config/vale;
-                recursive = true;
-            };
-    };
     };
 }
 
