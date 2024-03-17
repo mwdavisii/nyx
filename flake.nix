@@ -96,8 +96,8 @@
       top =
         let
           droidtop = genAttrs
-            (builtins.attrNames inputs.self.nixOnDroidConfiguration)
-            (attr: inputs.self.nixOnDroidConfiguration.${attr}.config.system.build.toplevel);
+            (builtins.attrNames inputs.self.nixOnDroidConfigurations)
+            (attr: inputs.self.nixOnDroidConfigurations.${attr}.config.system.build.toplevel);
           nixtop = genAttrs
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
