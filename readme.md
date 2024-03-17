@@ -4,6 +4,16 @@
 
 This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile.
 
+## General Project Structure
+```Markdown
+.
+├─ home    # Home-manager and user configrations
+├─ lib     # Shared functions that generate attribute sets
+├─ nix     # Default Nic Configurations
+├─ setup   # Intitial Install/Configure Scripts
+├─ system  # System / Host / Global configurations
+```
+
 ## Influences & Inspirations
 
 These public repositories heavily influenced my configuration. You'll see bit of stuff from each. In fact, most of the dot files in this project are directly pulled from EdenEast's public nix configuration. What he's done with [neovim/neovim](https://github.com/neovim/neovim) is mind blowing.
@@ -114,7 +124,7 @@ cd ./nyx/macos
 - **email** => Display Name used in GitHub config`
 - **signingKey** => The key used to sign git commits. (you can leave blank)`
 
-```haskell
+```nix
 {
   userName = "mwdavisii";
   email = "mwdavisii@gmail.com";
