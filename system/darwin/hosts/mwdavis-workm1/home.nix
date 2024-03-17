@@ -69,7 +69,7 @@
         enable = true;
         enableService = pkgs.hostPlatform.isLinux;
         publicKeys = [{
-            key = ../config/.gnupg/public.key;
+            key = ../../../../home/config/.gnupg/public.key;
           }];
       };
       jq.enable = true;

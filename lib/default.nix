@@ -400,8 +400,10 @@ rec {
                     );
                   }
                 )
-                (import ../system/shared)
+                (import ../system/shared/modules)
                 (import ../system/darwin/modules)
+                #(import ../system/shared/profiles)
+                (import ../system/shared/secrets)
                 (import (strToPath config ../system/darwin/hosts))
         ];
             specialArgs =

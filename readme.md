@@ -5,6 +5,7 @@
 This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile. The general approach here is to isolate my user configuration into `home` folder and system configurations in the `system` folder. There are some deviations from this. For instance, all of the secrets are user based, but they are decrypted from the system configuration because we get more control from agenix (owner and group permissions) and I have found this approach does not require any custom activations or a restart of wsl.
 
 ## General Project Structure
+
 ```Markdown
 .
 ├─ home    # Home-manager and user configrations
@@ -165,7 +166,6 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 ./switch.sh #Rebuilds and switches to the home environment.
 ```
 
-
 ### Android Installation
 
 1. You will need to install [Nix-on-Droid from f-droid](https://f-droid.org/en/packages/com.termux.nix/)
@@ -175,3 +175,64 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 5. Run `cd nyx` and the run `nix-on-droid switch --flake .`
 
 Note that NixOnDroid is still rudimentary and doesn't have full support for attrs and other utilities yet. This install still runs bash, but it does have neovim and several other functional tools.
+
+## Tips and Tricks
+
+I have over 126 commits in this project and those all came after I had an initial version running and deleted my .git folder before making this public. I am not new to declarative systems and have been using git ops strategies since they had a name, but Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was hard for me. I can't tell you how many `git reset --hard` commands I've executed.
+
+Here are some things that would have shortned my learning curve:
+
+### Recommended Reading
+
+- [EdenEast's Nyx Readme](https://github.com/EdenEast/nyx/blob/main/readme.md) The primary inspiration for this project 
+- [Introduction to Nix & NixOS](https://nixos-and-flakes.thiscute.world/introduction/) A great overview
+- [An Introduction to Nix Flakes](https://www.tweag.io/blog/2020-05-25-flakes/)
+- [Flakes aren't real and cannot hurt you: a guide to using Nix flakes the non-flake way](https://jade.fyi/blog/flakes-arent-real/)
+
+### My Nix, Flake, and mkAttribute Gotchas
+
+- There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introduce attribute sets, I found it more difficult to apply the published examples to the more complex approach. This was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
+- I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it. 
+  - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) and didn't want to use a custom activation script.
+- Rollback a buil that successfuly failed by executing `nixos-rebuild switch --rollback`
+  - I was frequently reloading the entire system when I had issues before I knew this.
+- `nyx.modules`, `nyx.profiles`, and `nyx.secrets`
+  - In each `mk${system}Configuration`, the lines below actually create the root options (`config.nyx.profiles`, `config.nyx.modules`,  and `config.nyx.secrets`).
+  - These options are set in `system/$system/hosts/$hostname/default.nix`.
+  - These options are applied from various subdirectories:
+    - Secrets (`config.nyx.secrets`) are applied from `system/shared/secrets`
+    - Profiles (`config.nyx.profiles`) are applied from `system/shared/profiles`
+    - Modules (these are applied by home-manager)
+      - App Modules (`config.nyx.modules.app`) are applied from `home/shared/modules/app`
+      - Dev Modules (`config.nyx.modules.dev`) are applied from `home/shared/modules/dev`
+      - Shell Modules (`config.nyx.modules.shell`) are applied from `home/shared/modules/shell`
+
+Example from `lib/default.nix`:
+
+```nix
+  (import ../system/shared/modules)
+  (import ../system/shared/profiles)
+  (import ../in/secrets)
+  (import (strToPath config ../in/hosts))
+```
+
+Example from `system/$system/hosts/$hostname/default.nix`:
+
+```nix
+  nyx = {
+    modules = {
+      user.home = ./home.nix;
+    };
+    secrets = {
+      awsSSHKeys.enable = true;
+      awsConfig.enable = true;
+      userSSHKeys.enable = true;
+      userPGPKeys.enable = true;
+    };
+    profiles = {
+      desktop = {
+        enable = true;
+      };
+    };
+  };
+```
