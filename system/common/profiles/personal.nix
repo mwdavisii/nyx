@@ -2,14 +2,17 @@
 
 with lib;
 let
-  cfg = config.nyx.profiles.desktop;
+  cfg = config.nyx.profiles.personal;
 in
 {
-  options.nyx.profiles.desktop = {
-    enable = mkEnableOption "desktop profile";
+  options.nyx.profiles.personal = {
+    enable = mkEnableOption "work profile";
   };
-
+  
   config = mkIf cfg.enable {
+    environment.systemPackages = [
+        pkgs.angband
+    ];
     fonts = {
       fonts = with pkgs; [
         (

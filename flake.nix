@@ -91,6 +91,8 @@
 
       nixosConfigurations = mapAttrs' mkNixosWSLConfiguration {
         nixos = {};
+        personal = {hostname ="personal";};
+        work = {hostname = "work";};
       };
       
       top =

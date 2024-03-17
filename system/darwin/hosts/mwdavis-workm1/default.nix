@@ -5,7 +5,7 @@
   
   nyx = {
     modules = {
-      user.home = ../../../../home/darwin/home.nix;
+      user.home = ./home.nix;
     };
   };
 }
