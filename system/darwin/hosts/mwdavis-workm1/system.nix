@@ -4,11 +4,33 @@ with pkgs;
 with inputs;
 with lib;
 {   
-    ## Dock Configuration
-    
+    imports = [
+        ../../dock
+    ];
+
     config = {
+        # Fully declarative dock using the latest from Nix Store
+            ## Dock Configuration
+        local.dock = {
+            enable = true;
+            entries = [
+            #{ path = "/Applications/Telegram.app/"; }
+            { path = "/Applications/Discord.app/"; } 
+            { path = "/Applications/Microsoft Outlook.app/"; }
+            { path = "/Applications/Microsoft Teams (work or school).app/"; }
+            { path = "/Applications/Google Chrome.app/"; }
+            { path = "/Applications/Firefox.app/"; }
+            { path = "/Applications/Safari.app/"; }
+            { path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
+            { path = "/Applications/iTerm.app/"; }
+            { path = "/Applications/Visual Studio Code.app/"; }
+            { path = "/Applications/Sublime Text.app/"; }
+            { path = "/Applications/MySQLWorkbench.app/"; } 
+            ];
+        };
         # Auto upgrade nix package and the daemon service.
         homebrew = {
+            
             enable = true;
             casks = pkgs.callPackage ../../casks.nix {};
             brews = pkgs.callPackage ../../brews.nix {};
@@ -29,6 +51,7 @@ with lib;
         
         fonts.fontDir.enable = true;
         system = {
+            
             #stateVersion = 4;
             defaults = {
                 LaunchServices = {
