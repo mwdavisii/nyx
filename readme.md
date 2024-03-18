@@ -194,9 +194,9 @@ Here are some things that would have shortned my learning curve:
 - There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introducing attribute sets, I found it more difficult to apply the published examples to the more complex approach. There was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
 - I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it. 
   - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) and didn't want to use a custom activation script.
-- Rollback a buil that successfuly failed by executing `nixos-rebuild switch --rollback`
-  - I was frequently reloading the entire system when I had issues before I knew this.
-- `nyx.modules`, `nyx.profiles`, and `nyx.secrets`
+- Rollback a build that successfuly failed by executing `nixos-rebuild switch --rollback` or `darwin-rebuild switch --rollback` or `nix-on-droid rollback`.
+  - I was frequently wiping and rebuilding the entire system before I knew this.
+- In regards to `nyx.modules`, `nyx.profiles`, and `nyx.secrets`
   - In each `mk${system}Configuration`, the lines below actually create the root options (`config.nyx.profiles`, `config.nyx.modules`,  and `config.nyx.secrets`).
   - These options are set in `system/$system/hosts/$hostname/default.nix`.
   - These options are applied from various subdirectories:
