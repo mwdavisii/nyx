@@ -2,9 +2,10 @@
 
 ## Overview
 
-This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile.
+This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile. The general approach here is to isolate my user configuration into `home` folder and system configurations in the `system` folder. There are some deviations from this. For instance, all of the secrets are user based, but they are decrypted from the system configuration because we get more control from agenix (owner and group permissions) and I have found this approach does not require any custom activations or a restart of wsl.
 
 ## General Project Structure
+
 ```Markdown
 .
 ├─ home    # Home-manager and user configrations
@@ -16,7 +17,7 @@ This is my personal configuration that I use for WSL on Windows, MacOS, and my P
 
 ## Influences & Inspirations
 
-These public repositories heavily influenced my configuration. You'll see bit of stuff from each. In fact, most of the dot files in this project are directly pulled from EdenEast's public nix configuration. What he's done with [neovim/neovim](https://github.com/neovim/neovim) is mind blowing.
+These public repositories heavily influenced my configuration. You'll see bit of stuff from each. In fact, most of the dot files in this project are directly pulled from EdenEast's public nix configuration. What they've done with [neovim/neovim](https://github.com/neovim/neovim) is mind blowing.
 
 - [EdenEast/nyx](https://github.com/EdenEast/nyx)
 - [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
@@ -27,15 +28,25 @@ These public repositories heavily influenced my configuration. You'll see bit of
 
 This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository.
 
-The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/home/$darwin or $wsl2>/home.mix are all marked false as shown below. This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
+The easiest way to run this is to create an empty secrets repository and update the inputs in flake.nix. Then make sure the options in '/system/$darwin or $wsl2>/hosts/$hostname/default.nix are all marked false as shown below. This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
 
 ```nix
-  nyx.modules = {
+  nyx = {
+    modules = {
+      user.home = ../../shared/home.nix;
+    };
+
     secrets = {
-        enable = false;
-        awsKeys.enable = false;
-        awsConfig.enable = false;
-        userKeys.enable = false;
+      awsSSHKeys.enable = false;
+      awsConfig.enable = false;
+      userSSHKeys.enable = false;
+      userPGPKeys.enable = false;
+    };
+
+    profiles = {
+      desktop = {
+        enable = true;
+      };
     };
   };
 ```
@@ -49,7 +60,7 @@ If you want to actually build and decrypt secrets, here is what my secrets repos
 ├─── id_ed25519.age files  # Example encrypted file
 ```
 
-* Not that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
+* Note that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
 
 ### WSL2 Installation
 
@@ -80,7 +91,7 @@ cd ./nyx/setup/wsl
 
 ****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL. As of now, it requires building from [nix-community/NixOS-WSL](https://github.com/nix-community/NixOS-WSL) which is more than I can care to tackle at the moment.
 
-```haskell
+```nix
 {
   userName = "nixos";
   email = "mwdavisii@gmail.com";
@@ -99,7 +110,7 @@ cd ./nyx/setup/wsl
 Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script. 
 
 ``` shell
-./reload.sh #Rebuilds and switches to the home environment.
+./switch.sh #Rebuilds and switches to the home environment.
 ```
 
 ### MacOS Installation
@@ -137,7 +148,7 @@ cd ./nyx/macos
 
 5. Edit the `./flake.nix` file and look for the following lines. Change the user to the user you created above and if you are running an intel mac, change `aarch64-darwin` to `x86_64-darwin`.
 
-```haskel
+```nix
 darwinConfigurations = mapAttrs' mkDarwinConfiguration{
         mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii";};
       };
@@ -152,9 +163,8 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 7. Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script.
 
 ```shell
-./reload.sh #Rebuilds and switches to the home environment.
+./switch.sh #Rebuilds and switches to the home environment.
 ```
-
 
 ### Android Installation
 
@@ -164,4 +174,65 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 4. Once complete, run `git clone https://github.com/mwdavisii/nyx.git`
 5. Run `cd nyx` and the run `nix-on-droid switch --flake .`
 
-Note that NixOnDroid is still rudimentary and doesn't have full support for attrs and other utilities yet. This install still runs bash, but it does have neovim and several other functional tools.
+**Notes On NixOnDroid** NixOnDroid is still rudimentary and doesn't have full support for attrs and other functions yet. Because of that, it doens't follow the same `mkAttrs` into `options` for build. It just looks at the files in `home/droid/modules` and runs the configuration there. You can see many of the modules are simplified for this environment. 
+
+## Tips
+
+I have over 150+ commits in the last week. I am not new to declarative systems and have been using git ops strategies since they had a name, but Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was hard for me. I can't tell you how many times I've typed `git reset --hard` or `nix-on-droid rollback`.
+
+Here are some things that would have shortned my learning curve:
+
+### Recommended Reading
+
+- [EdenEast's Nyx Readme](https://github.com/EdenEast/nyx/blob/main/readme.md) The primary inspiration for this project 
+- [Introduction to Nix & NixOS](https://nixos-and-flakes.thiscute.world/introduction/) A great overview
+- [An Introduction to Nix Flakes](https://www.tweag.io/blog/2020-05-25-flakes/)
+- [Flakes aren't real and cannot hurt you: a guide to using Nix flakes the non-flake way](https://jade.fyi/blog/flakes-arent-real/)
+
+### My Nix, Flake, and mkAttr Gotchas
+
+- There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introduce attribute sets, I found it more difficult to apply the published examples to the more complex approach. This was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
+- I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it. 
+  - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) and didn't want to use a custom activation script.
+- Rollback a buil that successfuly failed by executing `nixos-rebuild switch --rollback`
+  - I was frequently reloading the entire system when I had issues before I knew this.
+- `nyx.modules`, `nyx.profiles`, and `nyx.secrets`
+  - In each `mk${system}Configuration`, the lines below actually create the root options (`config.nyx.profiles`, `config.nyx.modules`,  and `config.nyx.secrets`).
+  - These options are set in `system/$system/hosts/$hostname/default.nix`.
+  - These options are applied from various subdirectories:
+    - Secrets (`config.nyx.secrets`) are applied from `system/shared/secrets`
+    - Profiles (`config.nyx.profiles`) are applied from `system/shared/profiles`
+    - Modules (these are applied by home-manager)
+      - App Modules (`config.nyx.modules.app`) are applied from `home/shared/modules/app`
+      - Dev Modules (`config.nyx.modules.dev`) are applied from `home/shared/modules/dev`
+      - Shell Modules (`config.nyx.modules.shell`) are applied from `home/shared/modules/shell`
+
+Example from `lib/default.nix`:
+
+```nix
+  (import ../system/shared/modules)
+  (import ../system/shared/profiles)
+  (import ../in/secrets)
+  (import (strToPath config ../in/hosts))
+```
+
+Example from `system/$system/hosts/$hostname/default.nix`:
+
+```nix
+  nyx = {
+    modules = {
+      user.home = ./home.nix;
+    };
+    secrets = {
+      awsSSHKeys.enable = true;
+      awsConfig.enable = true;
+      userSSHKeys.enable = true;
+      userPGPKeys.enable = true;
+    };
+    profiles = {
+      desktop = {
+        enable = true;
+      };
+    };
+  };
+```
