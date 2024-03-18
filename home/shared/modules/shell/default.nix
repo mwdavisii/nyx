@@ -26,6 +26,7 @@
     ./starship.nix
     ./terraform.nix
     ./tmux.nix
+    ./usbutils.nix
     ./vale.nix
     ./xdg.nix
     ./zellij.nix
