@@ -16,6 +16,6 @@
     ];
   };
   imports = [
-    ./modules
+    ../../../../home/droid/modules
   ];
 }
