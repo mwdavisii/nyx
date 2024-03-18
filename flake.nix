@@ -74,7 +74,20 @@
     in 
     rec {
       lib = import ./lib { inherit self inputs config; } // inputs.nixpkgs.lib;
+      devShell = foreachSystem (system: import ./shell.nix { pkgs = pkgsBySystem."${system}"; });
       legacyPackages = pkgsBySystem;
+      packages = foreachSystem (system: import ./nix/pkgs self system);
+      overlay = foreachSystem (system: _final: _prev: self.packages."${system}");
+      overlays = foreachSystem (
+        system: with inputs; let
+          ovs = attrValues (import ./nix/overlays self);
+        in
+        [
+          (self.overlay."${system}")
+          (nur.overlay)
+          # (_:_: { inherit (eww.packages."${system}") eww; })
+        ] ++ ovs
+      );
 
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
         nix-on-droid = {user = "droid";};

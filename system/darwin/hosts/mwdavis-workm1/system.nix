@@ -6,7 +6,7 @@ with lib;
 {   
     imports = [
         ../../modules/dock
-        ./docConfig.nix
+        ./dockConfig.nix
     ];
 
     config = {
@@ -15,7 +15,6 @@ with lib;
         
         # Auto upgrade nix package and the daemon service.
         homebrew = {
-            
             enable = true;
             casks = pkgs.callPackage ../../casks.nix {};
             brews = pkgs.callPackage ../../brews.nix {};
@@ -28,6 +27,11 @@ with lib;
             # $ mas search <app name>
             #
             masApps = {
+                "OneDrive" = 823766827;
+                "Microsoft Word" = 462054704;
+                "Microsoft Excel" = 462058435;
+                "Microsoft Outlook" = 985367838;
+                "Microsoft Power Point" = 462062816;
                 "Magnet" = 441258766;
                 "Keeper Password Manager" = 414781829;
             };
@@ -53,12 +57,13 @@ with lib;
                     InitialKeyRepeat = 15;
 
                     "com.apple.mouse.tapBehavior" = 1;
-                    "com.apple.sound.beep.volume" = 0.0;
+                    "com.apple.sound.beep.volume" = 1.0;
                     "com.apple.sound.beep.feedback" = 0;
                 };
 
                 finder = {
                     _FXShowPosixPathInTitle = false;
+                    AppleShowAllFiles = true;
                 };
 
                 trackpad = {

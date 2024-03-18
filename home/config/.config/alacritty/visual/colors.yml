@@ -6,10 +6,10 @@ import:
   # - ~/.config/alacritty/visual/colors/insomnia.yml
   # - ~/.config/alacritty/visual/colors/lovelace.yml
   # - ~/.config/alacritty/visual/colors/neon.yml
-  - ~/.config/alacritty/visual/colors/nightfox.yml
+  #- ~/.config/alacritty/visual/colors/nightfox.yml
   # - ~/.config/alacritty/visual/colors/skyfall.yml
   # - ~/.config/alacritty/visual/colors/tomorrow_night.yml
-
+  - ~/.config/alacritty/visual/color/tokyonight.yml
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
 
@@ -19,5 +19,5 @@ draw_bold_text_with_bright_colors: true
 bell:
   # Duration of the visual bell flash. A `duration` of `0` will disable the
   # visual bell animation.
-  duration: 0
+  duration: 2
 

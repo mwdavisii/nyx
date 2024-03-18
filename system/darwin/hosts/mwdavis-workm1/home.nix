@@ -27,10 +27,8 @@
   
   nyx.modules = {
     app = {
-      alacritty = {
-        enable = true;
-        package = null;
-      };
+      alacritty.enable = true;
+      finicky.enable = true;
       kitty.enable = true;
       discord.enable = true;
       firefox.enable = false;
@@ -63,7 +61,7 @@
       gcp.enable = true;
       git = {
         enable = true;
-        signing.signByDefault = false;
+        signing.signByDefault = true;
       };
       gnupg = {
         enable = true;
@@ -80,6 +78,7 @@
       neovim.enable = true;
       networking.enable = true;
       nushell.enable = true;
+      repo.enable = false;
       starship.enable = true;
       terraform.enable = true;
       tmux.enable = true;

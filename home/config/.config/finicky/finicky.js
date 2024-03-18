@@ -45,7 +45,8 @@ module.exports = {
           "*github.com*", //
           "*safelinks.protection.outlook.com*atlassian.com*", //jira links in email
           "samlsp.private.zscaler.com*",
-          "identity.getpostman.com*"
+          "identity.getpostman.com*",
+          "*atlassian.net*"
         ],
         browser: "Google Chrome"
       },
