@@ -1,5 +1,8 @@
 { ... }:
 
 {
-  imports = [ ../../shared/modules ];
+  imports = [ 
+    ../../shared/modules 
+    ./apps
+    ];
 }

@@ -340,71 +340,86 @@ rec {
         inputs.darwin.lib.darwinSystem {
             inherit system;            
             modules = [
-                (
-                  {
-                    environment.systemPackages = [ agenix.packages.${system}.default ];
-                  }
-                )
-                (
-                  { inputs, ... }: {
-                      # Re-expose self and nixpkgs as flakes.
-                      nix.registry = {
-                          self.flake = inputs.self;
-                          nixpkgs = {
-                          from = { id = "nixpkgs"; type = "indirect"; };
-                          flake = inputs.nixpkgs;
-                          };
-                      };
-                    }
-                )
-                (
-                  { pkgs, ... }: {
-                    # Don't rely on the configuration to enable a flake-compatible version of Nix.
-                    nix = {
-                      package = pkgs.nixVersions.stable;
-                      extraOptions = "experimental-features = nix-command flakes";
-                    };
-                    services.nix-daemon.enable = true;
-                    # users.nix.configureBuildUsers = true; # Not sure I am ready for this
-                  }
-                )
-                (inputs.agenix.darwinModules.default)
-                (inputs.home-manager.darwinModules.home-manager)
-                (
-                    {
-                        home-manager = {
-                            useGlobalPkgs = true;
-                            extraSpecialArgs =
-                            let
-                                self = inputs.self;
-                                user = userConf;
-                            in
-                            { inherit inputs pkgs self system user userConf secrets; };
+              (
+                { name, ... }: {
+                  networking.hostName = name;
+                }
+              )
+              (
+                { inputs, ... }: {
+                  # Use the nixpkgs from the flake.
+                  nixpkgs = { inherit pkgs; };
+                  # For compatibility with nix-shell, nix-build, etc.
+                  environment.etc.nixpkgs.source = inputs.nixpkgs;
+                  nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
+                }
+              )
+              (
+                { pkgs, ... }: {
+                  # Don't rely on the configuration to enable a flake-compatible version of Nix.
+                  nix = {
+                    package = pkgs.nixVersions.stable;
+                    extraOptions = "experimental-features = nix-command flakes";
+                  };
+                  services.nix-daemon.enable = true;
+                  # users.nix.configureBuildUsers = true; # Not sure I am ready for this
+                }
+              )
+              (
+                { inputs, ... }: {
+                    # Re-expose self and nixpkgs as flakes.
+                    nix.registry = {
+                        self.flake = inputs.self;
+                        nixpkgs = {
+                        from = { id = "nixpkgs"; type = "indirect"; };
+                        flake = inputs.nixpkgs;
                         };
-                    }
-                )
-                (
-                  { config, ... }: {
-                    system.activationScripts.applications.text = pkgs.lib.mkForce (
-                        ''
-                            echo "setting up ~/Applications/Nix..."
-                            rm -rf ~/Applications/Nix
-                            mkdir -p ~/Applications/Nix
-                            chown ${userConf.userName} ~/Applications/Nix
-                            find ${config.system.build.applications}/Applications -maxdepth 1 -type l | while read f; do
-                            src="$(/usr/bin/stat -f%Y $f)"
-                            appname="$(basename $src)"
-                            osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Users/${userConf.userName}/Applications/Nix/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
-                        done
-                        ''
-                    );
+                    };
                   }
-                )
-                (import ../system/shared/modules)
-                (import ../system/darwin/modules)
-                #(import ../system/shared/profiles)
-                (import ../system/shared/secrets)
-                (import (strToPath config ../system/darwin/hosts))
+              )
+              (
+                { ... }: {
+                  environment.systemPackages = [ agenix.packages.${system}.default ];
+                  #system.stateVersion = "23.11";
+                }
+              )
+              (inputs.agenix.darwinModules.default)
+              (inputs.home-manager.darwinModules.home-manager)
+              (
+                  {
+                      home-manager = {
+                          useGlobalPkgs = true;
+                          extraSpecialArgs =
+                          let
+                              self = inputs.self;
+                              user = userConf;
+                          in
+                          { inherit inputs pkgs self system user userConf secrets; };
+                      };
+                  }
+              )
+              (
+                { config, ... }: {
+                  system.activationScripts.applications.text = pkgs.lib.mkForce (
+                      ''
+                          echo "setting up ~/Applications/Nix..."
+                          rm -rf ~/Applications/Nix
+                          mkdir -p ~/Applications/Nix
+                          chown ${userConf.userName} ~/Applications/Nix
+                          find ${config.system.build.applications}/Applications -maxdepth 1 -type l | while read f; do
+                          src="$(/usr/bin/stat -f%Y $f)"
+                          appname="$(basename $src)"
+                          osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Users/${userConf.userName}/Applications/Nix/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
+                      done
+                      ''
+                  );
+                }
+              )
+              (import ../system/shared/modules)
+              (import ../system/darwin/modules)
+              #(import ../system/shared/profiles)
+              (import ../system/shared/secrets)
+              (import (strToPath config ../system/darwin/hosts))
         ];
             specialArgs =
             let
