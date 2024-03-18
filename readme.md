@@ -191,7 +191,7 @@ Here are some things that would have shortned my learning curve:
 
 ### My Nix, Flake, and mkAttr Gotchas
 
-- There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introduce attribute sets, I found it more difficult to apply the published examples to the more complex approach. This was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
+- There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introducing attribute sets, I found it more difficult to apply the published examples to the more complex approach. There was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
 - I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it. 
   - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) and didn't want to use a custom activation script.
 - Rollback a buil that successfuly failed by executing `nixos-rebuild switch --rollback`
