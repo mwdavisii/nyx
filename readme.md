@@ -174,11 +174,11 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 4. Once complete, run `git clone https://github.com/mwdavisii/nyx.git`
 5. Run `cd nyx` and the run `nix-on-droid switch --flake .`
 
-Note that NixOnDroid is still rudimentary and doesn't have full support for attrs and other utilities yet. This install still runs bash, but it does have neovim and several other functional tools.
+**Notes On NixOnDroid** NixOnDroid is still rudimentary and doesn't have full support for attrs and other functions yet. Because of that, it doens't follow the same `mkAttrs` into `options` for build. It just looks at the files in `home/droid/modules` and runs the configuration there. You can see many of the modules are simplified for this environment. 
 
-## Tips and Tricks
+## Tips
 
-I have over 126 commits in this project and those all came after I had an initial version running and deleted my .git folder before making this public. I am not new to declarative systems and have been using git ops strategies since they had a name, but Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was hard for me. I can't tell you how many `git reset --hard` commands I've executed.
+I have over 150+ commits in the last week. I am not new to declarative systems and have been using git ops strategies since they had a name, but Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was hard for me. I can't tell you how many times I've typed `git reset --hard` or `nix-on-droid rollback`.
 
 Here are some things that would have shortned my learning curve:
 
@@ -189,7 +189,7 @@ Here are some things that would have shortned my learning curve:
 - [An Introduction to Nix Flakes](https://www.tweag.io/blog/2020-05-25-flakes/)
 - [Flakes aren't real and cannot hurt you: a guide to using Nix flakes the non-flake way](https://jade.fyi/blog/flakes-arent-real/)
 
-### My Nix, Flake, and mkAttribute Gotchas
+### My Nix, Flake, and mkAttr Gotchas
 
 - There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introduce attribute sets, I found it more difficult to apply the published examples to the more complex approach. This was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
 - I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it. 

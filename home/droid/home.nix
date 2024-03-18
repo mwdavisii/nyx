@@ -13,6 +13,7 @@
       cmakeCurses
       cmake-format
       gnumake
+      curl
     ];
   };
   imports = [
