@@ -6,28 +6,13 @@ with lib;
 {   
     imports = [
         ../../modules/dock
+        ./docConfig.nix
     ];
 
     config = {
         # Fully declarative dock using the latest from Nix Store
             ## Dock Configuration
-        local.dock = {
-            enable = true;
-            entries = [
-            #{ path = "/Applications/Telegram.app/"; }
-            { path = "/Applications/Discord.app/"; } 
-            { path = "/Applications/Microsoft Outlook.app/"; }
-            { path = "/Applications/Microsoft Teams (work or school).app/"; }
-            { path = "/Applications/Google Chrome.app/"; }
-            { path = "/Applications/Firefox.app/"; }
-            { path = "/Applications/Safari.app/"; }
-            { path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
-            { path = "/Applications/iTerm.app/"; }
-            { path = "/Applications/Visual Studio Code.app/"; }
-            { path = "/Applications/Sublime Text.app/"; }
-            { path = "/Applications/MySQLWorkbench.app/"; } 
-            ];
-        };
+        
         # Auto upgrade nix package and the daemon service.
         homebrew = {
             

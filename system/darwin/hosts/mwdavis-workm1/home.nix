@@ -26,12 +26,6 @@
   };
   
   nyx.modules = {
-    secrets = {
-        awsSSHKeys.enable = true;
-        awsConfig.enable = true;
-        userSSHKeys.enable = true;
-        userPGPKeys.enable = true;
-    };
     app = {
       alacritty = {
         enable = true;
@@ -75,7 +69,7 @@
         enable = true;
         enableService = pkgs.hostPlatform.isLinux;
         publicKeys = [{
-            key = ../config/.gnupg/public.key;
+            key = ../../../../home/config/.gnupg/public.key;
           }];
       };
       jq.enable = true;

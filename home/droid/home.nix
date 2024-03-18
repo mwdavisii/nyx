@@ -13,6 +13,8 @@
       cmakeCurses
       cmake-format
       gnumake
+      curl
+      coreutils
     ];
   };
   imports = [
