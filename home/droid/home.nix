@@ -14,8 +14,7 @@
       cmake-format
       gnumake
       curl
-      grep
-      awk
+      coreutils
     ];
   };
   imports = [
