@@ -23,7 +23,6 @@
       app = {
         alacritty = {
           enable = false;
-          package = null;
         };
         kitty.enable = false;
         discord.enable = false;
