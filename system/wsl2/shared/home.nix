@@ -71,6 +71,7 @@
         starship.enable = true;
         terraform.enable = true;
         tmux.enable = true;
+        usbutils.enable = true;
         vale.enable = true;
         xdg.enable = true;
         zellij.enable = true;
