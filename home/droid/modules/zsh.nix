@@ -8,6 +8,9 @@ in
         [ 
           zsh                                   
           nix-zsh-completions
+          pkgs.oh-my-zsh
+          pkgs.zsh-syntax-highlighting
+          pkgs.zsh-history-substring-search
         ];
 
       home.file.".zshenv".source = ../../config/.zshenv;
