@@ -212,7 +212,7 @@ Example from `lib/default.nix`:
 ```nix
   (import ../system/shared/modules)
   (import ../system/shared/profiles)
-  (import ../in/secrets)
+  (import ../system/shared/secrets)
   (import (strToPath config ../in/hosts))
 ```
 
