@@ -66,6 +66,8 @@ in
       ''  
       [init]
         defaultBranch = main
+      [push]
+        autoSetupRemote = true
       [url "ssh://git@github.com/uLabSystems/"]
         insteadOf = https://github.com/uLabSystems/
       [url "ssh://git@github.com/mwdavisii/"]

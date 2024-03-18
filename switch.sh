@@ -7,6 +7,6 @@ if [[ $osName == "Darwin" ]]; then
 elif [[ $userName == "nix-on-droid" ]]; then
   nix-on-droid switch --flake .
 else
-  sudo nixos-rebuild switch --flake .
-  pkill gpg-agent #force any changes to gpg
+  sudo nixos-rebuild switch --flake .#$hostName
+  #pkill gpg-agent #force any changes to gpg
 fi
