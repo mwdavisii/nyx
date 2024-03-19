@@ -89,7 +89,7 @@ cd ./nyx/setup/wsl
 - **signingKey** => The key used to sign git commits. (you can leave blank)`
 - **windowsUserDirName** => This is the folder name of your windows profile. It is used to create the symlink from WSL to VS Code and add it to your path.
 
-****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL. As of now, it requires building from [nix-community/NixOS-WSL](https://github.com/nix-community/NixOS-WSL) which is more than I can care to tackle at the moment.
+****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL. As of now, it requires building from [nix-community/NixOS-WSL](https://github.com/nix-community/NixOS-WSL) which is more than I care to tackle at the moment.
 
 ```nix
 {
@@ -178,7 +178,7 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 
 ## Tips
 
-I have over 150+ commits in the last week. I am not new to declarative systems and have been using git ops strategies since they had a name, but Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was hard for me. I can't tell you how many times I've typed `git reset --hard` or `nix-on-droid rollback`.
+I have over 150+ commits in the last week. I am not new to declarative systems and have been using git ops strategies since they had a name. Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was difficult. I can't tell you how many times I've typed `git reset --hard` or `nix-on-droid rollback`.
 
 Here are some things that would have shortned my learning curve:
 
