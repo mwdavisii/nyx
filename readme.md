@@ -1,4 +1,4 @@
-# Home-Manager + Flakes for Mac/WSL and Droid
+# Home-Manager + Flakes for Mac, WSL, and Droid
 
 ## Overview
 
