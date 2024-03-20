@@ -4,9 +4,8 @@
 $NixPackageVersion = "nixos-23.11"
 $NixURL = "https://channels.nixos.org/${NixPackageVersion}latest-nixos-"
 
-$dirPath = "~\vms"
 $sshPath = "~\.ssh"
-
+$nixFlavor = "gnome-x86_64-linux.iso"
 
 #PS Check for Admin Rights
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -50,7 +49,12 @@ function Install-ChocoPackage {
         Write-Host "[INFO]Installing $PackageName..." -ForegroundColor Yellow
         $start_time = Get-Date
         #Install the package without confirmation prompt
-        choco install -y -v $PackageName 
+        $command = "choco install -y -v $PackageName"
+        $process = Start-Process -FilePath $command -Wait
+        if ($process.ExitCode -ne 0) {
+            Write-Error "Command '$command' failed with exit code $process.ExitCode."
+            exit
+        }
         Write-Host "Time taken: $((Get-Date).Subtract($start_time).Seconds) second(s)"
 
     }
@@ -62,28 +66,33 @@ function Install-ChocoPackage {
 
 function Build-VirtualBox {
     param(
-        [Parameter(Mandatory=$true)]
-        [string]$VMName
+        [Parameter(Mandatory=$true, Position=0)]
+        [string]$Name,
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]$VMPath,
+        [Parameter(Mandatory=$true, Position=2)]
+        [string]$ISOFileName
     )
-    param(
-        [Parameter(Mandatory=$true)]
-        [string]$VMPath
-    )
+
     #create disk
     VBoxManage createvm --name $name --ostype "Linux_64" --register --basefolder `$dirPath`
     #create memory and network
-    Execute-Command -command "VBoxManage modifyvm ${VMName} --ioapic on"
-    Execute-Command -command "VBoxManage modifyvm ${VMName} --memory 2048 --vram 128"
-    Execute-Command -command "VBoxManage modifyvm ${VMName} --nic1 nat"
+    write-host "Defining Memory and Network Configuration."
+    Execute-Command -command "VBoxManage modifyvm ${Name} --ioapic on"
+    Execute-Command -command "VBoxManage modifyvm ${Name} --memory 2048 --vram 128"
+    Execute-Command -command "VBoxManage modifyvm ${Name} --nic1 nat"
+    write-host "Creating Disks and Storage."
     Execute-Command -command "VBoxManage createhd --filename "${VMPath}"/${VMName}/${VMName}_DISK.vdi --size 40000 --format VDI"
-    Execute-Command -command "VBoxManage storagectl ${VMName} --name "SATA Controller" --add sata --controller IntelAhci"
-    Execute-Command -command "VBoxManage storageattach ${VMName} --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "${VMPath}"/${VMName}/${VMName}_DISK.vdi"
-    Execute-Command -command "VBoxManage storagectl ${VMName} --name "IDE Controller" --add ide --controller PIIX4"
-    Execute-Command -command "VBoxManage storageattach ${VMName} --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium "${VMPath}"/nixos.iso"       
-    Execute-Command -command "VBoxManage modifyvm ${VMName} --boot1 dvd --boot2 disk --boot3 none --boot4 none"
-    Execute-Command -command "VBoxManage modifyvm ${VMName} --vrde on"
-    Execute-Command -command "VBoxManage modifyvm ${VMName} --vrdemulticon on --vrdeport 10001"
-    Execute-Command -command "VBoxHeadless --startvm ${VMName} "
+    Execute-Command -command "VBoxManage storagectl ${Name} --name "SATA Controller" --add sata --controller IntelAhci"
+    Execute-Command -command "VBoxManage storageattach ${Name} --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "${VMPath}"/${Name}/${Name}_DISK.vdi"
+    Execute-Command -command "VBoxManage storagectl ${Name} --name "IDE Controller" --add ide --controller PIIX4"
+    Execute-Command -command "VBoxManage storageattach ${Name} --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium "${VMPath}"/${ISOFileName}"       
+    Execute-Command -command "VBoxManage modifyvm ${Name} --boot1 dvd --boot2 disk --boot3 none --boot4 none"
+    Execute-Command -command "VBoxManage modifyvm ${Name} --vrde on"
+    Execute-Command -command "VBoxManage modifyvm ${Name} --vrdemulticon on --vrdeport 10001"
+    write-host "Launching VM."
+    Execute-Command -command "VBoxHeadless --startvm ${Name} "
+    write-host "Attaching SSH Folder"
     Execute-Command -command "VBoxManage sharedfolder add $sshPath -name ".ssh" -hostpath $sshPath"
 }
 
@@ -119,15 +128,12 @@ switch ($decision)
         break
         };
     2 {
-        $sys = "hyperv"
-        break
-      };
-    3 {Exit}
+        exit
+    }
 }
 
 Install-ChocoPackage -PackageName $sys
 
-Clear-Host
 #Prompt for Version
 $title = "NixOS Versions"  
 $question = '
@@ -175,15 +181,31 @@ switch ($decision)
         break
       };
     6 {
-        {Exit}
+        exit
       };
 }
 
 
+$dirPath = Read-Host "Please enter the storage location for your VM files (default = $env:USERPROFILE\vms ) "
 
-write-host "Downloading NixOS."
-Invoke-WebRequest "https://channels.nixos.org/${NixPackageVersion}latest-nixos-$nixFlavor" -OutFile nixos.iso
+$VMName = Read-Host "Please enter a unique name for your VM (default = NixOS) "
 
-write-host "Process Completed."
+if ($dirPath -eq ""){
+    $dirPath = "$env:USERPROFILE\vms"
+}
 
-buildVirtualBoxImage $VName $VMPath
+if ($VMName -eq ""){
+    $VMName = "NixOS"
+}
+
+Write-Host "VMName = $VMName"
+
+if (!((test-path "${$dirPath}\${nixFlavor}"))) {
+    write-host "Downloading NixOS."
+    #write-host "https://channels.nixos.org/${NixPackageVersion}/latest-nixos-${nixFlavor}"
+    Invoke-WebRequest "https://channels.nixos.org/${NixPackageVersion}/latest-nixos-${nixFlavor}" -OutFile "${$dirPath}\${nixFlavor}"
+} else{
+    write-host "Local copy of ${nixFlavor}.iso found. Skipping download"
+}
+
+Build-VirtualBox -Name "$VMName" -VMPath "$dirPath" -ISOFileName "$nixFlavor"
