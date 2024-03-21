@@ -1,6 +1,12 @@
 #Requires -Version 7.2
 $powerlineFontsUrl = 'https://github.com/powerline/fonts.git'
 
+Import-Module ..\shared\common.ps1
+
+
+Check-Admin-Rights()
+
+
 #Check for latest wsl version
 write-host "Installing PSGitHub. This is required to determine the latest version of NixOS-WSL"
 Install-Module -Name PSGitHub
