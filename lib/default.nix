@@ -83,7 +83,7 @@ rec {
         EDITOR = "nvim";
         VISUAL = "nvim";
         COLORTERM = "truecolor"; 
-        PATH = "$PATH:/mnt/c/Users/${userConf.windowsUserDirName}/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows";
+        PATH = "$PATH:/mnt/c/Users/${userConf.windowsUserDirName}/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
       };
 
       # Use the same Nix configuration for the user
