@@ -8,13 +8,14 @@
 
   manual.manpages.enable = true;
   
-  home = {   
+  home = {
     stateVersion = "23.11";
     packages = with pkgs; [
       rustup
       vhs
       bat
       bash
+      wget
     ];
   };
 
