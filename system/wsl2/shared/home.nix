@@ -15,6 +15,7 @@
       vhs
       bat
       bash
+      wget
     ];
   };
 
