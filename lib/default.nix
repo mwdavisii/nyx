@@ -241,6 +241,8 @@ rec {
         nixosSystem {
           inherit system;
           modules = [
+            (inputs.nixos-wsl.nixosModules.wsl)
+            (vscode-server.nixosModules.default)
             (
               {
                 environment.systemPackages = [ agenix.packages.${system}.default ];

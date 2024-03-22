@@ -6,15 +6,6 @@ let
   nixConf = import ../../../nix/conf.nix;
 in
 {
-  modules = [
-    (inputs.nixos-wsl.nixosModules.wsl)
-    (vscode-server.nixosModules.default)
-    (
-      { config, pkgs, ... }: {
-        services.vscode-server.enable = true;
-      }
-    )
-  ];
   config = {
     wsl = {
         enable = true;
@@ -25,6 +16,7 @@ in
         startMenuLaunchers = true;
         docker-desktop.enable = false;
       };
+    services.vscode-server.enable = true;
     environment.shells = [pkgs.zsh];
     system.stateVersion = "23.11";
     programs.zsh.enable = true;
