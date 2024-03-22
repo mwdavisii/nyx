@@ -81,6 +81,26 @@
         "type": "github"
       }
     },
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1711006105,
+        "narHash": "sha256-pvjqjx4L2Hx/NP3RWcwLjk+ABtMODAJ9+rgreU6fP6I=",
+        "owner": "nix-community",
+        "repo": "disko",
+        "rev": "a8c966ee117c278a5aabc6f00b00ef62eb7e28f6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "disko",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -637,6 +657,7 @@
       "inputs": {
         "agenix": "agenix",
         "darwin": "darwin_2",
+        "disko": "disko",
         "ghostty-module": "ghostty-module",
         "home-manager": "home-manager_2",
         "homebrew-bundle": "homebrew-bundle",
