@@ -109,15 +109,12 @@
         mwdavisii = { };
       };
 
-      darwinConfigurations = mapAttrs' mkDarwinConfiguration{
-        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii";};
-      };
-
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
-        nixos = {}; #WSL
-        personal = {hostname ="personal";}; #WSL
-        work = {hostname = "work";}; #WSL
-        virtualBoxOVA = {hostname = "virtualBoxOVA"; user ="mwdavisii";}; #VirtualBox
+        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii"; buildTarget="darwin";}; #macbook
+        nixos = {user="nixos"; hostname ="nixos"; buildTarget="wsl";}; #WSL
+        personal = {user="nixos"; hostname ="personal"; buildTarget="wsl";}; #WSL
+        work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
+        virtualBoxOVA = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #VirtualBox
       };
       
       top =
