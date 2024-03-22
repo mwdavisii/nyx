@@ -6,6 +6,15 @@ let
   nixConf = import ../../../nix/conf.nix;
 in
 {
+  modules = [
+    (inputs.nixos-wsl.nixosModules.wsl)
+    (vscode-server.nixosModules.default)
+    (
+      { config, pkgs, ... }: {
+        services.vscode-server.enable = true;
+      }
+    )
+  ];
   config = {
     wsl = {
         enable = true;

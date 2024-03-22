@@ -1,10 +1,10 @@
 #Requires -Version 7.2
+#Requires -RunAsAdministrator
+
 $powerlineFontsUrl = 'https://github.com/powerline/fonts.git'
 
 Import-Module ..\shared\common.ps1
 
-
-Check-Admin-Rights()
 
 
 #Check for latest wsl version
