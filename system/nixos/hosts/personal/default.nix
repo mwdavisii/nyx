@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [../../shared/system.nix]; 
+  imports = [../../shared/wslsystem.nix]; 
   nyx = {
     modules = {
       user.home = ../../shared/home.nix;
