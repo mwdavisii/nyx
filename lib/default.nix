@@ -237,61 +237,63 @@ rec {
         let
             pkgs = inputs.self.legacyPackages."${system}";
             userConf = import (strToFile user ../users);
+            commonModules = [
+              (
+                {
+                  environment.systemPackages = [ agenix.packages.${system}.default ];
+                  age.identityPaths = [ "/home/${userConf.userName}/.ssh/id_rsa" ];
+                  
+                }
+              )
+              (
+                { name, ... }: {
+                  networking.hostName = name;
+                }
+              )
+              (
+                { inputs, ... }: {
+                  # Use the nixpkgs from the flake.
+                  nixpkgs = { inherit pkgs; };
+
+                  # For compatibility with nix-shell, nix-build, etc.
+                  environment.etc.nixpkgs.source = inputs.nixpkgs;
+                  nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
+                }
+              )
+              (
+                { pkgs, ... }: {
+                  # Don't rely on the configuration to enable a flake-compatible version of Nix.
+                  nix = {
+                    package = pkgs.nixVersions.stable;
+                    extraOptions = "experimental-features = nix-command flakes";
+                  };
+                }
+              )
+              (
+                { inputs, ... }: {
+                  # Re-expose self and nixpkgs as flakes.
+                  nix.registry = {
+                    self.flake = inputs.self;
+                    nixpkgs = {
+                      from = { id = "nixpkgs"; type = "indirect"; };
+                      flake = inputs.nixpkgs;
+                    };
+                  };
+                }
+              )
+              (
+                { ... }: {
+                  system.stateVersion = "23.11";
+                }
+              )
+              (inputs.nixos-wsl.nixosModules.wsl)
+              (vscode-server.nixosModules.default)
+              (inputs.agenix.nixosModules.default)
+            ];
         in
         nixosSystem {
           inherit system;
-          modules = [
-            (inputs.nixos-wsl.nixosModules.wsl)
-            (vscode-server.nixosModules.default)
-            (
-              {
-                environment.systemPackages = [ agenix.packages.${system}.default ];
-                age.identityPaths = [ "/home/${userConf.userName}/.ssh/id_rsa" ];
-                
-              }
-            )
-            (
-              { name, ... }: {
-                networking.hostName = name;
-              }
-            )
-            (
-              { inputs, ... }: {
-                # Use the nixpkgs from the flake.
-                nixpkgs = { inherit pkgs; };
-
-                # For compatibility with nix-shell, nix-build, etc.
-                environment.etc.nixpkgs.source = inputs.nixpkgs;
-                nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
-              }
-            )
-            (
-              { pkgs, ... }: {
-                # Don't rely on the configuration to enable a flake-compatible version of Nix.
-                nix = {
-                  package = pkgs.nixVersions.stable;
-                  extraOptions = "experimental-features = nix-command flakes";
-                };
-              }
-            )
-            (
-              { inputs, ... }: {
-                # Re-expose self and nixpkgs as flakes.
-                nix.registry = {
-                  self.flake = inputs.self;
-                  nixpkgs = {
-                    from = { id = "nixpkgs"; type = "indirect"; };
-                    flake = inputs.nixpkgs;
-                  };
-                };
-              }
-            )
-            (
-              { ... }: {
-                system.stateVersion = "23.11";
-              }
-            )
-            (inputs.agenix.nixosModules.default)
+          modules = commonModules ++ [
             (inputs.home-manager.nixosModules.home-manager)
             (
               {
@@ -311,8 +313,8 @@ rec {
             (import ../system/shared/modules)
             (import ../system/shared/profiles)
             (import ../system/shared/secrets)
-            (import ../system/nixos/modules)
-            (import (strToPath config ../system/nixos/hosts))
+            (import ../system/wsl2/modules)
+            (import (strToPath config ../system/wsl2/hosts))
           ];
           specialArgs =
             let

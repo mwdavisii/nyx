@@ -1,8 +1,8 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, hostName, ... }:
 {
     imports =
         [ # Include the results of the hardware scan.
-        ./hardware-configuration.nix
+        ./hardware.nix
         ];
 
     # Bootloader.
@@ -10,7 +10,7 @@
     boot.loader.grub.device = "/dev/sda";
     boot.loader.grub.useOSProber = true;
 
-    networking.hostName = "nixos"; # Define your hostname.
+    #networking.hostName = $hostName; # Define your hostname.
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
     # Configure network proxy if necessary
@@ -38,6 +38,25 @@
         LC_TIME = "en_US.UTF-8";
     };
 
+
+        # following configuration is added only when building VM with build-vm
+    virtualisation = {
+        vmVariant = {
+            virtualisation = {
+                memorySize =  2048; # Use 2048MiB memory.
+                cores = 4;
+            };         
+        };
+        vmVariantWithBootLoader = {
+            virtualisation = {
+                memorySize =  2048; # Use 2048MiB memory.
+                cores = 4;
+            };         
+        };
+        virtualbox = {
+            guest.enable = true;
+        };
+    };
 
     # Configure keymap in X11
     services.xserver = {
@@ -95,7 +114,4 @@
         ];
     };
 */
-    # Allow unfree packages
-    nixpkgs.config.allowUnfree = true;
-
 }

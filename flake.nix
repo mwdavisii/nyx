@@ -14,6 +14,12 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    #Virtualization
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+        
     # Secrets
     agenix.url = "github:ryantm/agenix";
     secrets = {
@@ -111,7 +117,7 @@
         nixos = {}; #WSL
         personal = {hostname ="personal";}; #WSL
         work = {hostname = "work";}; #WSL
-        NixOSV = {}; #VirtualBox
+        virtualBoxOVA = {hostname = "virtualBoxOVA"; user ="mwdavisii";}; #VirtualBox
       };
       
       top =

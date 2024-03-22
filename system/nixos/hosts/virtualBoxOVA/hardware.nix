@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, inputs, ... }:
 
 {
   imports = [
@@ -8,21 +8,27 @@
   boot = {
     initrd = {
         availableKernelModules = [ "ata_piix" "ahci" "sd_mod" "sr_mod" ];
-        initrd.kernelModules = [ ];
+        kernelModules = [ ];
     };
     kernelModules = [ ];
     extraModulePackages = [ ];
     loader = {
-      systemd-boot.enable = true;
+      #systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
   };
    
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/466a545c-d51f-4154-8dee-263b4c1ae339";
+  fileSystems= {
+    "/" = {
+      device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
+    "/boot" = {
+      device = "/dev/disk/by-label/boot";
+      fsType = "vfat";
+    };
+  };
 
   swapDevices = [ ];
 
