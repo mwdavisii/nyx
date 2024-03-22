@@ -8,14 +8,15 @@ in
 {
   config = {
     wsl = {
-        enable = true;
-        wslConf.automount.root = "/mnt";
-        wslConf.interop.appendWindowsPath = false;
-        wslConf.network.generateHosts = false;
-        defaultUser = userName;
-        startMenuLaunchers = true;
-        docker-desktop.enable = false;
-      };
+      enable = true;
+      wslConf.automount.root = "/mnt";
+      wslConf.interop.appendWindowsPath = false;
+      wslConf.network.generateHosts = false;
+      defaultUser = userName;
+      startMenuLaunchers = true;
+      docker-desktop.enable = false;
+    };
+    
     services.vscode-server.enable = true;
     environment.shells = [pkgs.zsh];
     system.stateVersion = "23.11";
