@@ -9,6 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url                 = "github:nix-community/NUR";    
+    #hardware
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Secrets
     agenix.url = "github:ryantm/agenix";
     secrets = {
@@ -102,10 +107,11 @@
         mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii";};
       };
 
-      nixosConfigurations = mapAttrs' mkNixosWSLConfiguration {
-        nixos = {};
-        personal = {hostname ="personal";};
-        work = {hostname = "work";};
+      nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
+        nixos = {}; #WSL
+        personal = {hostname ="personal";}; #WSL
+        work = {hostname = "work";}; #WSL
+        NixOSV = {}; #VirtualBox
       };
       
       top =
