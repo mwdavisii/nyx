@@ -317,16 +317,31 @@ rec {
           }
         #handles VM builds. Default will not cross compile.
         else if buildTarget == "vm" then
-          nixosSystem {
-          inherit system;
-          modules = commonModules ++ nixosModules;
-          specialArgs =
-          let
-            self = inputs.self;
-            user = userConf;
-          in
-          { inherit inputs name self system user userConf hostname secrets;};
-        }
+          nixos-generators.nixosGenerate {
+            inherit system;
+            modules = commonModules ++ nixosModules;
+            format = "vmware";
+            # optional arguments:
+            # explicit nixpkgs and lib:
+            # pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            # lib = nixpkgs.legacyPackages.x86_64-linux.lib;
+            # additional arguments to pass to modules:
+            # specialArgs = { myExtraArg = "foobar"; };
+            
+            # you can also define your own custom formats
+            # customFormats = { "myFormat" = <myFormatModule>; ... };
+            # format = "myFormat";
+            vbox = nixos-generators.nixosGenerate {
+              system = "x86_64-linux";
+              format = "virtualbox";
+            };
+            specialArgs =
+            let
+              self = inputs.self;
+              user = userConf;
+            in
+            { inherit inputs name self system user userConf hostname secrets;};
+          }
         else if buildTarget == "darwin" then
           inputs.darwin.lib.darwinSystem {
             inherit system;            
@@ -343,8 +358,6 @@ rec {
         else
           throw "${systemType} is not supported."
       );
-
-
 
       ################################## DROID ##################################
       mkNixOnDroidConfiguration = name: {config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? {}, }: 
