@@ -1,17 +1,17 @@
 { config, pkgs, ... }:
 
 {
-  imports = [../../shared/wslsystem.nix]; 
+  imports = [../../shared/system.nix]; 
   nyx = {
     modules = {
       user.home = ../../shared/home.nix;
     };
 
     secrets = {
-      awsSSHKeys.enable = true;
+      awsSSHKeys.enable = false;
       awsConfig.enable = true;
-      userSSHKeys.enable = true;
-      userPGPKeys.enable = true;
+      userSSHKeys.enable = false;
+      userPGPKeys.enable = false;
     };
 
     profiles = {

@@ -1,19 +1,60 @@
-{ config, pkgs, self, userConf, ... }:
+{ config, lib, pkgs, self, user, userConf, ... }:
 
 with self.lib;
 let
   cfg = config.nyx.modules.user;
+
+  isPasswdCompatible = str: !(hasInfix ":" str || hasInfix "\n" str);
+  passwdEntry = type: lib.types.addCheck type isPasswdCompatible // {
+    name = "passwdEntry ${type.name}";
+    description = "${type.description}, not containing newlines or colons";
+  };
+
+  defaultHashedPassword = existsOrDefault "hashedPassword" user null;
+
+  defaultExtraGroups = [
+    "audio"
+    "docker"
+    "games"
+    "locate"
+    "libvirtd"
+    "networmanager"
+    "wheel"
+  ];
 in
 {
-  options.nyx.modules.user = { };
+  options.nyx.modules.user = {
+    extraGroups = mkOption {
+      type = types.listOf types.str;
+      default = defaultExtraGroups;
+      description = "The user's auxiliary groups.";
+    };
 
+    hashedPassword = mkOption {
+      type = with types; nullOr (passwdEntry str);
+      default = defaultHashedPassword;
+      description = ''
+        Specifies the hashed password for the user.
+      '';
+    };
+  };
+  
   config = mkMerge [
     {
-      users.users.${userConf.userName} = {
-        name = "${userConf.userName}";
-        home = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
-        shell = pkgs.zsh;
-    };
+      users = {
+        users."${cfg.name}" = with cfg; {
+          inherit hashedPassword extraGroups;
+          isNormalUser = true;
+          name = "${userConf.userName}";
+          home = "/home/${userConf.userName}";
+          shell = pkgs.zsh;
+          uid = 1000;
+        };
+
+        # Do not allow users to be added or modified except through Nix configuration.
+        mutableUsers = false;
+      };
+      nix.settings.trusted-users = [ "${cfg.name}" ];
     }
   ];
 }
