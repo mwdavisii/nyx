@@ -28,6 +28,7 @@
         kitty.enable = false;
         discord.enable = false;
         firefox.enable = false;
+        qemu.enable = true;
         obs.enable = true;
         wezterm = {
           enable = false;
