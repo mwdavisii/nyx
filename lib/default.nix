@@ -155,6 +155,11 @@ rec {
         userConf = import (strToFile user ../users);
         #nixos = Dedicated Build on Metal
         nixosModules = [
+          (
+            { ... }: {
+              system.stateVersion = "23.11";
+            }
+          )
           (inputs.home-manager.nixosModules.home-manager)
           (
             {
@@ -173,12 +178,18 @@ rec {
           )
           (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
+          (import ../system/shared/profiles)
           (import ../system/shared/modules)
           (import ../system/nixos/modules)
           (import (strToPath config ../system/nixos/hosts))
         ];
         #Darwin = Mac Target
         darwinModules = [
+          (
+            {
+              services.nix-daemon.enable = true;
+            }
+          )
           (inputs.agenix.darwinModules.default)
           (inputs.home-manager.darwinModules.home-manager)
           (
@@ -212,11 +223,17 @@ rec {
             }
           )
           (import ../system/darwin/modules)
+          (import ../system/shared/modules)
           (import ../system/shared/secrets)
           (import (strToPath config ../system/darwin/hosts))
         ];
         #wsl = WSL Target
         wslModules = [
+          (
+            { ... }: {
+              system.stateVersion = "23.11";
+            }
+          )
           (inputs.home-manager.nixosModules.home-manager)
           (
             {
@@ -237,6 +254,7 @@ rec {
           (vscode-server.nixosModules.default)
           (inputs.agenix.nixosModules.default)
           (import ../system/shared/modules)
+          (import ../system/shared/profiles)
           (import ../system/wsl2/modules)
           (import (strToPath config ../system/wsl2/hosts))
         ];
@@ -284,12 +302,6 @@ rec {
               };
             }
           )
-          (
-            { ... }: {
-              system.stateVersion = "23.11";
-            }
-          )
-          (import ../system/shared/profiles)
           (import ../system/shared/secrets)
         ];
       in

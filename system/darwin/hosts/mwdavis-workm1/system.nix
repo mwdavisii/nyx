@@ -40,7 +40,6 @@ with lib;
         
         fonts.fontDir.enable = true;
         system = {
-            
             #stateVersion = 4;
             defaults = {
                 LaunchServices = {
