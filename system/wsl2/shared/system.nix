@@ -8,14 +8,16 @@ in
 {
   config = {
     wsl = {
-        enable = true;
-        wslConf.automount.root = "/mnt";
-        wslConf.interop.appendWindowsPath = false;
-        wslConf.network.generateHosts = false;
-        defaultUser = userName;
-        startMenuLaunchers = true;
-        docker-desktop.enable = false;
-      };
+      enable = true;
+      wslConf.automount.root = "/mnt";
+      wslConf.interop.appendWindowsPath = false;
+      wslConf.network.generateHosts = false;
+      defaultUser = userName;
+      startMenuLaunchers = true;
+      docker-desktop.enable = false;
+    };
+    
+    services.vscode-server.enable = true;
     environment.shells = [pkgs.zsh];
     system.stateVersion = "23.11";
     programs.zsh.enable = true;
@@ -26,7 +28,6 @@ in
       "d /home/${userName}/.config 0755 ${userName} users"
       "d /home/${userName}/.config/lvim 0755 ${userName} users"
     ];
-
     fonts.packages = with pkgs; [
       dejavu_fonts
       jetbrains-mono
