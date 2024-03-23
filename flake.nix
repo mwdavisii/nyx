@@ -77,7 +77,7 @@
           inherit system;
           config = import ./nix/config.nix;
           overlays = [
-            #self.overlays."${system}"
+          #  self.overlays."${system}"
             inputs.nix-on-droid.overlays.default
           ];
         }
@@ -106,6 +106,10 @@
 
       homeManagerConfigurations = mapAttrs' mkHome {
         mwdavisii = { };
+      };
+
+      darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
+        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii"; buildTarget="darwin";}; #macbook
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {

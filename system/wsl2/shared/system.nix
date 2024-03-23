@@ -28,7 +28,6 @@ in
       "d /home/${userName}/.config 0755 ${userName} users"
       "d /home/${userName}/.config/lvim 0755 ${userName} users"
     ];
-
     fonts.packages = with pkgs; [
       dejavu_fonts
       jetbrains-mono
