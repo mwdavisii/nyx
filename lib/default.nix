@@ -72,7 +72,7 @@ rec {
       imports = [
         (agenix.homeManagerModules.default)
         (import ../home/darwin/modules)
-        (import ../home/wsl2/modules)
+        (import ../home/nixos/modules)
         (import config )
       ];
       
@@ -83,7 +83,7 @@ rec {
         EDITOR = "nvim";
         VISUAL = "nvim";
         COLORTERM = "truecolor"; 
-        PATH = "$PATH:/mnt/c/Users/${userConf.windowsUserDirName}/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows";
+        PATH = "$PATH:/mnt/c/Users/${userConf.windowsUserDirName}/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
       };
 
       # Use the same Nix configuration for the user
@@ -148,7 +148,227 @@ rec {
         };
     };
     
-    mkNixOnDroidConfiguration = name: {config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? {}, }: 
+    mkNixSystemConfiguration = name: {config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? {}, }: 
+    nameValuePair name(
+      let
+        pkgs = inputs.self.legacyPackages."${system}";
+        userConf = import (strToFile user ../users);
+        #nixos = Dedicated Build on Metal
+        nixosModules = [
+          (
+            { ... }: {
+              system.stateVersion = "23.11";
+            }
+          )
+          (inputs.home-manager.nixosModules.home-manager)
+          (
+            {
+              home-manager = {
+                # useUserPackages = true;
+                useGlobalPkgs = true;
+                extraSpecialArgs =
+                  let
+                    self = inputs.self;
+                    user = userConf;
+                  in
+                  # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
+                  { inherit inputs self system user userConf secrets; };
+              };
+            }
+          )
+          (disko.nixosModules.disko)
+          (inputs.agenix.nixosModules.default)
+          (import ../system/shared/profiles)
+          (import ../system/shared/modules)
+          (import ../system/nixos/modules)
+          (import (strToPath config ../system/nixos/hosts))
+        ];
+        #Darwin = Mac Target
+        darwinModules = [
+          (
+            {
+              services.nix-daemon.enable = true;
+            }
+          )
+          (inputs.agenix.darwinModules.default)
+          (inputs.home-manager.darwinModules.home-manager)
+          (
+              {
+                  home-manager = {
+                      useGlobalPkgs = true;
+                      extraSpecialArgs =
+                      let
+                          self = inputs.self;
+                          user = userConf;
+                      in
+                      { inherit inputs pkgs self system user userConf secrets; };
+                  };
+              }
+          )
+          (
+            { config, ... }: {
+              system.activationScripts.applications.text = pkgs.lib.mkForce (
+                  ''
+                      echo "setting up ~/Applications/Nix..."
+                      rm -rf ~/Applications/Nix
+                      mkdir -p ~/Applications/Nix
+                      chown ${userConf.userName} ~/Applications/Nix
+                      find ${config.system.build.applications}/Applications -maxdepth 1 -type l | while read f; do
+                      src="$(/usr/bin/stat -f%Y $f)"
+                      appname="$(basename $src)"
+                      osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Users/${userConf.userName}/Applications/Nix/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
+                  done
+                  ''
+              );
+            }
+          )
+          (import ../system/darwin/modules)
+          (import ../system/shared/modules)
+          (import ../system/shared/secrets)
+          (import (strToPath config ../system/darwin/hosts))
+        ];
+        #wsl = WSL Target
+        wslModules = [
+          (
+            { ... }: {
+              system.stateVersion = "23.11";
+            }
+          )
+          (inputs.home-manager.nixosModules.home-manager)
+          (
+            {
+              home-manager = {
+                # useUserPackages = true;
+                useGlobalPkgs = true;
+                extraSpecialArgs =
+                  let
+                    self = inputs.self;
+                    user = userConf;
+                  in
+                  # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
+                  { inherit inputs self system user userConf secrets; };
+              };
+            }
+          )
+          (inputs.nixos-wsl.nixosModules.wsl)
+          (vscode-server.nixosModules.default)
+          (inputs.agenix.nixosModules.default)
+          (import ../system/shared/modules)
+          (import ../system/shared/profiles)
+          (import ../system/wsl2/modules)
+          (import (strToPath config ../system/wsl2/hosts))
+        ];
+        commonModules = [
+          (
+            {
+              environment.systemPackages = [ agenix.packages.${system}.default ];
+              age.identityPaths = [ "/home/${userConf.userName}/.ssh/id_rsa" ];
+              
+            }
+          )
+          (
+            { name, ... }: {
+              networking.hostName = name;
+            }
+          )
+          (
+            { inputs, ... }: {
+              # Use the nixpkgs from the flake.
+              nixpkgs = { inherit pkgs; };
+
+              # For compatibility with nix-shell, nix-build, etc.
+              environment.etc.nixpkgs.source = inputs.nixpkgs;
+              nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
+            }
+          )
+          (
+            { pkgs, ... }: {
+              # Don't rely on the configuration to enable a flake-compatible version of Nix.
+              nix = {
+                package = pkgs.nixVersions.stable;
+                extraOptions = "experimental-features = nix-command flakes";
+              };
+            }
+          )
+          (
+            { inputs, ... }: {
+              # Re-expose self and nixpkgs as flakes.
+              nix.registry = {
+                self.flake = inputs.self;
+                nixpkgs = {
+                  from = { id = "nixpkgs"; type = "indirect"; };
+                  flake = inputs.nixpkgs;
+                };
+              };
+            }
+          )
+          (import ../system/shared/secrets)
+        ];
+      in
+        if buildTarget == "wsl" then
+          nixosSystem {
+            inherit system;
+            modules = commonModules ++ wslModules;
+            specialArgs =
+              let
+                self = inputs.self;
+                user = userConf;
+              in
+              { inherit inputs name self system user userConf hostname secrets;};
+          }
+        ## handles nixos host builds
+        else if buildTarget == "nixos" then
+          nixosSystem {
+            inherit system;
+            modules = commonModules ++ nixosModules;
+            specialArgs =
+            let
+              self = inputs.self;
+              user = userConf;
+            in
+            { inherit inputs name self system user userConf hostname secrets;};
+          }
+        #handles VM builds. Default will not cross compile.
+        else if buildTarget == "vm" then
+            nixosSystem{  
+              inherit system;
+              modules = commonModules ++ nixosModules ++ [
+                inputs.nixos-generators.nixosModules.all-formats
+                (
+                  {
+                    formatConfigs.virtualbox = { config, ... }: {
+                      services.openssh.enable = true;
+                    };
+                  }
+                )
+              ];
+              specialArgs =
+              let
+                self = inputs.self;
+                user = userConf;
+              in
+              { inherit inputs name self system user userConf hostname secrets;};
+            }
+                  
+        else if buildTarget == "darwin" then
+          inputs.darwin.lib.darwinSystem {
+            inherit system;            
+            modules = commonModules ++ darwinModules;
+            specialArgs =
+            let
+              self = inputs.self;
+              user = userConf;
+            in
+            { 
+              inherit inputs name self system user userConf secrets pkgs; 
+            };
+          }
+        else
+          throw "${systemType} is not supported."
+      );
+
+      ################################## DROID ##################################
+      mkNixOnDroidConfiguration = name: {config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? {}, }: 
       nameValuePair name(
         let
             pkgs = import nixpkgs {
@@ -163,18 +383,6 @@ rec {
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
           modules = [
-/*
-            (
-              { inputs, ... }: {
-                # Use the nixpkgs from the flake.
-                nixpkgs = { inherit pkgs; };
-
-                # For compatibility with nix-shell, nix-build, etc.
-                environment.etc.nixpkgs.source = inputs.nixpkgs;
-                nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
-              }
-            )
-*/
             (
               { pkgs, ... }: {
                 # Don't rely on the configuration to enable a flake-compatible version of Nix.
@@ -219,9 +427,6 @@ rec {
               };
             }
           )
-          #(import ../system/common/modules)
-          #(import ../system/common/profiles)
-          #(import ../system/droid/modules)
           (import (strToPath config ../system/droid/hosts))
 
       ];
@@ -233,200 +438,5 @@ rec {
         { inherit inputs self system user userConf secrets agenix home-manager; };
       }
     );
-
-
-    mkNixosWSLConfiguration = name: {config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", args ? {}, }: 
-    nameValuePair name(
-        let
-            pkgs = inputs.self.legacyPackages."${system}";
-            userConf = import (strToFile user ../users);
-        in
-        nixosSystem {
-        inherit system;
-        modules = [
-          (
-            {
-              environment.systemPackages = [ agenix.packages.${system}.default ];
-              age.identityPaths = [ "/home/${userConf.userName}/.ssh/id_rsa" ];
-              
-            }
-          )
-          (inputs.nixos-wsl.nixosModules.wsl)
-          (
-            { name, ... }: {
-              networking.hostName = name;
-            }
-          )
-          (
-            { inputs, ... }: {
-              # Use the nixpkgs from the flake.
-              nixpkgs = { inherit pkgs; };
-
-              # For compatibility with nix-shell, nix-build, etc.
-              environment.etc.nixpkgs.source = inputs.nixpkgs;
-              nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
-            }
-          )
-          (
-            { pkgs, ... }: {
-              # Don't rely on the configuration to enable a flake-compatible version of Nix.
-              nix = {
-                package = pkgs.nixVersions.stable;
-                extraOptions = "experimental-features = nix-command flakes";
-              };
-            }
-          )
-          (
-            { inputs, ... }: {
-              # Re-expose self and nixpkgs as flakes.
-              nix.registry = {
-                self.flake = inputs.self;
-                nixpkgs = {
-                  from = { id = "nixpkgs"; type = "indirect"; };
-                  flake = inputs.nixpkgs;
-                };
-              };
-            }
-          )
-          (
-            { ... }: {
-              system.stateVersion = "23.11";
-            }
-          )
-          (vscode-server.nixosModules.default)
-          (
-            { config, pkgs, ... }: {
-              services.vscode-server.enable = true;
-            }
-          )
-          (inputs.agenix.nixosModules.default)
-          (inputs.home-manager.nixosModules.home-manager)
-          (
-            {
-              home-manager = {
-                # useUserPackages = true;
-                useGlobalPkgs = true;
-                extraSpecialArgs =
-                  let
-                    self = inputs.self;
-                    user = userConf;
-                  in
-                  # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
-                  { inherit inputs self system user userConf secrets; };
-              };
-            }
-          )
-          (import ../system/shared/modules)
-          (import ../system/shared/profiles)
-          (import ../system/shared/secrets)
-          (import ../system/wsl2/modules)
-          (import (strToPath config ../system/wsl2/hosts))
-        ];
-        specialArgs =
-          let
-            self = inputs.self;
-            user = userConf;
-          in
-          { inherit inputs name self system user userConf hostname secrets;};
-      }
-    );
+  }
     
-    mkDarwinConfiguration = name: {config ? name, user ? "nixos", system ? "aarch64-darwin", args ? {}, }: 
-    nameValuePair name (
-        let
-            pkgs = inputs.self.legacyPackages."${system}";
-            userConf = import (strToFile user ../users);
-        in
-        inputs.darwin.lib.darwinSystem {
-            inherit system;            
-            modules = [
-              (
-                { name, ... }: {
-                  networking.hostName = name;
-                }
-              )
-              (
-                { inputs, ... }: {
-                  # Use the nixpkgs from the flake.
-                  nixpkgs = { inherit pkgs; };
-                  # For compatibility with nix-shell, nix-build, etc.
-                  environment.etc.nixpkgs.source = inputs.nixpkgs;
-                  nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
-                }
-              )
-              (
-                { pkgs, ... }: {
-                  # Don't rely on the configuration to enable a flake-compatible version of Nix.
-                  nix = {
-                    package = pkgs.nixVersions.stable;
-                    extraOptions = "experimental-features = nix-command flakes";
-                  };
-                  services.nix-daemon.enable = true;
-                  # users.nix.configureBuildUsers = true; # Not sure I am ready for this
-                }
-              )
-              (
-                { inputs, ... }: {
-                    # Re-expose self and nixpkgs as flakes.
-                    nix.registry = {
-                        self.flake = inputs.self;
-                        nixpkgs = {
-                        from = { id = "nixpkgs"; type = "indirect"; };
-                        flake = inputs.nixpkgs;
-                        };
-                    };
-                  }
-              )
-              (
-                { ... }: {
-                  environment.systemPackages = [ agenix.packages.${system}.default ];
-                  #system.stateVersion = "23.11";
-                }
-              )
-              (inputs.agenix.darwinModules.default)
-              (inputs.home-manager.darwinModules.home-manager)
-              (
-                  {
-                      home-manager = {
-                          useGlobalPkgs = true;
-                          extraSpecialArgs =
-                          let
-                              self = inputs.self;
-                              user = userConf;
-                          in
-                          { inherit inputs pkgs self system user userConf secrets; };
-                      };
-                  }
-              )
-              (
-                { config, ... }: {
-                  system.activationScripts.applications.text = pkgs.lib.mkForce (
-                      ''
-                          echo "setting up ~/Applications/Nix..."
-                          rm -rf ~/Applications/Nix
-                          mkdir -p ~/Applications/Nix
-                          chown ${userConf.userName} ~/Applications/Nix
-                          find ${config.system.build.applications}/Applications -maxdepth 1 -type l | while read f; do
-                          src="$(/usr/bin/stat -f%Y $f)"
-                          appname="$(basename $src)"
-                          osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Users/${userConf.userName}/Applications/Nix/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
-                      done
-                      ''
-                  );
-                }
-              )
-              (import ../system/shared/modules)
-              (import ../system/darwin/modules)
-              #(import ../system/shared/profiles)
-              (import ../system/shared/secrets)
-              (import (strToPath config ../system/darwin/hosts))
-        ];
-            specialArgs =
-            let
-                self = inputs.self;
-                user = userConf;
-            in
-            { inherit inputs name self system user userConf secrets pkgs; };
-        }
-    );
-}

@@ -9,6 +9,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url                 = "github:nix-community/NUR";    
+    #hardware
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    #Virtualization
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+        
     # Secrets
     agenix.url = "github:ryantm/agenix";
     secrets = {
@@ -66,7 +77,7 @@
           inherit system;
           config = import ./nix/config.nix;
           overlays = [
-            #self.overlays."${system}"
+          #  self.overlays."${system}"
             inputs.nix-on-droid.overlays.default
           ];
         }
@@ -88,7 +99,6 @@
           # (_:_: { inherit (eww.packages."${system}") eww; })
         ] ++ ovs
       );
-
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
         nix-on-droid = {user = "droid";};
         default = {user = "droid";};
@@ -98,14 +108,16 @@
         mwdavisii = { };
       };
 
-      darwinConfigurations = mapAttrs' mkDarwinConfiguration{
-        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii";};
+      darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
+        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii"; buildTarget="darwin";}; #macbook
       };
 
-      nixosConfigurations = mapAttrs' mkNixosWSLConfiguration {
-        nixos = {};
-        personal = {hostname ="personal";};
-        work = {hostname = "work";};
+      nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
+        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii"; buildTarget="darwin";}; #macbook
+        nixos = {user="nixos"; hostname ="nixos"; buildTarget="wsl";}; #WSL
+        personal = {user="nixos"; hostname ="personal"; buildTarget="wsl";}; #WSL
+        work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
+        virtualbox = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #VirtualBox
       };
       
       top =
@@ -122,7 +134,10 @@
           darwintop = genAttrs
              (builtins.attrNames inputs.self.darwinConfigurations)
              (attr: inputs.self.darwinConfigurations.${attr}.system);
+          vmtop = genAttrs
+            (builtins.attrNames inputs.self.nixosConfigurations)
+            (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
         in
-        droidtop // nixtop // hometop // darwintop;
+        droidtop // nixtop // hometop // darwintop // vmtop;
   };
 }
