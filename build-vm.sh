@@ -1,1 +1,1 @@
-nixos-rebuild build-vm --flake .#virtualBoxOVA
+nixos-rebuild build-vm --flake .#virtualbox

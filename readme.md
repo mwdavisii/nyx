@@ -30,6 +30,7 @@ This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage
 
 The easiest way to run this is to update 'flake.nix` to use my [nix-secrets-example](https://github.com/mwdavisii/nix-secrets-example) repository. 
 Replace this:
+
 ```nix
 secrets = {
       url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
@@ -38,7 +39,8 @@ secrets = {
 ```
 
 with this:
-```
+
+```nix
 secrets = {
       url = "git+https://git@github.com/mwdavisii/nix-secrets-example.git";
       flake = false;
@@ -99,7 +101,7 @@ cd ./nyx/setup/wsl
 ./step2.sh
 ```
 
-** Note **
+**Note**
 Some users have reported a shell error when running step 2. If you see an error message that contains `\r`, it's likely git converted line breaks to windows format. I think it's caused b having `git config --global core.autocrlf` set to `true` on windows. If this happens, the easiest thing to do is go to your home directory `cd ~` and clone another copy of the repo through nix (commands below). If you do this this, don't forget to update your secrets.
 
 ```shell
@@ -108,8 +110,8 @@ sudo nix-channel --update
 nix-shell -p git vim 
 git clone https://github.com/mwdavisii/nyx
 ```
-After this, you shou be able to continue to step 6.
 
+After this, you shou be able to continue to step 6.
 
 6. Before running the last step, open ./flake.nix in your favorite text editor and look for the lines below and change the following values:
 
@@ -195,6 +197,10 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 ./switch.sh #Rebuilds and switches to the home environment.
 ```
 
+### Virtual Machines
+
+I've created a virtualbox host and am using [nix-community](https://github.com/nix-community/nixos-generators) to build. It supports all kinds of outputs. My plan was to create a host for each platform I care about and continue to use `nixosModules ++ commonModules` in `lib/default.nix` and `flakes.nix` to define the configurations.
+
 ### Android Installation
 
 1. You will need to install [Nix-on-Droid from f-droid](https://f-droid.org/en/packages/com.termux.nix/)
@@ -203,7 +209,7 @@ darwinConfigurations = mapAttrs' mkDarwinConfiguration{
 4. Once complete, run `git clone https://github.com/mwdavisii/nyx.git`
 5. Run `cd nyx` and the run `nix-on-droid switch --flake .`
 
-**Notes On NixOnDroid** NixOnDroid is still rudimentary and doesn't have full support for attrs and other functions yet. Because of that, it doens't follow the same `mkAttrs` into `options` for build. It just looks at the files in `home/droid/modules` and runs the configuration there. You can see many of the modules are simplified for this environment. 
+**Notes On NixOnDroid** NixOnDroid is still rudimentary and doesn't have full support for attrs and other functions yet. Because of that, it doens't follow the same `mkAttrs` into `options` for build. It just looks at the files in `home/droid/modules` and runs the configuration there. You can see many of the modules are simplified for this environment.
 
 ## Tips
 
