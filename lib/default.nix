@@ -171,10 +171,11 @@ rec {
               };
             }
           )
+          (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
           (import ../system/shared/modules)
           (import ../system/nixos/modules)
-          (import (strToPath config ../system/wsl2/hosts))
+          (import (strToPath config ../system/nixos/hosts))
         ];
         #Darwin = Mac Target
         darwinModules = [
@@ -317,31 +318,26 @@ rec {
           }
         #handles VM builds. Default will not cross compile.
         else if buildTarget == "vm" then
-          nixos-generators.nixosGenerate {
-            inherit system;
-            modules = commonModules ++ nixosModules;
-            format = "vmware";
-            # optional arguments:
-            # explicit nixpkgs and lib:
-            # pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            # lib = nixpkgs.legacyPackages.x86_64-linux.lib;
-            # additional arguments to pass to modules:
-            # specialArgs = { myExtraArg = "foobar"; };
-            
-            # you can also define your own custom formats
-            # customFormats = { "myFormat" = <myFormatModule>; ... };
-            # format = "myFormat";
-            vbox = nixos-generators.nixosGenerate {
-              system = "x86_64-linux";
-              format = "virtualbox";
-            };
-            specialArgs =
-            let
-              self = inputs.self;
-              user = userConf;
-            in
-            { inherit inputs name self system user userConf hostname secrets;};
-          }
+            nixosSystem{  
+              inherit system;
+              modules = commonModules ++ nixosModules ++ [
+                inputs.nixos-generators.nixosModules.all-formats
+                (
+                  {
+                    formatConfigs.virtualbox = { config, ... }: {
+                      services.openssh.enable = true;
+                    };
+                  }
+                )
+              ];
+              specialArgs =
+              let
+                self = inputs.self;
+                user = userConf;
+              in
+              { inherit inputs name self system user userConf hostname secrets;};
+            }
+                  
         else if buildTarget == "darwin" then
           inputs.darwin.lib.darwinSystem {
             inherit system;            
@@ -375,18 +371,6 @@ rec {
         nix-on-droid.lib.nixOnDroidConfiguration {
           inherit system;
           modules = [
-/*
-            (
-              { inputs, ... }: {
-                # Use the nixpkgs from the flake.
-                nixpkgs = { inherit pkgs; };
-
-                # For compatibility with nix-shell, nix-build, etc.
-                environment.etc.nixpkgs.source = inputs.nixpkgs;
-                nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
-              }
-            )
-*/
             (
               { pkgs, ... }: {
                 # Don't rely on the configuration to enable a flake-compatible version of Nix.

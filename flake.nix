@@ -99,7 +99,6 @@
           # (_:_: { inherit (eww.packages."${system}") eww; })
         ] ++ ovs
       );
-
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
         nix-on-droid = {user = "droid";};
         default = {user = "droid";};
@@ -114,7 +113,7 @@
         nixos = {user="nixos"; hostname ="nixos"; buildTarget="wsl";}; #WSL
         personal = {user="nixos"; hostname ="personal"; buildTarget="wsl";}; #WSL
         work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
-        virtualBoxOVA = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #VirtualBox
+        virtualbox = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #VirtualBox
       };
       
       top =
@@ -131,7 +130,10 @@
           darwintop = genAttrs
              (builtins.attrNames inputs.self.darwinConfigurations)
              (attr: inputs.self.darwinConfigurations.${attr}.system);
+          vmtop = genAttrs
+            (builtins.attrNames inputs.self.nixosConfigurations)
+            (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
         in
-        droidtop // nixtop // hometop // darwintop;
+        droidtop // nixtop // hometop // darwintop // vmtop;
   };
 }
