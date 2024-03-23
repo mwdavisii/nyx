@@ -99,8 +99,9 @@ in
       (mkIf cfg.enableService {
         services.gpg-agent = {
           enable = true;
+          enableBashIntegration = true;
           enableExtraSocket = true;
-          enableScDaemon = false;
+          enableScDaemon = true;
           enableSshSupport = true;
           pinentryFlavor = "gtk2";
           verbose = true;
