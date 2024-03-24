@@ -23,7 +23,7 @@
     # Secrets
     agenix.url = "github:ryantm/agenix";
     secrets = {
-      url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
+      url = "git+https://github.com/mwdavisii/nix-secrets-example.git";
       flake = false;
     };
     # MacOS
@@ -117,6 +117,7 @@
         nixos = {user="nixos"; hostname ="nixos"; buildTarget="wsl";}; #WSL
         personal = {user="nixos"; hostname ="personal"; buildTarget="wsl";}; #WSL
         work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
+        worklt = {hostname = "worklt"; user ="mwdavisii"; buildTarget="nixos";}; #Work Laptop (Host OS)
         virtualbox = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #VirtualBox
       };
       
