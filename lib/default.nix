@@ -335,15 +335,7 @@ rec {
             nixosSystem{  
               inherit system;
               modules = commonModules ++ nixosModules ++ [
-                inputs.nixos-generators.nixosModules.all-formats
-                (
-                  {
-                    format = "virtualdisk";
-                    formatConfigs.virtualbox = { config, ... }: {
-                      services.openssh.enable = true;
-                    };
-                  }
-                )
+              (inputs.nixos-generators.nixosModules.all-formats)
               ];
               specialArgs =
               let
