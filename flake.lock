@@ -732,17 +732,17 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1710526518,
-        "narHash": "sha256-JA5HlXEggJhsAhMTeGv+5PPyey/lmt4nEPZYdo2I9QM=",
+        "lastModified": 1710865947,
+        "narHash": "sha256-vDoO69GTEUzaRWDwDWimAwDKWKeNe/qIB1VF4p80Q0k=",
         "ref": "refs/heads/main",
-        "rev": "e3bbb31dfe6ec546a7f302d52fe9ff2fd2d9cd9c",
-        "revCount": 3,
+        "rev": "b32aa25158d76137c08ea017b09358de53db2a8a",
+        "revCount": 1,
         "type": "git",
-        "url": "ssh://git@github.com/mwdavisii/nix-secrets.git"
+        "url": "https://github.com/mwdavisii/nix-secrets-example.git"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@github.com/mwdavisii/nix-secrets.git"
+        "url": "https://github.com/mwdavisii/nix-secrets-example.git"
       }
     },
     "systems": {

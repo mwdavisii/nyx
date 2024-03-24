@@ -4,11 +4,19 @@
         [ # Include the results of the hardware scan.
         ./hardware.nix
         ];
-
+    isoImage.volumeID = lib.mkForce "my-nixos-live";
+    isoImage.isoName = lib.mkForce "my-nixos-live.iso";
+    # Use zstd instead of xz for compressing the liveUSB image, it's 6x faster and 15% bigger.
+    isoImage.squashfsCompression = "zstd -Xcompression-level 6";
     # Bootloader.
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
-
+    ## FIX for running out of space / tmp, which is used for building
+    fileSystems."/nix/.rw-store" = {
+        fsType = "tmpfs";
+        options = [ "mode=0755" "nosuid" "nodev" "relatime" "size=14G" ];
+        neededForBoot = true;
+    };
     #networking.hostName = $hostName; # Define your hostname.
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
