@@ -298,7 +298,8 @@ rec {
           nixosSystem {
             inherit system;
             modules = commonModules ++ nixosModules ++ [
-              (import "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
+              #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix") Default nix lib
+              (inputs.nixos-generators.nixosModules.all-formats) #Community Nix Generators
             ];
             specialArgs =
             let

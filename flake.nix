@@ -126,7 +126,8 @@
       top =
         let
           livecd = (builtins.attrNames inputs.self.nixosConfigurations)
-            (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.isoImage);
+            #(attr: inputs.self.nixosConfigurations.${attr}.config.system.build.isoImage);
+            (attr: inputs.self.nixosConfigurations.${attr}.livecd.config.formats.iso);
           droidtop = genAttrs
             (builtins.attrNames inputs.self.nixOnDroidConfigurations)
             (attr: inputs.self.nixOnDroidConfigurations.${attr}.config.system.build.toplevel);
