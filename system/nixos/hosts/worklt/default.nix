@@ -4,7 +4,7 @@
   imports = [./system.nix]; 
   nyx = {
     modules = {
-      user.home = ../../shared/home.nix;
+      user.home = ./home.nix;
     };
 
     secrets = {

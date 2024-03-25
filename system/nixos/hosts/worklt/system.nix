@@ -5,16 +5,12 @@
         ./hardware.nix
         ];
 
-    # Bootloader.
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
-
     #networking.hostName = $hostName; # Define your hostname.
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-# networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
+    # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
     #nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     # Enable networking
-    networking.wireless.enable  = lib.mkForce false;
+    # networking.wireless.enable  = lib.mkForce false;
     networking.networkmanager.enable = lib.mkForce true;
     networking.useDHCP = lib.mkDefault true;
 
@@ -44,6 +40,13 @@
             layout = "us";
             xkbVariant = "";
             libinput.enable = true;
+            displayManager.lightdm = {
+                enable = true;
+                greeters.slick.enable = true;
+            };
+            windowManager.bspwm = {
+                enable = true;
+            };
         };
         printing.enable = true;
         openssh.enable = true;
@@ -57,16 +60,6 @@
             };
             pulse.enable = true;
         };
-        # LightDM Display Manager
-        #displayManager.defaultSession = "none+bspwm";
-        #displayManager.lightdm = {
-        #    enable = true;
-        #    greeters.slick.enable = true;
-        #};
-        # Tiling window manager
-        #windowManager.bspwm = {
-        #    enable = true;
-        #};
     };
 
     # Enable sound with pipewire.
@@ -74,4 +67,17 @@
     hardware.pulseaudio.enable = false;
     security.rtkit.enable = true;
 
+    security.sudo = {
+        extraRules = [
+            {
+                commands = [
+                    {
+                        command = "ALL";
+                        options = [ "NOPASSWD" ];
+                    }
+                ];
+                groups = [ "wheel" ];
+            }
+        ];
+    };
 }

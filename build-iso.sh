@@ -1,1 +1,1 @@
-nix build .#nixosConfigurations.livecd.config.system.build.isoImage
+nix build --show-trace .#nixosConfigurations.livecd.config.formats.iso
