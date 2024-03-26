@@ -1,6 +1,6 @@
 $title = "WSL2 NixOS Configuration Options"  
 $question = '
-This script will wipe your NixOS WSL2 installation. Select No to cancel. 
+This script will wipe your NixOS WSL2 installation. 
 Select Yes to continue.
 Select No to cancel.'
 
