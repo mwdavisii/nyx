@@ -1,17 +1,17 @@
 { config, pkgs, ... }:
 
 {
-  imports = [./system.nix]; 
+  imports = [ ./system.nix ];
   nyx = {
     modules = {
       user.home = ./home.nix;
     };
 
     secrets = {
-      awsSSHKeys.enable = false;
-      awsConfig.enable = false;
-      userSSHKeys.enable = false;
-      userPGPKeys.enable = false;
+      awsSSHKeys.enable = true;
+      awsConfig.enable = true;
+      userSSHKeys.enable = true;
+      userPGPKeys.enable = true;
     };
 
     profiles = {
