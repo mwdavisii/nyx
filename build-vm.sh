@@ -1,1 +1,1 @@
-nixos-rebuild build-vm --flake .#virtualbox
+nix build .#nixosConfigurations.virtualbox.config.formats.virtualbox
