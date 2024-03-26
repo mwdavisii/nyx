@@ -19,11 +19,11 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-        
+
     # Secrets
     agenix.url = "github:ryantm/agenix";
     secrets = {
-      url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
+      url = "git+https://github.com/mwdavisii/nix-secrets-example.git";
       flake = false;
     };
     # MacOS
@@ -64,6 +64,7 @@
     };
     
     ghostty-module.url = "github:clo4/ghostty-hm-module";
+    
   };
 
   outputs = { self, ... }@inputs:
@@ -117,11 +118,16 @@
         nixos = {user="nixos"; hostname ="nixos"; buildTarget="wsl";}; #WSL
         personal = {user="nixos"; hostname ="personal"; buildTarget="wsl";}; #WSL
         work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
-        virtualbox = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #VirtualBox
+        worklt = {hostname = "worklt"; user ="mwdavisii"; buildTarget="nixos";}; #Work Laptop (Host OS)
+        virtualbox = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
+        livecd = {hostname = "worklt"; user ="mwdavisii"; buildTarget="iso";}; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
       };
       
       top =
         let
+          livecd = (builtins.attrNames inputs.self.nixosConfigurations)
+            #(attr: inputs.self.nixosConfigurations.${attr}.config.system.build.isoImage);
+            (attr: inputs.self.nixosConfigurations.${attr}.livecd.config.formats.iso);
           droidtop = genAttrs
             (builtins.attrNames inputs.self.nixOnDroidConfigurations)
             (attr: inputs.self.nixOnDroidConfigurations.${attr}.config.system.build.toplevel);

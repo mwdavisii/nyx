@@ -13,14 +13,15 @@ let
     if builtins.typeOf x == "string"
     then builtins.toPath ("${toString path}/${x}.nix")
     else x;
+    
 in
 rec {
     firstOrDefault = first: default: if !isNull first then first else default;
     existsOrDefault = x: set: default: if hasAttr x set then getAttr x set else default;
     mkHome = name: { config ? name, user ? "mwdavisii", system ? "aarch64-darwin" }:
     let
-      #pkgs = inputs.self.legacyPackages."${system}";
-      pkgs = inputs.self.legacyPackages.aarch64-darwin;
+      pkgs = inputs.self.legacyPackages."${system}";
+      #pkgs = inputs.self.legacyPackages.aarch64-darwin;
       userConf = import (strToFile user ../users);
       userOptions = strToPath config ../home/hosts;
       homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
@@ -147,7 +148,7 @@ rec {
             inherit nixpkgs nixpkgs-unstable;
         };
     };
-    
+
     mkNixSystemConfiguration = name: {config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? {}, }: 
     nameValuePair name(
       let
@@ -155,11 +156,6 @@ rec {
         userConf = import (strToFile user ../users);
         #nixos = Dedicated Build on Metal
         nixosModules = [
-          (
-            { ... }: {
-              system.stateVersion = "23.11";
-            }
-          )
           (inputs.home-manager.nixosModules.home-manager)
           (
             {
@@ -178,18 +174,12 @@ rec {
           )
           (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
-          (import ../system/shared/profiles)
           (import ../system/shared/modules)
           (import ../system/nixos/modules)
           (import (strToPath config ../system/nixos/hosts))
         ];
         #Darwin = Mac Target
         darwinModules = [
-          (
-            {
-              services.nix-daemon.enable = true;
-            }
-          )
           (inputs.agenix.darwinModules.default)
           (inputs.home-manager.darwinModules.home-manager)
           (
@@ -223,17 +213,11 @@ rec {
             }
           )
           (import ../system/darwin/modules)
-          (import ../system/shared/modules)
           (import ../system/shared/secrets)
           (import (strToPath config ../system/darwin/hosts))
         ];
         #wsl = WSL Target
         wslModules = [
-          (
-            { ... }: {
-              system.stateVersion = "23.11";
-            }
-          )
           (inputs.home-manager.nixosModules.home-manager)
           (
             {
@@ -254,7 +238,6 @@ rec {
           (vscode-server.nixosModules.default)
           (inputs.agenix.nixosModules.default)
           (import ../system/shared/modules)
-          (import ../system/shared/profiles)
           (import ../system/wsl2/modules)
           (import (strToPath config ../system/wsl2/hosts))
         ];
@@ -302,10 +285,30 @@ rec {
               };
             }
           )
+          (
+            { ... }: {
+              system.stateVersion = "23.11";
+            }
+          )
+          (import ../system/shared/profiles)
           (import ../system/shared/secrets)
         ];
       in
-        if buildTarget == "wsl" then
+        if buildTarget == "iso" then
+          nixosSystem {
+            inherit system;
+            modules = commonModules ++ nixosModules ++ [
+              #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix") Default nix lib
+              (inputs.nixos-generators.nixosModules.all-formats) #Community Nix Generators
+            ];
+            specialArgs =
+            let
+              self = inputs.self;
+              user = userConf;
+            in
+            { inherit inputs name self system user userConf hostname secrets;};
+        }
+        else if buildTarget == "wsl" then
           nixosSystem {
             inherit system;
             modules = commonModules ++ wslModules;
@@ -333,14 +336,7 @@ rec {
             nixosSystem{  
               inherit system;
               modules = commonModules ++ nixosModules ++ [
-                inputs.nixos-generators.nixosModules.all-formats
-                (
-                  {
-                    formatConfigs.virtualbox = { config, ... }: {
-                      services.openssh.enable = true;
-                    };
-                  }
-                )
+              (inputs.nixos-generators.nixosModules.all-formats)
               ];
               specialArgs =
               let
