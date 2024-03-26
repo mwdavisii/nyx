@@ -1,4 +1,4 @@
-# Home-Manager + Flakes for Mac/WSL and Droid
+# Home-Manager + Flakes for Mac, WSL, and Droid
 
 ## Overview
 
@@ -120,7 +120,7 @@ After this, you shou be able to continue to step 6.
 - **signingKey** => The key used to sign git commits. (you can leave blank)`
 - **windowsUserDirName** => This is the folder name of your windows profile. It is used to create the symlink from WSL to VS Code and add it to your path.
 
-****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL. As of now, it requires building from [nix-community/NixOS-WSL](https://github.com/nix-community/NixOS-WSL) which is more than I can care to tackle at the moment.
+****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL. As of now, it requires building from [nix-community/NixOS-WSL](https://github.com/nix-community/NixOS-WSL) which is more than I care to tackle at the moment.
 
 ```nix
 {
@@ -213,7 +213,7 @@ I've created a virtualbox host and am using [nix-community](https://github.com/n
 
 ## Tips
 
-I have over 150+ commits in the last week. I am not new to declarative systems and have been using git ops strategies since they had a name, but Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was hard for me. I can't tell you how many times I've typed `git reset --hard` or `nix-on-droid rollback`.
+I have over 150+ commits in the last week. I am not new to declarative systems and have been using git ops strategies since they had a name. Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was difficult. I can't tell you how many times I've typed `git reset --hard` or `nix-on-droid rollback`.
 
 Here are some things that would have shortned my learning curve:
 
@@ -228,7 +228,7 @@ Here are some things that would have shortned my learning curve:
 
 - There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introducing attribute sets, I found it more difficult to apply the published examples to the more complex approach. There was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
 - I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it. 
-  - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) and didn't want to use a custom activation script.
+  - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) in home manager, and didn't want to use a custom activation script.
 - Rollback a build that successfuly failed by executing `nixos-rebuild switch --rollback` or `darwin-rebuild switch --rollback` or `nix-on-droid rollback`.
   - I was frequently wiping and rebuilding the entire system before I knew this.
 - In regards to `nyx.modules`, `nyx.profiles`, and `nyx.secrets`
@@ -247,7 +247,7 @@ Example from `lib/default.nix`:
 ```nix
   (import ../system/shared/modules)
   (import ../system/shared/profiles)
-  (import ../in/secrets)
+  (import ../system/shared/secrets)
   (import (strToPath config ../in/hosts))
 ```
 

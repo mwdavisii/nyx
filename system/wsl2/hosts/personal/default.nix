@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [../../shared/system.nix]; 
+  imports = [../../shared/system.nix];
   nyx = {
     modules = {
       user.home = ../../shared/home.nix;
@@ -9,7 +9,7 @@
 
     secrets = {
       awsConfig.enable = true;
-      awsSSHKeys.enable = false;  
+      awsSSHKeys.enable = false;
       userSSHKeys.enable = false;
       userPGPKeys.enable = false;
     };
