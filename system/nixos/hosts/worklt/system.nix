@@ -35,7 +35,6 @@
 
   #wayland
   security.polkit.enable = true;
-  hardware.opengl.enable = true;
   #programs.sway.enable = true;
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -67,15 +66,6 @@
   environment.systemPackages = with pkgs; [
     libevdev
   ];
-  environment.variables={
-   NIXOS_OZONE_WL = "1";
-   PATH = [
-     "\${HOME}/.local/bin"
-     "\${HOME}/.config/rofi/scripts"
-   ];
-   NIXPKGS_ALLOW_UNFREE = "1";
-   #PKG_CONFIG_PATH = lib.makeLibraryPath [ libevdev ];
-  };
   # Configure keymap in X11
   services = {
     xserver = {
