@@ -33,8 +33,6 @@
     channel = "https://nixos.org/channels/nixos-23.11";
   };
 
-  #wayland
-  security.polkit.enable = true;
   #programs.sway.enable = true;
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -72,7 +70,7 @@
       enable = true;
       layout = "us";
       xkbVariant = "";
-      libinput.enable = true;
+      #libinput.enable = true;
       #    desktopManager.gnome.enable = true;
       #    #displayManager.lightdm = {
       #    #    enable = true;
@@ -84,8 +82,8 @@
     };
     printing.enable = true;
     openssh.enable = true;
-    #gvfs.enable = true; # Mount, trash, and other functionalities
-    #tumbler.enable = true;
+    gvfs.enable = true; # Mount, trash, and other functionalities
+    tumbler.enable = true;
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -97,6 +95,7 @@
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
+  security.polkit.enable = true;
   security.rtkit.enable = true;
   programs.dconf.enable = true;
 
