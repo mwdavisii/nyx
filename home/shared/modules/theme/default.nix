@@ -1,10 +1,10 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.nyx.modules.theme;
 in
 {
-  imports = [ 
+  imports = [
     ./cava
   ];
   options.nyx.modules.theme = {
@@ -22,7 +22,7 @@ in
 
   config = {
     nyx.modules.theme.colors = with builtins; fromJSON (readFile ((toString ./.) + "/${cfg.name}.json"));
-       
+
     gtk = {
       enable = true;
       iconTheme = {
