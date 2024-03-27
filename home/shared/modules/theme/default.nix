@@ -1,5 +1,4 @@
-{ config, lib, pkgs, ... }:
-
+{ config, lib, pkgs, ...}:
 with lib;
 let
   cfg = config.nyx.modules.theme;
@@ -51,4 +50,3 @@ in
 #
 # Disable mouse acceleration
 # defaults write .GlobalPreferences com.apple.mouse.scaling 0
-{ config, lib, pkgs, ... }:

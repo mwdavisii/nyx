@@ -14,7 +14,7 @@ in
       twemoji-color-font
     ];
     fonts = {
-      fonts = with pkgs; [
+      packages = with pkgs; [
         noto-fonts
         noto-fonts-cjk
         noto-fonts-emoji
