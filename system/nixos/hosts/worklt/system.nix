@@ -113,7 +113,8 @@
         ${pkgs.greetd.tuigreet}/bin/tuigreet \
           --time \
           --asterisks \
-          --user-menu 
+          --user-menu \
+          cmd = "$SHELL -l";
       '';
     };
   };
