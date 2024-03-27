@@ -114,10 +114,23 @@
           --time \
           --asterisks \
           --user-menu \
-          --cmd sway
+          --cmd Hyperland
       '';
     };
   };
+
+
+/*
+default_session.command = ''
+        ${pkgs.greetd.tuigreet}/bin/tuigreet \
+          --time \
+          --asterisks \
+          --user-menu \
+          --cmd sway
+      '';
+*/
+
+
 
   security.sudo = {
     extraRules = [
