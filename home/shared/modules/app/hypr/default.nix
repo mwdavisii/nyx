@@ -1,9 +1,18 @@
 { config, lib, pkgs, ... }:
 
+with lib;
+let
+  cfg = config.nyx.modules.app.hypr;
+in
 {
   imports = [ 
     ./hyprland-environment.nix
   ];
+
+  options.nyx.modules.app.hypr = {
+    enable = mkEnableOption "hypr configuration";
+  };
+config = mkIf cfg.enable {
 
   home.packages = with pkgs; [ 
     waybar
@@ -216,4 +225,5 @@ $color13 = rgba(7BC7DDee)
 $color14 = rgba(9CB4E3ee)
 $color15 = rgba(c3dde7ee)
     '';
+};
 }

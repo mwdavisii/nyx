@@ -70,10 +70,10 @@
   services = {
     xserver = {
       enable = true;
-      #    desktopManager.gnome.enable = true;
       layout = "us";
       xkbVariant = "";
       libinput.enable = true;
+      #    desktopManager.gnome.enable = true;
       #    #displayManager.lightdm = {
       #    #    enable = true;
       #    #    greeters.slick.enable = true;
