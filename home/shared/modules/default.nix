@@ -2,5 +2,5 @@
 
 
 {
-  imports = [ ./dev ./shell ./app ./theme ];
+  imports = [ ./app ./dev ./shell ./scripts ./theme ];
 }
