@@ -1,10 +1,20 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
+let
+  cfg = config.nyx.modules.app.rofi;
+in
 {
-  programs.rofi = {
-    enable = true;
-    terminal = "${pkgs.cool-retro-term}/bin/cool-retro-term";
-    theme = ./theme.rasi;
+  options.nyx.modules.app.rofi = {
+    enable = mkEnableOption "rofi configuration";
   };
+
+  config = mkIf cfg.enable {
+    programs.rofi = {
+        enable = true;
+        terminal = "${pkgs.cool-retro-term}/bin/cool-retro-term";
+        theme = ./theme.rasi;
+    };
 
     home.file.".config/rofi/theme.rasi".text = ''
 
@@ -210,4 +220,5 @@ error-message {
 }
 
     '';
+};
 }
