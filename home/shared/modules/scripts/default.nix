@@ -22,17 +22,20 @@ let
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     if command -v swww >/dev/null 2>&1; then 
-        killall dynamic_wallpaper
-        swww img $(find ~/Imagens/wallpapers/. -name "*.png" | shuf -n1) --transition-type simple
+        # killall dynamic_wallpaper
+        swww img $(find ~/.config/wallpapers/. -name "*.png" | shuf -n1) --transition-type simple
     fi
   '';
   default_wall = pkgs.writeShellScriptBin "default_wall" ''
     if command -v swww >/dev/null 2>&1; then 
-          swww img ~/Imagens/wallpapers/menhera.jpg  --transition-type simple
+          swww img ~/.config/wallpapers/wall0.png  --transition-type simple
     fi
   '';
 in
+
 {
+  ## Move wallpaapers
+  xdg.configFile."wallpapers".source = ../../../config/.config/wallpapers;
   home.packages = with pkgs; [
     cool-retro-term-zsh
     rofi1
