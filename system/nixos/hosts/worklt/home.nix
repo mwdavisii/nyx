@@ -6,7 +6,7 @@
   # Install man output for any Nix packages.
   programs.man.enable = true;
   manual.manpages.enable = true;
-  
+
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
@@ -16,7 +16,7 @@
       name = "Tokyonight-Dark-B-LB";
     };
   };
-  
+
   #wayland.windowManager.sway = {
   #  enable = true;
   #  config = rec {
@@ -42,7 +42,7 @@
       cool-retro-term
       bibata-cursors
       lutris
-      
+
       #utils
       ranger
       wlr-randr
@@ -67,7 +67,7 @@
       tty-clock
       btop
       tokyo-night-gtk
-      ] ++ (with pkgs.gnome; [ 
+    ] ++ (with pkgs.gnome; [
       nautilus
       zenity
       gnome-tweaks
@@ -88,7 +88,7 @@
         waybar.enable = true;
         kitty.enable = true;
         discord.enable = true;
-        firefox.enable = false;
+        firefox.enable = true;
         chrome.enable = true;
         obs.enable = true;
         wezterm = {
