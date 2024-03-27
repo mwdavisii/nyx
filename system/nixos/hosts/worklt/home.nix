@@ -83,7 +83,7 @@
           enable = true;
         };
         dunst.enable = true;
-        hyper.enable = true;
+        hypr.enable = true;
         rofi.enable = true;
         waybar.enable = true;
         kitty.enable = true;
