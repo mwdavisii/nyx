@@ -83,6 +83,9 @@
           enable = true;
         };
         dunst.enable = true;
+        hyper.enable = true;
+        rofi.enable = true;
+        waybar.enable = true;
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = false;
