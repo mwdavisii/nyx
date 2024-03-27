@@ -17,7 +17,7 @@ in
       waybar
       swww
     ];
-    xdg.configFile."hypr".source = ../../../config/.config/hyper;
+    xdg.configFile."hypr".source = ../../../../config/.config/hyper;
     #test later systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
     wayland.windowManager.hyprland = {
       enable = true;
