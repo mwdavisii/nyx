@@ -82,6 +82,7 @@
         alacritty = {
           enable = true;
         };
+        dunst.enable = true;
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = false;

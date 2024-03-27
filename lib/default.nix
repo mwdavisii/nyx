@@ -216,6 +216,7 @@ rec {
           )
           (import ../system/darwin/modules)
           (import ../system/shared/secrets)
+          (import ../system/shared/profiles)
           (import (strToPath config ../system/darwin/hosts))
         ];
         #wsl = WSL Target
@@ -241,6 +242,7 @@ rec {
           (inputs.agenix.nixosModules.default)
           (import ../system/shared/modules)
           (import ../system/wsl2/modules)
+          (import ../system/shared/profiles)
           (import (strToPath config ../system/wsl2/hosts))
         ];
         commonModules = [
