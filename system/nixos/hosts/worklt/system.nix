@@ -104,7 +104,7 @@
     wlr.enable = true;
     config.common.default = "*";
   };
-
+/*
   programs.regreet.enable = true;
   services.greetd = {
     enable = true;
@@ -114,21 +114,22 @@
           --time \
           --asterisks \
           --user-menu \
-          cmd = "$SHELL -l";
+          --cmd sway
       '';
     };
   };
-
-
-/*
-default_session.command = ''
-        ${pkgs.greetd.tuigreet}/bin/tuigreet \
-          --time \
-          --asterisks \
-          --user-menu \
-          --cmd sway
-      '';
 */
+
+  programs.regreet.enable = true;
+    services.greetd = {
+      enable = true;
+      settings = {
+        initial_session = {
+          user = "enzo";
+          command = "$SHELL -l";
+        };
+      };
+    };
 
 
 
