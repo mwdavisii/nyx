@@ -6,7 +6,17 @@
   # Install man output for any Nix packages.
   programs.man.enable = true;
   manual.manpages.enable = true;
+  
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
 
+    "org/gnome/shell/extensions/user-theme" = {
+      name = "Tokyonight-Dark-B-LB";
+    };
+  };
+  
   wayland.windowManager.sway = {
     enable = true;
     config = rec {
@@ -27,7 +37,43 @@
       bat
       bash
       wget
-    ];
+      #User Apps
+      celluloid
+      cool-retro-term
+      bibata-cursors
+      lutris
+      
+      #utils
+      ranger
+      wlr-randr
+      gnumake
+      catimg
+      curl
+      xflux
+      dunst
+      pavucontrol
+      sqlite
+
+      #misc 
+      cava
+      rofi
+      nitch
+      wget
+      grim
+      slurp
+      wl-clipboard
+      pamixer
+      mpc-cli
+      tty-clock
+      btop
+      tokyo-night-gtk
+      ] ++ (with pkgs.gnome; [ 
+      nautilus
+      zenity
+      gnome-tweaks
+      eog
+      gedit
+    ]);
   };
 
   nyx = {

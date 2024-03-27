@@ -4,7 +4,6 @@
     [
       # Include the results of the hardware scan.
       ./hardware.nix
-      ./greetd.nix
     ];
 
   #networking.hostName = $hostName; # Define your hostname.
@@ -15,6 +14,12 @@
   # networking.wireless.enable  = lib.mkForce false;
   networking.networkmanager.enable = lib.mkForce true;
   networking.useDHCP = lib.mkDefault true;
+  hardware.opengl = {
+    enable = true;
+    #driSupport = true;
+    #driSupport32Bit = true;
+  };
+
 
   #Garbage colector
   nix.gc = {
@@ -62,6 +67,15 @@
   environment.systemPackages = with pkgs; [
     libevdev
   ];
+  environment.variables={
+   NIXOS_OZONE_WL = "1";
+   PATH = [
+     "\${HOME}/.local/bin"
+     "\${HOME}/.config/rofi/scripts"
+   ];
+   NIXPKGS_ALLOW_UNFREE = "1";
+   #PKG_CONFIG_PATH = lib.makeLibraryPath [ libevdev ];
+  };
   # Configure keymap in X11
   services = {
     xserver = {
@@ -80,14 +94,12 @@
     };
     printing.enable = true;
     openssh.enable = true;
-    gvfs.enable = true; # Mount, trash, and other functionalities
-    tumbler.enable = true;
+    #gvfs.enable = true; # Mount, trash, and other functionalities
+    #tumbler.enable = true;
     pipewire = {
       enable = true;
-      alsa = {
-        enable = true;
-        support32Bit = true;
-      };
+      alsa.enable = true;
+      alsa.support32Bit = true;
       pulse.enable = true;
     };
   };
@@ -96,6 +108,27 @@
   sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  programs.dconf.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    config.common.default = "*";
+  };
+
+  programs.regreet.enable = true;
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session.command = ''
+        ${pkgs.greetd.tuigreet}/bin/tuigreet \
+          --time \
+          --asterisks \
+          --user-menu \
+          --cmd sway
+      '';
+    };
+  };
 
   security.sudo = {
     extraRules = [
