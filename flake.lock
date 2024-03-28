@@ -344,6 +344,31 @@
         "type": "github"
       }
     },
+    "hyprland-plugins": {
+      "inputs": {
+        "hyprland": [
+          "hyprland"
+        ],
+        "systems": [
+          "hyprland-plugins",
+          "hyprland",
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1711229082,
+        "narHash": "sha256-d7mJ3CVsEuCu+U3MDpoth+bBD/XVhho5gMrNWnETBI0=",
+        "owner": "hyprwm",
+        "repo": "hyprland-plugins",
+        "rev": "826d47b85566f2c928a4412adf5adc1f7b9e3773",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprwm",
+        "repo": "hyprland-plugins",
+        "type": "github"
+      }
+    },
     "hyprland-protocols": {
       "inputs": {
         "nixpkgs": [
@@ -839,6 +864,7 @@
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
         "hyprland": "hyprland",
+        "hyprland-plugins": "hyprland-plugins",
         "neovim-flake": "neovim-flake",
         "nix-homebrew": "nix-homebrew",
         "nix-on-droid": "nix-on-droid",
