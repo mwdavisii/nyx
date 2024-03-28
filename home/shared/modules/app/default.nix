@@ -14,6 +14,7 @@
     ./qemu.nix
     ./obs.nix
     ./scrcpy.nix
+    ./steam.nix
     ./vscode.nix
     ./waybar.nix
     ./wezterm.nix ];

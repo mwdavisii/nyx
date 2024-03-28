@@ -91,6 +91,9 @@
         firefox.enable = true;
         chrome.enable = true;
         obs.enable = true;
+        scrcpy.enable = true;
+        steam.enable = true;
+        qemu.enable = true;
         wezterm = {
           enable = true;
           package = null;
@@ -99,6 +102,7 @@
         vscode.enable = true;
       };
       dev = {
+        androidSDK.enable = true;
         cc.enable = true;
         rust.enable = true;
         go.enable = true;
