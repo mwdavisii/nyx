@@ -19,7 +19,16 @@
     driSupport = true;
     driSupport32Bit = true;
   };
-
+  time.hardwareClockInLocalTime = true;
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    grub = {
+      enable = true;
+      devices = [ "nodev" ];
+      efiSupport = true;
+      useOSProber = true;
+    };
+  };
 
   #Garbage colector
   nix.gc = {
