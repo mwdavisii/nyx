@@ -13,12 +13,12 @@ let
     if builtins.typeOf x == "string"
     then builtins.toPath ("${toString path}/${x}.nix")
     else x;
-    
+
 in
 rec {
-    firstOrDefault = first: default: if !isNull first then first else default;
-    existsOrDefault = x: set: default: if hasAttr x set then getAttr x set else default;
-    mkHome = name: { config ? name, user ? "mwdavisii", system ? "aarch64-darwin" }:
+  firstOrDefault = first: default: if !isNull first then first else default;
+  existsOrDefault = x: set: default: if hasAttr x set then getAttr x set else default;
+  mkHome = name: { config ? name, user ? "mwdavisii", system ? "aarch64-darwin" }:
     let
       pkgs = inputs.self.legacyPackages."${system}";
       #pkgs = inputs.self.legacyPackages.aarch64-darwin;
@@ -68,22 +68,22 @@ rec {
       }
     );
 
-    mkUserHome = { config, userConf, system ? "aarch64-darwin" }:
+  mkUserHome = { config, userConf, system ? "aarch64-darwin" }:
     { ... }: {
       imports = [
         (agenix.homeManagerModules.default)
         (import ../home/darwin/modules)
         (import ../home/nixos/modules)
-        (import config )
+        (import config)
       ];
-      
+
       # For compatibility with nix-shell, nix-build, etc.
       home.file.".nixpkgs".source = inputs.nixpkgs;
       home.sessionVariables = {
         NIX_PATH = "nixpkgs=$HOME/.nixpkgs\${NIX_PATH:+:}$NIX_PATH";
         EDITOR = "nvim";
         VISUAL = "nvim";
-        COLORTERM = "truecolor"; 
+        COLORTERM = "truecolor";
         PATH = "$PATH:/mnt/c/Users/${userConf.windowsUserDirName}/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
       };
 
@@ -119,43 +119,30 @@ rec {
       home.stateVersion = "23.11";
     };
 
-    nixpkgsWithOverlays = with inputs; rec {
-        config = import ../nix/config.nix;
-        overlays = [
-          nix-on-droid.overlays.default
-          nur.overlay
-          (_final: prev: {
-            # this allows us to reference pkgs.unstable
-            unstable = import nixpkgs-unstable {
-              inherit (prev) system;
-              inherit config;
-            };
-          })
-        ];
-    };
-
-    configurationDefaults = args: {
-        nixpkgs = nixpkgsWithOverlays;
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "hm-backup";
-        home-manager.extraSpecialArgs = args;
-    };
-
-    argDefaults = {
-    inherit secrets inputs self nix-index-database;
-        channels = {
-            inherit nixpkgs nixpkgs-unstable;
+  nixpkgsWithOverlays = with inputs; rec {
+    config = import ../nix/config.nix;
+    overlays = [
+      nix-on-droid.overlays.default
+      nur.overlay
+      (_final: prev: {
+        # this allows us to reference pkgs.unstable
+        unstable = import nixpkgs-unstable {
+          inherit (prev) system;
+          inherit config;
         };
-    };
+      })
+    ];
+  };
 
-    mkNixSystemConfiguration = name: {config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? {}, }: 
-    nameValuePair name(
+  mkNixSystemConfiguration = name: { config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? { }, }:
+    nameValuePair name (
       let
         pkgs = inputs.self.legacyPackages."${system}";
         userConf = import (strToFile user ../users);
+        unstable = import nixpkgs-unstable {inherit system;};
         #nixos = Dedicated Build on Metal
         nixosModules = [
+          (hyprland.nixosModules.default)
           (inputs.home-manager.nixosModules.home-manager)
           (
             {
@@ -168,37 +155,48 @@ rec {
                     user = userConf;
                   in
                   # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
-                  { inherit inputs self system user userConf secrets; };
+                  { inherit inputs self system user userConf unstable secrets; };
               };
+            }
+          )
+          (
+            { ... }: {
+              system.stateVersion = "23.11";
             }
           )
           (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
           (import ../system/shared/modules)
           (import ../system/nixos/modules)
+          (import ../system/nixos/profiles)
           (import (strToPath config ../system/nixos/hosts))
         ];
         #Darwin = Mac Target
         darwinModules = [
+          (
+            {
+              services.nix-daemon.enable = true;
+            }
+          )
           (inputs.agenix.darwinModules.default)
           (inputs.home-manager.darwinModules.home-manager)
           (
-              {
-                  home-manager = {
-                      useGlobalPkgs = true;
-                      extraSpecialArgs =
-                      let
-                          self = inputs.self;
-                          user = userConf;
-                      in
-                      { inherit inputs pkgs self system user userConf secrets; };
-                  };
-              }
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                extraSpecialArgs =
+                  let
+                    self = inputs.self;
+                    user = userConf;
+                  in
+                  { inherit inputs pkgs self system user userConf secrets; };
+              };
+            }
           )
           (
             { config, ... }: {
               system.activationScripts.applications.text = pkgs.lib.mkForce (
-                  ''
+                ''
                       echo "setting up ~/Applications/Nix..."
                       rm -rf ~/Applications/Nix
                       mkdir -p ~/Applications/Nix
@@ -208,12 +206,15 @@ rec {
                       appname="$(basename $src)"
                       osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Users/${userConf.userName}/Applications/Nix/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
                   done
-                  ''
+                ''
               );
             }
           )
+          
           (import ../system/darwin/modules)
+          (import ../system/shared/modules)
           (import ../system/shared/secrets)
+          (import ../system/shared/profiles/macbook.nix)
           (import (strToPath config ../system/darwin/hosts))
         ];
         #wsl = WSL Target
@@ -234,11 +235,17 @@ rec {
               };
             }
           )
+          (
+            { ... }: {
+              system.stateVersion = "23.11";
+            }
+          )
           (inputs.nixos-wsl.nixosModules.wsl)
           (vscode-server.nixosModules.default)
           (inputs.agenix.nixosModules.default)
           (import ../system/shared/modules)
           (import ../system/wsl2/modules)
+          (import ../system/shared/profiles)
           (import (strToPath config ../system/wsl2/hosts))
         ];
         commonModules = [
@@ -246,7 +253,7 @@ rec {
             {
               environment.systemPackages = [ agenix.packages.${system}.default ];
               age.identityPaths = [ "/home/${userConf.userName}/.ssh/id_rsa" ];
-              
+
             }
           )
           (
@@ -285,31 +292,27 @@ rec {
               };
             }
           )
-          (
-            { ... }: {
-              system.stateVersion = "23.11";
-            }
-          )
-          (import ../system/shared/profiles)
           (import ../system/shared/secrets)
         ];
       in
-        if buildTarget == "iso" then
-          nixosSystem {
+      if buildTarget == "iso" then
+        nixosSystem
+          {
             inherit system;
             modules = commonModules ++ nixosModules ++ [
               #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix") Default nix lib
               (inputs.nixos-generators.nixosModules.all-formats) #Community Nix Generators
             ];
             specialArgs =
-            let
-              self = inputs.self;
-              user = userConf;
-            in
-            { inherit inputs name self system user userConf hostname secrets;};
-        }
-        else if buildTarget == "wsl" then
-          nixosSystem {
+              let
+                self = inputs.self;
+                user = userConf;
+              in
+              { inherit inputs name self system user userConf hostname secret; };
+          }
+      else if buildTarget == "wsl" then
+        nixosSystem
+          {
             inherit system;
             modules = commonModules ++ wslModules;
             specialArgs =
@@ -317,77 +320,80 @@ rec {
                 self = inputs.self;
                 user = userConf;
               in
-              { inherit inputs name self system user userConf hostname secrets;};
+              { inherit inputs name self system user userConf hostname secrets; };
           }
-        ## handles nixos host builds
-        else if buildTarget == "nixos" then
-          nixosSystem {
+      ## handles nixos host builds
+      else if buildTarget == "nixos" then
+        nixosSystem
+          {
             inherit system;
             modules = commonModules ++ nixosModules;
             specialArgs =
-            let
-              self = inputs.self;
-              user = userConf;
-            in
-            { inherit inputs name self system user userConf hostname secrets;};
-          }
-        #handles VM builds. Default will not cross compile.
-        else if buildTarget == "vm" then
-            nixosSystem{  
-              inherit system;
-              modules = commonModules ++ nixosModules ++ [
-              (inputs.nixos-generators.nixosModules.all-formats)
-              ];
-              specialArgs =
               let
                 self = inputs.self;
                 user = userConf;
               in
-              { inherit inputs name self system user userConf hostname secrets;};
-            }
-                  
-        else if buildTarget == "darwin" then
-          inputs.darwin.lib.darwinSystem {
-            inherit system;            
+              { inherit inputs name self system user userConf hostname secrets; };
+          }
+      #handles VM builds. Default will not cross compile.
+      else if buildTarget == "vm" then
+        nixosSystem
+          {
+            inherit system;
+            modules = commonModules ++ nixosModules ++ [
+              (inputs.nixos-generators.nixosModules.all-formats)
+            ];
+            specialArgs =
+              let
+                self = inputs.self;
+                user = userConf;
+              in
+              { inherit inputs name self system user userConf hostname secrets; };
+          }
+
+      else if buildTarget == "darwin" then
+        inputs.darwin.lib.darwinSystem
+          {
+            inherit system;
             modules = commonModules ++ darwinModules;
             specialArgs =
-            let
-              self = inputs.self;
-              user = userConf;
-            in
-            { 
-              inherit inputs name self system user userConf secrets pkgs; 
-            };
+              let
+                self = inputs.self;
+                user = userConf;
+              in
+              {
+                inherit inputs name self system user userConf secrets pkgs;
+              };
           }
-        else
-          throw "${systemType} is not supported."
-      );
+      else
+        throw "${systemType} is not supported."
+    );
 
-      ################################## DROID ##################################
-      mkNixOnDroidConfiguration = name: {config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? {}, }: 
-      nameValuePair name(
-        let
-            pkgs = import nixpkgs {
-              system = "aarch64-linux";
-              overlays = [
-                nix-on-droid.overlays.default
-                # add other overlays
-              ];
-            };
-            userConf = import (strToFile user ../users);
-        in
-        nix-on-droid.lib.nixOnDroidConfiguration {
-          inherit system;
-          modules = [
-            (
-              { pkgs, ... }: {
-                # Don't rely on the configuration to enable a flake-compatible version of Nix.
-                nix = {
-                  package = pkgs.nixVersions.stable;
-                  extraOptions = "experimental-features = nix-command flakes";
-                };
-              }
-            )
+  ################################## DROID ##################################
+  mkNixOnDroidConfiguration = name: { config ? name, user ? "", system ? "aarch64-linux", hostname ? "nix-on-droid", args ? { }, }:
+    nameValuePair name (
+      let
+        pkgs = import nixpkgs {
+          system = "aarch64-linux";
+          overlays = [
+            nix-on-droid.overlays.default
+            # add other overlays
+          ];
+        };
+        userConf = import (strToFile user ../users);
+      in
+      nix-on-droid.lib.nixOnDroidConfiguration {
+        inherit system;
+        modules = [
+          (
+            { pkgs, ... }: {
+              # Don't rely on the configuration to enable a flake-compatible version of Nix.
+              nix = {
+                package = pkgs.nixVersions.stable;
+                extraOptions = "experimental-features = nix-command flakes";
+              };
+            }
+          )
 
           (
             { inputs, ... }: {
@@ -425,14 +431,14 @@ rec {
           )
           (import (strToPath config ../system/droid/hosts))
 
-      ];
-      extraSpecialArgs =
-        let
-          self = inputs.self;
-          user = userConf;
-        in
-        { inherit inputs self system user userConf secrets agenix home-manager; };
+        ];
+        extraSpecialArgs =
+          let
+            self = inputs.self;
+            user = userConf;
+          in
+          { inherit inputs self system user userConf secrets agenix home-manager; };
       }
     );
-  }
+}
     

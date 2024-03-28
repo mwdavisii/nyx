@@ -1,10 +1,12 @@
 { config, lib, pkgs, ... }:
-
 with lib;
 let
   cfg = config.nyx.modules.theme;
 in
 {
+  imports = [
+    ./cava
+  ];
   options.nyx.modules.theme = {
     name = mkOption {
       type = types.str;
