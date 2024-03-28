@@ -23,7 +23,6 @@ in
       #hyprlock
     ];
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
-    #test later systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
     wayland.windowManager.hyprland = {
       enable = true;
       systemd.enable = true;
