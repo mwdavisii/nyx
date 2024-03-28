@@ -7,6 +7,7 @@
       ../../shared/system/locale.nix
       ../../shared/system/gc.nix
       ../../shared/system/login.nix
+      ../../shared/system/bluetooth.nix
 
     ];
 
