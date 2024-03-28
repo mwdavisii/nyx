@@ -61,7 +61,7 @@
     LC_TIME = "en_US.UTF-8";
   };
   environment.variables = {
-    NIXOS_OZONE_WL = "1";
+    #NIXOS_OZONE_WL = "1";
     #GBM_BACKEND= "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME= "amd";
     LIBVA_DRIVER_NAME= "radeonsi"; # hardware acceleration
