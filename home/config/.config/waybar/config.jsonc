@@ -1,7 +1,7 @@
 {
     "position": "top",
     "layer": "top",
-    "height": 16,
+    "height": 30,
     "margin-top": 0,
     "margin-bottom": 0,
     "margin-left": 0,
@@ -143,9 +143,9 @@
   },
   "custom/launcher": {
     "format": "󰈸",
-    "on-click": "rofi -show drun",
+    "on-click": "bash $HOME/.config/rofi/launcher.sh",
 //    "on-click": "wofi --show drun -I -a -n -W 500 -H 376 -s ~/.config/wofi/themes/gruvbox.css",
-    "on-click-right": "rofi -show run"  
+    "on-click-right": "bash $HOME/.config/rofi/run.sh"  
 //    "on-click-right": "wofi --show run -I -a -n -W 500 -H 376 -s ~/.config/wofi/themes/gruvbox.css"  
   },
 
