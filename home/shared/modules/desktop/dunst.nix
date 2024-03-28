@@ -2,10 +2,10 @@
 
 with lib;
 let 
-    cfg = config.nyx.modules.app.dunst;
+    cfg = config.nyx.modules.desktop.dunst;
 in
 {
-  options.nyx.modules.app.dunst = { enable = mkEnableOption "Dunst Notification Services"; };
+  options.nyx.modules.desktop.dunst = { enable = mkEnableOption "Dunst Notification Services"; };
 
   config = mkIf cfg.enable {
     services.dunst = {

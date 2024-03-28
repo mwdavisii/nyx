@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  cfg = config.nyx.modules.app.waybar;
+  cfg = config.nyx.modules.desktop.waybar;
 in
 {
-  options.nyx.modules.app.waybar = { enable = mkEnableOption "Dunst Notification Services"; };
+  options.nyx.modules.desktop.waybar = { enable = mkEnableOption "Waybar Status Bar"; };
 
   config = mkIf cfg.enable {
     programs.waybar = {

@@ -134,26 +134,12 @@ rec {
     ];
   };
 
-  configurationDefaults = args: {
-    nixpkgs = nixpkgsWithOverlays;
-    home-manager.useGlobalPkgs = true;
-    home-manager.useUserPackages = true;
-    home-manager.backupFileExtension = "hm-backup";
-    home-manager.extraSpecialArgs = args;
-  };
-
-  argDefaults = {
-    inherit secrets inputs self nix-index-database;
-    channels = {
-      inherit nixpkgs nixpkgs-unstable;
-    };
-  };
-
   mkNixSystemConfiguration = name: { config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? { }, }:
     nameValuePair name (
       let
         pkgs = inputs.self.legacyPackages."${system}";
         userConf = import (strToFile user ../users);
+        unstable = import nixpkgs-unstable {inherit system;};
         #nixos = Dedicated Build on Metal
         nixosModules = [
           (hyprland.nixosModules.default)
@@ -169,7 +155,7 @@ rec {
                     user = userConf;
                   in
                   # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
-                  { inherit inputs self system user userConf secrets; };
+                  { inherit inputs self system user userConf unstable secrets; };
               };
             }
           )
@@ -310,7 +296,7 @@ rec {
                 self = inputs.self;
                 user = userConf;
               in
-              { inherit inputs name self system user userConf hostname secrets; };
+              { inherit inputs name self system user userConf hostname secret; };
           }
       else if buildTarget == "wsl" then
         nixosSystem
