@@ -1,14 +1,20 @@
 {
   inputs = {
     # Core
-    nixpkgs.url             = "github:NixOS/nixpkgs/nixos-23.11";
-    nixpkgs-unstable.url    = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-master.url      = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nur.url                 = "github:nix-community/NUR";    
+    nur.url = "github:nix-community/NUR";
+    #hyprland
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };  
     #hardware
     disko = {
       url = "github:nix-community/disko";
@@ -27,12 +33,12 @@
       flake = false;
     };
     # MacOS
-    nixpkgs-darwin.url      = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-homebrew.url        = "github:zhaofengli-wip/nix-homebrew";
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     homebrew-bundle = {
       url = "github:homebrew/homebrew-bundle";
       flake = false;
@@ -62,9 +68,9 @@
       url = "github:neovim/neovim?dir=contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     ghostty-module.url = "github:clo4/ghostty-hm-module";
-    
+
   };
 
   outputs = { self, ... }@inputs:
@@ -78,12 +84,12 @@
           inherit system;
           config = import ./nix/config.nix;
           overlays = [
-          #  self.overlays."${system}"
+            #  self.overlays."${system}"
             inputs.nix-on-droid.overlays.default
           ];
         }
       );
-    in 
+    in
     rec {
       lib = import ./lib { inherit self inputs config; } // inputs.nixpkgs.lib;
       devShell = foreachSystem (system: import ./shell.nix { pkgs = pkgsBySystem."${system}"; });
@@ -101,8 +107,8 @@
         ] ++ ovs
       );
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
-        nix-on-droid = {user = "droid";};
-        default = {user = "droid";};
+        nix-on-droid = { user = "droid"; };
+        default = { user = "droid"; };
       };
 
       homeManagerConfigurations = mapAttrs' mkHome {
@@ -110,7 +116,7 @@
       };
 
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
-        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii"; buildTarget="darwin";}; #macbook
+        mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
@@ -119,10 +125,11 @@
         personal = {user="nixos"; hostname ="personal"; buildTarget="wsl";}; #WSL
         work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
         worklt = {hostname = "worklt"; user ="mwdavisii"; buildTarget="nixos";}; #Work Laptop (Host OS)
+	hephaestus = {hostname="hephaestus"; user="mwdavisii"; buildTarget="nixos";}; #home machine
         virtualbox = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
         livecd = {hostname = "worklt"; user ="mwdavisii"; buildTarget="iso";}; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
       };
-      
+
       top =
         let
           livecd = (builtins.attrNames inputs.self.nixosConfigurations)
@@ -138,12 +145,12 @@
             (builtins.attrNames inputs.self.homeManagerConfigurations)
             (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
           darwintop = genAttrs
-             (builtins.attrNames inputs.self.darwinConfigurations)
-             (attr: inputs.self.darwinConfigurations.${attr}.system);
+            (builtins.attrNames inputs.self.darwinConfigurations)
+            (attr: inputs.self.darwinConfigurations.${attr}.system);
           vmtop = genAttrs
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
         in
         droidtop // nixtop // hometop // darwintop // vmtop;
-  };
+    };
 }

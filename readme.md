@@ -21,6 +21,7 @@ These public repositories heavily influenced my configuration. You'll see bit of
 
 - [EdenEast/nyx](https://github.com/EdenEast/nyx)
 - [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
+- [HeinzDev](https://github.com/HeinzDev/Hyprland-dotfiles)
 
 ## Installation & Configuration
 

@@ -15,6 +15,7 @@ in
       # clang-tidy, clang-format clang-check
       gcc
       clang-tools
+      pkg-config
       # cross platform makefile generator
       # cmake
       # ccmake - curses cmake terminal frontend (contains cmake)
