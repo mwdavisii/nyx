@@ -124,8 +124,8 @@
         nixos = {user="nixos"; hostname ="nixos"; buildTarget="wsl";}; #WSL
         personal = {user="nixos"; hostname ="personal"; buildTarget="wsl";}; #WSL
         work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
-        worklt = {hostname = "worklt"; user ="mwdavisii"; buildTarget="nixos";}; #Work Laptop (Host OS)
-	hephaestus = {hostname="hephaestus"; user="mwdavisii"; buildTarget="nixos";}; #home machine
+        olenos = {hostname = "olenos"; user ="mwdavisii"; buildTarget="nixos";}; #Work Laptop (Host OS)
+	      hephaestus = {hostname="hephaestus"; user="mwdavisii"; buildTarget="nixos";}; #home machine
         virtualbox = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
         livecd = {hostname = "worklt"; user ="mwdavisii"; buildTarget="iso";}; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
       };
