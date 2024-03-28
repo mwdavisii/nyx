@@ -92,7 +92,10 @@
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = true;
-        chrome.enable = true;
+        chrome = {
+          enable = true;
+          makeDefaultBrowser = true;
+        };
         obs.enable = true;
         scrcpy.enable = true;
         steam.enable = true;

@@ -17,6 +17,9 @@ in
     home.packages = with pkgs; [
       waybar
       swww
+      wayland-protocols
+      mesa
+      mesa-libGL
       #hyprlock
     ];
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
