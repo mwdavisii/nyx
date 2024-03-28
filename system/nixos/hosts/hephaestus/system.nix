@@ -4,6 +4,10 @@
     [
       # Include the results of the hardware scan.
       ./hardware.nix
+      ../../shared/system/locale.nix
+      ../../shared/system/gc.nix
+      ../../shared/system/login.nix
+
     ];
 
   #networking.hostName = $hostName; # Define your hostname.
@@ -19,7 +23,9 @@
     driSupport = true;
     driSupport32Bit = true;
   };
+
   time.hardwareClockInLocalTime = true;
+  
   boot.loader = {
     efi.canTouchEfiVariables = true;
     grub = {
@@ -30,36 +36,8 @@
     };
   };
 
-  #Garbage colector
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
 
-  system.autoUpgrade = {
-    enable = true;
-    channel = "https://nixos.org/channels/nixos-23.11";
-  };
 
-  #programs.sway.enable = true;
-  # Set your time zone.
-  time.timeZone = "America/Chicago";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
   environment.variables = {
     #NIXOS_OZONE_WL = "1";
     #GBM_BACKEND= "nvidia-drm";
@@ -112,55 +90,10 @@
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
-  security.polkit.enable = true;
-  security.rtkit.enable = true;
-  programs.dconf.enable = true;
 
   xdg.portal = {
     enable = true;
     wlr.enable = true;
     config.common.default = "*";
-  };
-/*
-  programs.regreet.enable = true;
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session.command = ''
-        ${pkgs.greetd.tuigreet}/bin/tuigreet \
-          --time \
-          --asterisks \
-          --user-menu \
-          --cmd sway
-      '';
-    };
-  };
-*/
-
-  programs.regreet.enable = true;
-    services.greetd = {
-      enable = true;
-      settings = {
-        initial_session = {
-          user = "mwdavisii";
-          command = "$SHELL -l";
-        };
-      };
-    };
-
-
-
-  security.sudo = {
-    extraRules = [
-      {
-        commands = [
-          {
-            command = "ALL";
-            options = [ "NOPASSWD" ];
-          }
-        ];
-        groups = [ "wheel" ];
-      }
-    ];
   };
 }
