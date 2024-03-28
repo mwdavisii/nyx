@@ -20,6 +20,7 @@ let
     "libvirtd"
     "networmanager"
     "wheel"
+    "video"
   ];
 in
 {
