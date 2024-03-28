@@ -64,6 +64,7 @@
   services = {
     xserver = {
       enable = true;
+      videoDrivers = [ "amdgpu" ];
       layout = "us";
       xkbVariant = "";
       #libinput.enable = true;

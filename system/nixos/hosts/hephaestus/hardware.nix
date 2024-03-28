@@ -10,9 +10,9 @@
         kernelPackages = pkgs.linuxPackages_latest;
         initrd = {
             availableKernelModules = [ "ata_piix" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-            kernelModules = [ ];
+            kernelModules = [ "amdgpu" ];
         };
-        kernelModules = [ "kvm-intel" ];
+        kernelModules = [ "amdgpu" ];
         #extraModulePackages = [ ];
         loader = {
         #systemd-boot.enable = true;
