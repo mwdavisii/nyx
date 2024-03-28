@@ -1,7 +1,7 @@
 { config, lib, pkgs, inputs, ... }:
 with lib;
 let
-  cfg = config.nyx.modules.app.hypr;
+  cfg = config.nyx.modules.desktop.hypr;
   plugins = inputs.hyprland-plugins.packages.${pkgs.system};
 in
 {
@@ -9,7 +9,7 @@ in
     ./hyprland-environment.nix
   ];
 
-  options.nyx.modules.app.hypr = {
+  options.nyx.modules.desktop.hypr = {
     enable = mkEnableOption "hypr configuration";
   };
 

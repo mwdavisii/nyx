@@ -2,10 +2,10 @@
 
 with lib;
 let
-  cfg = config.nyx.modules.app.rofi;
+  cfg = config.nyx.modules.desktop.rofi;
 in
 {
-  options.nyx.modules.app.rofi = {
+  options.nyx.modules.desktop.rofi = {
     enable = mkEnableOption "rofi configuration";
   };
 

@@ -78,19 +78,25 @@
 
   nyx = {
     modules = {
-      app = {
-        alacritty = {
-          enable = true;
-        };
+      desktop = {
         dunst.enable = true;
         hypr.enable = true;
         rofi.enable = true;
         waybar.enable = true;
+        gtk.enable = true;
+      };
+      app = {
+        alacritty = {
+          enable = true;
+        };
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = true;
         chrome.enable = true;
         obs.enable = true;
+        scrcpy.enable = true;
+        steam.enable = false;
+        qemu.enable = true;
         wezterm = {
           enable = true;
           package = null;

@@ -78,14 +78,17 @@
 
   nyx = {
     modules = {
-      app = {
-        alacritty = {
-          enable = true;
-        };
+      desktop = {
         dunst.enable = true;
         hypr.enable = true;
         rofi.enable = true;
         waybar.enable = true;
+        gtk.enable = true;
+      };
+      app = {
+        alacritty = {
+          enable = true;
+        };
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = true;
