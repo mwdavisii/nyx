@@ -39,11 +39,11 @@ Below are descriptions of the hosts configurations. If you have access to window
 ├─────── default        # => Google Pixel Fold
 ├─── nixos
 ├───── hosts
-├─────── athena         # => Personal Laptops - Alienware m15 R6 / i7 / RTX 3080 / nixos only
-├─────── hephaestus     # => Home Machine - Custom Build / i9 / AMD 7900xt / dual boot nixos+win
+├─────── athena         # => Personal laptop - Alienware m15 R6 / i7 / RTX 3080 / nixos only
+├─────── hephaestus     # => Home machine - Custom Build / i9 / AMD 7900xt / dual boot nixos+win
 ├─────── livecd         # => Bootable installer ISO w/ custom shell
-├─────── olenos         # => Work Laptop - Thinkpad x13 / i7 / integrated graphics / nixos only
-├─────── virtualbox     # => Oracle Virtual Box Image (Gnome + Shell)
+├─────── olenos         # => Work laptop - Thinkpad x13 / i7 / integrated graphics / nixos only
+├─────── virtualbox     # => Oracle Virtualbox Image (Gnome + Shell)
 ├─── wsl
 ├───── hosts
 ├─────── ares           # => Personal WSL w/ personal credential decryption
