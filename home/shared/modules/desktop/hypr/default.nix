@@ -17,8 +17,11 @@ in
     home.packages = with pkgs; [
       waybar
       swww
-      wayland-protocols
       mesa
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal
+      acpi
+      wayland-protocols
       #mesa-libGL
       #hyprlock
     ];
