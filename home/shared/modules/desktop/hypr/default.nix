@@ -22,6 +22,7 @@ in
       xdg-desktop-portal
       acpi
       wayland-protocols
+      mpd
       #mesa-libGL
       #hyprlock
     ];
