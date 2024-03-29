@@ -25,6 +25,31 @@ These public repositories heavily influenced my configuration. You'll see bit of
 
 ## Installation & Configuration
 
+### My Configured Hosts
+Below are descriptions of the hosts I have configured if it helps give you an idea of something
+
+```Markdown
+├─ system
+├─── darwin
+├───── hosts
+├─────── mwdavis-workm1 # => Work Macbook / 2022 16" Pro M1
+├─── droid
+├───── hosts
+├─────── default        # => Google Pixel Fold
+├─── nixos
+├───── hosts
+├─────── hephaestus     # => Home Machine - Custom Build / i9 / AMD 7900xt / dual boot nixos+win
+├─────── livecd         # => Bootable installer ISO w/ custom shell
+├─────── olenos         # => Work Laptop - Thinkpad x13 / i7 / integrated graphics / nixos only
+├─────── virtualbox     # => Oracle Virtual Box Image (Gnome + Shell)
+├─── wsl
+├───── hosts
+├─────── ares           # => Personal WSL w/ personal credential decryption
+├─────── nixos          # => Generic WSL2 w/ No Credentials
+├─────── work           # => Work WSL2 w/ work credential decryption
+
+```
+
 ### Secrets Configuration
 
 This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository.
