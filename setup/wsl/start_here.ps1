@@ -3,7 +3,7 @@
 
 $powerlineFontsUrl = 'https://github.com/powerline/fonts.git'
 
-Import-Module ..\shared\common.ps1
+Import-Module ..\shared\common.psm1
 
 
 
