@@ -15,8 +15,13 @@
         kernelModules = [ "amdgpu" ];
         #extraModulePackages = [ ];
         loader = {
-        #systemd-boot.enable = true;
-        #efi.canTouchEfiVariables = true;
+            efi.canTouchEfiVariables = true;
+            grub = {
+            enable = true;
+            devices = [ "nodev" ];
+            efiSupport = true;
+            useOSProber = true;
+            };
         };
     };
     hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

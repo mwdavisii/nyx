@@ -5,13 +5,23 @@
   programs.home-manager.enable = true;
   # Install man output for any Nix packages.
   programs.man.enable = true;
-
   manual.manpages.enable = true;
-  
-  home = {
-      sessionVariables = {
-        PATH = "$PATH::/mnt/c/Program\ Files/Microsoft\ VS\ Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
     };
+
+    "org/gnome/shell/extensions/user-theme" = {
+      name = "Tokyonight-Dark-B-LB";
+    };
+  };
+
+  home = {
+    sessionVariables = {
+      PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
+    };
+
     stateVersion = "23.11";
     packages = with pkgs; [
       rustup
@@ -19,27 +29,79 @@
       bat
       bash
       wget
-    ];
+      #User Apps
+      celluloid
+      cool-retro-term
+      bibata-cursors
+      lutris
+
+      #utils
+      ranger
+      wlr-randr
+      gnumake
+      catimg
+      curl
+      xflux
+      dunst
+      pavucontrol
+      sqlite
+
+      #misc 
+      cava
+      rofi
+      nitch
+      wget
+      grim
+      slurp
+      wl-clipboard
+      pamixer
+      mpc-cli
+      tty-clock
+      btop
+      tokyo-night-gtk
+      playerctl
+    ] ++ (with pkgs.gnome; [
+      nautilus
+      zenity
+      gnome-tweaks
+      eog
+      gedit
+    ]);
   };
 
   nyx = {
     modules = {
+      desktop = {
+        dunst.enable = true;
+        hypr.enable = true;
+        rofi.enable = true;
+        waybar.enable = true;
+        gtk.enable = true;
+      };
       app = {
         alacritty = {
-          enable = false;
+          enable = true;
         };
-        kitty.enable = false;
-        discord.enable = false;
+        kitty.enable = true;
+        discord.enable = true;
         firefox.enable = false;
-        qemu.enable = true;
+        chrome = {
+          enable = true;
+          makeDefaultBrowser = true;
+        };
         obs.enable = true;
+        scrcpy.enable = true;
+        steam.enable = true;
+        qemu.enable = true;
         wezterm = {
-          enable = false;
+          enable = true;
           package = null;
           fontSize = 14;
         };
+        vscode.enable = true;
       };
       dev = {
+        androidSDK.enable = true;
         cc.enable = true;
         rust.enable = true;
         go.enable = true;
