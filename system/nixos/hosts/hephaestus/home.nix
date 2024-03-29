@@ -30,6 +30,9 @@
   #};
 
   home = {
+    sessionVariables = {
+        PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts:/mnt/c/Program Files/Microsoft\ VS\ Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
+    };
     stateVersion = "23.11";
     packages = with pkgs; [
       rustup

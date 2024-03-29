@@ -8,7 +8,7 @@
       ../../shared/system/gc.nix
       ../../shared/system/login.nix
       ../../shared/system/bluetooth.nix
-      ../../shared/system/env-vars-amd.nix
+      ../../shared/system/env-vars-nvidia.nix
       ../../shared/system/opengl.nix
 
     ];
@@ -22,27 +22,20 @@
   networking.networkmanager.enable = lib.mkForce true;
   networking.useDHCP = lib.mkDefault true;
 
+
   time.hardwareClockInLocalTime = true;
 
   environment.systemPackages = with pkgs; [
     libevdev
   ];
+
   # Configure keymap in X11
   services = {
     xserver = {
       enable = true;
-      videoDrivers = [ "amdgpu" ];
+      videoDrivers = [ "nvidia" ];
       layout = "us";
       xkbVariant = "";
-      #libinput.enable = true;
-      #    desktopManager.gnome.enable = true;
-      #    #displayManager.lightdm = {
-      #    #    enable = true;
-      #    #    greeters.slick.enable = true;
-      #    #};
-      #    windowManager.bspwm = {
-      #        enable = true;
-      #    };
     };
     printing.enable = true;
     openssh.enable = true;
