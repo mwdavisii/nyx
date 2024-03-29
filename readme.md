@@ -26,7 +26,8 @@ These public repositories heavily influenced my configuration. You'll see bit of
 ## Installation & Configuration
 
 ### My Configured Hosts
-Below are descriptions of the hosts I have configured if it helps give you an idea of something
+
+Below are descriptions of the hosts configurations. If you have access to windows / wsl, I recommend wsl/hosts/nixos.
 
 ```Markdown
 ├─ system
@@ -38,6 +39,7 @@ Below are descriptions of the hosts I have configured if it helps give you an id
 ├─────── default        # => Google Pixel Fold
 ├─── nixos
 ├───── hosts
+├─────── athena         # => Personal Laptops - Alienware m15 R6 / i7 / RTX 3080 / nixos only
 ├─────── hephaestus     # => Home Machine - Custom Build / i9 / AMD 7900xt / dual boot nixos+win
 ├─────── livecd         # => Bootable installer ISO w/ custom shell
 ├─────── olenos         # => Work Laptop - Thinkpad x13 / i7 / integrated graphics / nixos only

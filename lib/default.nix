@@ -84,7 +84,6 @@ rec {
         EDITOR = "nvim";
         VISUAL = "nvim";
         COLORTERM = "truecolor";
-        PATH = "$PATH:/mnt/c/Program Files/Microsoft\ VS\ Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
       };
 
       # Use the same Nix configuration for the user
