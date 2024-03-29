@@ -122,7 +122,7 @@
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
         mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii"; buildTarget="darwin";}; #macbook
         nixos = {user="nixos"; hostname ="nixos"; buildTarget="wsl";}; #WSL
-        personal = {user="nixos"; hostname ="personal"; buildTarget="wsl";}; #WSL
+        ares = {user="nixos"; hostname ="ares"; buildTarget="wsl";}; #WSLi
         work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
         olenos = {hostname = "olenos"; user ="mwdavisii"; buildTarget="nixos";}; #Work Laptop (Host OS)
 	      hephaestus = {hostname="hephaestus"; user="mwdavisii"; buildTarget="nixos";}; #home machine

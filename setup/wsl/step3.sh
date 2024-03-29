@@ -32,19 +32,19 @@ UCyan='\033[4;36m'        # Cyan
 UWhite='\033[4;37m'       # White
 
 ########## Ask the user for hostname - which drives configuration
-options=("nixos" "personal" "work")
+options=("nixos" "ares" "work")
 echo -e "It looks like you're setting up WSL2 for the first time. There are 3 pre-configured hosts for WSL2."
 echo " "
 echo "The options are:"
 echo -e "  ${BBlue}- \"nixos\"    ${Cyan} -- Default with no secrets or public keys applied." 
-echo -e "  ${BBlue}- \"personal\" ${Cyan} -- Designed for mixed-user. Includes personal keys, but no system access keys." 
+echo -e "  ${BBlue}- \"ares\" 	  ${Cyan} -- Designed for mixed-user. Includes personal keys, but no system access keys." 
 echo -e "  ${BBlue}- \"work\"     ${Cyan} -- Designed for VPN enabled systems. Includes personal + system access keys." 
 echo " "
 echo -e "${Color_Off}"
 select opt in "${options[@]}"
 do
     case $opt in
-        "nixos"|"personal"|"work")
+        "nixos"|"ares"|"work")
             echo "Using $opt config. ";break;;
         *) echo -e "${Red}Invalid option. Please select a valid option or press crtl-c to quit.";;
     esac
