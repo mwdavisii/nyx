@@ -67,6 +67,7 @@
       tty-clock
       btop
       tokyo-night-gtk
+      playerctl
     ] ++ (with pkgs.gnome; [
       nautilus
       zenity
@@ -91,7 +92,7 @@
         };
         kitty.enable = true;
         discord.enable = true;
-        firefox.enable = true;
+        firefox.enable = false;
         chrome = {
           enable = true;
           makeDefaultBrowser = true;
