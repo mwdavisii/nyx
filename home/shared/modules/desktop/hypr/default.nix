@@ -28,6 +28,7 @@ in
       qt5ct
       swaylock-effects
       swayidle
+      glfw-wayland
       #mesa-libGL
       #hyprlock
     ];
