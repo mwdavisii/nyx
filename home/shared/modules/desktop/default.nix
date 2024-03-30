@@ -2,10 +2,11 @@
 
 {
   imports = [ 
-    ./dunst.nix
+    ./dunst
     ./hypr
     ./rofi
-    ./waybar.nix
-    ./gtk.nix
+    ./waybar
+    ./gtk
+    ./wlogout
     ];
 }

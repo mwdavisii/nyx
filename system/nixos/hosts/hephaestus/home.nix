@@ -31,7 +31,7 @@
 
   home = {
     sessionVariables = {
-        PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts:/mnt/c/Program Files/Microsoft\ VS\ Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
+        PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
     };
     stateVersion = "23.11";
     packages = with pkgs; [
@@ -47,16 +47,14 @@
       lutris
 
       #utils
-      ranger
       wlr-randr
       gnumake
       catimg
       curl
       xflux
-      dunst
       pavucontrol
       sqlite
-
+      networkmanagerapplet
       #misc 
       cava
       rofi
@@ -74,7 +72,6 @@
     ] ++ (with pkgs.gnome; [
       nautilus
       zenity
-      gnome-tweaks
       eog
       gedit
     ]);
@@ -86,8 +83,9 @@
         dunst.enable = true;
         hypr.enable = true;
         rofi.enable = true;
-        waybar.enable = true;
         gtk.enable = true;
+        waybar.enable = true;
+        wlogout.enable = true;
       };
       app = {
         alacritty = {
@@ -101,11 +99,12 @@
           makeDefaultBrowser = true;
         };
         obs.enable = true;
+        ranger.enable = true;
         scrcpy.enable = true;
         steam.enable = true;
         qemu.enable = true;
         wezterm = {
-          enable = true;
+          enable = false; #having issue with wezterm and wayland
           package = null;
           fontSize = 14;
         };
@@ -143,6 +142,7 @@
         lf.enable = true;
         lorri.enable = false;
         mcfly.enable = true;
+        neofetch.enable = true;
         neovim.enable = true;
         networking.enable = true;
         nushell.enable = true;

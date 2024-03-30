@@ -18,6 +18,7 @@
     ./lf.nix
     ./lorri.nix
     ./mcfly.nix
+    ./neofetch.nix
     ./neovim.nix
     ./networking.nix
     ./nushell.nix

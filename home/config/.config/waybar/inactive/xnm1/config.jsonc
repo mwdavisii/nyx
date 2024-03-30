@@ -340,7 +340,7 @@
                 "lower-medium": 30,
                 "low": 10,
             },
-            "on-click": "wezterm start btop",
+            "on-click": "cool start btop",
             "on-click-right": "wezterm start btm",
         },
     
