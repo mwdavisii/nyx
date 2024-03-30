@@ -26,7 +26,7 @@ in
       hyprpicker
       qt6ct
       qt5ct
-      swaylock
+      swaylock-effects
       swayidle
       #mesa-libGL
       #hyprlock
