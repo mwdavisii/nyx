@@ -23,10 +23,17 @@ in
       acpi
       wayland-protocols
       mpd
+      hyprpicker
+      qt6ct
+      qt5ct
+      swaylock
+      swayidle
       #mesa-libGL
       #hyprlock
     ];
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
+    xdg.configFile."swaylock".source = ../../../../config/.config/swaylock;
+    xdg.configFile."swayidle".source = ../../../../config/.config/swayidle;
     wayland.windowManager.hyprland = {
       enable = true;
       systemd.enable = true;

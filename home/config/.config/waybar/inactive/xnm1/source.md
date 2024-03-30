@@ -1,0 +1,1 @@
+https://github.com/XNM1/linux-nixos-hyprland-config-dotfiles
