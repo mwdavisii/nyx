@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "sleep 1; hyprlock",
+    "action" : "sleep 1; swaylock",
     "text" : "Lock",
     "keybind" : "l"
 }
@@ -12,7 +12,7 @@
 }
 {
     "label" : "logout",
-    "action" : "$HOME/dotfiles/hypr/scripts/exit.sh",
+    "action" : "$HOME/.config/hypr/scripts/exit.sh",
     "text" : "Exit",
     "keybind" : "e"
 }
