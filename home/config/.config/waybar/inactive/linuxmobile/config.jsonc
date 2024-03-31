@@ -1,17 +1,18 @@
 {
     "position": "top",
     "layer": "top",
-    "height": 40,
+    "height": 45,
+    "spacing": 4,
     "margin-top": 0,
     "margin-bottom": 0,
     "margin-left": 0,
     "margin-right": 0,
-    "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/playerctl", "custom/playerlabel"],
-    "modules-center": ["cpu", "memory", "disk"],
+    "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/playerctl", "custom/playerlabel", "wlr/taskbar" ],
+    "modules-center": ["cpu", "memory", "disk", "temperature"],
     "modules-right": ["tray", "custom/randwall", "battery", "bluetooth", "network", "pulseaudio", "clock"],
     // Modules configuration
     "clock": {
-      "format": "{:%I:%M %p %Ez | %a • %h | %F}",
+      "format": "{:%I:%M %p GMT:%Ez | %m/%d/%Y}",
       "format-alt": "{:%I:%M %p}",
       "tooltip-format": "<tt><small>{calendar}</small></tt>",
       // "locale": "en_US.UTF-8",
@@ -34,7 +35,7 @@
           }
       },
   },
-	
+
 
 	"hyprland/workspaces": {
         "active-only": false,
@@ -115,12 +116,24 @@
   },
 
   "disk": {
-    "format": "󰋊 {}%",
-    "format-alt": "󰋊 {used}/{total} GiB",
-    "interval": 5,
-    "path": "/mnt/Datos",
-    "on-click": "kitty --start-as=fullscreen --title btop sh -c 'btop'"
+    "interval": 30,
+    //"format": "󰋊",
+    "path": "/",
+    //"format-alt-click": "click",
+    "format": "{percentage_used}% 󰋊",
+    //"tooltip": true,
+    "tooltip-format": "{used} used out of {total} on {path} ({percentage_used}%)",
   },
+
+  "temperature": {
+    // "thermal-zone": 2,
+    // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "critical-threshold": 80,
+    // "format-critical": "{temperatureC}°C {icon}",
+    "format": "{temperatureC}°C {icon}",
+    "format-icons": ["", "", ""]
+  },
+
 	"bluetooth": {
     "format": "󰂯",
     "format-disabled": "󰂲",
@@ -146,7 +159,15 @@
           "tooltip-format": "{essid}",
           "on-click-right": "nm-connection-editor"
 	},
-
+  "wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 20,
+    "icon-theme": "Numix-Circle",
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-right": "close",
+    "on-click-middle": "fullscreen",
+  },
 	"tray": {
 		"icon-size": 16,
 		"spacing": 5
