@@ -29,17 +29,24 @@ in
     TTYVTDisallocate = true;
   };
 
-  security.sudo = {
-    extraRules = [
-      {
-        commands = [
-          {
-            command = "ALL";
-            options = [ "NOPASSWD" ];
-          }
-        ];
-        groups = [ "wheel" ];
-      }
-    ];
-  };
+  security = {
+    sudo = {
+      extraRules = [
+        {
+          commands = [
+            {
+              command = "ALL";
+              options = [ "NOPASSWD" ];
+            }
+          ];
+          groups = [ "wheel" ];
+        }
+      ];
+    };
+    pam.services.swaylock = {
+      text = ''
+        aith include login
+      '';
+    };
+  };git 
 }
