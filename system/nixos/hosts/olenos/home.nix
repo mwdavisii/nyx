@@ -30,6 +30,9 @@
   #};
 
   home = {
+    sessionVariables = {
+      PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
+    };
     stateVersion = "23.11";
     packages = with pkgs; [
       rustup
@@ -44,19 +47,17 @@
       lutris
 
       #utils
-      ranger
       wlr-randr
       gnumake
       catimg
       curl
       xflux
-      dunst
       pavucontrol
       sqlite
+      networkmanagerapplet
 
       #misc 
       cava
-      rofi
       nitch
       wget
       grim
@@ -67,10 +68,10 @@
       tty-clock
       btop
       tokyo-night-gtk
+      playerctl
     ] ++ (with pkgs.gnome; [
       nautilus
       zenity
-      gnome-tweaks
       eog
       gedit
     ]);
@@ -82,8 +83,9 @@
         dunst.enable = true;
         hypr.enable = true;
         rofi.enable = true;
-        waybar.enable = true;
         gtk.enable = true;
+        waybar.enable = true;
+        wlogout.enable = true;
       };
       app = {
         alacritty = {
@@ -91,20 +93,25 @@
         };
         kitty.enable = true;
         discord.enable = true;
-        firefox.enable = true;
-        chrome.enable = true;
+        firefox.enable = false;
+        chrome = {
+          enable = true;
+          makeDefaultBrowser = true;
+        };
         obs.enable = true;
+        ranger.enable = true;
         scrcpy.enable = true;
-        steam.enable = false;
+        steam.enable = true;
         qemu.enable = true;
         wezterm = {
-          enable = true;
+          enable = false; #having issue with wezterm and wayland
           package = null;
           fontSize = 14;
         };
         vscode.enable = true;
       };
       dev = {
+        androidSDK.enable = true;
         cc.enable = true;
         rust.enable = true;
         go.enable = true;
@@ -135,6 +142,7 @@
         lf.enable = true;
         lorri.enable = false;
         mcfly.enable = true;
+        neofetch.enable = true;
         neovim.enable = true;
         networking.enable = true;
         nushell.enable = true;
