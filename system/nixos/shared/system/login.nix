@@ -3,8 +3,7 @@ let
   tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
 in
 {
-  security.polkit.enable = true;
-  security.rtkit.enable = true;
+
   programs.dconf.enable = true;
 
   programs.regreet.enable = true;
@@ -48,5 +47,7 @@ in
         aith include login
       '';
     };
-  };git 
+    polkit.enable = true;
+    rtkit.enable = true;
+  };
 }
