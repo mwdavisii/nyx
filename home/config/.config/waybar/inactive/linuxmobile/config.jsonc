@@ -1,21 +1,39 @@
 {
     "position": "top",
     "layer": "top",
-    "height": 16,
+    "height": 40,
     "margin-top": 0,
     "margin-bottom": 0,
     "margin-left": 0,
     "margin-right": 0,
     "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/playerctl", "custom/playerlabel"],
     "modules-center": ["cpu", "memory", "disk"],
-    "modules-right": ["tray", "custom/randwall", "network", "pulseaudio", "clock"],
+    "modules-right": ["tray", "custom/randwall", "battery", "bluetooth", "network", "pulseaudio", "clock"],
     // Modules configuration
-	"clock": {
-		"format": " {:%H:%M}",
-		"tooltip": "true",
-        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        	"format-alt": " {:%m/%d}"
-	},
+    "clock": {
+      "format": "{:%I:%M %p %Ez | %a • %h | %F}",
+      "format-alt": "{:%I:%M %p}",
+      "tooltip-format": "<tt><small>{calendar}</small></tt>",
+      // "locale": "en_US.UTF-8",
+      // "timezones": [ "Europe/Kyiv", "America/New_York" ],
+      "actions": {
+          "on-click-right": "mode",
+      },
+      "calendar": {
+          "mode"          : "month",
+          "mode-mon-col"  : 3,
+          "weeks-pos"     : "right",
+          "on-scroll"     : 1,
+          "on-click-right": "mode",
+          "format": {
+              "months":     "<span color='#f4dbd6'><b>{}</b></span>",
+              "days":       "<span color='#cad3f5'><b>{}</b></span>",
+              "weeks":      "<span color='#c6a0f6'><b>W{}</b></span>",
+              "weekdays":   "<span color='#a6da95'><b>{}</b></span>",
+              "today":      "<span color='#8bd5ca'><b><u>{}</u></b></span>"
+          }
+      },
+  },
 	
 
 	"hyprland/workspaces": {
@@ -103,7 +121,22 @@
     "path": "/mnt/Datos",
     "on-click": "kitty --start-as=fullscreen --title btop sh -c 'btop'"
   },
-	
+	"bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱 {device_alias}",
+    "format-connected-battery": "󰂱 {device_alias} (󰥉 {device_battery_percentage}%)",
+    // "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
+    "tooltip-format": "{controller_alias}\t{controller_address} ({status})\n\n{num_connections} connected",
+    "tooltip-format-disabled": "bluetooth off",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address} ({status})\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t({device_battery_percentage}%)",
+    "max-length": 35,
+    "on-click": "fish -c bluetooth_toggle",
+    "on-click-right": "blueman-manager"
+  },
+
 	"network": {
         	"format-wifi": "󰤨",
         	"format-ethernet": " {ifname}: Aesthetic",
