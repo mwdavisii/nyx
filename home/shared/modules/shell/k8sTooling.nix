@@ -9,8 +9,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs;[ 
-      jq 
+    home.packages = with pkgs;[
+      jq
       k9s
       fluxcd
       kubectl
