@@ -1,100 +1,61 @@
-/*
-          _                         _    
-__      _| | ___   __ _  ___  _   _| |_  
-\ \ /\ / / |/ _ \ / _` |/ _ \| | | | __| 
- \ V  V /| | (_) | (_| | (_) | |_| | |_  
-  \_/\_/ |_|\___/ \__, |\___/ \__,_|\__| 
-                  |___/                  
- 
-by Stephan Raabe (2023) 
------------------------------------------------------ 
-
- -----------------------------------------------------
- * Import Pywal colors 
- * ----------------------------------------------------- 
-
-
- -----------------------------------------------------
- * General 
- * ----------------------------------------------------- 
- 
-*/
-
-@import '../../.cache/wal/colors-wlogout.css';
-
-* {
-    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-	background-image: none;
-	transition: 20ms;
-	box-shadow: none;
-}
-
 window {
-	background: url("../../.cache/blurred_wallpaper.png");
-	background-size: cover;
+    font-family: JetBrains Mono Nerd Font;
+    font-size: 14pt;
+    color: #ffffff; /* text */
+    background-color: rgba(46, 52, 64, 0.8);
 }
 
 button {
-	color: #FFFFFF;
-    font-size:20px;
-
     background-repeat: no-repeat;
-	background-position: center;
-	background-size: 25%;
-
-	border-style: solid;
-	background-color: rgba(12, 12, 12, 0.3);
-	border: 3px solid #FFFFFF;
-
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-position: center;
+    background-size: 25%;
+    border: none;
+    background-color: rgba(30, 30, 46, 0);
+    margin: 5px;
+    color: #ffffff;
+    transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-button:focus,
-button:active,
 button:hover {
-    color: @color11;
-	background-color: rgba(12, 12, 12, 0.5);
-	border: 3px solid @color11;
+    background-color: rgba(76, 85, 106, 0.4);
 }
 
-/* 
------------------------------------------------------ 
-Buttons
------------------------------------------------------ 
-*/
+button:focus {
+    background-color: #4c566a;
+    color: #ffffff;
+}
 
 #lock {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("$HOME/.config/wlogout/icons/lock.png"));
+    background-image: image(url("./lock.png"));
+}
+#lock:focus {
+    background-image: image(url("./lock-hover.png"));
 }
 
 #logout {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("~/.config/wlogout/icons/logout.png"));
+    background-image: image(url("./logout.png"));
+}
+#logout:focus {
+    background-image: image(url("./logout-hover.png"));
 }
 
 #suspend {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("~/.config/wlogout/icons/suspend.png"));
+    background-image: image(url("./sleep.png"));
 }
-
-#hibernate {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("~/.config/wlogout/icons/hibernate.png"));
+#suspend:focus {
+    background-image: image(url("./sleep-hover.png"));
 }
 
 #shutdown {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("~/.config/wlogout/icons/shutdown.png"));
+    background-image: image(url("./power.png"));
+}
+#shutdown:focus {
+    background-image: image(url("./power-hover.png"));
 }
 
 #reboot {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("~/.config/wlogout/icons/reboot.png"));
+    background-image: image(url("./restart.png"));
+}
+#reboot:focus {
+    background-image: image(url("./restart-hover.png"));
 }

@@ -1,36 +1,30 @@
 {
     "label" : "lock",
-    "action" : "sleep 1; swaylock",
+    "action" : "swaylock",
     "text" : "Lock",
     "keybind" : "l"
 }
 {
-    "label" : "hibernate",
-    "action" : "sleep 1; systemctl hibernate",
-    "text" : "Hibernate",
-    "keybind" : "h"
-}
-{
-    "label" : "logout",
-    "action" : "$HOME/.config/hypr/scripts/exit.sh",
-    "text" : "Exit",
-    "keybind" : "e"
+    "label" : "reboot",
+    "action" : "systemctl reboot",
+    "text" : "Reboot",
+    "keybind" : "r"
 }
 {
     "label" : "shutdown",
-    "action" : "sleep 1; systemctl poweroff",
+    "action" : "systemctl poweroff",
     "text" : "Shutdown",
     "keybind" : "s"
 }
 {
-    "label" : "suspend",
-    "action" : "sleep 1; systemctl suspend",
-    "text" : "Suspend",
-    "keybind" : "u"
+    "label" : "logout",
+    "action" : "hyprctl dispatch exit 0",
+    "text" : "Logout",
+    "keybind" : "e"
 }
 {
-    "label" : "reboot",
-    "action" : "sleep 1; systemctl reboot",
-    "text" : "Reboot",
-    "keybind" : "r"
+    "label" : "suspend",
+    "action" : "systemctl suspend",
+    "text" : "Suspend",
+    "keybind" : "u"
 }
