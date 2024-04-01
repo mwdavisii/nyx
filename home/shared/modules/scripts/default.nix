@@ -24,6 +24,7 @@ let
     if command -v swww >/dev/null 2>&1; then 
         # killall dynamic_wallpaper
         swww img $(find ~/.config/wallpapers/. -name "*" | shuf -n1) --transition-type simple
+        
     fi
   '';
   default_wall = pkgs.writeShellScriptBin "default_wall" ''

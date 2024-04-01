@@ -12,6 +12,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       wlogout
+      pywal
     ];
     xdg.configFile."wlogout".source = ../../../../config/.config/wlogout;
   };
