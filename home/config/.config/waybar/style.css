@@ -1,28 +1,63 @@
+@import "../../.cache/wal/colors-waybar.css";
+
 * {
-  border: none;
-  border-radius: 0px;
-  /*font-family: VictorMono, Iosevka Nerd Font, Noto Sans CJK;*/
-  font-family: Iosevka, FontAwesome, Noto Sans CJK;
-  font-size: 14px;
-  font-style: normal;
   min-height: 0;
+  border: none;
+  font-family: "Roboto Condensed", "sans-serif", "Font Awesome 6 Free";
 }
 
 window#waybar {
-  background: #282828; /*rgba(30, 30, 46, 0.5);*/
-  border-bottom: 1px solid #282828;
-  color: #f4d9e1;
+  background-color: alpha(@background, 0.5);
+  color: @foreground;
+  transition-property: opacity, background-color;
+  transition-duration: 0.5s;
+  border-radius: 10px 10px 0 0;
+  font-size: 12pt;
 }
 
-#workspaces {
-  background: #282828;
-  margin: 5px 5px 5px 5px;
-  padding: 0px 5px 0px 5px;
-  border-radius: 16px;
-  border: solid 0px #f4d9e1;
-  font-weight: normal;
-  font-style: normal;
+window#waybar.firefox {
+  background-color: @background;
 }
+
+window#waybar.Alacritty {
+  background-color: alpha(@background, 0.9);
+}
+
+window#waybar.bottom {
+  border-radius: 0 0 10px 10px;
+}
+
+/*window#waybar.bottom.mode-hide {*/
+/*border-radius: 10px;*/
+/*}*/
+
+window#waybar.hidden {
+  opacity: 0.2;
+}
+
+window#waybar.empty {
+  border-radius: 10px;
+  /*opacity: 0.5;*/
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+  margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+  margin-right: 0;
+}
+
+.modules-left {
+  margin-left: 15px;
+}
+
+.modules-right {
+  margin-right: 15px;
+}
+
 #workspaces button {
   padding: 0px 5px;
   border-radius: 16px;
@@ -41,211 +76,78 @@ window#waybar {
   border-radius: 16px;
 }
 
-#custom-date,
-#clock,
-#battery,
-#pulseaudio,
-#network,
-#custom-randwall,
-#custom-launcher {
-  background: transparent;
-  padding: 5px 5px 5px 5px;
-  margin: 5px 5px 5px 5px;
-  border-radius: 8px;
-  border: solid 0px #f4d9e1;
-}
-
-#custom-date {
-  color: #d3869b;
-}
-
-#custom-power {
-  color: #24283b;
-  background-color: #db4b4b;
-  border-radius: 5px;
-  margin-right: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 0px;
-  padding: 5px 10px;
-}
-
-#tray {
-  background: #282828;
-  margin: 5px 5px 5px 5px;
-  border-radius: 16px;
-  padding: 0px 5px;
-  /*border-right: solid 1px #282738;*/
+#mode {
+  margin: 6px;
+  color: @color4;
+  font-weight: bold;
 }
 
 #clock {
-  color: #e6b9c6;
-  background-color: #282828;
-  border-radius: 0px 0px 0px 24px;
-  padding-left: 13px;
-  padding-right: 15px;
-  margin-right: 0px;
-  margin-left: 10px;
-  margin-top: 0px;
-  margin-bottom: 0px;
   font-weight: bold;
-  /*border-left: solid 1px #282738;*/
 }
 
-#battery {
-  color: #9ece6a;
+#battery.charging,
+#battery.plugged {
+  color: @color1;
+  font-weight: bold;
 }
 
-#battery.charging {
-  color: #9ece6a;
+@keyframes blink {
+  to {
+    color: @color1;
+  }
 }
 
-#battery.warning:not(.charging) {
-  background-color: #f7768e;
-  color: #24283b;
-  border-radius: 5px 5px 5px 5px;
+#battery.critical:not(.charging) {
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
-#backlight {
-  background-color: #24283b;
-  color: #db4b4b;
-  border-radius: 0px 0px 0px 0px;
-  margin: 5px;
-  margin-left: 0px;
-  margin-right: 0px;
-  padding: 0px 0px;
+/*label:focus {*/
+/*background-color: #000000;*/
+/*}*/
+
+#custom-media.custom-spotify {
+  color: #66cc99;
 }
 
-#network {
-  color: #f4d9e1;
-  border-radius: 8px;
-  margin-right: 5px;
+#custom-media.custom-vlc {
+  color: #ffa000;
 }
 
-#pulseaudio {
-  color: #f4d9e1;
-  border-radius: 8px;
-  margin-left: 0px;
+#workspaces,
+#clock,
+#battery,
+#custom-bluetooth,
+#network,
+#idle_inhibitor,
+#disk,
+#cpu,
+#memory,
+#temperature,
+#custom-media,
+#custom-lockbar,
+#language,
+#language,
+#backlight,
+#pulseaudio,
+#custom-wallpaper,
+#custom-github,
+#custom-weather,
+#tray,
+#custom-power {
+  color: @foreground;
+  margin: 4px 8px;
 }
 
-#pulseaudio.muted {
+button:hover {
   background: transparent;
-  color: #928374;
-  border-radius: 8px;
-  margin-left: 0px;
 }
 
-#custom-randwall {
-  color: #f4d9e1;
-  border-radius: 8px;
-  margin-right: 0px;
-}
-
-#custom-launcher {
-  color: #e5809e;
-  background-color: #282828;
-  border-radius: 0px 24px 0px 0px;
-  margin: 0px 0px 0px 0px;
-  padding: 0 20px 0 13px;
-  /*border-right: solid 1px #282738;*/
-  font-size: 20px;
-}
-
-#custom-launcher button:hover {
-  background-color: #fb4934;
-  color: transparent;
-  border-radius: 8px;
-  margin-right: -5px;
-  margin-left: 10px;
-}
-
-#custom-playerctl {
-  background: #282828;
-  padding-left: 15px;
-  padding-right: 14px;
-  border-radius: 16px;
-  /*border-left: solid 1px #282738;*/
-  /*border-right: solid 1px #282738;*/
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 0px;
-  font-weight: normal;
-  font-style: normal;
-  font-size: 16px;
-}
-
-#custom-playerlabel {
-  background: transparent;
-  padding-left: 10px;
-  padding-right: 15px;
-  border-radius: 16px;
-  /*border-left: solid 1px #282738;*/
-  /*border-right: solid 1px #282738;*/
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-weight: normal;
-  font-style: normal;
-}
-
-#window {
-  background: #282828;
-  padding-left: 15px;
-  padding-right: 15px;
-  border-radius: 16px;
-  /*border-left: solid 1px #282738;*/
-  /*border-right: solid 1px #282738;*/
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-weight: normal;
-  font-style: normal;
-}
-
-#custom-wf-recorder {
-  padding: 0 20px;
-  color: #e5809e;
-  background-color: #1e1e2e;
-}
-
-#cpu {
-  background-color: #282828;
-  /*color: #FABD2D;*/
-  border-radius: 16px;
-  margin: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding: 0px 10px 0px 10px;
-  font-weight: bold;
-}
-
-#memory {
-  background-color: #282828;
-  /*color: #83A598;*/
-  border-radius: 16px;
-  margin: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding: 0px 10px 0px 10px;
-  font-weight: bold;
-}
-
-#disk {
-  background-color: #282828;
-  /*color: #8EC07C;*/
-  border-radius: 16px;
-  margin: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding: 0px 10px 0px 10px;
-  font-weight: bold;
-}
-
-#custom-hyprpicker {
-  background-color: #282828;
-  /*color: #8EC07C;*/
-  border-radius: 16px;
-  margin: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding: 0px 11px 0px 9px;
-  font-weight: bold;
+tooltip {
+  background-color: @foreground;
+  color: @background;
 }

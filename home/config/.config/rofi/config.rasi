@@ -7,6 +7,7 @@
   font: "JetBrainsMono Bold 10";
 }
 
+@import "~/.cache/wal/colors-rofi-dark"
 
 window {
   padding: 1em;
