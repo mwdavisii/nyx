@@ -9,11 +9,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ 
-        pkgs.terraform
-        pkgs.terraform-ls
-        pkgs.tflint
-    ];
+    home.packages = with pkgs;
+      [
+        terraform
+        terraform-ls
+        tflint
+      ];
   };
 }
   

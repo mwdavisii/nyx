@@ -115,7 +115,9 @@ in
   config = mkIf cfg.enable (mkMerge [
     {
       home.packages = with pkgs;
-        [ zsh ] ++ optional cfg.enableCompletion nix-zsh-completions;
+        [
+          zsh
+        ] ++ optional cfg.enableCompletion nix-zsh-completions;
     }
 
     {

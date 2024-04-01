@@ -19,9 +19,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [
-      pkgs.wezterm
-    ];
+    home.packages = with pkgs;
+      [
+        wezterm
+      ];
     xdg.configFile."wezterm".source = ../../../../config/.config/wezterm;
     xdg.dataFile."wezterm/nyx.lua".text =
       let
