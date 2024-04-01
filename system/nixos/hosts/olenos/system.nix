@@ -33,9 +33,10 @@
     NIXPKGS_ALLOW_UNFREE = "1";
     #PKG_CONFIG_PATH = lib.makeLibraryPath [ libevdev ];
   };
-
+  services.hardware.openrgb.enable = true;
   environment.systemPackages = with pkgs; [
     libevdev
+    openrgb
   ];
   # Configure keymap in X11
   services = {

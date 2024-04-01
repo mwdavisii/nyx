@@ -80,11 +80,9 @@
   nyx = {
     modules = {
       desktop = {
-        dunst.enable = true;
         hypr.enable = true;
         rofi.enable = true;
         gtk.enable = true;
-        waybar.enable = true;
         wlogout.enable = true;
       };
       app = {

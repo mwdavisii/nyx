@@ -1,12 +1,10 @@
 { ... }:
 
 {
-  imports = [ 
-    ./dunst
+  imports = [
     ./hypr
     ./rofi
-    ./waybar
     ./gtk
     ./wlogout
-    ];
+  ];
 }
