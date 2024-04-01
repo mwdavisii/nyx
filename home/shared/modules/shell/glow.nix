@@ -9,7 +9,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.glow ];
+    home.packages = with pkgs;
+      [
+        glow
+      ];
     xdg.configFile."glow".source = ../../../config/.config/glow;
   };
 }

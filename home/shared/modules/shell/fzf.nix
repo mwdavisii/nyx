@@ -23,7 +23,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.fzf ];
+    home.packages = with pkgs;
+      [
+        fzf
+      ];
 
     xdg.configFile."fzf".source = ../../../config/.config/fzf;
 

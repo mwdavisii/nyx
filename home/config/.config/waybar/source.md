@@ -1,1 +1,1 @@
-./inactive/linuxmobile/source.md
+https://github.com/linuxmobile/hyprland-dots

@@ -1,18 +1,18 @@
 { ... }:
 
 {
-  imports = [ 
-    ./ghostty 
-    ./alacritty 
+  imports = [
+    ./ghostty
+    ./alacritty
     ./chrome
-    ./discord 
-    ./firefox 
-    ./kitty 
+    ./discord
+    ./firefox
+    ./kitty
     ./qemu
     ./obs
-    ./ranger
     ./scrcpy
     ./steam
     ./vscode
-    ./wezterm ];
+    ./wezterm
+  ];
 }

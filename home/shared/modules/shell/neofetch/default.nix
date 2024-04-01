@@ -9,7 +9,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.glow ];
-    xdg.configFile."neofetch".source = ../../../config/.config/neofetch;
+    home.packages = with pkgs;
+      [
+        neofetch
+      ];
+    xdg.configFile."neofetch".source = ../../../../config/.config/neofetch;
   };
 }

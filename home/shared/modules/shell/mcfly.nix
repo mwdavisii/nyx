@@ -11,7 +11,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.mcfly ];
+    home.packages = with pkgs;
+      [
+        mcfly
+      ];
 
     nyx.modules.shell.bash.initExtra =
       mkIf config.nyx.modules.shell.bash.enable ''

@@ -14,7 +14,7 @@
     hyprland-plugins = {
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
-    };  
+    };
     #hardware
     disko = {
       url = "github:nix-community/disko";
@@ -86,6 +86,18 @@
           overlays = [
             #  self.overlays."${system}"
             inputs.nix-on-droid.overlays.default
+            (final: prev: {
+              python311Full = prev.python311Full.override {
+                packageOverrides = finalPkgs: prevPkgs: {
+                  # Disable failing tests https://github.com/NixOS/nixpkgs/issues/272430
+                  eventlet = prevPkgs.eventlet.overridePythonAttrs (prevAttrs: {
+                    disabledTests = prevAttrs.disabledTests ++ [
+                      "test_full_duplex"
+                    ];
+                  });
+                };
+              };
+            })
           ];
         }
       );
@@ -120,14 +132,14 @@
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
-        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii"; buildTarget="darwin";}; #macbook
-        nixos = {user="nixos"; hostname ="nixos"; buildTarget="wsl";}; #WSL
-        ares = {user="nixos"; hostname ="ares"; buildTarget="wsl";}; #WSLi
-        work = {user="nixos"; hostname = "work"; buildTarget="wsl";}; #WSL
-        olenos = {hostname = "olenos"; user ="mwdavisii"; buildTarget="nixos";}; #Work Laptop (Host OS)
-	      hephaestus = {hostname="hephaestus"; user="mwdavisii"; buildTarget="nixos";}; #home machine
-        virtualbox = {hostname = "virtualBoxOVA"; user ="mwdavisii"; buildTarget="vm";}; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
-        livecd = {hostname = "worklt"; user ="mwdavisii"; buildTarget="iso";}; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
+        mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
+        nixos = { user = "nixos"; hostname = "nixos"; buildTarget = "wsl"; }; #WSL
+        ares = { user = "nixos"; hostname = "ares"; buildTarget = "wsl"; }; #WSLi
+        work = { user = "nixos"; hostname = "work"; buildTarget = "wsl"; }; #WSL
+        olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Work Laptop (Host OS)
+        hephaestus = { hostname = "hephaestus"; user = "mwdavisii"; buildTarget = "nixos"; }; #home machine
+        virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
+        livecd = { hostname = "worklt"; user = "mwdavisii"; buildTarget = "iso"; }; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
       };
 
       top =

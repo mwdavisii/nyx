@@ -11,9 +11,10 @@ in
 
   # TODO: Find how to sync external packages
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      vale
-    ];
+    home.packages = with pkgs;
+      [
+        vale
+      ];
 
     home.file = {
       ".config/vale" = {
