@@ -4,20 +4,25 @@
   imports = [
     (./disk-config.nix)
     (modulesPath + "/installer/scan/not-detected.nix")
-   ];
-       # Bootloader.
-    boot = {
-        kernelPackages = pkgs.linuxPackages_latest;
-        initrd = {
-            availableKernelModules = [ "ata_piix" "ahci" "sd_mod" "sr_mod" ];
-            kernelModules = [ ];
-        };
-        kernelModules = [ "kvm-intel" ];
-        #extraModulePackages = [ ];
-        loader = {
-        systemd-boot.enable = true;
-        efi.canTouchEfiVariables = true;
-        };
+  ];
+  # Bootloader.
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    initrd = {
+      availableKernelModules = [ "ata_piix" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
+      kernelModules = [ ];
     };
-    hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    kernelModules = [ ];
+    #extraModulePackages = [ ];
+    loader = {
+      efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        devices = [ "nodev" ];
+        efiSupport = true;
+        useOSProber = true;
+      };
+    };
+  };
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
