@@ -8,5 +8,6 @@
     ./minesweeper
     ./steam
     ./bsdgames
+    ./retroarch
   ];
 }
