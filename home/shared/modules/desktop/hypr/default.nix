@@ -3,8 +3,9 @@ with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
   plugins = inputs.hyprland-plugins.packages.${pkgs.system};
-  waybar_restart = pkgs.writeShellScriptBin "waybar_restart" ''
-    killall -q -r waybar_start &
+  wbar_restart = pkgs.writeShellScriptBin "wbar_restart" ''
+    killall -q -9 -r waybar
+    sleep .1
     waybar_start_top &
     waybar_start_bottom &
   '';
@@ -29,6 +30,7 @@ let
       swww img $paper --transition-type simple
       if command -v wal >/dev/null 2>&1; then 
         wal -i $paper
+        wbar_restart &
       fi
     fi
   '';
@@ -38,6 +40,7 @@ let
       swww img ~/.config/wallpapers/wall0.png  --transition-type simple
       if command -v wal >/dev/null 2>&1; then 
         wal -i ~/.config/wallpapers/wall0.png
+        wbar_restart &
       fi
     fi
   '';
@@ -50,6 +53,7 @@ let
           swww img ~/.config/wallpapers/wall0.png  --transition-type simple
         fi
         wal -i ~/.config/wallpapers/wall0.png
+        wbar_restart &
       fi
     fi
   '';
@@ -85,7 +89,7 @@ in
       glfw-wayland
       pywal
       killall
-      waybar_restart
+      wbar_restart
       waybar_start_top
       waybar_start_bottom
       wallpaper_random
