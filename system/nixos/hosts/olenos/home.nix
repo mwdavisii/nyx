@@ -80,10 +80,11 @@
     modules = {
       gaming = {
         bsdgames.enable = true;
-        lutris.enable = true;
+        lutris.enable = false;
         mahjong.enable = true;
         minesweeper.enable = true;
-        steam.enable = true;
+        retroarch.enable = false;
+        steam.enable = false;
       };
       desktop = {
         hypr.enable = true;

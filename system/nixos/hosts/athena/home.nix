@@ -78,6 +78,14 @@
 
   nyx = {
     modules = {
+      gaming = {
+        bsdgames.enable = true;
+        lutris.enable = true;
+        mahjong.enable = true;
+        minesweeper.enable = true;
+        retroarch.enable = true;
+        steam.enable = true;
+      };
       desktop = {
         hypr.enable = true;
         rofi.enable = true;
@@ -97,7 +105,6 @@
         };
         obs.enable = true;
         scrcpy.enable = true;
-        steam.enable = true;
         qemu.enable = true;
         wezterm = {
           enable = false; #having issue with wezterm and wayland
