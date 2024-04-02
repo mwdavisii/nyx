@@ -1,19 +1,15 @@
 { config, pkgs, lib, inputs, ... }:
 with lib;
 let
-  cfg = config.nyx.modules.games.mahjong;
+  cfg = config.nyx.modules.gaming.mahjong;
   #android-sdk = inputs.android-nixpkgs.hmModule;
 in
 {
-  options.nyx.modules.games.mahjong = {
-    enable = mkEnableOption "Android SDK Configuration";
+  options.nyx.modules.gaming.mahjong = {
+    enable = mkEnableOption "Mahjong Configuration";
   };
 
   config = mkIf cfg.enable {
-    programs.bash.shellAliases = {
-      mahjong = "kmahjongg";
-    };
-
     home = {
       packages = with pkgs;
         [
