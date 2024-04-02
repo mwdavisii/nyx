@@ -44,7 +44,6 @@
       celluloid
       cool-retro-term
       bibata-cursors
-      lutris
 
       #utils
       wlr-randr
@@ -79,9 +78,12 @@
 
   nyx = {
     modules = {
-      games = {
+      gaming = {
+        bsdgames.enable = true;
+        lutris.enable = true;
         mahjong.enable = true;
         minesweeper.enable = true;
+        steam.enable = true;
       };
       desktop = {
         hypr.enable = true;
@@ -103,7 +105,6 @@
         obs.enable = true;
 
         scrcpy.enable = true;
-        steam.enable = true;
         qemu.enable = true;
         wezterm = {
           enable = false; #having issue with wezterm and wayland

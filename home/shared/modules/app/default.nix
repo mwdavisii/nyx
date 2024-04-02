@@ -11,7 +11,6 @@
     ./qemu
     ./obs
     ./scrcpy
-    ./steam
     ./vscode
     ./wezterm
   ];
