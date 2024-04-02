@@ -1,7 +1,7 @@
 { config, lib, pkgs, agenix, ... }:
 
 with lib;
-let 
+let
   cfgHome = config.xdg.configHome;
   cfg = config.nyx.modules.shell.usbutils;
 in
@@ -11,7 +11,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs;[ usbutils ];
-    
+    home.packages = with pkgs;
+      [
+        usbutils
+      ];
+
   };
 }

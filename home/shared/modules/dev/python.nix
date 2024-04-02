@@ -13,7 +13,7 @@ in
     extraPackages = mkOption {
       description = "List of extra packages to be installed";
       type = with types; listOf package;
-      default = with pkgs.python39Packages; [
+      default = with pkgs.python311Packages; [
         black
         jedi
         pip
@@ -26,7 +26,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      python39
+      python311
       pipenv
     ] ++ cfg.extraPackages;
 

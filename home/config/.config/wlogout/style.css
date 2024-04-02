@@ -1,61 +1,50 @@
+* {
+  background-image: none;
+}
+
 window {
-    font-family: JetBrains Mono Nerd Font;
-    font-size: 14pt;
-    color: #ffffff; /* text */
-    background-color: rgba(46, 52, 64, 0.8);
+  background-color: rgba(36, 39, 58, 0.9);
 }
 
 button {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 25%;
-    border: none;
-    background-color: rgba(30, 30, 46, 0);
-    margin: 5px;
-    color: #ffffff;
-    transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  margin: 8px;
+  color: #cad3f5;
+  background-color: #363a4f;
+  border-style: solid;
+  border-width: 2px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 25%;
 }
 
+button:active,
+button:focus,
 button:hover {
-    background-color: rgba(76, 85, 106, 0.4);
-}
-
-button:focus {
-    background-color: #4c566a;
-    color: #ffffff;
+  color: #8bd5ca;
+  background-color: #24273a;
+  outline-style: none;
 }
 
 #lock {
-    background-image: image(url("./lock.png"));
-}
-#lock:focus {
-    background-image: image(url("./lock-hover.png"));
+  background-image: image(url("icons/lock.png"));
 }
 
 #logout {
-    background-image: image(url("./logout.png"));
-}
-#logout:focus {
-    background-image: image(url("./logout-hover.png"));
+  background-image: image(url("icons/logout.png"));
 }
 
 #suspend {
-    background-image: image(url("./sleep.png"));
+  background-image: image(url("icons/suspend.png"));
 }
-#suspend:focus {
-    background-image: image(url("./sleep-hover.png"));
+
+#hibernate {
+  background-image: image(url("icons/hibernate.png"));
 }
 
 #shutdown {
-    background-image: image(url("./power.png"));
-}
-#shutdown:focus {
-    background-image: image(url("./power-hover.png"));
+  background-image: image(url("icons/shutdown.png"));
 }
 
 #reboot {
-    background-image: image(url("./restart.png"));
-}
-#reboot:focus {
-    background-image: image(url("./restart-hover.png"));
+  background-image: image(url("icons/reboot.png"));
 }

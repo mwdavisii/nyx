@@ -31,7 +31,7 @@
 
   home = {
     sessionVariables = {
-        PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
+      PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
     };
     stateVersion = "23.11";
     packages = with pkgs; [
@@ -80,11 +80,9 @@
   nyx = {
     modules = {
       desktop = {
-        dunst.enable = true;
         hypr.enable = true;
         rofi.enable = true;
         gtk.enable = true;
-        waybar.enable = true;
         wlogout.enable = true;
       };
       app = {
@@ -99,7 +97,6 @@
           makeDefaultBrowser = true;
         };
         obs.enable = true;
-        ranger.enable = true;
         scrcpy.enable = true;
         steam.enable = true;
         qemu.enable = true;
@@ -146,6 +143,7 @@
         neovim.enable = true;
         networking.enable = true;
         nushell.enable = true;
+        ranger.enable = false; #prefer lf
         starship.enable = true;
         terraform.enable = true;
         tmux.enable = true;

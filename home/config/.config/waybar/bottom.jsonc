@@ -1,0 +1,36 @@
+{   
+    "id": "bottom",
+    "reload_style_on_change": true,
+    "position": "bottom",
+    "layer": "top",
+    "height": 50,
+    "spacing": 4,
+    "margin-top": 0,
+    "margin-bottom": 0,
+    "margin-left": 0,
+    "margin-right": 0,
+    "modules-left": [],
+    "modules-center": ["custom/launcher", "wlr/taskbar"],
+    "modules-right": [],
+    
+  "wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 20,
+    "icon-theme": "Numix-Circle",
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-right": "close",
+    "on-click-middle": "fullscreen"
+  },
+	"tray": {
+		"icon-size": 16,
+		"spacing": 5
+	},
+  "custom/launcher": {
+    "format": "󰈸",
+    "on-click": "rofi -show drun",
+//    "on-click": "wofi --show drun -I -a -n -W 500 -H 376 -s ~/.config/wofi/themes/gruvbox.css",
+    "on-click-right": "rofi -show window"  
+//    "on-click-right": "wofi --show run -I -a -n -W 500 -H 376 -s ~/.config/wofi/themes/gruvbox.css"  
+  }
+}

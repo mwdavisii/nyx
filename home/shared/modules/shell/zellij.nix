@@ -9,7 +9,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.zellij ];
+    home.packages = with pkgs;
+      [
+        zellij
+      ];
     xdg.configFile."zellij".source = ../../../config/.config/zellij;
   };
 }

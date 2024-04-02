@@ -2,10 +2,10 @@
 
 with lib;
 let
-  cfg = config.nyx.modules.app.ranger;
+  cfg = config.nyx.modules.shell.ranger;
 in
 {
-  options.nyx.modules.app.ranger = {
+  options.nyx.modules.shell.ranger = {
     enable = mkEnableOption "Ranger Config";
   };
 

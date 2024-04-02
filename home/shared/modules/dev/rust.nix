@@ -11,7 +11,10 @@ in
 
   config = mkIf cfg.enable {
     home = {
-      packages = with pkgs; [ rustup ];
+      packages = with pkgs;
+        [
+          rustup
+        ];
 
       sessionVariables = {
         RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
