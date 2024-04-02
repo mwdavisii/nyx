@@ -10,9 +10,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.rofi = {
-      enable = true;
-    };
+    home.packages = with pkgs;
+      [
+        rofi
+      ];
     xdg.configFile."rofi".source = ../../../../config/.config/rofi;
   };
 }

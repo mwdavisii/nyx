@@ -1,0 +1,21 @@
+$wallpaper = ~/.config/wallpapers/mountain-store.jpg
+
+$background = #3f0f22
+$foreground = #e9d8cd
+
+$color0 = #3f0f22
+$color1 = #DE9C85
+$color2 = #E09B83
+$color3 = #DDA993
+$color4 = #E1A38C
+$color5 = #DBB6A5
+$color6 = #D9C8BE
+$color7 = #e9d8cd
+$color8 = #a3978f
+$color9 = #DE9C85
+$color10 = #E09B83
+$color11 = #DDA993
+$color12 = #E1A38C
+$color13 = #DBB6A5
+$color14 = #D9C8BE
+$color15 = #e9d8cd

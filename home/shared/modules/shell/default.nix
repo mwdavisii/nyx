@@ -18,10 +18,11 @@
     ./lf.nix
     ./lorri.nix
     ./mcfly.nix
-    ./neofetch.nix
+    ./neofetch
     ./neovim.nix
     ./networking.nix
     ./nushell.nix
+    ./ranger
     ./repo.nix
     ./ssh.nix
     ./starship.nix
@@ -29,6 +30,7 @@
     ./tmux.nix
     ./usbutils.nix
     ./vale.nix
+    ./wal
     ./xdg.nix
     ./zellij.nix
     ./zoxide.nix

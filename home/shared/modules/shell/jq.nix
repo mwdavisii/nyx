@@ -9,6 +9,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.jq ];
+    home.packages = with pkgs;
+      [
+        jq
+      ];
   };
 }

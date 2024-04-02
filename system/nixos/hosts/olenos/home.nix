@@ -80,11 +80,9 @@
   nyx = {
     modules = {
       desktop = {
-        dunst.enable = true;
         hypr.enable = true;
         rofi.enable = true;
         gtk.enable = true;
-        waybar.enable = true;
         wlogout.enable = true;
       };
       app = {
@@ -99,7 +97,7 @@
           makeDefaultBrowser = true;
         };
         obs.enable = true;
-        ranger.enable = true;
+
         scrcpy.enable = true;
         steam.enable = true;
         qemu.enable = true;
@@ -146,11 +144,13 @@
         neovim.enable = true;
         networking.enable = true;
         nushell.enable = true;
+        ranger.enable = false;
         starship.enable = true;
         terraform.enable = true;
         tmux.enable = true;
         usbutils.enable = true;
         vale.enable = true;
+        wal.enable = true;
         xdg.enable = true;
         zellij.enable = true;
         zsh.enable = true;

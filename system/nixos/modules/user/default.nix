@@ -21,6 +21,7 @@ let
     "networmanager"
     "wheel"
     "video"
+    "netdev"
   ];
 in
 {
@@ -39,7 +40,7 @@ in
       '';
     };
   };
-  
+
   config = mkMerge [
     {
       users = {
