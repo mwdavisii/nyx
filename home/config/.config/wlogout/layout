@@ -3,7 +3,7 @@
     "action" : "swaylock",
     "text" : "Lock",
     "keybind" : "l"
-}
+}hh
 {
     "label" : "hibernate",
     "action" : "systemctl hibernate",
