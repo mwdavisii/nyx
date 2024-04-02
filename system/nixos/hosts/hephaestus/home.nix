@@ -44,7 +44,6 @@
       celluloid
       cool-retro-term
       bibata-cursors
-      lutris
 
       #utils
       wlr-randr

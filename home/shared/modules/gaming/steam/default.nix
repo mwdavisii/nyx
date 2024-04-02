@@ -2,17 +2,17 @@
 
 with lib;
 let
-  cfg = config.nyx.modules.app.steam;
+  cfg = config.nyx.modules.gaming.steam;
 in
 {
-  options.nyx.modules.app.steam = {
+  options.nyx.modules.gaming.steam = {
     enable = mkEnableOption "Steam Games";
   };
 
   config = mkIf cfg.enable {
     # go ahead and install adb here since it's required
     home.packages = with pkgs; [
-        steam
+      steam
     ];
   };
 }
