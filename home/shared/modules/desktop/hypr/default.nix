@@ -3,10 +3,61 @@ with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
   plugins = inputs.hyprland-plugins.packages.${pkgs.system};
+  waybar_restart = pkgs.writeShellScriptBin "waybar_restart" ''
+    killall -q -r waybar_start &
+    waybar_start_top &
+    waybar_start_bottom &
+  '';
+  waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
+    if command -v waybar >/dev/null 2>&1; then 
+      waybar -c ~/.config/waybar/top.jsonc -s ~/.config/waybar/style.css
+    fi
+  '';
+  waybar_start_bottom = pkgs.writeShellScriptBin "waybar_start_bottom" ''
+    if command -v waybar >/dev/null 2>&1; then 
+      waybar -c ~/.config/waybar/bottom.jsonc -s ~/.config/waybar/style.css
+    fi
+  '';
+  rofiWindow = pkgs.writeShellScriptBin "rofiWindow" ''
+    #!/usr/bin/env bash
+    rofi -show drun 
+  '';
+  wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
+    #!/usr/bin/env bash
+    if command -v swww >/dev/null 2>&1; then 
+      paper=$(find ~/.config/wallpapers/ -name "*" | shuf -n1)
+      swww img $paper --transition-type simple
+      if command -v wal >/dev/null 2>&1; then 
+        wal -i $paper
+      fi
+    fi
+  '';
+  wallpaper_default = pkgs.writeShellScriptBin "wallpaper_default" ''
+    #!/usr/bin/env bash
+    if command -v swww >/dev/null 2>&1; then
+      swww img ~/.config/wallpapers/wall0.png  --transition-type simple
+      if command -v wal >/dev/null 2>&1; then 
+        wal -i ~/.config/wallpapers/wall0.png
+      fi
+    fi
+  '';
+
+  init_colors = pkgs.writeShellScriptBin "init_colors" ''
+    #!/usr/bin/env bash
+    if wal &> /dev/null; then
+      if !test -f ~/.cache/wal/colors-hyprland; then
+        if command -v swww >/dev/null 2>&1; then
+          swww img ~/.config/wallpapers/wall0.png  --transition-type simple
+        fi
+        wal -i ~/.config/wallpapers/wall0.png
+      fi
+    fi
+  '';
 in
 {
   imports = [
     ./hyprland-environment.nix
+    ./dunst.nix
   ];
 
   options.nyx.modules.desktop.hypr = {
@@ -14,8 +65,13 @@ in
   };
 
   config = mkIf cfg.enable {
+
+
     home.packages = with pkgs; [
+      swaylock-effects
+      swayidle
       waybar
+      dunst
       swww
       mesa
       xdg-desktop-portal-gtk
@@ -26,22 +82,37 @@ in
       hyprpicker
       qt6ct
       qt5ct
-      swaylock-effects
-      swayidle
       glfw-wayland
-      #mesa-libGL
-      #hyprlock
+      pywal
+      killall
+      waybar_restart
+      waybar_start_top
+      waybar_start_bottom
+      wallpaper_random
+      wallpaper_default
+      init_colors
+      rofiWindow
     ];
+
+    #wal template for hyprland
+    home.file.".config/wal/templates/colors-hyprland".source = ../../../../config/.config/wal/templates/colors-hyprland;
+    #walpapers directory
+    xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
+    #swaylock
     xdg.configFile."swaylock".source = ../../../../config/.config/swaylock;
+    #swayidle
     xdg.configFile."swayidle".source = ../../../../config/.config/swayidle;
+    #waybar
+    xdg.configFile."waybar".source = ../../../../config/.config/waybar;
+
     wayland.windowManager.hyprland = {
       enable = true;
       systemd.enable = true;
       xwayland.enable = true;
       plugins = with plugins; [ hyprbars ];
-
     };
+
 
   };
 }

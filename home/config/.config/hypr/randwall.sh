@@ -1,1 +1,0 @@
-swww img $(find ~/.config/wallpapers/. -name "*" | shuf -n1) --transition-type simple

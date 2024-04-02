@@ -9,7 +9,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.eza ];
+    home.packages = with pkgs;
+      [
+        eza
+      ];
   };
 }
 

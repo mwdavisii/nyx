@@ -9,7 +9,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.bat ];
+    home.packages = with pkgs;
+      [
+        bat
+      ];
   };
 }
 

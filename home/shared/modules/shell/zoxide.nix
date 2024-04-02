@@ -8,5 +8,10 @@ in
     enable = mkEnableOption "zoxide configuration";
   };
 
-  config = mkIf cfg.enable { home.packages = [ pkgs.zoxide ]; };
+  config = mkIf cfg.enable {
+    home.packages = with pkgs;
+      [
+        zoxide
+      ];
+  };
 }
