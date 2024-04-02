@@ -114,7 +114,7 @@ in
       enable = true;
       systemd.enable = true;
       xwayland.enable = true;
-      plugins = with plugins; [ hyprbars ];
+      plugins = with plugins; [ hyprbars hyprpaper ];
     };
 
 
