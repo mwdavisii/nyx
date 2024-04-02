@@ -79,6 +79,10 @@
 
   nyx = {
     modules = {
+      games = {
+        mahjong.enable = true;
+        minesweeper.enable = true;
+      };
       desktop = {
         hypr.enable = true;
         rofi.enable = true;
