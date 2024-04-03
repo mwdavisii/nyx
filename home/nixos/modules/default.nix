@@ -6,5 +6,6 @@
     ./gaming
     ./desktop
     ./app
+    ./shell
   ];
 }
