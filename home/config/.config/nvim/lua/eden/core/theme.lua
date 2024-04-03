@@ -23,7 +23,7 @@ local Theme = {
 }
 
 function Theme.init()
-  vim.opt.termguicolors = true
+  -- vim.opt.termguicolors = true
   Theme.load_cache()
   local group = vim.api.nvim_create_augroup("eden_theme_handler", { clear = true })
   vim.api.nvim_create_autocmd("ColorScheme", {
