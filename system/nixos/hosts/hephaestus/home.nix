@@ -93,6 +93,7 @@
         wlogout.enable = true;
       };
       app = {
+        guvcview.enable = true;
         alacritty = {
           enable = true;
         };
