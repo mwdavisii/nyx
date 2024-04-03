@@ -30,6 +30,7 @@ let
       swww img $paper --transition-type simple
       if command -v wal >/dev/null 2>&1; then 
         wal -i $paper
+        cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
         wbar_restart &
       fi
     fi
@@ -99,6 +100,8 @@ in
     ];
 
     #wal template for hyprland
+    # we call at each specific file so the directory is still writeable.
+    home.file.".config/wal/templates/btop".source = ../../../../config/.config/wal/templates/btop;
     home.file.".config/wal/templates/colors-hyprland".source = ../../../../config/.config/wal/templates/colors-hyprland;
     #walpapers directory
     xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
