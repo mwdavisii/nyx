@@ -5,5 +5,6 @@
     ../../shared/modules
     ./gaming
     ./desktop
+    ./app
   ];
 }
