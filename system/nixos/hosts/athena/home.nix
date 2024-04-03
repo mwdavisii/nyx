@@ -98,7 +98,7 @@
         };
         kitty.enable = true;
         discord.enable = true;
-        firefox.enable = false;
+        firefox.enable = true;
         chrome = {
           enable = true;
           makeDefaultBrowser = true;
