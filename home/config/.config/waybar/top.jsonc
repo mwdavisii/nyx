@@ -8,7 +8,7 @@
     "margin-bottom": 0,
     "margin-left": 0,
     "margin-right": 0,
-    "modules-left": ["custom/launcher", "hyprland/workspaces"],
+    "modules-left": ["idle_inhibitor", "hyprland/workspaces"],
     "modules-middle": ["custom/playerctl", "custom/playerlabel"],
     "modules-right": ["group/system", "tray", "custom/randwall", "tray", "battery", "bluetooth", "backlight", "network", "pulseaudio", "clock", "custom/logout_menu", "tray"],
     // Modules configuration
@@ -190,6 +190,13 @@
 			"default": ["󰕿", "󰖀", "󰕾"]
 		},
 		"on-click-right": "pavucontrol"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
   },
   "custom/randwall": {
     "format": "󰏘",
