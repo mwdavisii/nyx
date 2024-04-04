@@ -129,6 +129,7 @@
         awscliv2.enable = true;
         bash.enable = true;
         bat.enable = true;
+        btop.enable = true;
         direnv.enable = true;
         eza.enable = true;
         fzf.enable = true;
