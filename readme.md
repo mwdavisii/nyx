@@ -1,4 +1,5 @@
-# Home-Manager + Flakes for Mac, WSL, and Droid
+# Nixos + DotFiles
+## Hyperland + Home-Manager + Flakes for Mac, WSL, and Droid
 
 ## Overview
 
