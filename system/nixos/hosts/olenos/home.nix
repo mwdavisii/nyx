@@ -65,7 +65,6 @@
       pamixer
       mpc-cli
       tty-clock
-      btop
       tokyo-night-gtk
       playerctl
     ] ++ (with pkgs.gnome; [
@@ -99,7 +98,7 @@
         mysql-workbench.enable = true;
         kitty.enable = true;
         discord.enable = true;
-        firefox.enable = false;
+        firefox.enable = true;
         chrome = {
           enable = true;
           makeDefaultBrowser = true;

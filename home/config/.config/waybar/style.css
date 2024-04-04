@@ -117,7 +117,7 @@ window#waybar.empty {
 #custom-media.custom-vlc {
   color: #ffa000;
 }
-
+#idle_inhibitor,
 #workspaces,
 #clock,
 #battery,
