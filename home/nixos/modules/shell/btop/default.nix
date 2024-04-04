@@ -11,7 +11,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      ranger
+      btop
     ];
     xdg.configFile."btop".source = ../../../../config/.config/btop;
   };
