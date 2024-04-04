@@ -96,6 +96,7 @@
         alacritty = {
           enable = true;
         };
+        mysql-workbench.enable = true;
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = false;
@@ -140,6 +141,7 @@
         gnupg = {
           enable = true;
           enableService = true;
+          enableSSHSupport = true;
         };
         jq.enable = true;
         k8sTooling.enable = true;
