@@ -8,6 +8,7 @@
     ./discord
     ./firefox
     ./kitty
+    ./mysql-workbench
     ./qemu
     ./obs
     ./scrcpy

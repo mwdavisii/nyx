@@ -1,11 +1,10 @@
-{ config, lib, pkgs, modulesPath, hostName, ... }:
+{ config, lib, pkgs, modulesPath, hostName, userConf, ... }:
 let
   tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
 in
 {
 
   programs.dconf.enable = true;
-
   programs.regreet.enable = true;
   services.greetd = {
     enable = true;
@@ -28,6 +27,10 @@ in
     TTYVTDisallocate = true;
   };
 
+  #yubikey
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+  #programs.yubico-pam = true;
+
   security = {
     sudo = {
       extraRules = [
@@ -42,9 +45,14 @@ in
         }
       ];
     };
+    pam.yubico = {
+      enable = true;
+      mode = "challenge-response";
+      id = userConf.yubiKeySerials;
+    };
     pam.services.swaylock = {
       text = ''
-        aith include login
+        auth include login
       '';
     };
     polkit.enable = true;
