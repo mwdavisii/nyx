@@ -65,7 +65,6 @@
       pamixer
       mpc-cli
       tty-clock
-      btop
       tokyo-night-gtk
       playerctl
     ] ++ (with pkgs.gnome; [
@@ -129,6 +128,7 @@
         awscliv2.enable = true;
         bash.enable = true;
         bat.enable = true;
+        btop.enable = true;
         direnv.enable = true;
         eza.enable = true;
         fzf.enable = true;

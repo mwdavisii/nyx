@@ -65,7 +65,6 @@
       pamixer
       mpc-cli
       tty-clock
-      btop
       tokyo-night-gtk
       playerctl
     ] ++ (with pkgs.gnome; [
