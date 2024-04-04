@@ -42,6 +42,7 @@ in
     enable = mkEnableOption "gnupg configuration";
 
     enableService = mkEnableOption "gnupg service";
+    enableSSHSupport = mkEnableOption "gnupg ssh support service";
 
     publicKeys = mkOption {
       type = types.listOf publicKeyType;
@@ -95,14 +96,13 @@ in
           in
           hm.dag.entryAfter [ "installPackages" ] (result);
       })
-
       (mkIf cfg.enableService {
         services.gpg-agent = {
           enable = true;
           enableBashIntegration = true;
           enableExtraSocket = true;
           enableScDaemon = true;
-          enableSshSupport = true;
+          enableSshSupport = cfg.enableSSHSupport;
           pinentryFlavor = "gtk2";
           verbose = true;
         };
