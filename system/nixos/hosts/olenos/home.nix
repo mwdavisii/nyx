@@ -65,7 +65,6 @@
       pamixer
       mpc-cli
       tty-clock
-      btop
       tokyo-night-gtk
       playerctl
     ] ++ (with pkgs.gnome; [
@@ -96,9 +95,10 @@
         alacritty = {
           enable = true;
         };
+        mysql-workbench.enable = true;
         kitty.enable = true;
         discord.enable = true;
-        firefox.enable = false;
+        firefox.enable = true;
         chrome = {
           enable = true;
           makeDefaultBrowser = true;
@@ -129,6 +129,7 @@
         awscliv2.enable = true;
         bash.enable = true;
         bat.enable = true;
+        btop.enable = true;
         direnv.enable = true;
         eza.enable = true;
         fzf.enable = true;
@@ -140,6 +141,7 @@
         gnupg = {
           enable = true;
           enableService = true;
+          enableSSHSupport = true;
         };
         jq.enable = true;
         k8sTooling.enable = true;

@@ -1,9 +1,7 @@
 { ... }:
 
-
 {
   imports = [
-    ./steam
-    ./retroarch
+    ./gucview
   ];
 }

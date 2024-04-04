@@ -4,6 +4,12 @@
 
 This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile. The general approach here is to isolate my user configuration into `home` folder and system configurations in the `system` folder. There are some deviations from this. For instance, all of the secrets are user based, but they are decrypted from the system configuration because we get more control from agenix (owner and group permissions) and I have found this approach does not require any custom activations or a restart of wsl.
 
+## Hyprland
+
+![Screen Shots](assets/hyprland.png)
+
+## Multi-platform Shells
+
 ![Screen Shots](assets/shell-shots.jpeg)
 
 ## General Project Structure

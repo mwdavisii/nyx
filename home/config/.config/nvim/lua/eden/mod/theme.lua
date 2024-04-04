@@ -76,7 +76,9 @@ return {
     "rebelot/kanagawa.nvim",
     config = function() require("kanagawa").setup({}) end,
   },
-
+  {
+    "dylanaraps/wal.vim"
+  },
   {
     "projekt0n/caret.nvim",
   },
