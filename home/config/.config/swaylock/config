@@ -2,6 +2,7 @@ daemonize
 indicator
 clock
 screenshots
+ignore-empty-password
 
 effect-blur=11x11
 #effect-compose=1100,10;/home/xnm/.config/swaylock/rebecca.png
