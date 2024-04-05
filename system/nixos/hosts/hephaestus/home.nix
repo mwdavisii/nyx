@@ -92,6 +92,7 @@
         wlogout.enable = true;
       };
       app = {
+        chromium.enable = true;
         guvcview.enable = true;
         alacritty = {
           enable = true;

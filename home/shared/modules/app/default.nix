@@ -5,6 +5,7 @@
     ./ghostty
     ./alacritty
     ./chrome
+    ./chromium
     ./discord
     ./firefox
     ./kitty
