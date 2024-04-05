@@ -2,7 +2,7 @@ daemonize
 indicator
 clock
 screenshots
-ignore-empty-password
+#ignore-empty-password #Improves functionality of yubi to have disabled
 
 effect-blur=11x11
 #effect-compose=1100,10;/home/xnm/.config/swaylock/rebecca.png
