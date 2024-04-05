@@ -151,6 +151,7 @@
         neovim.enable = true;
         networking.enable = true;
         nushell.enable = true;
+        openssl.enable = true;
         ranger.enable = false;
         starship.enable = true;
         terraform.enable = true;

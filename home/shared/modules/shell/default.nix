@@ -22,6 +22,7 @@
     ./neovim.nix
     ./networking.nix
     ./nushell.nix
+    ./openssl
     ./ranger
     ./repo.nix
     ./ssh.nix
