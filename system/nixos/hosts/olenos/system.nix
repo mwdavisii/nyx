@@ -8,6 +8,7 @@
       ../../shared/system/gc.nix
       ../../shared/system/login.nix
       ../../shared/system/bluetooth.nix
+      ../../shared/system/openvpn3.nix
 
     ];
 
