@@ -5,8 +5,17 @@
   nyx = {
     modules = {
       user.home = ./home.nix;
+      system = {
+        bluetooth.enable = true;
+        amd.enable = true;
+        garbagecollection.enable = true;
+        hyprlogin.enable = true;
+        opengl.enable = true;
+        centraltimezone.enable = true;
+        yubilogin.enable = true;
+      };
     };
-
+    
     secrets = {
       awsSSHKeys.enable = false;
       awsConfig.enable = true;

@@ -1,5 +1,12 @@
 { config, lib, pkgs, modulesPath, hostName, ... }:
-{ 
+with lib;
+let cfg = config.nyx.modules.system.amd;
+in
+{
+  options.nyx.modules.system.amd = { 
+    enable = mkEnableOption "AMD Env Vars"; 
+  };
+  config = mkIf cfg.enable {
   environment.variables = {
     #NIXOS_OZONE_WL = "1";
     __GLX_VENDOR_LIBRARY_NAME= "amd";
@@ -10,4 +17,5 @@
     CLUTTER_BACKEND = "wayland";
     WLR_RENDERER = "vulkan";    
   };
+};
 }
