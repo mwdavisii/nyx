@@ -24,7 +24,7 @@ rec {
       #pkgs = inputs.self.legacyPackages.aarch64-darwin;
       userConf = import (strToFile user ../users);
       userOptions = strToPath config ../home/hosts;
-      homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
+      #homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
     in
     nameValuePair name (
       inputs.home-manager.lib.homeManagerConfiguration {
@@ -148,6 +148,7 @@ rec {
               home-manager = {
                 # useUserPackages = true;
                 useGlobalPkgs = true;
+                useUserPackages = true;
                 extraSpecialArgs =
                   let
                     self = inputs.self;
@@ -184,6 +185,7 @@ rec {
             {
               home-manager = {
                 useGlobalPkgs = true;
+                useUserPackages = true;
                 extraSpecialArgs =
                   let
                     self = inputs.self;
