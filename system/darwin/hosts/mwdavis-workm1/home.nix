@@ -83,6 +83,7 @@
       terraform.enable = true;
       tmux.enable = true;
       vale.enable = true;
+      wal.enable = true;
       xdg.enable = true;
       zellij.enable = true;
       zsh.enable = true;
