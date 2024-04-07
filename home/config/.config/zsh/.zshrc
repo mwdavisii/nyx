@@ -65,7 +65,10 @@ if [[ $command_profile == true ]]; then
     unsetopt xtrace
     exec 2>&3 3>&-
 fi
-
-source <(kubectl completion zsh) #Kubectl Autocompletion
-. <(flux completion zsh) # Flux Autocompletion
+if [ $(command -v kubectl) ]; then
+    source <(kubectl completion zsh) #Kubectl Autocompletion
+fi
+if [ $(command -v flux) ]; then
+    source <(flux completion zsh) # Flux Autocompletion
+fi 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh #fuzzyfind

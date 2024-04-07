@@ -1,4 +1,4 @@
-{ config, pkgs, self, userConf, secrets, ... }:
+{ config, pkgs, self, userConf, secrets, system, ... }:
 
 with self.lib;
 let
@@ -21,6 +21,7 @@ in
 
   config = mkMerge [
     {
+      home-manager.users."${userConf.userName}" = mkUserHome { inherit system userConf; config = cfg.home; };
       users.users.${userConf.userName} = {
         name = "${userConf.userName}";
         home = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
