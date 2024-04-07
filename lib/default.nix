@@ -213,7 +213,7 @@ rec {
           
           (import ../system/darwin/modules)
           (import ../system/shared/secrets)
-          (import ../system/shared/profiles)
+          (import ../system/shared/profiles/macbook.nix)
           (import (strToPath config ../system/darwin/hosts))
         ];
         commonModules = [
