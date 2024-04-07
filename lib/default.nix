@@ -163,11 +163,12 @@ rec {
               system.stateVersion = "23.11";
             }
           )
+          (inputs.nixos-wsl.nixosModules.wsl)
+          (vscode-server.nixosModules.default)
           (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
-          (import ../system/shared/modules)
           (import ../system/nixos/modules)
-          (import ../system/nixos/profiles)
+          (import ../system/shared/profiles)
           (import (strToPath config ../system/nixos/hosts))
         ];
         #Darwin = Mac Target
@@ -211,41 +212,9 @@ rec {
           )
           
           (import ../system/darwin/modules)
-          (import ../system/shared/modules)
           (import ../system/shared/secrets)
-          (import ../system/shared/profiles/macbook.nix)
-          (import (strToPath config ../system/darwin/hosts))
-        ];
-        #wsl = WSL Target
-        wslModules = [
-          (inputs.home-manager.nixosModules.home-manager)
-          (
-            {
-              home-manager = {
-                # useUserPackages = true;
-                useGlobalPkgs = true;
-                extraSpecialArgs =
-                  let
-                    self = inputs.self;
-                    user = userConf;
-                  in
-                  # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
-                  { inherit inputs self system user userConf secrets; };
-              };
-            }
-          )
-          (
-            { ... }: {
-              system.stateVersion = "23.11";
-            }
-          )
-          (inputs.nixos-wsl.nixosModules.wsl)
-          (vscode-server.nixosModules.default)
-          (inputs.agenix.nixosModules.default)
-          (import ../system/shared/modules)
-          (import ../system/wsl2/modules)
           (import ../system/shared/profiles)
-          (import (strToPath config ../system/wsl2/hosts))
+          (import (strToPath config ../system/darwin/hosts))
         ];
         commonModules = [
           (

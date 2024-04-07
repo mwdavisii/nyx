@@ -1,12 +1,16 @@
-{ config, pkgs, userConf, inputs, hostname, ... }: 
-with pkgs;
+{ config, lib, userConf, inputs, hostname, ... }: 
 with userConf;
 with lib;
 let
   nixConf = import ../../../nix/conf.nix;
+  cfg = config.nyx.modules.wsl2;
 in
 {
-  config = {
+  options.nyx.modules.wsl2 = { 
+    enable = mkEnableOption "WSL2 System Config"; 
+  };
+
+  config = mkIf cfg.enable {
     wsl = {
       enable = true;
       wslConf.automount.root = "/mnt";
@@ -18,7 +22,6 @@ in
     };
     
     services.vscode-server.enable = true;
-    environment.shells = [pkgs.zsh];
     system.stateVersion = "23.11";
     programs.zsh.enable = true;
     security.sudo.wheelNeedsPassword = false;
@@ -27,13 +30,6 @@ in
     systemd.tmpfiles.rules = [
       "d /home/${userName}/.config 0755 ${userName} users"
       "d /home/${userName}/.config/lvim 0755 ${userName} users"
-    ];
-    fonts.packages = with pkgs; [
-      dejavu_fonts
-      jetbrains-mono
-      font-awesome
-      noto-fonts
-      noto-fonts-emoji
     ];
      # Turn on flag for proprietary software
     nix = {
@@ -70,12 +66,12 @@ in
       extraRules = [{
         commands = [
         {
-          command = "${pkgs.systemd}/bin/reboot";
+          command = "*ALL";
           options = [ "NOPASSWD" ];
-          }
-        ];
-        groups = [ "wheel" ];
-      }];
-    };
+        }
+      ];
+    groups = [ "wheel" ];
+   }];
   };
+};
 }

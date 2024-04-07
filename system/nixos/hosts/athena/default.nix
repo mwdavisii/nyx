@@ -5,13 +5,22 @@
   nyx = {
     modules = {
       user.home = ./home.nix;
+      system = {
+        bluetooth.enable = true;
+        nvidia.enable = true;
+        garbagecollection.enable = true;
+        hyprlogin.enable = true;
+        opengl.enable = true;
+        centraltimezone.enable = true;
+        yubilogin.enable = false;
+      };
     };
-
+    
     secrets = {
       awsSSHKeys.enable = false;
-      awsConfig.enable = false;
-      userSSHKeys.enable = true;
-      userPGPKeys.enable = true;
+      awsConfig.enable = true;
+      userSSHKeys.enable = false;
+      userPGPKeys.enable = false;
     };
 
     profiles = {
