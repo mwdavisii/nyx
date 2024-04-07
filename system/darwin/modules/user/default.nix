@@ -6,7 +6,18 @@ let
   homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
-  options.nyx.modules.user = { };
+  options.nyx.modules.user = {
+    name = mkOption {
+      type = types.str;
+      default = userConf.userName;
+      description = "User's name";
+    };
+    home = mkOption {
+      type = with types; nullOr types.path;
+      default = null;
+      description = "Path of home manager home file";
+    };
+   };
 
   config = mkMerge [
     {
