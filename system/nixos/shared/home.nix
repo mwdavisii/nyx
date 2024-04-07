@@ -7,20 +7,31 @@
   programs.man.enable = true;
 
   manual.manpages.enable = true;
-  
+
   home = {
+    sessionVariables = {
+      PATH = "$PATH::/mnt/c/Program\ Files/Microsoft\ VS\ Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
+    };
     stateVersion = "23.11";
     packages = with pkgs; [
       rustup
       vhs
       bat
       bash
-      wget 
+      wget
     ];
   };
 
   nyx = {
     modules = {
+      gaming = {
+        bsdgames.enable = true;
+        lutris.enable = false;
+        mahjong.enable = false;
+        minesweeper.enable = false;
+        retroarch.enable = false;
+        steam.enable = false;
+      };
       app = {
         alacritty = {
           enable = false;
@@ -28,6 +39,7 @@
         kitty.enable = false;
         discord.enable = false;
         firefox.enable = false;
+        qemu.enable = true;
         obs.enable = true;
         wezterm = {
           enable = false;

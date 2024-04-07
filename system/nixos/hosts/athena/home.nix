@@ -34,45 +34,6 @@
       PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
     };
     stateVersion = "23.11";
-    packages = with pkgs; [
-      rustup
-      vhs
-      bat
-      bash
-      wget
-      #User Apps
-      celluloid
-      cool-retro-term
-      bibata-cursors
-
-      #utils
-      wlr-randr
-      gnumake
-      catimg
-      curl
-      xflux
-      pavucontrol
-      sqlite
-      networkmanagerapplet
-      #misc 
-      cava
-      rofi
-      nitch
-      wget
-      grim
-      slurp
-      wl-clipboard
-      pamixer
-      mpc-cli
-      tty-clock
-      tokyo-night-gtk
-      playerctl
-    ] ++ (with pkgs.gnome; [
-      nautilus
-      zenity
-      eog
-      gedit
-    ]);
   };
 
   nyx = {

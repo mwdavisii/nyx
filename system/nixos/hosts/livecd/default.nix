@@ -4,7 +4,15 @@
   imports = [./system.nix]; 
   nyx = {
     modules = {
-      user.home = ../worklt/home.nix;
+      user.home = ../../shared/home.nix;
+      system = {
+        bluetooth.enable = true;
+        garbagecollection.enable = true;
+        hyprlogin.enable = true;
+        opengl.enable = true;
+        centraltimezone.enable = true;
+        yubilogin.enable = true;
+      };
     };
 
     secrets = {
