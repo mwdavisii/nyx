@@ -26,6 +26,9 @@
   };
   
   nyx.modules = {
+    desktop = {
+      wallpaper.enable = true;
+    };
     app = {
       alacritty.enable = true;
       finicky.enable = true;
