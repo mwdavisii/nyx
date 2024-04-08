@@ -13,5 +13,9 @@
       userSSHKeys.enable = true;
       userPGPKeys.enable = true;
     };
+
+    profiles = {
+      macbook.enable = true;
+    };
   };
 }
