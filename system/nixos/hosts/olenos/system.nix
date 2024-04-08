@@ -4,12 +4,6 @@
     [
       # Include the results of the hardware scan.
       ./hardware.nix
-      ../../shared/system/locale.nix
-      ../../shared/system/gc.nix
-      ../../shared/system/login.nix
-      ../../shared/system/bluetooth.nix
-      ../../shared/system/openvpn3.nix
-
     ];
 
   #networking.hostName = $hostName; # Define your hostname.

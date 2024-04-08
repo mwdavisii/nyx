@@ -11,4 +11,3 @@ export ZDOTDIR="$HOME/.config/zsh"
 
 [[ -f $HOME/.local/share/zsh/nyx_zshenv ]] && . $HOME/.local/share/zsh/nyx_zshenv
 [[ -f $HOME/.local/share/zsh/zshenv ]] && . $HOME/.local/share/zsh/zshenv
-

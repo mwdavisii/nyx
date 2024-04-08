@@ -24,7 +24,7 @@ rec {
       #pkgs = inputs.self.legacyPackages.aarch64-darwin;
       userConf = import (strToFile user ../users);
       userOptions = strToPath config ../home/hosts;
-      homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
+      #homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
     in
     nameValuePair name (
       inputs.home-manager.lib.homeManagerConfiguration {
@@ -148,6 +148,7 @@ rec {
               home-manager = {
                 # useUserPackages = true;
                 useGlobalPkgs = true;
+                useUserPackages = true;
                 extraSpecialArgs =
                   let
                     self = inputs.self;
@@ -163,11 +164,12 @@ rec {
               system.stateVersion = "23.11";
             }
           )
+          (inputs.nixos-wsl.nixosModules.wsl)
+          (vscode-server.nixosModules.default)
           (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
-          (import ../system/shared/modules)
           (import ../system/nixos/modules)
-          (import ../system/nixos/profiles)
+          (import ../system/shared/profiles)
           (import (strToPath config ../system/nixos/hosts))
         ];
         #Darwin = Mac Target
@@ -183,6 +185,7 @@ rec {
             {
               home-manager = {
                 useGlobalPkgs = true;
+                useUserPackages = true;
                 extraSpecialArgs =
                   let
                     self = inputs.self;
@@ -211,41 +214,9 @@ rec {
           )
           
           (import ../system/darwin/modules)
-          (import ../system/shared/modules)
           (import ../system/shared/secrets)
           (import ../system/shared/profiles/macbook.nix)
           (import (strToPath config ../system/darwin/hosts))
-        ];
-        #wsl = WSL Target
-        wslModules = [
-          (inputs.home-manager.nixosModules.home-manager)
-          (
-            {
-              home-manager = {
-                # useUserPackages = true;
-                useGlobalPkgs = true;
-                extraSpecialArgs =
-                  let
-                    self = inputs.self;
-                    user = userConf;
-                  in
-                  # NOTE: Cannot pass name to home-manager as it passes `name` in to set the `hmModule`
-                  { inherit inputs self system user userConf secrets; };
-              };
-            }
-          )
-          (
-            { ... }: {
-              system.stateVersion = "23.11";
-            }
-          )
-          (inputs.nixos-wsl.nixosModules.wsl)
-          (vscode-server.nixosModules.default)
-          (inputs.agenix.nixosModules.default)
-          (import ../system/shared/modules)
-          (import ../system/wsl2/modules)
-          (import ../system/shared/profiles)
-          (import (strToPath config ../system/wsl2/hosts))
         ];
         commonModules = [
           (

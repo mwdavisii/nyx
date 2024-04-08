@@ -1,4 +1,4 @@
-{ config, lib, pkgs, self, user, userConf, ... }:
+{ config, lib, pkgs, self, user, userConf, system, ... }:
 
 with self.lib;
 let
@@ -31,7 +31,16 @@ in
       default = defaultExtraGroups;
       description = "The user's auxiliary groups.";
     };
-
+    name = mkOption {
+      type = types.str;
+      default = userConf.userName;
+      description = "User's name";
+    };
+    home = mkOption {
+      type = with types; nullOr types.path;
+      default = null;
+      description = "Path of home manager home file";
+    };
     hashedPassword = mkOption {
       type = with types; nullOr (passwdEntry str);
       default = defaultHashedPassword;
@@ -43,6 +52,9 @@ in
 
   config = mkMerge [
     {
+      home-manager.users."${userConf.userName}" = mkUserHome { inherit system userConf; config = cfg.home; };
+      
+      programs.zsh.enable = true;
       users = {
         users."${cfg.name}" = with cfg; {
           inherit hashedPassword extraGroups;

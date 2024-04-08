@@ -26,6 +26,9 @@
   };
   
   nyx.modules = {
+    desktop = {
+      wallpaper.enable = true;
+    };
     app = {
       alacritty.enable = true;
       finicky.enable = true;
@@ -83,6 +86,7 @@
       terraform.enable = true;
       tmux.enable = true;
       vale.enable = true;
+      wal.enable = true;
       xdg.enable = true;
       zellij.enable = true;
       zsh.enable = true;

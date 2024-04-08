@@ -8,4 +8,6 @@ export PROMPT_NO_INFO_LINE=true
 # Stop dotnet from collecting telemetry. FK OFF MICROSOFT!! (╯°□°）╯︵ ┻━┻
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-wal -R -q
+if [ command -v wal >/dev/null 2>&1 ]; then
+    wal -R -q
+fi

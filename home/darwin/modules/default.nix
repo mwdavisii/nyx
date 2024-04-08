@@ -1,8 +1,12 @@
-{ ... }:
+{ lib, ... }:
 
+with builtins;
+with lib;
 {
-  imports = [ 
-    ../../shared/modules 
-    ./apps
+  imports =
+    [
+      ./desktop
+      ./apps
+      ../../shared/modules
     ];
 }
