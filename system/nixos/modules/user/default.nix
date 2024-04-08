@@ -1,4 +1,4 @@
-{ config, lib, pkgs, self, user, userConf, ... }:
+{ config, lib, pkgs, self, user, userConf, system, ... }:
 
 with self.lib;
 let
@@ -52,6 +52,9 @@ in
 
   config = mkMerge [
     {
+      home-manager.users."${userConf.userName}" = mkUserHome { inherit system userConf; config = cfg.home; };
+      
+      programs.zsh.enable = true;
       users = {
         users."${cfg.name}" = with cfg; {
           inherit hashedPassword extraGroups;
