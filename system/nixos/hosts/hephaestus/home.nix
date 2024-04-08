@@ -5,6 +5,7 @@
   programs.home-manager.enable = true;
   # Install man output for any Nix packages.
   programs.man.enable = true;
+  programs.zsh.enable = true;
   manual.manpages.enable = true;
 
   home = {
@@ -20,7 +21,7 @@
         bsdgames.enable = true;
         lutris.enable = true;
         mahjong.enable = true;
-        minesweeper.enable = true;
+        minesweeper.enable = false;
         retroarch.enable = true;
         steam.enable = true;
       };
