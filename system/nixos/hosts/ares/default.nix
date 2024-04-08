@@ -1,10 +1,12 @@
 { config, pkgs, ... }:
 
 {
-  imports = [../../shared/system.nix];
   nyx = {
     modules = {
       user.home = ../../shared/home.nix;
+      system = {
+        wsl2.enable = true;
+      };
     };
 
     secrets = {

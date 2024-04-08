@@ -10,6 +10,7 @@ with lib;
     ];
 
     config = {
+        programs.zsh.enable = true;
         # Fully declarative dock using the latest from Nix Store
             ## Dock Configuration
         

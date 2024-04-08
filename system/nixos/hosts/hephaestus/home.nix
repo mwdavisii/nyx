@@ -5,74 +5,14 @@
   programs.home-manager.enable = true;
   # Install man output for any Nix packages.
   programs.man.enable = true;
+  programs.zsh.enable = true;
   manual.manpages.enable = true;
-
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      color-scheme = "prefer-dark";
-    };
-
-    "org/gnome/shell/extensions/user-theme" = {
-      name = "Tokyonight-Dark-B-LB";
-    };
-  };
-
-  #wayland.windowManager.sway = {
-  #  enable = true;
-  #  config = rec {
-  #    modifier = "Mod4"; # Super key
-  #    output = {
-  #      "Virtual-1" = {
-  #        mode = "1920x1080@60Hz";
-  #      };
-  #    };
-  #  };
-  #};
 
   home = {
     sessionVariables = {
       PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
     };
     stateVersion = "23.11";
-    packages = with pkgs; [
-      rustup
-      vhs
-      bat
-      bash
-      wget
-      #User Apps
-      celluloid
-      cool-retro-term
-      bibata-cursors
-
-      #utils
-      wlr-randr
-      gnumake
-      catimg
-      curl
-      xflux
-      pavucontrol
-      sqlite
-      networkmanagerapplet
-      #misc 
-      cava
-      rofi
-      nitch
-      wget
-      grim
-      slurp
-      wl-clipboard
-      pamixer
-      mpc-cli
-      tty-clock
-      tokyo-night-gtk
-      playerctl
-    ] ++ (with pkgs.gnome; [
-      nautilus
-      zenity
-      eog
-      gedit
-    ]);
   };
 
   nyx = {
@@ -81,7 +21,7 @@
         bsdgames.enable = true;
         lutris.enable = true;
         mahjong.enable = true;
-        minesweeper.enable = true;
+        minesweeper.enable = false;
         retroarch.enable = true;
         steam.enable = true;
       };
