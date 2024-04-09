@@ -1,16 +1,16 @@
-{ ... }:
+{ lib, ... }:
 
+with builtins;
+with lib;
 {
-  imports = [
-    ./androidsdk.nix
-    ./cc.nix
-    ./dhall.nix
-    ./go.nix
-    ./lua.nix
-    ./nix.nix
-    ./node.nix
-    ./python.nix
-    ./rust.nix
-  ];
+  imports =
+    let
+      dirs = filterAttrs
+        (
+          n: v: v != null && !(hasPrefix "_" n) && (v == "directory")
+        )
+        (readDir ./.);
+      paths = map (x: "${toString ./.}/${x}") (attrNames dirs);
+    in
+    paths;
 }
-

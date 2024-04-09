@@ -1,19 +1,16 @@
-{ ... }:
+{ lib, ... }:
 
+with builtins;
+with lib;
 {
-  imports = [
-    ./ghostty
-    ./alacritty
-    ./chrome
-    ./chromium
-    ./discord
-    ./firefox
-    ./kitty
-    ./mysql-workbench
-    ./qemu
-    ./obs
-    ./scrcpy
-    ./vscode
-    ./wezterm
-  ];
+  imports =
+    let
+      dirs = filterAttrs
+        (
+          n: v: v != null && !(hasPrefix "_" n) && (v == "directory")
+        )
+        (readDir ./.);
+      paths = map (x: "${toString ./.}/${x}") (attrNames dirs);
+    in
+    paths;
 }

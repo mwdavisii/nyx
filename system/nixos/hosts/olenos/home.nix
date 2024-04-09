@@ -6,6 +6,7 @@
   # Install man output for any Nix packages.
   programs.man.enable = true;
   manual.manpages.enable = true;
+  programs.zsh.enable = true;
 
   home = {
     sessionVariables = {
