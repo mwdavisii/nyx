@@ -39,6 +39,7 @@
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = true;
+        jupyter.enable = true;
         chrome = {
           enable = true;
           makeDefaultBrowser = true;
@@ -63,7 +64,7 @@
         lua.enable = true;
         nix.enable = true;
         node.enable = true;
-        python.enable = true;
+        python.enable = false; #conflict w/ Jupyter
       };
       shell = {
         awscliv2.enable = true;
