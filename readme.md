@@ -49,16 +49,14 @@ Below are descriptions of the hosts configurations. If you have access to window
 ├─────── default        # => Google Pixel Fold
 ├─── nixos
 ├───── hosts
+├─────── ares           # => Personal WSL w/ personal credential decryption
 ├─────── athena         # => Personal laptop - Alienware m15 R6 / i7 / RTX 3080 / nixos only
 ├─────── hephaestus     # => Home machine - Custom Build / i9 / AMD 7900xt / dual boot nixos+win
 ├─────── livecd         # => Bootable installer ISO w/ custom shell
 ├─────── olenos         # => Work laptop - Thinkpad x13 / i7 / integrated graphics / nixos only
 ├─────── virtualbox     # => Oracle Virtualbox Image (Gnome + Shell)
-├─── wsl
-├───── hosts
-├─────── ares           # => Personal WSL w/ personal credential decryption
-├─────── nixos          # => Generic WSL2 w/ No Credentials
-├─────── work           # => Work WSL2 w/ work credential decryption
+├─────── nixos          # => Generic WSL2
+
 
 ```
 
@@ -283,7 +281,7 @@ Here are some things that would have shortned my learning curve:
 Example from `lib/default.nix`:
 
 ```nix
-  (import ../system/shared/modules)
+  (import ../system/nixos/shared/modules)
   (import ../system/shared/profiles)
   (import ../system/shared/secrets)
   (import (strToPath config ../in/hosts))

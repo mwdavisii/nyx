@@ -1,23 +1,16 @@
 { config, lib, pkgs, modulesPath, hostName, ... }:
 {
-  
+
   imports =
     [
       # Include the results of the hardware scan.
       ./hardware.nix
-      
+
     ];
   config = {
     networking.networkmanager.enable = lib.mkForce true;
     networking.useDHCP = lib.mkDefault true;
-
     time.hardwareClockInLocalTime = true;
-    programs.openvpn3.enable = true;
-    environment.systemPackages = with pkgs; [
-      libevdev
-      openvpn3
-      openssl
-    ];
     # Configure keymap in X11
     services = {
       xserver = {
@@ -25,15 +18,7 @@
         videoDrivers = [ "amdgpu" ];
         layout = "us";
         xkbVariant = "";
-        #libinput.enable = true;
-        #    desktopManager.gnome.enable = true;
-        #    #displayManager.lightdm = {
-        #    #    enable = true;
-        #    #    greeters.slick.enable = true;
-        #    #};
-        #    windowManager.bspwm = {
-        #        enable = true;
-        #    };
+        libinput.enable = true;
       };
       printing.enable = true;
       openssh.enable = true;
