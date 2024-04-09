@@ -283,7 +283,7 @@ Here are some things that would have shortned my learning curve:
 Example from `lib/default.nix`:
 
 ```nix
-  (import ../system/shared/modules)
+  (import ../system/nixos/shared/modules)
   (import ../system/shared/profiles)
   (import ../system/shared/secrets)
   (import (strToPath config ../in/hosts))

@@ -1,16 +1,16 @@
-{ config, lib, pkgs, modulesPath, hostName, userConf, ... }:
+{ lib, ... }:
 
-
+with builtins;
+with lib;
 {
-  imports = [ 
-    ./bluetooth.nix 
-    ./env-vars-amd.nix
-    ./env-vars-nvidia.nix
-    ./gc.nix
-    ./hyprlogin.nix 
-    ./packages.nix
-    ./opengl.nix
-    ./timezones.nix
-    ./yubilogin.nix
-  ];
+  imports =
+    let
+      dirs = filterAttrs
+        (
+          n: v: v != null && !(hasPrefix "_" n) && (v == "directory")
+        )
+        (readDir ./.);
+      paths = map (x: "${toString ./.}/${x}") (attrNames dirs);
+    in
+    paths;
 }
