@@ -48,8 +48,8 @@ let
 
   init_colors = pkgs.writeShellScriptBin "init_colors" ''
     #!/usr/bin/env bash
-    if wal &> /dev/null; then
-      if !test -f ~/.cache/wal/colors-hyprland; then
+    if command -v wal >/dev/null 2>&1; then
+      if ! test -f ~/.cache/wal/colors-hyprland; then
         if command -v swww >/dev/null 2>&1; then
           swww img ~/.config/wallpapers/wall0.png  --transition-type simple
         fi
