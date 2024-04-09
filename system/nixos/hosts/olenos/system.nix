@@ -14,11 +14,7 @@
   # networking.wireless.enable  = lib.mkForce false;
   networking.networkmanager.enable = lib.mkForce true;
   networking.useDHCP = lib.mkDefault true;
-  hardware.opengl = {
-    enable = true;
-    #driSupport = true;
-    #driSupport32Bit = true;
-  };
+
   environment.variables = {
     #NIXOS_OZONE_WL = "1";
     PATH = [
@@ -28,26 +24,14 @@
     NIXPKGS_ALLOW_UNFREE = "1";
     #PKG_CONFIG_PATH = lib.makeLibraryPath [ libevdev ];
   };
-  services.hardware.openrgb.enable = true;
-  environment.systemPackages = with pkgs; [
-    libevdev
-    openrgb
-  ];
   # Configure keymap in X11
   services = {
     xserver = {
       enable = true;
       layout = "us";
       xkbVariant = "";
-      #libinput.enable = true;
-      #    desktopManager.gnome.enable = true;
-      #    #displayManager.lightdm = {
-      #    #    enable = true;
-      #    #    greeters.slick.enable = true;
-      #    #};
-      #    windowManager.bspwm = {
-      #        enable = true;
-      #    };
+      libinput.enable = true;
+
     };
     printing.enable = true;
     openssh.enable = true;

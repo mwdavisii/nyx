@@ -53,7 +53,7 @@ in
   config = mkMerge [
     {
       home-manager.users."${userConf.userName}" = mkUserHome { inherit system userConf; config = cfg.home; };
-      
+      # Enable zsh in order to add /run/current-system/sw/bin to $PATH
       programs.zsh.enable = true;
       users = {
         users."${cfg.name}" = with cfg; {
