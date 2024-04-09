@@ -63,7 +63,7 @@ in
   imports = [
     ./hyprland-environment.nix
   ];
-  
+
   options.nyx.modules.desktop.hypr = {
     enable = mkEnableOption "hypr configuration";
   };
@@ -79,6 +79,7 @@ in
       mesa
       xdg-desktop-portal-gtk
       xdg-desktop-portal
+      gnome.gnome-keyring
       acpi
       wayland-protocols
       mpd
@@ -118,7 +119,7 @@ in
       plugins = with plugins; [ hyprbars ];
     };
 
-        services.dunst = {
+    services.dunst = {
       enable = true;
       iconTheme = {
         name = "Papirus-Dark";
