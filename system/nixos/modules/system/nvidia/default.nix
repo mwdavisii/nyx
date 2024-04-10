@@ -7,6 +7,7 @@ in
     enable = mkEnableOption "AMD Env Vars"; 
   };
   config = mkIf cfg.enable {
+    programs.hyprland.nvidiaPatches = true;
     environment.variables = {
       #NIXOS_OZONE_WL = "1";
       GBM_BACKEND= "nvidia-drm";
