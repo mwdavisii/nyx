@@ -81,7 +81,6 @@
         "Paused": "<span foreground='#928374'>󰒮 󰏥 󰒭</span>"
       }
     },
-  
     "custom/playerlabel": {
       "format": "<span>{}</span>",
       "return-type": "json",
