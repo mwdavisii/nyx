@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
-  plugins = inputs.hyprland-plugins.packages.${pkgs.system};
+  #plugins = inputs.hyprland-plugins.packages.${pkgs.system};
   wbar_restart = pkgs.writeShellScriptBin "wbar_restart" ''
     killall -q -9 -r waybar
     sleep .1
@@ -77,6 +77,8 @@ in
       dunst
       swww
       mesa
+      xwayland
+      xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
       xdg-desktop-portal
       gnome.gnome-keyring
@@ -113,10 +115,17 @@ in
     xdg.configFile."waybar".source = ../../../../config/.config/waybar;
 
     wayland.windowManager.hyprland = {
+      plugins = [
+        inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+        inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
+        inputs.hyprland-plugins.packages.${pkgs.system}.hyprwinwrap
+        inputs.hyprland-plugins.packages.${pkgs.system}.hyprtrails
+      ];
       enable = true;
+      package = pkgs.hyprland;
       systemd.enable = true;
       xwayland.enable = true;
-      plugins = with plugins; [ hyprbars ];
+
     };
 
     services.dunst = {
