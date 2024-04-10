@@ -21,7 +21,7 @@
         bsdgames.enable = true;
         lutris.enable = true;
         mahjong.enable = true;
-        minesweeper.enable = false;
+        minesweeper.enable = true;
         retroarch.enable = true;
         steam.enable = true;
       };
@@ -30,6 +30,7 @@
         rofi.enable = true;
         gtk.enable = true;
         wlogout.enable = true;
+        cava.enable = true;
       };
       app = {
         chromium.enable = true;
