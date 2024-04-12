@@ -28,6 +28,7 @@ in
       gnumake
       # Faster build system to make
       ninja
+      meson
     ];
   };
 }
