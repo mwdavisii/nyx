@@ -25,13 +25,17 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    kmonad = {
+      url = "git+https://github.com/kmonad/kmonad?submodules=1&dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Secrets
     agenix.url = "github:ryantm/agenix";
     secrets = {
       url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
       flake = false;
     };
+
     # MacOS
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
     darwin = {
@@ -51,6 +55,7 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+    
     # WSL
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nixos-wsl = {
@@ -83,7 +88,8 @@
         import inputs.nixpkgs {
           inherit system;
           config = import ./nix/config.nix;
-          overlays = [
+          overlays = self.overlays."${system}";
+          /*overlays = [
             #  self.overlays."${system}"
             inputs.nix-on-droid.overlays.default
             (final: prev: {
@@ -99,12 +105,15 @@
               };
             })
           ];
+          */
         }
       );
     in
     rec {
       lib = import ./lib { inherit self inputs config; } // inputs.nixpkgs.lib;
+
       devShell = foreachSystem (system: import ./shell.nix { pkgs = pkgsBySystem."${system}"; });
+
       legacyPackages = pkgsBySystem;
       packages = foreachSystem (system: import ./nix/pkgs self system);
       overlay = foreachSystem (system: _final: _prev: self.packages."${system}");
@@ -118,6 +127,7 @@
           # (_:_: { inherit (eww.packages."${system}") eww; })
         ] ++ ovs
       );
+      
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
         nix-on-droid = { user = "droid"; };
         default = { user = "droid"; };
@@ -132,15 +142,15 @@
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
+        athena = { hostname = "athena"; user = "mwdavisii"; buildTarget = "nixos";};
+        ares = { user = "nixos"; hostname = "ares"; buildTarget = "nixos"; }; #WSLi
+        hephaestus = { hostname = "hephaestus"; user = "mwdavisii"; buildTarget = "nixos"; }; #home machine
+        livecd = { hostname = "worklt"; user = "mwdavisii"; buildTarget = "iso"; }; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
         nixos = { user = "nixos"; hostname = "nixos"; buildTarget = "nixos"; }; #WSL
-        ares = { user = "nixos"; hostname = "ares"; buildTarget = "nixos"; }; #WSLi
-        work = { user = "nixos"; hostname = "work"; buildTarget = "nixos"; }; #WSL
         olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Work Laptop (Host OS)
-        hephaestus = { hostname = "hephaestus"; user = "mwdavisii"; buildTarget = "nixos"; }; #home machine
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
-        livecd = { hostname = "worklt"; user = "mwdavisii"; buildTarget = "iso"; }; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
-        athena = { hostname = "athena"; user = "mwdavisii"; buildTarget = "nixos";};
+
       };
 
       top =

@@ -118,21 +118,6 @@ rec {
       home.stateVersion = "23.11";
     };
 
-  nixpkgsWithOverlays = with inputs; rec {
-    config = import ../nix/config.nix;
-    overlays = [
-      nix-on-droid.overlays.default
-      nur.overlay
-      (_final: prev: {
-        # this allows us to reference pkgs.unstable
-        unstable = import nixpkgs-unstable {
-          inherit (prev) system;
-          inherit config;
-        };
-      })
-    ];
-  };
-
   mkNixSystemConfiguration = name: { config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? { }, }:
     nameValuePair name (
       let
@@ -169,7 +154,7 @@ rec {
           (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
           (import ../system/nixos/modules)
-          (import ../system/shared/profiles)
+          (import ../system/shared)
           (import (strToPath config ../system/nixos/hosts))
         ];
         #Darwin = Mac Target
