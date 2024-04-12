@@ -15,15 +15,18 @@
     
   "wlr/taskbar": {
     "format": "{icon}",
-    "icon-size": 20,
+    "icon-size": 25,
     "icon-theme": "Numix-Circle",
     "tooltip-format": "{title}",
     "on-click": "activate",
-    "on-click-right": "close",
-    "on-click-middle": "fullscreen"
+    "on-click-right": "fullscreen",
+    "on-click-middle": "close",
+    "ignore-list": [
+	    "Alacritty"
+	  ]
   },
 	"tray": {
-		"icon-size": 16,
+		"icon-size": 20,
 		"spacing": 5
 	},
   "custom/launcher": {

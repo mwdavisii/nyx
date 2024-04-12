@@ -1,9 +1,8 @@
-{ config, pkgs, self, userConf, secrets, system, ... }:
+{ config, pkgs, self, userConf, system, ... }:
 
 with self.lib;
 let
   cfg = config.nyx.modules.user;
-  homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
   options.nyx.modules.user = {
@@ -24,7 +23,7 @@ in
       home-manager.users."${userConf.userName}" = mkUserHome { inherit system userConf; config = cfg.home; };
       users.users.${userConf.userName} = {
         name = "${userConf.userName}";
-        home = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
+        home = "/Users/${userConf.userName}";
         isHidden = false;
         shell = pkgs.zsh;
     };
