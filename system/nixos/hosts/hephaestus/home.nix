@@ -31,6 +31,7 @@
         gtk.enable = true;
         wlogout.enable = true;
         cava.enable = true;
+        kmonad.enable = true;
       };
       app = {
         chromium.enable = true;
