@@ -1,19 +1,12 @@
 
 (defcfg
   ;; ** For Linux **
-  ;; input  (device-file "/dev/input/by-id/usb-HOLTEK_USB-HID_Keyboard-event-kbd") ;; Change this line for your device
+  input  (device-file "/dev/input/by-id/usb-Logitech_G915_TKL_LIGHTSPEED_Wireless_RGB_Mechanical_Gaming_Keyboard_3B30EB6C-event-kbd")
   ;; input  (device-file "/dev/input/by-id/usb-Matias_Ergo_Pro_Keyboard-event-kbd")
   output (uinput-sink "KMonad output")
 
-  ;; ** For Windows **
-  ;; input  (low-level-hook)
-  ;; output (send-event-sink)
-
-  ;; ** For MacOS **
-  ;; input  (iokit-name "my-keyboard-product-string")
-  ;; output (kext)
-
   fallthrough true
+  allow-cmd true
 )
 
 (defsrc
@@ -25,8 +18,9 @@
   lctl    lmet lalt           spc            ralt rmet cmp  rctl                left    down    right
 )
  
-(defalias
-  hyp  (lctl-lmet-lalt-lsft) ;; Use as Modifier in HammerSpoon and Hypr
+
+(
+  defalias hyp C-A-M-S
 )
 
 (deflayer qwerty
@@ -35,5 +29,5 @@
   tab     q    w    e    r    t    y    u    i    o    p    [    ]    \         del     end     pgdn
   @hyp    a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft      z    x    c    v    b    n    m    ,    .    /    rsft                      up
-  lctl    lmet lalt           spc            ralt rmet @nm2 rctl                left    down    right
+  lctl    lmet lalt           spc            ralt rmet cmp rctl                left    down    right
 )

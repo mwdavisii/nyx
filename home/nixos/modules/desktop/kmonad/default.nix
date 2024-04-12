@@ -10,9 +10,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-     kmonad
-    ];
     xdg.configFile."kmonad".source = ../../../../config/.config/kmonad;
   };
 }
