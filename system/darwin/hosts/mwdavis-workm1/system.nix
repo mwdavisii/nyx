@@ -35,6 +35,7 @@ with lib;
                 "Microsoft Power Point" = 462062816;
                 "Magnet" = 441258766;
                 "Keeper Password Manager" = 414781829;
+                "Xcode" = 497799835;
             };
         };
         # Enable fonts dir
@@ -57,7 +58,7 @@ with lib;
                     InitialKeyRepeat = 15;
 
                     "com.apple.mouse.tapBehavior" = 1;
-                    "com.apple.sound.beep.volume" = 1.0;
+                    "com.apple.sound.beep.volume" = 0.0;
                     "com.apple.sound.beep.feedback" = 0;
                 };
 
