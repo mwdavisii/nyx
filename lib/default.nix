@@ -154,7 +154,7 @@ rec {
           (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
           (import ../system/nixos/modules)
-          (import ../system/shared/profiles)
+          (import ../system/shared)
           (import (strToPath config ../system/nixos/hosts))
         ];
         #Darwin = Mac Target
