@@ -3,6 +3,7 @@ _:
 [
   # Development Tools
   #"homebrew/cask/docker"
+  "hammerspoon"
   "insomnia"
   "ngrok"
   "visual-studio-code"
@@ -10,6 +11,7 @@ _:
   "mysqlworkbench"
   "postman"
   "powershell"
+  "karabiner-elements"
   # Communication Tools
   "telegram"
   "zoom"

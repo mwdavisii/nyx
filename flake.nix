@@ -32,6 +32,7 @@
       url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
       flake = false;
     };
+
     # MacOS
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
     darwin = {
@@ -51,6 +52,7 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+    
     # WSL
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nixos-wsl = {
@@ -76,6 +78,7 @@
   outputs = { self, ... }@inputs:
     with self.lib;
     let
+      hammerspoon = ./pkgs.hammerspoon;
       systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
       foreachSystem = genAttrs systems;
       pkgsBySystem = foreachSystem (
@@ -132,15 +135,15 @@
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
+        athena = { hostname = "athena"; user = "mwdavisii"; buildTarget = "nixos";};
+        ares = { user = "nixos"; hostname = "ares"; buildTarget = "nixos"; }; #WSLi
+        hephaestus = { hostname = "hephaestus"; user = "mwdavisii"; buildTarget = "nixos"; }; #home machine
+        livecd = { hostname = "worklt"; user = "mwdavisii"; buildTarget = "iso"; }; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
         nixos = { user = "nixos"; hostname = "nixos"; buildTarget = "nixos"; }; #WSL
-        ares = { user = "nixos"; hostname = "ares"; buildTarget = "nixos"; }; #WSLi
-        work = { user = "nixos"; hostname = "work"; buildTarget = "nixos"; }; #WSL
         olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Work Laptop (Host OS)
-        hephaestus = { hostname = "hephaestus"; user = "mwdavisii"; buildTarget = "nixos"; }; #home machine
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
-        livecd = { hostname = "worklt"; user = "mwdavisii"; buildTarget = "iso"; }; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
-        athena = { hostname = "athena"; user = "mwdavisii"; buildTarget = "nixos";};
+
       };
 
       top =
