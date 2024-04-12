@@ -78,7 +78,6 @@
   outputs = { self, ... }@inputs:
     with self.lib;
     let
-      hammerspoon = ./pkgs.hammerspoon;
       systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
       foreachSystem = genAttrs systems;
       pkgsBySystem = foreachSystem (
@@ -86,7 +85,8 @@
         import inputs.nixpkgs {
           inherit system;
           config = import ./nix/config.nix;
-          overlays = [
+          overlays = self.overlays."${system}";
+          /*overlays = [
             #  self.overlays."${system}"
             inputs.nix-on-droid.overlays.default
             (final: prev: {
@@ -102,12 +102,15 @@
               };
             })
           ];
+          */
         }
       );
     in
     rec {
       lib = import ./lib { inherit self inputs config; } // inputs.nixpkgs.lib;
+
       devShell = foreachSystem (system: import ./shell.nix { pkgs = pkgsBySystem."${system}"; });
+
       legacyPackages = pkgsBySystem;
       packages = foreachSystem (system: import ./nix/pkgs self system);
       overlay = foreachSystem (system: _final: _prev: self.packages."${system}");
@@ -121,6 +124,7 @@
           # (_:_: { inherit (eww.packages."${system}") eww; })
         ] ++ ovs
       );
+      
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
         nix-on-droid = { user = "droid"; };
         default = { user = "droid"; };

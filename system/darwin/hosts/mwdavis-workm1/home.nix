@@ -29,6 +29,8 @@
     desktop = {
       wallpaper.enable = true;
       yabai.enable = true;
+      hammerspoon.enable = true;
+      karabiner.enable = true;
     };
     app = {
       alacritty.enable = true;
