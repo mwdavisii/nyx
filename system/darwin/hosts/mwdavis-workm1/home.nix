@@ -28,6 +28,7 @@
   nyx.modules = {
     desktop = {
       wallpaper.enable = true;
+      yabai.enable = true;
     };
     app = {
       alacritty.enable = true;
@@ -78,10 +79,10 @@
       lf.enable = true;
       lorri.enable = false;
       mcfly.enable = true;
+      neofetch.enable = true;
       neovim.enable = true;
       networking.enable = true;
       nushell.enable = true;
-      repo.enable = false;
       starship.enable = true;
       terraform.enable = true;
       tmux.enable = true;
