@@ -1,9 +1,8 @@
+{pkgs, ...}:
   let
-    pkgs = import <nixpkgs> { };
-
     kmonad-bin = pkgs.fetchurl {
-      url = "https://github.com/kmonad/kmonad/releases/download/0.4.2/kmonad";
-      sha256 = "0j73dzsfnsa7s96gnxhy9v2wz4l8pln0safdlbkz5j4gdasz3lsl";
+      url = "https://github.com/kmonad/kmonad/releases/download/0.4.1/kmonad-0.4.1-linux";
+      sha256 = "839e58e7cc23d6dd06846f343c0c9be0f927698189e497da35ef5196703f7a8f";
     };
   in
   pkgs.runCommand "kmonad" {}

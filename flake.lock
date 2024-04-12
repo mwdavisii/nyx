@@ -422,6 +422,30 @@
         "type": "github"
       }
     },
+    "kmonad": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "nix",
+        "lastModified": 1707655140,
+        "narHash": "sha256-oyq3hCFqQb5Yi28PCW5k1MJnSuGfdyqOqXYH2mcPK/8=",
+        "ref": "refs/heads/master",
+        "rev": "70a5e97518c87ff52be4b403d774e88c5c61e3c1",
+        "revCount": 785,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/kmonad/kmonad?dir=nix"
+      },
+      "original": {
+        "dir": "nix",
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/kmonad/kmonad?dir=nix"
+      }
+    },
     "neovim-flake": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -845,6 +869,7 @@
         "homebrew-core": "homebrew-core",
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
+        "kmonad": "kmonad",
         "neovim-flake": "neovim-flake",
         "nix-homebrew": "nix-homebrew",
         "nix-on-droid": "nix-on-droid",
