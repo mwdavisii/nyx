@@ -13,6 +13,8 @@ let
   defaultHashedPassword = existsOrDefault "hashedPassword" user null;
 
   defaultExtraGroups = [
+    "input"
+    "uinput"
     "audio"
     "docker"
     "games"
@@ -52,6 +54,8 @@ in
 
   config = mkMerge [
     {
+      users.groups = { uinput = {}; };
+
       home-manager.users."${userConf.userName}" = mkUserHome { inherit system userConf; config = cfg.home; };
       # Enable zsh in order to add /run/current-system/sw/bin to $PATH
       programs.zsh.enable = true;
@@ -66,7 +70,7 @@ in
         };
 
         # Do not allow users to be added or modified except through Nix configuration.
-        mutableUsers = false;
+        mutableUsers = true;
       };
       nix.settings.trusted-users = [ "${cfg.name}" ];
     }

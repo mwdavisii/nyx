@@ -12,8 +12,5 @@ with lib;
         (readDir ./.);
       paths = map (x: "${toString ./.}/${x}") (attrNames dirs);
     in
-    paths ++ 
-    [
-      ../../../shared/modules/system
-    ];
+    paths;
 }
