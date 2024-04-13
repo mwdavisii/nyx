@@ -1,5 +1,5 @@
 -- Define the modifier key
-local super = {"ctrl", "alt", "cmd", "shift"}
+local super = {"ctrl", "alt", "cmd"}
 
 hs.loadSpoon("SpoonInstall")
 -- spoon.SpoonInstall:andUse("AClock")
