@@ -5,7 +5,7 @@
     sessionVariables = {
       EDITOR = "nvim";
       BROWSER = "google-chrome-stable";
-      TERMINAL = "alacritty";
+      TERMINAL = "kitty";
       WLR_NO_HARDWARE_CURSORS = "1";
       WLR_RENDERER_ALLOW_SOFTWARE = "1";
       CLUTTER_BACKEND = "wayland";
