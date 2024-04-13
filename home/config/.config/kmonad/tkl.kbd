@@ -20,7 +20,7 @@
  
 
 (
-  defalias hyp C-A-M-S
+  defalias hyp (around lctl (around lmet lalt))
 )
 
 (deflayer qwerty
