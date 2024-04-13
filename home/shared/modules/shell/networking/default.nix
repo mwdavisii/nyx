@@ -12,6 +12,8 @@ in
     home.packages = with pkgs;[ 
         coreutils-full
         inetutils
+        nmap
+        dig
     ];
   };
 }
