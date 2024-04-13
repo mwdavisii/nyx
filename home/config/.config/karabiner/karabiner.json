@@ -31,10 +31,9 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code": "left_shift",
+                                        "key_code": "left_control",
                                         "modifiers": [
                                             "left_command",
-                                            "left_control",
                                             "left_option"
                                         ]
                                     }
