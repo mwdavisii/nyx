@@ -28,7 +28,6 @@
   nyx.modules = {
     desktop = {
       wallpaper.enable = true;
-      yabai.enable = true;
       hammerspoon.enable = true;
       karabiner.enable = true;
     };

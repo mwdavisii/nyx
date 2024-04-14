@@ -44,6 +44,9 @@ with lib;
         system = {
             #stateVersion = 4;
             defaults = {
+                dock = {
+                    autohide = true;
+                };   
                 LaunchServices = {
                     LSQuarantine = false;
                 };
