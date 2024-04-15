@@ -33,7 +33,6 @@ with lib;
                 "Microsoft Excel" = 462058435;
                 "Microsoft Outlook" = 985367838;
                 "Microsoft Power Point" = 462062816;
-                "Magnet" = 441258766;
                 "Keeper Password Manager" = 414781829;
                 "Xcode" = 497799835;
             };
