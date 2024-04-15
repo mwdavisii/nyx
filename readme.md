@@ -116,7 +116,7 @@ If you want to actually build and decrypt secrets, here is what my secrets repos
 ├─── id_ed25519.age files  # Example encrypted file
 ```
 
-* Note that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
+** Note that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
 
 ### WSL2 Installation
 
