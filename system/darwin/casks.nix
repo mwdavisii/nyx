@@ -1,15 +1,19 @@
 _:
 
 [
+  #desktop toools
+  "whichspace"
+  "dozer"
+  "amethyst"
+
   # Development Tools
   #"homebrew/cask/docker"
   "insomnia"
   "ngrok"
-  "visual-studio-code"
-  "wireshark"
   "mysqlworkbench"
   "postman"
   "powershell"
+  
   # Communication Tools
   "telegram"
   "zoom"
@@ -28,6 +32,6 @@ _:
   # Browsers
   "google-chrome"
 
-  # AI
+  # AIhic
   "diffusionbee"
 ]

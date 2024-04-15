@@ -7,6 +7,7 @@ with lib;
 config = {
     local.dock = {
             enable = true;
+            autohide = true;
             entries = [
             #{ path = "/Applications/Telegram.app/"; }
             { path = "/Applications/Discord.app/"; } 
