@@ -10,7 +10,7 @@ local superShift = {"ctrl", "alt", "cmd", "lshift"}
 
 require("aliases")
 require("apps")
-require("windows")
+require("hswindow")
 
 return {
     init = module_init
