@@ -1,15 +1,19 @@
 _:
 
 [
+  #desktop toools
+  "whichspace"
+  "dozer"
+  "amethyst"
+
   # Development Tools
   #"homebrew/cask/docker"
-  "amethyst"
   "insomnia"
   "ngrok"
   "mysqlworkbench"
   "postman"
   "powershell"
-  "whichspace"
+  
   # Communication Tools
   "telegram"
   "zoom"
