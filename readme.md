@@ -84,8 +84,6 @@ Below are descriptions of the hosts configurations. If you have access to window
 ├─────── olenos         # => Work laptop - Thinkpad x13 / i7 / integrated graphics / nixos only
 ├─────── virtualbox     # => Oracle Virtualbox Image (Gnome + Shell)
 ├─────── nixos          # => Generic WSL2
-
-
 ```
 
 ### Secrets Configuration
