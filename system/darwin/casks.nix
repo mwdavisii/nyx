@@ -3,13 +3,13 @@ _:
 [
   # Development Tools
   #"homebrew/cask/docker"
+  "amethyst"
   "insomnia"
   "ngrok"
-  "visual-studio-code"
-  "wireshark"
   "mysqlworkbench"
   "postman"
   "powershell"
+  "whichspace"
   # Communication Tools
   "telegram"
   "zoom"
@@ -28,6 +28,6 @@ _:
   # Browsers
   "google-chrome"
 
-  # AI
+  # AIhic
   "diffusionbee"
 ]

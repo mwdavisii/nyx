@@ -1,0 +1,197 @@
+# Default settings for Amethyst
+# Repo: `https://github.com/ianyh/Amethyst`
+#
+# Note due to issue 1419 (https://github.com/ianyh/Amethyst/issues/1419) some
+# config values may conflict and not work if they are the same as the default
+# values for Amethyst. You can see these values on GitHub at
+# https://github.com/ianyh/Amethyst/blob/development/Amethyst/default.amethyst
+# If you're experiencing conflicts and the settings are the same as the default,
+# comment out the commands in this file.
+#
+# Move this file to: `~/.amethyst.yml`
+# In order to register changes restart Amethyst.
+# If you experience issues pulling in the changes you can also quit Amethyst and run: `defaults delete com.amethyst.Amethyst.plist`
+# This removes the current preferences and causes Amethyst to restart with default preferences and pull configs from this file.
+
+# layouts - Ordered list of layouts to use by layout key (default tall, wide, fullscreen, and column).
+layouts:
+  - bsp
+  - tall
+  - fullscreen
+  # - tall-right
+  - wide
+  - two-pane
+  - middle-wide
+  - 3column-left
+  - middle-wide # The legacy name of "3column-middle"
+  - 3column-right
+  - 4column-left
+  - 4column-right
+  - column
+  # - row
+  # - floating
+  # - widescreen-tall
+  # - widescreen-tall-right
+
+# First mod (default option + shift).
+mod1:
+  - option
+  - control
+  - command
+
+# Second mod (default option + shift + control).
+mod2:
+  - option
+  - control
+  - command
+  - shift
+
+# Commands:
+# special key values
+# space
+# enter
+# up
+# right
+# down
+# left
+
+# special characters require quotes
+# '.'
+# ','
+
+# Move to the next layout in the list.
+cycle-layout:
+  mod: mod1
+  key: up
+
+# Move to the previous layout in the list.
+cycle-layout-backward:
+  mod: mod1
+  key: down
+
+# Shrink the main pane by a percentage of the screen dimension as defined by window-resize-step. Note that not all layouts respond to this command.
+shrink-main:
+  mod: mod1
+  key: "-"
+
+# Expand the main pane by a percentage of the screen dimension as defined by window-resize-step. Note that not all layouts respond to this command.
+expand-main:
+  mod: mod1
+  key: "="
+
+# Focus the next window in the list going counter-clockwise.
+focus-ccw:
+  mod: mod1
+  key: left
+
+# Focus the next window in the list going clockwise.
+focus-cw:
+  mod: mod1
+  key: right
+
+# Swap the position of the currently focused window with the main window in the list.
+swap-main:
+  mod: mod2
+  key: enter
+
+# Move focus to the n-th screen in the list; e.g., focus-screen-3 will move mouse focus to the 3rd screen. Note that the main window in the given screen will be focused.
+focus-screen-1:
+  mod: mod1
+  key: 1
+focus-screen-2:
+  mod: mod1
+  key: 2
+focus-screen-3:
+  mod: mod1
+  key: 3
+focus-screen-4:
+  mod: mod1
+  key: 4
+focus-screen-5:
+  mod: mod1
+  key: 5
+focus-screen-6:
+  mod: mod1
+  key: 6
+
+# Move the currently focused window to the n-th screen; e.g., throw-screen-3 will move the window to the 3rd screen.
+throw-space-1:
+  mod: mod2
+  key: 1
+throw-space-2:
+  mod: mod2
+  key: 2
+throw-space-3:
+  mod: mod2
+  key: 3
+throw-space-4:
+  mod: mod2
+  key: 4
+
+
+
+# Select tall layout
+select-tall-layout:
+  mod: mod1
+  key: a
+
+# Select wide layout
+select-wide-layout:
+  mod: mod1
+  key: s
+
+# Turn on or off tiling entirely.
+toggle-tiling:
+  mod: mod2
+  key: t
+
+# Rerun the current layout's algorithm.
+reevaluate-windows:
+  mod: mod1
+  key: z
+
+# disable screen padding on builtin display
+disable-padding-on-builtin-display: false
+
+# Boolean flag for whether or not to add margins between windows (default false).
+window-margins: true
+smart-window-margins: true
+window-margin-size: 5
+
+# List of bundle identifiers for applications to either be automatically floating or 
+# automatically tiled based on floating-is-blacklist (default []).
+floating: [
+  "com.apple.finder",
+  "org.alacritty",
+  "com.apple.systempreferences"
+]
+
+# Boolean flag determining behavior of the floating list. true if the applications should be floating and all others tiled. false if the applications should be tiled and all others floating (default true).
+floating-is-blacklist: true
+
+# true if windows smaller than a 500px square should be floating by default (default true)
+float-small-windows: true
+
+# true if dragging and dropping windows on to each other should swap their positions (default false).
+mouse-swaps-windows: true
+
+# true if changing the frame of a window with the mouse should update the layout to accommodate the change (default false). Note that not all layouts will be able to respond to the change.
+mouse-resizes-windows: true
+
+# true to insert new windows into the first position and false to insert new windows into the last position (default false).
+new-windows-to-main: false
+
+# true to automatically move to a space when throwing a window to it (default true).
+follow-space-thrown-windows: true
+
+# Padding to apply between windows and the left edge of the screen (in px, default 0).
+screen-padding-left: 5
+
+# Padding to apply between windows and the right edge of the screen (in px, default 0).
+screen-padding-right: 5
+
+# Padding to apply between windows and the top edge of the screen (in px, default 0).
+screen-padding-top: 5
+
+# Padding to apply between windows and the bottom edge of the screen (in px, default 0).
+screen-padding-bottom: 5

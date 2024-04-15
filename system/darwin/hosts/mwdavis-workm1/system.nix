@@ -43,10 +43,7 @@ with lib;
         fonts.fontDir.enable = true;
         system = {
             #stateVersion = 4;
-            defaults = {
-                dock = {
-                    autohide = true;
-                };   
+            defaults = { 
                 LaunchServices = {
                     LSQuarantine = false;
                 };
