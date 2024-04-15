@@ -1,4 +1,5 @@
 # Nixos + DotFiles
+
 ## Hyperland + Home-Manager + Flakes for Mac, WSL, and Droid
 
 ## Overview
@@ -64,7 +65,7 @@ Below are descriptions of the hosts configurations. If you have access to window
 
 This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository.
 
-The easiest way to run this is to update 'flake.nix` to use my [nix-secrets-example](https://github.com/mwdavisii/nix-secrets-example) repository. 
+The easiest way to run this is to update 'flake.nix` to use my [nix-secrets-example](https://github.com/mwdavisii/nix-secrets-example) repository.
 Replace this:
 
 ```nix
@@ -120,7 +121,7 @@ If you want to actually build and decrypt secrets, here is what my secrets repos
 ### WSL2 Installation
 
 1. Make sure you have WSL enabled and installed. [Click here if you need help setting up basic WSL2.](https://learn.microsoft.com/en-us/windows/wsl/install)
-2. Make sure you have git installed in windows. You can download it [here.](https://git-scm.com/downloads) 
+2. Make sure you have git installed in windows. You can download it [here.](https://git-scm.com/downloads)
 3. Open up a PowerShell window
 4. Clone this repo and start the windows side of the installation by executing [start_here.ps1](https://github.com/mwdavisii/nyx/blob/main/setup/wsl/start_here.ps1).
 
@@ -174,7 +175,7 @@ After this, you shou be able to continue to step 6.
 ./step3.sh
 ```
 
-Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script. 
+Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script.
 
 ``` shell
 ./switch.sh #Rebuilds and switches to the home environment.
@@ -186,7 +187,7 @@ Now close the current shell and open a new one. After the initial install, you c
 
 My active darwin configuration is using hammerspoon, karabiner, & amethyst to try to match my tile management and hot keys across hyprland and darwin. You can avoid taking these configurations yourself by just setting all `nyx.modules.desktop.mmodules` to false in `system/darwin/hosts/*hostname*/home.nix` and removing the apps from `system/darwin/casks.nix`.
 
-1. Make sure you have git installed. You can download it [here.](https://git-scm.com/downloads) 
+1. Make sure you have git installed. You can download it [here.](https://git-scm.com/downloads)
 2. Clone this repository.
 
 ```shell
@@ -259,7 +260,7 @@ Here are some things that would have shortned my learning curve:
 
 ### Recommended Reading
 
-- [EdenEast's Nyx Readme](https://github.com/EdenEast/nyx/blob/main/readme.md) The primary inspiration for this project 
+- [EdenEast's Nyx Readme](https://github.com/EdenEast/nyx/blob/main/readme.md) The primary inspiration for this project
 - [Introduction to Nix & NixOS](https://nixos-and-flakes.thiscute.world/introduction/) A great overview
 - [An Introduction to Nix Flakes](https://www.tweag.io/blog/2020-05-25-flakes/)
 - [Flakes aren't real and cannot hurt you: a guide to using Nix flakes the non-flake way](https://jade.fyi/blog/flakes-arent-real/)
@@ -267,7 +268,7 @@ Here are some things that would have shortned my learning curve:
 ### My Nix, Flake, and mkAttr Gotchas
 
 - There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introducing attribute sets, I found it more difficult to apply the published examples to the more complex approach. There was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
-- I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it. 
+- I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it.
   - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) in home manager, and didn't want to use a custom activation script.
 - Rollback a build that successfuly failed by executing `nixos-rebuild switch --rollback` or `darwin-rebuild switch --rollback` or `nix-on-droid rollback`.
   - I was frequently wiping and rebuilding the entire system before I knew this.
