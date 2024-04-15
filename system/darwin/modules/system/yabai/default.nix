@@ -10,6 +10,10 @@ in
     services.yabai = {
       enable = true;
       extraConfig = ''
+        yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+        sudo yabai --load-sa
+        yabai -m config debug_output on
+
       # ====== Variables =============================
 
         declare -A gaps
@@ -25,10 +29,10 @@ in
         color["focused"]="0xE0808080"
         color["normal"]="0x00010101"
         color["preselect"]="0xE02d74da"
-        
-        sudo yabai --load-sa
-        yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
+        # sudo yabai --load-sa
+        # yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+    
         yabai -m config layout                      bsp
 
         yabai -m config top_padding                 "''${gaps["top"]}"
@@ -37,6 +41,8 @@ in
         yabai -m config right_padding               "''${gaps["right"]}"
         yabai -m config window_gap                  "''${gaps["inner"]}"
 
+        yabai -m config window_placement            first_child
+        
         yabai -m config mouse_follows_focus         off
         yabai -m config focus_follows_mouse         off
 
