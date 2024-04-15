@@ -128,18 +128,6 @@ throw-space-4:
   mod: mod2
   key: 4
 
-
-
-# Select tall layout
-select-tall-layout:
-  mod: mod1
-  key: a
-
-# Select wide layout
-select-wide-layout:
-  mod: mod1
-  key: s
-
 # Turn on or off tiling entirely.
 toggle-tiling:
   mod: mod2

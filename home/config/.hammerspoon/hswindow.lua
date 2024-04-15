@@ -1,3 +1,6 @@
+local super = {"ctrl", "alt", "cmd"}
+local superShift = {"ctrl", "alt", "cmd", "lshift"}
+
 function toggle_fullscreen()
     return function()
         local win = hs.window.focusedWindow()
