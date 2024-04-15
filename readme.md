@@ -184,7 +184,7 @@ Now close the current shell and open a new one. After the initial install, you c
 
 #### Tiling Configuration
 
-My active darwin configuration is using hammerspoon, karabiner, & amethyst to try to match my tile management and hot keys across hyprland and darwin. You can avoid taking these configurations yourself by just setting all `nyx.modules.desktop.mmodules` to false in `system/darwin/hosts/*hostname*/home.nix` and removing the apps from `system/darwin/casks.nix`.
+My active darwin configuration is using hammerspoon, karabiner, & amethyst to try to match my tile management and hot keys between hyprland and darwin. You can avoid taking these configurations yourself by just setting all `nyx.modules.desktop.modules` to false in `system/darwin/hosts/*hostname*/home.nix` and removing the apps from `system/darwin/casks.nix`.
 
 1. Make sure you have git installed. You can download it [here.](https://git-scm.com/downloads) 
 2. Clone this repository.
