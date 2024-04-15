@@ -10,8 +10,10 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs;[ 
-        coreutils-full
+        #coreutils-full
         inetutils
+        nmap
+        dig
     ];
   };
 }
