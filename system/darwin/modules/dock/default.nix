@@ -11,7 +11,9 @@ in
       default = stdenv.isDarwin;
       example = false;
     };
-
+    local.dock.autohide = mkOption {
+      default = false;
+    };
     local.dock.entries = mkOption
       {
         description = "Entries on the Dock";
@@ -50,6 +52,7 @@ in
             cfg.entries;
         in
         {
+          system.defaults.dock.autohide = cfg.autohide;          
           system.activationScripts.postUserActivation.text = ''
             echo >&2 "Setting up the Dock..."
             haveURIs="$(${dockutil}/bin/dockutil --list | ${pkgs.coreutils}/bin/cut -f2)"
