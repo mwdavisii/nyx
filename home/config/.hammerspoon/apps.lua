@@ -1,3 +1,7 @@
+local super = {"ctrl", "alt", "cmd"}
+local superShift = {"ctrl", "alt", "cmd", "lshift"}
+
+
 --- start quick open applications 
 function open_app(name)
     return function()

@@ -1,3 +1,6 @@
+local super = {"ctrl", "alt", "cmd"}
+local superShift = {"ctrl", "alt", "cmd", "lshift"}
+
 
 -- Commands
 hs.hotkey.bind(super, "q", nil, function() hs.eventtap.keyStroke({"cmd"}, "q") end)

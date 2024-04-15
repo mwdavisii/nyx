@@ -1,3 +1,6 @@
+local super = {"ctrl", "alt", "cmd"}
+local superShift = {"ctrl", "alt", "cmd", "lshift"}
+
 -- Send message(s) to a running instance of yabai.
 local function yabai(commands)
   return function()
