@@ -30,6 +30,7 @@
       wallpaper.enable = true;
       hammerspoon.enable = true;
       karabiner.enable = true;
+      amethyst.enable = true; #amethyst is installed by brew cask, this copies config files
     };
     app = {
       alacritty.enable = true;
