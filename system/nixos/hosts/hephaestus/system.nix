@@ -16,8 +16,10 @@
       xserver = {
         enable = true;
         videoDrivers = [ "amdgpu" ];
-        layout = "us";
-        xkbVariant = "";
+        xkb = {
+          layout = "us";
+          variant = "";
+        };
         libinput.enable = true;
       };
       printing.enable = true;

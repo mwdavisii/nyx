@@ -121,7 +121,6 @@ in
         inputs.hyprland-plugins.packages.${pkgs.system}.hyprtrails
       ];
       enable = true;
-      package = pkgs.hyprland;
       systemd.enable = true;
       xwayland.enable = true;
 
