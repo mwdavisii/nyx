@@ -11,12 +11,12 @@
   # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
   #nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   # Enable networking
-  # networking.wireless.enable  = lib.mkForce false;
+  # networking.wireless.enable  = lib.mkForce false;1@
   networking.networkmanager.enable = lib.mkForce true;
   networking.useDHCP = lib.mkDefault true;
 
   environment.variables = {
-    #NIXOS_OZONE_WL = "1";
+    NIXOS_OZONE_WL = "1";
     PATH = [
       "\${HOME}/.local/bin"
       "\${HOME}/.config/rofi/scripts"
@@ -28,8 +28,10 @@
   services = {
     xserver = {
       enable = true;
-      layout = "us";
-      xkbVariant = "";
+      xkb = {
+        layout = "us";
+        variant = "";
+      };
       libinput.enable = true;
 
     };

@@ -103,7 +103,7 @@ in
           enableExtraSocket = true;
           enableScDaemon = true;
           enableSshSupport = cfg.enableSSHSupport;
-          pinentryFlavor = "gtk2";
+          #pinentryFlavor = "gtk2";
           verbose = true;
         };
       })

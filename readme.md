@@ -1,9 +1,6 @@
 # Nixos + DotFiles
-## Hyperland + Home-Manager + Flakes for Mac, WSL, and Droid
 
-## Overview
-
-This is my personal configuration that I use for WSL on Windows, MacOS, and my PixelFold. The WSL version primarily installs and configures my preferred shell with development and administration tools while the mac version configures the system and profile. The general approach here is to isolate my user configuration into `home` folder and system configurations in the `system` folder. There are some deviations from this. For instance, all of the secrets are user based, but they are decrypted from the system configuration because we get more control from agenix (owner and group permissions) and I have found this approach does not require any custom activations or a restart of wsl.
+This is my personal configuration that I use for Nixos, WSL on Windows, MacOS, and my PixelFold.
 
 ## Hyprland
 
@@ -12,6 +9,24 @@ This is my personal configuration that I use for WSL on Windows, MacOS, and my P
 ## Multi-platform Shells
 
 ![Screen Shots](assets/shell-shots.jpeg)
+
+## Overview
+
+The general approach here is to isolate my user configuration into `home` folder and system configurations in the `system` folder. There are some deviations from this. For instance, all of the secrets are user based, but they are decrypted from the system configuration because we get more control from agenix (owner and group permissions) and I have found this approach does not require any custom activations or a restart of wsl.
+
+I have used this repo for shell environments over the last couple of years or so but I've gotten carried away with hyprland and desktop tiling over the last few months. I've tried to put everything desktop related in the `nyx.modules.desktop` configuration space under home-manager. Most of the options are specified in in the `/systems/<platform>/hosts/<hostname>/home.nix` file. You can delete the entire desktop section if you don't want any your desktop to be modified.
+The exceptions to this are:
+
+- Nixos
+  - Hyprland => `system/nixos/modules/hyprland`
+  - Hyprlogin => `system/nixos/modules/hyprlogin`
+  - Yubilogin => `system/nixos/modules/yubilogin`
+
+- Darwin
+  - Yarbai => `system/darwin/modules/system/yabai`
+  - Dock => `system/darwin/modules/dock`
+  - Brews => `system/darwin/brews.nix`
+  - Casks => `system/darwin/casks.nix`
 
 ## General Project Structure
 
@@ -24,14 +39,27 @@ This is my personal configuration that I use for WSL on Windows, MacOS, and my P
 ├─ system  # System / Host / Global configurations
 ```
 
-## Influences & Inspirations
+## Influences, Inspirations & Credits
 
-These public repositories heavily influenced my configuration. You'll see bit of stuff from each. In fact, most of the dot files in this project are directly pulled from EdenEast's public nix configuration. What they've done with [neovim/neovim](https://github.com/neovim/neovim) is mind blowing.
+These public repositories heavily influenced my configuration. The project architecture and most of the dot files in this project started directly from EdenEast's public nix configuration. I am sure I missed someone's repo in the list, but I'm trying to give credit where credit is due. 
+
+### Nix
 
 - [EdenEast/nyx](https://github.com/EdenEast/nyx)
 - [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
+- [LGUG2Z/nixos-wsl-starter](https://github.com/LGUG2Z/nixos-wsl-starter)
+
+### Hyprland / Waybar / dotFiles
+
 - [HeinzDev/Hyperland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles)
 - [linuxmobile/hyperland-dots](https://github.com/linuxmobile/hyprland-dots)
+- [xsghetti/HyprCrux](https://github.com/xsghetti/HyprCrux)
+
+### Amethyst / Yabai / Hammerspoon
+
+- [ianyh/Amethyst](https://github.com/ianyh/Amethyst)
+- [julian-heng/yabai-config](https://github.com/julian-heng/yabai-config)
+- [breuerfelix/dotfiles](https://github.com/breuerfelix/dotfiles)
 
 ## Installation & Configuration
 
@@ -56,15 +84,13 @@ Below are descriptions of the hosts configurations. If you have access to window
 ├─────── olenos         # => Work laptop - Thinkpad x13 / i7 / integrated graphics / nixos only
 ├─────── virtualbox     # => Oracle Virtualbox Image (Gnome + Shell)
 ├─────── nixos          # => Generic WSL2
-
-
 ```
 
 ### Secrets Configuration
 
 This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository.
 
-The easiest way to run this is to update 'flake.nix` to use my [nix-secrets-example](https://github.com/mwdavisii/nix-secrets-example) repository. 
+The easiest way to run this is to update 'flake.nix` to use my [nix-secrets-example](https://github.com/mwdavisii/nix-secrets-example) repository.
 Replace this:
 
 ```nix
@@ -115,12 +141,12 @@ If you want to actually build and decrypt secrets, here is what my secrets repos
 ├─── id_ed25519.age files  # Example encrypted file
 ```
 
-* Note that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
+** Note that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
 
 ### WSL2 Installation
 
 1. Make sure you have WSL enabled and installed. [Click here if you need help setting up basic WSL2.](https://learn.microsoft.com/en-us/windows/wsl/install)
-2. Make sure you have git installed in windows. You can download it [here.](https://git-scm.com/downloads) 
+2. Make sure you have git installed in windows. You can download it [here.](https://git-scm.com/downloads)
 3. Open up a PowerShell window
 4. Clone this repo and start the windows side of the installation by executing [start_here.ps1](https://github.com/mwdavisii/nyx/blob/main/setup/wsl/start_here.ps1).
 
@@ -174,7 +200,7 @@ After this, you shou be able to continue to step 6.
 ./step3.sh
 ```
 
-Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script. 
+Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script.
 
 ``` shell
 ./switch.sh #Rebuilds and switches to the home environment.
@@ -182,11 +208,7 @@ Now close the current shell and open a new one. After the initial install, you c
 
 ### MacOS Installation
 
-#### Tiling Configuration
-
-My active darwin configuration is using hammerspoon, karabiner, & amethyst to try to match my tile management and hot keys between hyprland and darwin. You can avoid taking these configurations yourself by just setting all `nyx.modules.desktop.modules` to false in `system/darwin/hosts/*hostname*/home.nix` and removing the apps from `system/darwin/casks.nix`.
-
-1. Make sure you have git installed. You can download it [here.](https://git-scm.com/downloads) 
+1. Make sure you have git installed. You can download it [here.](https://git-scm.com/downloads)
 2. Clone this repository.
 
 ```shell
@@ -259,15 +281,15 @@ Here are some things that would have shortned my learning curve:
 
 ### Recommended Reading
 
-- [EdenEast's Nyx Readme](https://github.com/EdenEast/nyx/blob/main/readme.md) The primary inspiration for this project 
-- [Introduction to Nix & NixOS](https://nixos-and-flakes.thiscute.world/introduction/) A great overview
+- [EdenEast's Nyx Readme](https://github.com/EdenEast/nyx/blob/main/readme.md) 
+- [Introduction to Nix & NixOS](https://nixos-and-flakes.thiscute.world/introduction/)
 - [An Introduction to Nix Flakes](https://www.tweag.io/blog/2020-05-25-flakes/)
 - [Flakes aren't real and cannot hurt you: a guide to using Nix flakes the non-flake way](https://jade.fyi/blog/flakes-arent-real/)
 
 ### My Nix, Flake, and mkAttr Gotchas
 
 - There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introducing attribute sets, I found it more difficult to apply the published examples to the more complex approach. There was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
-- I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it. 
+- I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it.
   - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) in home manager, and didn't want to use a custom activation script.
 - Rollback a build that successfuly failed by executing `nixos-rebuild switch --rollback` or `darwin-rebuild switch --rollback` or `nix-on-droid rollback`.
   - I was frequently wiping and rebuilding the entire system before I knew this.

@@ -71,6 +71,7 @@ rec {
   mkUserHome = { config, userConf, system ? "aarch64-darwin" }:
     { ... }: {
       imports = [
+        (hyprland.homeManagerModules.default)
         (agenix.homeManagerModules.default)
         (import ../home/darwin/modules)
         (import ../home/nixos/modules)

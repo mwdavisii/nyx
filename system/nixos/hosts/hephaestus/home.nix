@@ -22,7 +22,7 @@
         lutris.enable = true;
         mahjong.enable = true;
         minesweeper.enable = true;
-        retroarch.enable = true;
+        #retroarch.enable = true;
         steam.enable = true;
       };
       desktop = {

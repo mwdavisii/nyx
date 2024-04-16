@@ -16,20 +16,19 @@
 # layouts - Ordered list of layouts to use by layout key (default tall, wide, fullscreen, and column).
 layouts:
   - bsp
-  - tall
-  - fullscreen
+  # - tall
+  # - fullscreen
   # - tall-right
   - wide
   - two-pane
-  - middle-wide
   - 3column-left
   - middle-wide # The legacy name of "3column-middle"
-  - 3column-right
-  - 4column-left
-  - 4column-right
+  # - 3column-right
+  # - 4column-left
+  # - 4column-right
   - column
-  # - row
-  # - floating
+  - row
+  - floating
   # - widescreen-tall
   # - widescreen-tall-right
 
@@ -45,19 +44,6 @@ mod2:
   - control
   - command
   - shift
-
-# Commands:
-# special key values
-# space
-# enter
-# up
-# right
-# down
-# left
-
-# special characters require quotes
-# '.'
-# ','
 
 # Move to the next layout in the list.
 cycle-layout:
@@ -95,24 +81,13 @@ swap-main:
   key: enter
 
 # Move focus to the n-th screen in the list; e.g., focus-screen-3 will move mouse focus to the 3rd screen. Note that the main window in the given screen will be focused.
-focus-screen-1:
+#focus-screen-1:
+#  mod: mod1
+#  key: pageup
+
+toggle-float:
   mod: mod1
-  key: 1
-focus-screen-2:
-  mod: mod1
-  key: 2
-focus-screen-3:
-  mod: mod1
-  key: 3
-focus-screen-4:
-  mod: mod1
-  key: 4
-focus-screen-5:
-  mod: mod1
-  key: 5
-focus-screen-6:
-  mod: mod1
-  key: 6
+  key: 
 
 # Move the currently focused window to the n-th screen; e.g., throw-screen-3 will move the window to the 3rd screen.
 throw-space-1:
@@ -127,6 +102,21 @@ throw-space-3:
 throw-space-4:
   mod: mod2
   key: 4
+throw-space-5:
+  mod: mod2
+  key: 5
+throw-space-6:
+  mod: mod2
+  key: 6
+throw-space-7:
+  mod: mod2
+  key: 7
+throw-space-8:
+  mod: mod2
+  key: 8
+throw-space-9:
+  mod: mod2
+  key: 9
 
 # Turn on or off tiling entirely.
 toggle-tiling:
