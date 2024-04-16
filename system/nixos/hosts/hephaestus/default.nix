@@ -14,6 +14,7 @@
         centraltimezone.enable = true;
         yubilogin.enable = true;
         kmonad.enable = true;
+        hyprland.enable = true;
       };
     };
     
