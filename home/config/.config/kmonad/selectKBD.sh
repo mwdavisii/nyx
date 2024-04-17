@@ -23,7 +23,7 @@ if [[ $hostName == "olenos" ]]; then
     fi
 elif [[ $hostName == "hephaestus" ]]; then
     #launch logitech TKL
-    kmonad ~/.config/kmonad/linux/g915-tkl-office.kbd
+    kmonad ~/.config/kmonad/linux/g915-tkl-home.kbd
 elif [[ $hostName == "athena" ]]; then
     echo "Need to setup athena"
     
