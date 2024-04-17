@@ -14,8 +14,8 @@
         openrgb.enable = true;
         centraltimezone.enable = true;
         yubilogin.enable = true;
-        kmonad.enable = true;
         hyprland.enable = true;
+        kmonad.enable = true;
       };
     };
 

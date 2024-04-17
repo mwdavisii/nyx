@@ -1,7 +1,7 @@
 { config, lib, pkgs, agenix, ... }:
 
 with lib;
-let 
+let
   cfg = config.nyx.modules.desktop.kmonad;
 in
 {
