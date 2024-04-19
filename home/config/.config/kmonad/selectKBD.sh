@@ -23,7 +23,7 @@ if [[ $hostName == "olenos" ]]; then
     fi
 elif [[ $hostName == "hephaestus" ]]; then
     #Check USB First
-    if [[ -e /dev/input/by-id/usb-Logitech_G915_TKL_LIGHTSPEED_Wireless_RGB_Mechanical_Gaming_Keyboard_6AF4933C-event-kbd ]]; then
+    if [[ -e /dev/input/by-id/usb-Logitech_G915_TKL_LIGHTSPEED_Wireless_RGB_Mechanical_Gaming_Keyboard_3B30EB6C-event-kbd ]]; then
         kmonad ~/.config/kmonad/linux/g915-tkl-home.kbd
     else
         kmonad ~/.config/kmonad/linux/g915-tkl-home-usb.kbd
