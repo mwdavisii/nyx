@@ -7,8 +7,18 @@ in
     enable = mkEnableOption "AMD Env Vars"; 
   };
   config = mkIf cfg.enable {
+    hardware.opengl = {
+      extraPackages = with pkgs; [
+        rocmPackages.clr.icd
+        amdvlk
+      ]; 
+      extraPackages32 = with pkgs; [
+        driversi686Linux.amdvlk
+      ];
+    };
     environment.systemPackages = with pkgs; [
       radeontop 
+      libllvm
     ];
     environment.variables = {
       NIXOS_OZONE_WL = "1";

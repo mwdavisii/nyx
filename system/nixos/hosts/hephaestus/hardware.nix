@@ -12,7 +12,7 @@
             availableKernelModules = [ "ata_piix" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
             kernelModules = [ "amdgpu" ];
         };
-        kernelModules = [ "amdgpu" ];
+        kernelParams = [ "amdgpu" ];
         #extraModulePackages = [ ];
         loader = {
             efi.canTouchEfiVariables = true;
@@ -26,3 +26,4 @@
     };
     hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
+
