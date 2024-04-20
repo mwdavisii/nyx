@@ -108,13 +108,11 @@
         neofetch.enable = true;
         neovim.enable = true;
         networking.enable = true;
-        nushell.enable = true;
         ranger.enable = false; #prefer lf
         starship.enable = true;
         terraform.enable = true;
         tmux.enable = true;
         usbutils.enable = true;
-        vale.enable = true;
         xdg.enable = true;
         zellij.enable = true;
         zsh.enable = true;
