@@ -12,7 +12,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs;
       [
-        rofi
+        rofi-wayland
       ];
     xdg.configFile."rofi".source = ../../../../config/.config/rofi;
   };
