@@ -160,10 +160,6 @@ return {
           ),
           extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
         },
-        vale = {
-          extra_args = { "--config", path.join(path.home, ".config", "vale", "config.ini") },
-          filetypes = { "asciidoc", "markdown", "text" },
-        },
         write_good = {
           filetypes = { "asciidoc", "markdown", "text" },
         },

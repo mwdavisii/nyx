@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
-  #plugins = inputs.hyprland-plugins.packages.${pkgs.system};
+  plugins = inputs.hyprland-plugins.packages.${pkgs.system};
   wbar_restart = pkgs.writeShellScriptBin "wbar_restart" ''
     killall -q -9 -r waybar
     sleep .1
@@ -28,9 +28,11 @@ let
     if command -v swww >/dev/null 2>&1; then 
       paper=$(find ~/.config/wallpapers/ -name "*" | shuf -n1)
       swww img $paper --transition-type simple
+      cp $paper ~/active_paper
       if command -v wal >/dev/null 2>&1; then 
         wal -i $paper
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
+        cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/colors-kitty.conf
         wbar_restart &
       fi
     fi
@@ -39,8 +41,11 @@ let
     #!/usr/bin/env bash
     if command -v swww >/dev/null 2>&1; then
       swww img ~/.config/wallpapers/wall0.png  --transition-type simple
+      cp $paper ~/active_paper
       if command -v wal >/dev/null 2>&1; then 
         wal -i ~/.config/wallpapers/wall0.png
+        cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
+        cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/colors-kitty.conf
         wbar_restart &
       fi
     fi
@@ -70,8 +75,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      swaylock-effects
-      swayidle
+      wayland-protocols
       waybar
       dunst
       swww
@@ -82,7 +86,6 @@ in
       xdg-desktop-portal
       gnome.gnome-keyring
       acpi
-      wayland-protocols
       mpd
       hyprpicker
       qt6ct
@@ -97,6 +100,8 @@ in
       wallpaper_default
       init_colors
       rofiWindow
+      hyprlock
+      hypridle
     ];
 
     #wal template for hyprland
@@ -106,19 +111,14 @@ in
     #walpapers directory
     xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
-    #swaylock
-    xdg.configFile."swaylock".source = ../../../../config/.config/swaylock;
-    #swayidle
-    xdg.configFile."swayidle".source = ../../../../config/.config/swayidle;
-    #waybar
     xdg.configFile."waybar".source = ../../../../config/.config/waybar;
 
     wayland.windowManager.hyprland = {
       plugins = [
-        inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
-        inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
-        inputs.hyprland-plugins.packages.${pkgs.system}.hyprwinwrap
-        inputs.hyprland-plugins.packages.${pkgs.system}.hyprtrails
+        plugins.hyprexpo
+        plugins.hyprbars
+        plugins.hyprwinwrap
+        plugins.hyprtrails
       ];
       enable = true;
       systemd.enable = true;

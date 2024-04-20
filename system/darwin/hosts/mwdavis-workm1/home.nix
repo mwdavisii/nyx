@@ -84,11 +84,9 @@
       neofetch.enable = true;
       neovim.enable = true;
       networking.enable = true;
-      nushell.enable = true;
       starship.enable = true;
       terraform.enable = true;
       tmux.enable = true;
-      vale.enable = true;
       wal.enable = true;
       xdg.enable = true;
       zellij.enable = true;

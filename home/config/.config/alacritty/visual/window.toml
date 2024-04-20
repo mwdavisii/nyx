@@ -1,0 +1,21 @@
+[window]
+dynamic_padding = false
+decorations = "full"
+startup_mode = "Windowed"
+opacity = 1
+
+  [window.dimensions]
+  columns = 0
+  lines = 0
+
+  [window.position]
+  x = 0
+  y = 0
+
+  [window.padding]
+  x = 4
+  y = 4
+
+  [window.class]
+  instance = "alacritty"
+  general = "alacritty"
