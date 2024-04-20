@@ -33,19 +33,6 @@ in
     };
 
     security = {
-      sudo = {
-        extraRules = [
-          {
-            commands = [
-              {
-                command = "ALL";
-                options = [ "NOPASSWD" ];
-              }
-            ];
-            groups = [ "wheel" ];
-          }
-        ];
-      };
       polkit.enable = true;
       rtkit.enable = true;
     };
