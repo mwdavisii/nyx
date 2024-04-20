@@ -1,0 +1,5 @@
+[cursor]
+style = "Block"
+vi_mode_style = "Beam"
+unfocused_hollow = true
+thickness = 0.15

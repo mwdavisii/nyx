@@ -1,0 +1,34 @@
+
+(defcfg
+  ;; ** For Linux **
+  input  (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
+  output (uinput-sink "KMonad output")
+
+  fallthrough true
+  allow-cmd true
+)
+
+(defsrc
+
+    esc     f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12  del
+    grv     1    2    3    4    5    6    7    8    9    0    -     =    bspc
+    tab     q    w    e    r    t    y    u    i    o    p    [     ]    \
+    caps    a    s    d    f    g    h    j    k    l    ;    '     ret
+    lshift  lsft z    x    c    v    b    n    m    ,    .    /     rsft
+    lctl    cmp  lmet lalt           spc            ralt rctl left  up   right
+                                                                    down
+)
+
+(
+  defalias hyp (around lctl (around lmet lalt))
+)
+
+(deflayer qwerty
+    esc     f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  del
+    grv     1    2    3    4    5    6    7    8    9    0    -    =    bspc
+    tab     q    w    e    r    t    y    u    i    o    p    [    ]    \
+    @hyp    a    s    d    f    g    h    j    k    l    ;    '    ret
+    lshift  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+    lctl    cmp  lmet lalt           spc            ralt rctl left up   right
+                                                                down
+)

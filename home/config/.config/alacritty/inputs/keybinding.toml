@@ -1,0 +1,46 @@
+[[key_bindings]]
+key = "Space"
+mods = "Control"
+chars = "\u0000"
+
+[[key_bindings]]
+key = "I"
+mods = "Control"
+chars = "\u001b[105;5u"
+
+[[key_bindings]]
+key = "Paste"
+action = "Paste"
+
+[[key_bindings]]
+key = "Copy"
+action = "Copy"
+
+[[key_bindings]]
+key = "PageUp"
+mods = "Shift"
+mode = "~Alt"
+action = "ScrollPageUp"
+
+[[key_bindings]]
+key = "PageDown"
+mods = "Shift"
+mode = "~Alt"
+action = "ScrollPageDown"
+
+[[key_bindings]]
+key = "Home"
+mods = "Shift"
+mode = "~Alt"
+action = "ScrollToTop"
+
+[[key_bindings]]
+key = "End"
+mods = "Shift"
+mode = "~Alt"
+action = "ScrollToBottom"
+
+[[key_bindings]]
+key = "Return"
+mods = "Alt"
+action = "ToggleFullscreen"
