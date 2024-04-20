@@ -72,8 +72,6 @@ in
       in
       [ package xclip ] ++ cfg.lspServers ++ cfg.debugAdaptors ++ cfg.formatters ++ cfg.extraPkgs;
 
-    nyx.modules.shell.vale.enable = true;
-
     # Add Treesitter parsers
     xdg.dataFile = with pkgs.tree-sitter-grammars; let
       grammars = with pkgs.tree-sitter-grammars; [

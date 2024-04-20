@@ -74,11 +74,6 @@ return {
             return item
           end,
         },
-        experimental = {
-          ghost_text = {
-            hl_group = "LspCodeLens",
-          },
-        },
         sorting = {
           comparators = {
             cmp.config.compare.offset,

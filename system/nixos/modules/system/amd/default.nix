@@ -19,6 +19,7 @@ in
     environment.systemPackages = with pkgs; [
       radeontop 
       libllvm
+      blender-hip
     ];
     environment.variables = {
       NIXOS_OZONE_WL = "1";
