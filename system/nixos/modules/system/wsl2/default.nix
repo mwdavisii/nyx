@@ -3,10 +3,10 @@ with userConf;
 with lib;
 let
   nixConf = import ../../../nix/conf.nix;
-  cfg = config.nyx.modules.wsl2;
+  cfg = config.nyx.modules.system.wsl2;
 in
 {
-  options.nyx.modules.wsl2 = { 
+  options.nyx.modules.system.wsl2 = { 
     enable = mkEnableOption "WSL2 System Config"; 
   };
 
@@ -24,7 +24,6 @@ in
     services.vscode-server.enable = true;
     system.stateVersion = "24.05";
     programs.zsh.enable = true;
-    security.sudo.wheelNeedsPassword = false;
     time.timeZone = "America/Chicago";
     networking.hostName = "${hostname}";
     systemd.tmpfiles.rules = [
@@ -53,25 +52,11 @@ in
         automatic = true;
         options = "--delete-older-than 7d";
       };
-
       registry = {
         nixpkgs = {
           flake = inputs.nixpkgs;
         };
       };
     };
-     # Don't require password for users in `wheel` group for these commands
-    security.sudo = {
-      enable = true;
-      extraRules = [{
-        commands = [
-        {
-          command = "*ALL";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    groups = [ "wheel" ];
-   }];
   };
-};
 }

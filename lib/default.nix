@@ -147,7 +147,7 @@ rec {
           )
           (
             { ... }: {
-              system.stateVersion = "23.11";
+              system.stateVersion = "24.05";
             }
           )
           (inputs.nixos-wsl.nixosModules.wsl)
@@ -270,7 +270,7 @@ rec {
         nixosSystem
           {
             inherit system;
-            modules = commonModules ++ wslModules;
+            modules = commonModules ++ nixosModules;
             specialArgs =
               let
                 self = inputs.self;
