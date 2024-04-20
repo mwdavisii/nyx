@@ -54,6 +54,7 @@ These public repositories heavily influenced my configuration. The project archi
 - [HeinzDev/Hyperland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles)
 - [linuxmobile/hyperland-dots](https://github.com/linuxmobile/hyprland-dots)
 - [xsghetti/HyprCrux](https://github.com/xsghetti/HyprCrux)
+- [justinmdickey/publicdots](https://github.com/justinmdickey/publicdots/tree/main)
 
 ### Amethyst / Yabai / Hammerspoon
 

@@ -73,9 +73,6 @@
       url = "github:neovim/neovim?dir=contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    ghostty-module.url = "github:clo4/ghostty-hm-module";
-
   };
 
   outputs = { self, ... }@inputs:
