@@ -87,7 +87,7 @@ swap-main:
 
 toggle-float:
   mod: mod1
-  key: 
+  key: pageup
 
 # Move the currently focused window to the n-th screen; e.g., throw-screen-3 will move the window to the 3rd screen.
 throw-space-1:
