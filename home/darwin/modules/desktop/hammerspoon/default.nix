@@ -14,11 +14,13 @@ in
     home.packages = with pkgs; [
      hammerspoon
     ];
-    #programs.hammerspoon = {
-    #    enable = true;
-    #    package = hammerspoon;
-    #};
-    # place the default hammerspoon file - this points to the folder under ~/.config/hammerspoon
-    home.file.".hammerspoon".source = ../../../../config/.hammerspoon;
+
+    # I'm using individual files here to allow the .hammerspoon dir to be rw by default
+    home.file.".hammerspoon/apps.lua".source = ../../../../config/.hammerspoon/apps.lua;
+    home.file.".hammerspoon/commands.lua".source = ../../../../config/.hammerspoon/commands.lua;
+    home.file.".hammerspoon/hswindow.lua".source = ../../../../config/.hammerspoon/hswindow.lua;
+    home.file.".hammerspoon/init.lua".source = ../../../../config/.hammerspoon/init.lua;
+    home.file.".hammerspoon/yabai.lua".source = ../../../../config/.hammerspoon/yabai.lua;
+    home.file.".hammerspoon/Spoons/SpoonInstall.spoon".source = ../../../../config/.hammerspoon/Spoons/SpoonInstall.spoon;
   };
 }
