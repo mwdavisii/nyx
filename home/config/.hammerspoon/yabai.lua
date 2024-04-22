@@ -11,13 +11,6 @@ local function yabai(commands)
 end
 
 
-function executeShellCommand(command)
-  return function()
-      hs.execute(command, true)
-  end
-end
-
-
 
 hs.hotkey.bind(super, "pageup", yabai(" -m window --toggle float;  -m window --toggle border"))
 hs.hotkey.bind(super, "pagedown", yabai(" -m window --toggle split"))
