@@ -46,48 +46,48 @@ mod2:
   - shift
 
 # Move to the next layout in the list.
-cycle-layout:
-  mod: mod1
-  key: up
+#cycle-layout:
+#  mod: mod1
+#  key: up
 
 # Move to the previous layout in the list.
-cycle-layout-backward:
-  mod: mod1
-  key: down
+#cycle-layout-backward:
+#  mod: mod1
+#  key: down
 
 # Shrink the main pane by a percentage of the screen dimension as defined by window-resize-step. Note that not all layouts respond to this command.
-shrink-main:
-  mod: mod1
-  key: "-"
+#shrink-main:
+#  mod: mod1
+#  key: "-"
 
 # Expand the main pane by a percentage of the screen dimension as defined by window-resize-step. Note that not all layouts respond to this command.
-expand-main:
-  mod: mod1
-  key: "="
+#expand-main:
+#  mod: mod1
+#  key: "="
 
 # Focus the next window in the list going counter-clockwise.
-focus-ccw:
-  mod: mod1
-  key: left
+#focus-ccw:
+#  mod: mod1
+#  key: left
 
 # Focus the next window in the list going clockwise.
-focus-cw:
-  mod: mod1
-  key: right
+#focus-cw:
+#  mod: mod1
+#  key: right
 
 # Swap the position of the currently focused window with the main window in the list.
-swap-main:
-  mod: mod2
-  key: enter
+#swap-main:
+#  mod: mod2
+#  key: enter
 
 # Move focus to the n-th screen in the list; e.g., focus-screen-3 will move mouse focus to the 3rd screen. Note that the main window in the given screen will be focused.
 #focus-screen-1:
 #  mod: mod1
 #  key: pageup
 
-toggle-float:
-  mod: mod1
-  key: pageup
+#toggle-float:
+#  mod: mod1
+#  key: pageup
 
 # Move the currently focused window to the n-th screen; e.g., throw-screen-3 will move the window to the 3rd screen.
 throw-space-1:
@@ -124,52 +124,52 @@ toggle-tiling:
   key: t
 
 # Rerun the current layout's algorithm.
-reevaluate-windows:
-  mod: mod1
-  key: z
+#reevaluate-windows:
+#  mod: mod1
+#  key: z
 
 # disable screen padding on builtin display
-disable-padding-on-builtin-display: false
+#disable-padding-on-builtin-display: false
 
 # Boolean flag for whether or not to add margins between windows (default false).
-window-margins: true
-smart-window-margins: true
-window-margin-size: 5
+#window-margins: true
+#smart-window-margins: true
+#window-margin-size: 5
 
 # List of bundle identifiers for applications to either be automatically floating or 
 # automatically tiled based on floating-is-blacklist (default []).
-floating: [
-  "com.apple.finder",
-  "org.alacritty",
-  "com.apple.systempreferences"
-]
+#floating: [
+#  "com.apple.finder",
+#  "org.alacritty",
+#  "com.apple.systempreferences"
+#]
 
 # Boolean flag determining behavior of the floating list. true if the applications should be floating and all others tiled. false if the applications should be tiled and all others floating (default true).
-floating-is-blacklist: true
+#floating-is-blacklist: true
 
 # true if windows smaller than a 500px square should be floating by default (default true)
-float-small-windows: true
+#float-small-windows: true
 
 # true if dragging and dropping windows on to each other should swap their positions (default false).
-mouse-swaps-windows: true
+#mouse-swaps-windows: true
 
 # true if changing the frame of a window with the mouse should update the layout to accommodate the change (default false). Note that not all layouts will be able to respond to the change.
-mouse-resizes-windows: true
+#mouse-resizes-windows: true
 
 # true to insert new windows into the first position and false to insert new windows into the last position (default false).
-new-windows-to-main: false
+#new-windows-to-main: false
 
 # true to automatically move to a space when throwing a window to it (default true).
-follow-space-thrown-windows: true
+#follow-space-thrown-windows: true
 
 # Padding to apply between windows and the left edge of the screen (in px, default 0).
-screen-padding-left: 5
+#screen-padding-left: 5
 
 # Padding to apply between windows and the right edge of the screen (in px, default 0).
-screen-padding-right: 5
+#screen-padding-right: 5
 
 # Padding to apply between windows and the top edge of the screen (in px, default 0).
-screen-padding-top: 5
+#screen-padding-top: 5
 
 # Padding to apply between windows and the bottom edge of the screen (in px, default 0).
-screen-padding-bottom: 5
+#screen-padding-bottom: 5
