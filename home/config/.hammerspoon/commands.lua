@@ -16,6 +16,7 @@ hs.hotkey.bind({"ctrl"}, "s", nil, function() hs.eventtap.keyStroke({"cmd"}, "s"
 hs.hotkey.bind({"ctrl"}, "return", nil, function() hs.eventtap.keyStroke({"cmd"}, "return") end)
 hs.hotkey.bind(nil, "f13", nil, function() hs.eventtap.keyStroke({"ctrl, cmd, shift"}, "4") end)
 
+
 -- these are named only so0 that we can enable and disable in terminal apps
 local windowsCopy = hs.hotkey.bind({"ctrl"}, "c", nil, function() hs.eventtap.keyStroke({"cmd"}, "c") end)
 local shiftCopy = hs.hotkey.bind({"ctrl", "lshift"}, "c", nil, function() hs.eventtap.keyStroke({"cmd"}, "c") end)
@@ -24,16 +25,16 @@ shiftCopy:disable()
 shiftPaste:disable()
 
 function applicationWatcher(appName, eventType, appObject)
-    if (appName == "Alacritty" or appName == "Kitty" or appName == "iTerm" or appName == "WezTerm") then
+    if (appName == "Alacritty" or appName == "kitty" or appName == "iTerm" or appName == "WezTerm") then
         windowsCopy:disable()
         shiftCopy:enable()
         shiftPaste:enable()
     end
     if (eventType == hs.application.watcher.deactivated) then
-        if (appName == "Alacritty" or appName == "Kitty" or appName == "iTerm" or appName == "WezTerm") then
-            windowsCopy:enable()
+        if (appName == "Alacritty" or appName == "kitty" or appName == "iTerm" or appName == "WezTerm") then
             shiftCopy:disable()
             shiftPaste:disable()
+            windowsCopy:enable()
         end
     end
 end
