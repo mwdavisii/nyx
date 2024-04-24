@@ -9,7 +9,7 @@ spoon.ReloadConfiguration:start()
 
 require("commands")
 require("apps")
-require("hswindow")
+require("windows")
 
 return {
     init = module_init
