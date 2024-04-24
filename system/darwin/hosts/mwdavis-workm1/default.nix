@@ -5,7 +5,7 @@
   nyx = {
     modules = {
       user.home = ./home.nix;
-      system.yabai.enable = false;
+      system.yabai.enable = true;
     };
 
     secrets = {
