@@ -11,7 +11,7 @@ if [[ $hostName == "olenos" ]]; then
     # try work G915 TKL
     if [[ -e /dev/input/by-id/usb-Logitech_G915_TKL_LIGHTSPEED_Wireless_RGB_Mechanical_Gaming_Keyboard_6AF4933C-event-kbd ]]; then
         echo "Logitech_G915_TKL_LIGHTSPEED_Wireless_RGB_Mechanical_Gaming_Keyboard_6AF4933C found"
-        kmonad ~/.config/kmonad/linux/g915-tkl-work.kbd
+        kmonad ~/.config/kmonad/linux/g915-tkl-office.kbd
     elif [[ -e  /dev/input/by-id/usb-Logitech_G915_TKL_LIGHTSPEED_Wireless_RGB_Mechanical_Gaming_Keyboard_3B30EB6C-event-kbd ]]; then
         # nope, now try home G915 TKL
         echo "Logitech_G915_TKL_LIGHTSPEED_Wireless_RGB_Mechanical_Gaming_Keyboard_3B30EB6C found"
