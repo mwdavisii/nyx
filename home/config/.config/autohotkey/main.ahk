@@ -49,7 +49,7 @@ PrintScreen::Send {LWin down}{SHIFT}S
 
 ; Enable Tiling
 #!^k::Run, pwsh -WindowStyle hidden -Command "Enable-Tiling"
-#!^+t::Run, pwsh -WindowStyle hidden -Command "Disable-Tiling"
++#!^k::Run, pwsh -WindowStyle hidden -Command "Disable-Tiling"
 
 ;#######################################################################################
 ;#######################################################################################
