@@ -44,9 +44,9 @@ if ($oldValue.Path -notcontains $newPath) {
 
 # Shell
 winget install starship
-
 # komorebi & wkhd
 winget install LGUG2Z.komorebi
+winget install scoop
 
 # Install PS Modules
 Install-Module VirtualDesktop
