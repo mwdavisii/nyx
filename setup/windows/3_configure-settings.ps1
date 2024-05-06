@@ -1,5 +1,26 @@
 #Requires -Version 7.2
 
+
+#Lets set up 9 virtual desktops
+$vDesktopLimit = 8
+
+$initial = Get-DesktopCount
+if ($initial -le $vDesktopLimit){
+    Do {
+        New-Desktop
+        $initial++
+    }
+    While ($initial -le $vDesktopLimit)
+}
+
+if ($initial -ge $vDesktopLimit){
+    Do {
+        Remove-Desktop -Desktop ($initial -1)
+        $initial--
+    }
+    While ($initial -ge $vDesktopLimit)
+}
+
 # just grab it all
 Copy-Item -Recurse -Force ../../home/config/.config ~/
 
