@@ -42,12 +42,14 @@
 #!^l::Run, rundll32.exe user32.dll,LockWorkStation
 
 ; Quit w/ Super Q
-#!^q::
-Send !{F4}
-return
+#!^q::Send !{F4}
 
 ; Launch Screen Capture to ClipBoard
 PrintScreen::Send {LWin down}{SHIFT}S
+
+; Enable Tiling
+#!^k::Run, pwsh -WindowStyle hidden -Command "Enable-Tiling"
+#!^+t::Run, pwsh -WindowStyle hidden -Command "Disable-Tiling"
 
 ;#######################################################################################
 ;#######################################################################################
@@ -59,24 +61,24 @@ PrintScreen::Send {LWin down}{SHIFT}S
 ^Left::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop ((Get-DesktopIndex) -1)"
 
 ; Virtual Desktop Mapping
-#!^1::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 0
-#!^2::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 1
-#!^3::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 2
-#!^4::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 3
-#!^5::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 4
-#!^6::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 5
-#!^7::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 6
-#!^8::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 7
-#!^9::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 8
+#!^1::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 0"
+#!^2::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 1"
+#!^3::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 2"
+#!^4::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 3"
+#!^5::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 4"
+#!^6::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 5"
+#!^7::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 6"
+#!^8::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 7"
+#!^9::Run, pwsh -WindowStyle hidden -Command "Switch-Desktop -Desktop 8"
 
 ; Move Windows to virtual desktop
-#!^+1::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 0
-#!^+2::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 1
-#!^+3::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 2
-#!^+4::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 3
-#!^+5::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 4
-#!^+6::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 5
-#!^+7::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 6
-#!^+8::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 7
-#!^+9::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 8
+#!^+1::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 0"
+#!^+2::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 1"
+#!^+3::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 2"
+#!^+4::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 3"
+#!^+5::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 4"
+#!^+6::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 5"
+#!^+7::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 6"
+#!^+8::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 7"
+#!^+9::Run, pwsh -WindowStyle hidden -Command "Move-ActiveWindow -Desktop 8"
 
