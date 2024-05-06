@@ -9,4 +9,4 @@ Set-Location $HOME\Downloads\kmonad
 stack build
 # install kmonad.exe (copies kmonad.exe to %APPDATA%\local\bin\)
 stack install
-Copy-Item ..\..\home\config\.config\PowerShell\Scripts\kmonad.ps1 "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
+Copy-Item ..\..\home\config\.config\kmonad\windows\kmonad.cmd "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
