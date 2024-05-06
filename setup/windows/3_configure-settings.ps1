@@ -36,10 +36,10 @@ Copy-Item ..\..\home\config\.config\autohotkey\main.ahk "$env:APPDATA\Microsoft\
 
 #install winwal
 go install github.com/thefryscorer/schemer2@latest
-Remove-Item -Recurse -Force $env:USERPROFILE\.config\winwal
-Remove-Item -Recurse -Force $env:USERPROFILE\.config\pywal
-git clone https://github.com/mwdavisii/winwal $env:USERPROFILE\.config\winwal
-git clone https://github.com/mwdavisii/pywal $env:USERPROFILE\.config\pywal
+Remove-Item -Recurse -Force $env:USERPROFILE\.source\winwal
+Remove-Item -Recurse -Force $env:USERPROFILE\.source\pywal
+git clone https://github.com/mwdavisii/winwal $env:USERPROFILE\.source\winwal
+git clone https://github.com/mwdavisii/pywal $env:USERPROFILE\.source\pywal
 pip3 install --user $env:USERPROFILE\.config\pywal
 
-Import-Module $env:USERPROFILE\.config\winwal\winwal.psm1
+Import-Module $env:USERPROFILE\.source\winwal\winwal.psm1
