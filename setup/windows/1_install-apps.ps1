@@ -23,10 +23,15 @@ Install-ChocoPackage go
 
 
 #python
-Remove-Item $env:LOCALAPPDATA\Microsoft\WindowsApps\python.exe
-Remove-Item $env:LOCALAPPDATA\Microsoft\WindowsApps\python3.exe
-
-winget install -e -i --id=Python.Python.3.12 --source=winget --scope=machine
+if (Test-Path $env:LOCALAPPDATA\Microsoft\WindowsApps\python.exe) {
+  Remove-Item $env:LOCALAPPDATA\Microsoft\WindowsApps\python.exe
+}
+if (Test-Path $env:LOCALAPPDATA\Microsoft\WindowsApps\python3.exe) {
+  Remove-Item $env:LOCALAPPDATA\Microsoft\WindowsApps\python3.exe
+}
+if (-not (Get-Command python.exe)) {
+  winget install -e -i --id=Python.Python.3.12 --source=winget --scope=machine
+}
 
 $keyPath = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"  # System path registry key
 $oldValue = Get-ItemProperty -Path $keyPath -Name "Path"
@@ -48,4 +53,3 @@ Install-Module VirtualDesktop
 
 # K8s Tooling
 Install-ChocoPackage kubernetes-cli
-Install-ChocoPackage flux-cd
