@@ -1,5 +1,5 @@
 Invoke-Expression (&starship init powershell)
-Import-Module $env:USERPROFILE\.config\winwal\winwal.psm1
+Import-Module $env:USERPROFILE\.source\winwal\winwal.psm1
 
 
 function Set-RandomWallpaper {
