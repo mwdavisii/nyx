@@ -1,5 +1,5 @@
 Set-ExecutionPolicy RemoteSigned -scope CurrentUser
-Invoke-WebRequest -useb get.scoop.sh | iex
+Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression
 scoop install stack
 
 # clone the KMonad repository (assuming you have `git` installed)
