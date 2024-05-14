@@ -1,0 +1,1 @@
+pwsh -Command "Start-Process -WindowStyle hidden kmonad $env:USERPROFILE\.config\kmonad\windows\g915-tkl.kbd"
