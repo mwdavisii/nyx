@@ -55,7 +55,7 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
-    
+
     # WSL
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nixos-wsl = {
@@ -124,7 +124,7 @@
           # (_:_: { inherit (eww.packages."${system}") eww; })
         ] ++ ovs
       );
-      
+
       nixOnDroidConfigurations = mapAttrs' mkNixOnDroidConfiguration {
         nix-on-droid = { user = "droid"; };
         default = { user = "droid"; };
@@ -139,8 +139,9 @@
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
-        athena = { hostname = "athena"; user = "mwdavisii"; buildTarget = "nixos";};
-        ares = { user = "nixos"; hostname = "ares"; buildTarget = "nixos"; }; #WSLi
+        athena = { hostname = "athena"; user = "mwdavisii"; buildTarget = "nixos"; };
+        ares = { user = "nixos"; hostname = "ares"; buildTarget = "nixos"; }; #WSL
+        asahi = { user = "mwdavisii"; system = "aarch64-darwin"; hostname = "asahi"; buildTarget = "nixos"; }; #WSL
         hephaestus = { hostname = "hephaestus"; user = "mwdavisii"; buildTarget = "nixos"; }; #home machine
         livecd = { hostname = "worklt"; user = "mwdavisii"; buildTarget = "iso"; }; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
