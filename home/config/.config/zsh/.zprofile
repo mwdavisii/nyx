@@ -22,3 +22,4 @@ fi
 [[ -f $HOME/.local/share/zsh/nyx_zprofile ]] && . $HOME/.local/share/zsh/nyx_zprofile
 [[ -f $HOME/.local/share/zsh/zprofile ]] && . $HOME/.local/share/zsh/zprofile
 
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'
