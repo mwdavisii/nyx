@@ -4,34 +4,32 @@ _:
   #desktop toools
   "whichspace"
   "dozer"
-  "amethyst"
+  #"amethyst"
 
   # Development Tools
   #"homebrew/cask/docker"
   "insomnia"
   "ngrok"
-  "mysqlworkbench"
-  "postman"
+  #"mysqlworkbench"
   "powershell"
   
   # Communication Tools
-  "telegram"
-  "zoom"
+  #"telegram"
 
   # Entertainment Tools
-  "steam"
-  "vlc"
+  #"steam"
+  #"vlc"
 
   # Productivity Tools
   "raycast"
   "finicky"
 
   # Design Tools
-  "inkscape"
+  #"inkscape"
 
   # Browsers
-  "google-chrome"
+  #"google-chrome"
 
   # AIhic
-  "diffusionbee"
+  #"diffusionbee"
 ]
