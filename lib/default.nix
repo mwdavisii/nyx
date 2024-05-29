@@ -18,13 +18,12 @@ in
 rec {
   firstOrDefault = first: default: if !isNull first then first else default;
   existsOrDefault = x: set: default: if hasAttr x set then getAttr x set else default;
-  mkHome = name: { config ? name, user ? "mwdavisii", system ? "aarch64-darwin" }:
+  mkHome = name: { config ? name, user, system ? "aarch64-darwin" }:
     let
       pkgs = inputs.self.legacyPackages."${system}";
       #pkgs = inputs.self.legacyPackages.aarch64-darwin;
       userConf = import (strToFile user ../users);
       userOptions = strToPath config ../home/hosts;
-      #homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
     in
     nameValuePair name (
       inputs.home-manager.lib.homeManagerConfiguration {
@@ -188,11 +187,11 @@ rec {
                       echo "setting up ~/Applications/Nix..."
                       rm -rf ~/Applications/Nix
                       mkdir -p ~/Applications/Nix
-                      chown ${userConf.userName} ~/Applications/Nix
+                      chown mdavis67 ~/Applications/Nix
                       find ${config.system.build.applications}/Applications -maxdepth 1 -type l | while read f; do
                       src="$(/usr/bin/stat -f%Y $f)"
                       appname="$(basename $src)"
-                      osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Users/${userConf.userName}/Applications/Nix/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
+                      osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Users/mdavis67/Applications/Nix/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
                   done
                 ''
               );
