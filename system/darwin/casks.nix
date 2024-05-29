@@ -4,15 +4,16 @@ _:
   #desktop toools
   "whichspace"
   "dozer"
-  #"amethyst"
+  "amethyst"
+  "hammerspoon"
+  "sublime-text"
 
   # Development Tools
-  #"homebrew/cask/docker"
-  "insomnia"
+  "homebrew/cask/docker"
   "ngrok"
-  #"mysqlworkbench"
   "powershell"
-  
+
+
   # Communication Tools
   #"telegram"
 
@@ -28,8 +29,9 @@ _:
   #"inkscape"
 
   # Browsers
-  #"google-chrome"
+  "google-chrome"
+  "firefox"
 
   # AIhic
-  #"diffusionbee"
+  "diffusionbee"
 ]

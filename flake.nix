@@ -129,13 +129,14 @@
         nix-on-droid = { user = "droid"; };
         default = { user = "droid"; };
       };
-
+/*
       homeManagerConfigurations = mapAttrs' mkHome {
-        mwdavisii = { };
+        mdavis67 = { };
       };
-
+*/
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
+	      L211011 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
@@ -148,7 +149,7 @@
         nixos = { user = "nixos"; hostname = "nixos"; buildTarget = "nixos"; }; #WSL
         olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Work Laptop (Host OS)
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
-
+        L211011 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
       };
 
       top =

@@ -11,8 +11,19 @@ in
       default = stdenv.isDarwin;
       example = false;
     };
+    local.dock.spring-load-actions-on-all-items = mkOption {
+      default = true;
+    };
+    local.dock.show-recents = mkOption {
+      type = types.nullOr types.bool;
+      default = false;
+    };
     local.dock.autohide = mkOption {
       default = false;
+    };
+    local.dock.tilesize = mkOption {
+      type = types.nullOr types.int;
+      default = 32;
     };
     local.dock.entries = mkOption
       {
