@@ -46,9 +46,19 @@ module.exports = {
           "*safelinks.protection.outlook.com*atlassian.com*", //jira links in email
           "samlsp.private.zscaler.com*",
           "identity.getpostman.com*",
-          "*atlassian.net*"
         ],
         browser: "Google Chrome"
+      },
+      {
+        //sjch links
+        match: [
+          finicky.matchDomains(/.*sjch.atlassian.net/),
+          finicky.matchDomains(/.*stjude.org/),
+          finicky.matchDomains(/.*\login.microsoft.com/),
+          finicky.matchDomains(/.*\sjcrh-my*/)
+        ],
+        browser: "Google Chrome"
+
       },
       {
         // Open links in Safari when the option key is pressed
