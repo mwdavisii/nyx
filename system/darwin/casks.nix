@@ -5,32 +5,32 @@ _:
   "whichspace"
   "dozer"
   "amethyst"
+  "hammerspoon"
+  "sublime-text"
 
   # Development Tools
-  #"homebrew/cask/docker"
-  "insomnia"
+  "homebrew/cask/docker"
   "ngrok"
-  "mysqlworkbench"
-  "postman"
   "powershell"
-  
+
+
   # Communication Tools
-  "telegram"
-  "zoom"
+  #"telegram"
 
   # Entertainment Tools
-  "steam"
-  "vlc"
+  #"steam"
+  #"vlc"
 
   # Productivity Tools
   "raycast"
   "finicky"
 
   # Design Tools
-  "inkscape"
+  #"inkscape"
 
   # Browsers
   "google-chrome"
+  "firefox"
 
   # AIhic
   "diffusionbee"
