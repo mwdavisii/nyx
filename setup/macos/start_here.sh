@@ -11,6 +11,9 @@ echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
 echo "build-users-group = nixbld" >> ~/.config/nix/nix.conf
 rm ~/.bashrc ~/.zshhrc
 
+# install homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
 # install nixos
 sh <(curl -L https://nixos.org/nix/install)
 
