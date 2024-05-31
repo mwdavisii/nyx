@@ -69,10 +69,6 @@
       inputs.home-manager.follows = "home-manager";
     };
     # Other
-    neovim-flake = {
-      url = "github:neovim/neovim?dir=contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = { self, ... }@inputs:
