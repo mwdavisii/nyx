@@ -34,7 +34,7 @@ end
 hs.hotkey.bind(super, "C",        open_app("Visual Studio Code"))
 hs.hotkey.bind(super, "B",        open_app("Google Chrome"))
 hs.hotkey.bind(super, "O",        open_app("Microsoft Outlook"))
-hs.hotkey.bind(super, "T",        open_app("Microsoft Teams (work or school)"))
+hs.hotkey.bind(super, "T",        open_app("Microsoft Teams"))
 hs.hotkey.bind(super, "return",   open_app("Alacritty"))
 hs.hotkey.bind(super, "K",        open_app("Kitty"))
 hs.hotkey.bind(super, "F",        open_app("Finder"))
