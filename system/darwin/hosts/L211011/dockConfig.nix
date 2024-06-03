@@ -9,6 +9,7 @@ config = {
             enable = true;
             autohide = true;
             entries = [
+            { path = "/Applications/Obsidian.app/"; } 
             { path = "${pkgs.discord}/Applications/Discord.app/"; } 
             { path = "/Applications/Microsoft Outlook.app/"; }
             { path = "/Applications/Microsoft Teams.app/"; }
