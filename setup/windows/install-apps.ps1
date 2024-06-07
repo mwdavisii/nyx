@@ -11,5 +11,5 @@ Install-ChocoPackage vscode
 Install-ChocoPackage discord
 Install-ChocoPackage docker-desktop
 Install-ChocoPackage winrar
-
-
+Install-ChocoPackage goggalaxy
+Install-ChocoPackage obsidian
