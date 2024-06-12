@@ -52,7 +52,7 @@ module.exports = {
       {
         //sjch links
         match: [
-          "sjcrh.sharepoint.com",
+          finicky.matchDomains(/.*sjcrh.sharepoint.com/),
           finicky.matchDomains(/.*sjch.atlassian.net/),
           finicky.matchDomains(/.*stjude.org/),
           finicky.matchDomains(/login.microsoft.com/),
