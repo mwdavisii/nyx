@@ -24,7 +24,7 @@ _:
   # Productivity Tools
   "raycast"
   "finicky"
-
+  "obsidian"
   # Design Tools
   #"inkscape"
 
