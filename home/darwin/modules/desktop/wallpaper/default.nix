@@ -9,7 +9,12 @@ let
       osascript -e "tell application \"System Events\" to tell every desktop to set picture to \""''${file}\"" as POSIX file"
       wal -i "''${rand_file}" 2> /dev/null
       '';
-    
+    wallpaper_sj = pkgs.writeShellScriptBin "wallpaper_sj" ''
+      #!/usr/bin/env bash
+      file=~/.config/wallpapers/230599177-180001_PRIDE_VirtualBackground_v2-02.png
+      osascript -e "tell application \"System Events\" to tell every desktop to set picture to \""''${file}\"" as POSIX file"
+      wal -i "''${rand_file}" 2> /dev/null
+      '';  
 
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
@@ -20,6 +25,10 @@ let
     osascript -e "tell application \"System Events\" to tell every desktop to set picture to \""''${rand_file}\"" as POSIX file"
     wal -i "''${rand_file}" 2> /dev/null
   '';
+
+
+
+  
 in
 {
   options.nyx.modules.desktop.wallpaper = {
@@ -30,6 +39,7 @@ in
      home.packages = with pkgs; [
       wallpaper_random
       wallpaper_default
+      wallpaper_sj
     ];
     home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
     home.file.".config/wallpapers".source = ../../../../config/.config/wallpapers;  
