@@ -72,3 +72,5 @@ if [ $(command -v flux) ]; then
     source <(flux completion zsh) # Flux Autocompletion
 fi 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh #fuzzyfind
+
+source ~/.cache/wal/colors-tty.sh
