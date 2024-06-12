@@ -44,6 +44,7 @@ module.exports = {
           "*.miro.com/*", // match google.com subdomains
           "*github.com*", //
           "*safelinks.protection.outlook.com*atlassian.com*", //jira links in email
+          "*safelinks.protection.outlook.com*atlassian.net*", //jira links in email
           "samlsp.private.zscaler.com*",
           "identity.getpostman.com*",
         ],
@@ -52,10 +53,11 @@ module.exports = {
       {
         //sjch links
         match: [
+          finicky.matchDomains(/.*sjcrh.sharepoint.com/),
           finicky.matchDomains(/.*sjch.atlassian.net/),
           finicky.matchDomains(/.*stjude.org/),
-          finicky.matchDomains(/.*\login.microsoft.com/),
-          finicky.matchDomains(/.*\sjcrh-my*/)
+          finicky.matchDomains(/login.microsoft.com/),
+          finicky.matchDomains(/.*\sjcrh-my*/),
         ],
         browser: "Google Chrome"
 
