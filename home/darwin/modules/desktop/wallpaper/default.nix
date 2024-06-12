@@ -8,7 +8,7 @@ let
       file=~/.config/wallpapers/wall0.png
       osascript -e "tell application \"System Events\" to tell every desktop to set picture to \""''${file}\"" as POSIX file"
       wal -i "''${rand_file}" 2> /dev/null
-      sudo wal -i "''${file}" 2> /dev/null '';
+      '';
     
 
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
@@ -19,7 +19,6 @@ let
     rand_file="''${files[rand_idx]}"
     osascript -e "tell application \"System Events\" to tell every desktop to set picture to \""''${rand_file}\"" as POSIX file"
     wal -i "''${rand_file}" 2> /dev/null
-    sudo wal -i "''${rand_file}" 2> /dev/null
   '';
 in
 {
