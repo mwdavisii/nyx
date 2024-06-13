@@ -33,6 +33,7 @@
       amethyst.enable = true; #amethyst is installed by brew cask, this copies config files
     };
     app = {
+      iterm2.enable = true;
       alacritty.enable = true;
       finicky.enable = true;
       kitty.enable = true;
