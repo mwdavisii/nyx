@@ -9,14 +9,19 @@ in
     enable = mkEnableOption "macbook profile";
   };
 
-  config = mkIf cfg.enable {
+    config = mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      twemoji-color-font
+    ];
     fonts = {
-      fonts = with pkgs; [
-        (
-          nerdfonts.override {
-            fonts = [ "JetBrainsMono" "Hack" "Meslo" "UbuntuMono" ];
-          }
-        )
+      packages = with pkgs; [
+        noto-fonts
+        noto-fonts-cjk
+        noto-fonts-emoji
+        nerdfonts
+        twemoji-color-font
+        fira-code
+        fira-code-symbols
       ];
     };
   };
