@@ -2,7 +2,7 @@
 with pkgs;
 with userConf;
 {
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
   #programs.zsh.enable = true;
   #environment.pathsToLink = ["/share/zsh/"];
   #environment.shells = [pkgs.zsh];
