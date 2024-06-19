@@ -38,9 +38,6 @@ with lib;
                 "Xcode" = 497799835;
             };
         };
-        # Enable fonts dir
-        
-        fonts.fontDir.enable = true;
         system = {
             #stateVersion = 4;
             defaults = { 

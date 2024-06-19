@@ -4,7 +4,7 @@ let
     lspServers = [
         marksman
         nodePackages.bash-language-server
-        nodePackages.pyright
+        #nodePackages.pyright
         nodePackages.typescript-language-server
         nodePackages.vim-language-server
         nodePackages.write-good

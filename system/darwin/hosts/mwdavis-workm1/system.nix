@@ -39,7 +39,6 @@ with lib;
         };
         # Enable fonts dir
         
-        fonts.fontDir.enable = true;
         system = {
             #stateVersion = 4;
             defaults = { 
