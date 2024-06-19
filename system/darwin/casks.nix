@@ -12,6 +12,7 @@ _:
   "homebrew/cask/docker"
   "ngrok"
   "powershell"
+  "iterm2"
 
 
   # Communication Tools
