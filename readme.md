@@ -168,7 +168,7 @@ cd ./nyx/setup/wsl
 Some users have reported a shell error when running step 2. If you see an error message that contains `\r`, it's likely git converted line breaks to windows format. I think it's caused b having `git config --global core.autocrlf` set to `true` on windows. If this happens, the easiest thing to do is go to your home directory `cd ~` and clone another copy of the repo through nix (commands below). If you do this this, don't forget to update your secrets.
 
 ```shell
-sudo nix-channel --add https://nixos.org/channels/nixos-23.11 nixos
+sudo nix-channel --add https://nixos.org/channels/nixos-24.05 nixos
 sudo nix-channel --update
 nix-shell -p git vim 
 git clone https://github.com/mwdavisii/nyx
