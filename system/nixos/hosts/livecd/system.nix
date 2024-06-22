@@ -28,12 +28,12 @@
 
     # Configure keymap in X11
     services = {
+        libinput.enable = true;
         xserver = {
             enable = true;
             desktopManager.gnome.enable = true;
             layout = "us";
             xkbVariant = "";
-            libinput.enable = true;
         };
         printing.enable = true;
         openssh.enable = true;

@@ -7,7 +7,7 @@ in
     enable = mkEnableOption "AMD Env Vars"; 
   };
   config = mkIf cfg.enable {
-    hardware.opengl = {
+    hardware.graphics = {
       extraPackages = with pkgs; [
         rocmPackages.clr.icd
         amdvlk
@@ -29,7 +29,7 @@ in
       WLR_NO_HARDWARE_CURSORS = "1";
       WLR_RENDERER_ALLOW_SOFTWARE = "1";
       CLUTTER_BACKEND = "wayland";
-      WLR_RENDERER = "vulkan";    
+      #WLR_RENDERER = "vulkan";    
     };
   };
 }
