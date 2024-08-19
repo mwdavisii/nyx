@@ -80,6 +80,7 @@
       efiSupport = true;
       efiInstallAsRemovable = true;
       device = "nodev";
+      default = "saved";
     };
 
     # autosuspend was enabled as safe for the PCI SD card reader
