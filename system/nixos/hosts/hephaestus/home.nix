@@ -68,7 +68,7 @@
         python.enable = true;
       };
       shell = {
-        awscliv2.enable = true;
+        awscliv2.enable = false;
         bash.enable = true;
         bat.enable = true;
         btop.enable = true;

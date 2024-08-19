@@ -48,7 +48,7 @@ in
     home.packages = with pkgs; [
       git
       gitAndTools.git-crypt
-      gitAndTools.delta
+      #gitAndTools.delta
       gitAndTools.gh
       gitAndTools.glab
       gitAndTools.git-filter-repo
