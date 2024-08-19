@@ -7,14 +7,12 @@ in
     enable = mkEnableOption "AMD Env Vars"; 
   };
   config = mkIf cfg.enable {
-    hardware.opengl = {
+    hardware.graphics = {
       extraPackages = with pkgs; [
         rocmPackages.clr.icd
         amdvlk
-      ]; 
-      extraPackages32 = with pkgs; [
         driversi686Linux.amdvlk
-      ];
+      ]; 
     };
     environment.systemPackages = with pkgs; [
       radeontop 
