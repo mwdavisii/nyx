@@ -84,7 +84,7 @@ in
       xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
       xdg-desktop-portal
-      gnome.gnome-keyring
+      gnome-keyring
       acpi
       mpd
       hyprpicker
