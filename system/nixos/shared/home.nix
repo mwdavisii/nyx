@@ -59,6 +59,7 @@
       };
       shell = {
         awscliv2.enable = true;
+        azurecli.enable = true;
         bash.enable = true;
         bat.enable = true;
         direnv.enable = true;
