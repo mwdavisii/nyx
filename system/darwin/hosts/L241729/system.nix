@@ -39,7 +39,7 @@ with lib;
             };
         };
         system = {
-            #stateVersion = 4;
+            stateVersion = 5;
             defaults = { 
                 LaunchServices = {
                     LSQuarantine = false;
