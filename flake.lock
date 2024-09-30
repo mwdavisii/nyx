@@ -105,6 +105,7 @@
         "owner": "lnl7",
         "repo": "nix-darwin",
         "rev": "bd7d1e3912d40f799c5c0f7e5820ec950f1e0b3d",
+
         "type": "github"
       },
       "original": {
@@ -264,11 +265,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1727184416,
-        "narHash": "sha256-Swdhh7PE6xYhIz8bczF1K7h65ZETD5XJ4R4jfmv9sTA=",
+        "lastModified": 1724519948,
+        "narHash": "sha256-OomP7Sl23nXRN6ySs4EaETwVa9zfYXDZTKp/lXMwctA=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "2366d7e8dc36f668f64939163ae1a3b6f2e3a6cb",
+        "rev": "ee88c7ce440a7beb45f0ee65dca6c5fd80bf99ad",
         "type": "github"
       },
       "original": {
