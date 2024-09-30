@@ -17,6 +17,7 @@ _:
 
   # Communication Tools
   #"telegram"
+  "whatsapp"
 
   # Entertainment Tools
   #"steam"
