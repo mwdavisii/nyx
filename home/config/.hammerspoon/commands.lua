@@ -5,6 +5,7 @@ local superShift = {"ctrl", "alt", "cmd", "lshift"}
 -- Commands
 hs.hotkey.bind(super, "h", hs.toggleConsole)
 hs.hotkey.bind(super, "q", nil, function() hs.eventtap.keyStroke({"cmd"}, "q") end)
+hs.hotkey.bind(super, "end", nil, function() hs.eventtap.keyStroke({"ctrl, cmd"}, "q") end)
 
 -- copy / paste / select all / select none / undo
 hs.hotkey.bind({"ctrl"}, "a", nil, function() hs.eventtap.keyStroke({"cmd"}, "a") end)

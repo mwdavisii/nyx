@@ -41,11 +41,11 @@
       #firefox.enable = true;
       obs.enable = false;
       scrcpy.enable = true;
-      wezterm = {
-        enable = true;
-        package = null;
-        fontSize = 14;
-      };
+      #wezterm = {
+      #  enable = true;
+      #  package = null;
+      #  fontSize = 14;
+      #};
       vscode.enable = true;
     };
     dev = {
@@ -60,7 +60,8 @@
       python.enable = true;
     };
     shell = {
-      awscliv2.enable = true;
+      awscliv2.enable = false;
+      azurecli.enable = true;
       bash.enable = true;
       bat.enable = true;
       direnv.enable = true;
