@@ -3,18 +3,18 @@ draw_bold_text_with_bright_colors = true
 [font]
 size = 12
 
-  [font.normal]
-  family = "Hack Nerd Font"
-  style = "Regular"
+[font.normal]
+family = "Hack Nerd Font"
+style = "Regular"
 
-  [font.bold]
-  family = "Hack Nerd Font"
-  style = "Bold"
+[font.bold]
+family = "Hack Nerd Font"
+style = "Bold"
 
-  [font.italic]
-  family = "Hack Nerd Font"
-  style = "Italic"
+[font.italic]
+family = "Hack Nerd Font"
+style = "Italic"
 
-  [font.bold_italic]
-  family = "Hack Nerd Font"
-  style = "Bold Italic"
+[font.bold_italic]
+family = "Hack Nerd Font"
+style = "Bold Italic"

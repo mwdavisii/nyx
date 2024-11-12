@@ -89,7 +89,7 @@ in
       mpd
       hyprpicker
       qt6ct
-      qt5ct
+      #libsForQT5.qt5ct
       glfw-wayland
       pywal
       killall

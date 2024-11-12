@@ -26,14 +26,13 @@
   };
   # Configure keymap in X11
   services = {
+    libinput.enable = true;
     xserver = {
       enable = true;
       xkb = {
         layout = "us";
         variant = "";
       };
-      libinput.enable = true;
-
     };
     printing.enable = true;
     openssh.enable = true;
@@ -47,8 +46,7 @@
     };
   };
 
-  # Enable sound with pipewire.
-  sound.enable = true;
+  # Enable sound with pipewire
   hardware.pulseaudio.enable = false;
 
   xdg.portal = {

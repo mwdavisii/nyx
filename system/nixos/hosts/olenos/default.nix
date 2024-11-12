@@ -9,7 +9,7 @@
         bluetooth.enable = true;
         garbagecollection.enable = true;
         hyprlogin.enable = true;
-        opengl.enable = true;
+        #sopengl.enable = true;
         openvpn.enable = true;
         openrgb.enable = true;
         centraltimezone.enable = true;
