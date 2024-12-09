@@ -18,7 +18,6 @@ in
         noto-fonts
         noto-fonts-cjk-sans
         noto-fonts-emoji
-        nerdfonts
         twemoji-color-font
         fira-code
         fira-code-symbols
