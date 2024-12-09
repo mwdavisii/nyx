@@ -90,33 +90,33 @@ mod2:
 #  key: pageup
 
 # Move the currently focused window to the n-th screen; e.g., throw-screen-3 will move the window to the 3rd screen.
-throw-space-1:
-  mod: mod2
-  key: 1
-throw-space-2:
-  mod: mod2
-  key: 2
-throw-space-3:
-  mod: mod2
-  key: 3
-throw-space-4:
-  mod: mod2
-  key: 4
-throw-space-5:
-  mod: mod2
-  key: 5
-throw-space-6:
-  mod: mod2
-  key: 6
-throw-space-7:
-  mod: mod2
-  key: 7
-throw-space-8:
-  mod: mod2
-  key: 8
-throw-space-9:
-  mod: mod2
-  key: 9
+#throw-space-1:
+#  mod: mod2
+#  key: 1
+#throw-space-2:
+#  mod: mod2
+#  key: 2
+#throw-space-3:
+##  mod: mod2
+# key: 3
+#throw-space-4:
+#  mod: mod2
+#  key: 4
+#throw-space-5:
+#  mod: mod2
+#  key: 5
+#throw-space-6:
+#  mod: mod2
+#  key: 6
+#throw-space-7:
+#  mod: mod2
+#  key: 7
+#throw-space-8:
+#  mod: mod2
+#  key: 8
+#throw-space-9:
+#  mod: mod2
+#  key: 9
 
 # Turn on or off tiling entirely.
 toggle-tiling:
