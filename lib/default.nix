@@ -278,6 +278,19 @@ rec {
               { inherit inputs name self system user userConf hostname secrets; };
           }
       ## handles nixos host builds
+      else if buildTarget == "ubuntu" then
+        nixosSystem
+          {
+            inherit system;
+            modules = commonModules;
+            specialArgs =
+              let
+                self = inputs.self;
+                user = userConf;
+              in
+              { inherit inputs name self system user userConf hostname secrets; };
+          }
+      ## handles nixos host builds
       else if buildTarget == "nixos" then
         nixosSystem
           {

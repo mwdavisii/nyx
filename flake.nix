@@ -148,6 +148,7 @@
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
         L211011 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
         L241729 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
+        L242731 = { hostname = "L242731"; user = "mdavis67"; buildTarget = "ubuntu"; };
       };
 
       top =
