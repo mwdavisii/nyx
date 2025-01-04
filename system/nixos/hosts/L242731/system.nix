@@ -14,6 +14,7 @@
   # networking.wireless.enable  = lib.mkForce false;1@
   networking.networkmanager.enable = lib.mkForce true;
   networking.useDHCP = lib.mkDefault true;
+  networking.hostname = "L242731";
 
   environment.variables = {
     NIXOS_OZONE_WL = "1";
