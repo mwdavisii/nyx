@@ -6,15 +6,14 @@
       ./hardware.nix
     ];
 
-  #networking.hostName = $hostName; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = $hostName; # Define your hostname.
+  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
-  #nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   # Enable networking
-  # networking.wireless.enable  = lib.mkForce false;1@
-  networking.networkmanager.enable = lib.mkForce true;
+  networking.wireless.enable  = lib.mkForce true;
+  networking.networkmanager.enable = lib.mkForce false;
   networking.useDHCP = lib.mkDefault true;
-  networking.hostName = "L242731";
   # Configure keymap in X11
   services = {
     libinput.enable = true;
