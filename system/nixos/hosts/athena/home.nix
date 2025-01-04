@@ -33,7 +33,7 @@
     sessionVariables = {
       PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
     };
-    stateVersion = "24.05";
+    stateVersion = "24.11";
   };
 
   nyx = {

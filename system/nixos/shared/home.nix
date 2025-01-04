@@ -12,7 +12,7 @@
     sessionVariables = {
       PATH = "$PATH::/mnt/c/Program\ Files/Microsoft\ VS\ Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
     };
-    stateVersion = "24.05";
+    stateVersion = "24.11";
     packages = with pkgs; [
       rustup
       vhs
