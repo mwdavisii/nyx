@@ -9,9 +9,9 @@
   networking.hostName = $hostName; # Define your hostname.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   # Enable networking
-  networking.wireless.enable  = lib.mkForce true;
+  #networking.wireless.enable  = lib.mkForce true;
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   networking.networkmanager.enable = lib.mkForce false;
   networking.useDHCP = lib.mkDefault true;
   # Configure keymap in X11
@@ -20,6 +20,7 @@
     xserver = {
       enable = true;
       desktopManager.gnome.enable = false;
+      displayManager.gdm.enable = true;
       xkb = {
         layout = "us";
         variant = "";

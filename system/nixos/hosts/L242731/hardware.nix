@@ -11,7 +11,7 @@
     initrd = {
       availableKernelModules = [ "xhci_pci" "thunderbolt" "vmd" "nvme" "usb_storage" "usbhid" "sd_mod" ];
       kernelModules = [ ];
-      luks.devices."luks-031e3e0a-58aa-4f51-a1ee-73ec72f43778".device = "/dev/disk/by-uuid/031e3e0a-58aa-4f51-a1ee-73ec72f43778";
+      #luks.devices."luks-031e3e0a-58aa-4f51-a1ee-73ec72f43778".device = "/dev/disk/by-uuid/031e3e0a-58aa-4f51-a1ee-73ec72f43778";
     };
     kernelModules = [ "kvm-intel" "iwlwifi" ];
     #extraModulePackages = [ ];
