@@ -22,7 +22,7 @@ in
     };
     
     services.vscode-server.enable = true;
-    system.stateVersion = "24.05";
+    system.stateVersion = "24.11";
     programs.zsh.enable = true;
     time.timeZone = "America/Chicago";
     networking.hostName = "${hostname}";
