@@ -6,11 +6,11 @@
     modules = {
       user.home = ./home.nix;
       system = {
+        acceleratedgraphics.enable = true;
         bluetooth.enable = true;
         garbagecollection.enable = true;
         hyprlogin.enable = true;
-        opengl.enable = true;
-        openvpn.enable = true;
+        openvpn.enable = false;
         openrgb.enable = true;
         centraltimezone.enable = true;
         yubilogin.enable = true;
@@ -24,7 +24,7 @@
       awsConfig.enable = false;
       userSSHKeys.enable = true;
       userPGPKeys.enable = true;
-      workvpn.enable = false;
+      workvpn.enable = true;
     };
 
     profiles = {
