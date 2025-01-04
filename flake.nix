@@ -147,7 +147,7 @@
         olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Work Laptop (Host OS)
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
         L241729 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
-        L242731 = { user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
+        L242731 = { system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
       };
 
       top =
