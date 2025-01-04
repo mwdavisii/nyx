@@ -6,7 +6,7 @@
       ./hardware.nix
     ];
 
-  networking.hostName = hostname; # Define your hostname.
+  networking.hostName = lib.makeForce hostname; # Define your hostname.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
   # Enable networking
