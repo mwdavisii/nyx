@@ -11,9 +11,9 @@
         garbagecollection.enable = true;
         hyprlogin.enable = true;
         openvpn.enable = false;
-        openrgb.enable = true;
+        openrgb.enable = false;
         centraltimezone.enable = true;
-        yubilogin.enable = true;
+        yubilogin.enable = false;
         hyprland.enable = true;
         kmonad.enable = true;
       };
