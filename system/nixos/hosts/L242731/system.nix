@@ -20,6 +20,7 @@
     libinput.enable = true;
     xserver = {
       enable = true;
+      desktopManager.gnome.enable = false;
       xkb = {
         layout = "us";
         variant = "";
