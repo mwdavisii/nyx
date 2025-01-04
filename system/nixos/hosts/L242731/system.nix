@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, hostName, ... }:
+{ config, lib, pkgs, modulesPath, hostname, ... }:
 {
   imports =
     [
@@ -6,7 +6,7 @@
       ./hardware.nix
     ];
 
-  networking.hostName = hostName; # Define your hostname.
+  networking.hostName = hostname; # Define your hostname.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
   # Enable networking
