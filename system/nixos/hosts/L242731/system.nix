@@ -15,16 +15,6 @@
   networking.networkmanager.enable = lib.mkForce true;
   networking.useDHCP = lib.mkDefault true;
   networking.hostName = "L242731";
-
-  environment.variables = {
-    NIXOS_OZONE_WL = "1";
-    PATH = [
-      "\${HOME}/.local/bin"
-      "\${HOME}/.config/rofi/scripts"
-    ];
-    NIXPKGS_ALLOW_UNFREE = "1";
-    #PKG_CONFIG_PATH = lib.makeLibraryPath [ libevdev ];
-  };
   # Configure keymap in X11
   services = {
     libinput.enable = true;

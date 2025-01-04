@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, hostName, userConf, ... }:
+{ config, lib, pkgs, modulesPath, hostName, userConf, inputs, ... }:
 with lib;
 let
   cfg = config.nyx.modules.system.hyprland;
@@ -8,6 +8,10 @@ in
     enable = mkEnableOption "Include Hyprland Login Service"; 
   };
   config = mkIf cfg.enable {
-    programs.hyprland.enable = true;
+    programs.hyprland = {
+      enable = true;
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    };
   };
 }
