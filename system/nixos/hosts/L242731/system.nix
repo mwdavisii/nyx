@@ -11,21 +11,17 @@
   # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
   # Enable networking
   #networking.wireless.enable  = lib.mkForce true;
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  networking.networkmanager.enable = lib.mkForce false;
+  networking.networkmanager.enable = lib.mkForce true;
   networking.useDHCP = lib.mkDefault true;
   # Configure keymap in X11
   services = {
     libinput.enable = true;
     xserver = {
       enable = true;
-      desktopManager.gnome.enable = false;
-      displayManager.gdm.enable = true;
       xkb = {
         layout = "us";
         variant = "";
       };
-
     };
     printing.enable = true;
     openssh.enable = true;
