@@ -7,8 +7,8 @@
 #  ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝      ╚═╝
 #
 
-live_config_reload = true
-import = [
+general.live_config_reload = true
+general.import = [
   "~/.config/alacritty/func/debug.yml",
   "~/.config/alacritty/func/env.yml",
   "~/.config/alacritty/func/scrolling.yml",

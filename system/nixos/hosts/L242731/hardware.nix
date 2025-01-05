@@ -13,7 +13,7 @@
       kernelModules = [ ];
       #luks.devices."luks-031e3e0a-58aa-4f51-a1ee-73ec72f43778".device = "/dev/disk/by-uuid/031e3e0a-58aa-4f51-a1ee-73ec72f43778";
     };
-    kernelModules = [ "kvm-intel" "iwlwifi" ];
+    kernelModules = [ "kvm-intel" ];
     #extraModulePackages = [ ];
     loader = {
       efi.canTouchEfiVariables = true;
