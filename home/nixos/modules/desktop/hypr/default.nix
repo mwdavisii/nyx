@@ -75,6 +75,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      nwg-displays
       wayland-protocols
       waybar
       dunst
@@ -115,7 +116,7 @@ in
 
     wayland.windowManager.hyprland = {
       plugins = [
-        plugins.hyprexpo
+        #plugins.hyprexpo
         plugins.hyprbars
         plugins.hyprwinwrap
         plugins.hyprtrails
