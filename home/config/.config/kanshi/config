@@ -1,0 +1,45 @@
+profile undocked {
+  output "eDP-1" enable mode 1920x1080@60.0
+  exec hyprctl dispatch moveworkspacetomonitor 1 eDP-1
+  exec hyprctl dispatch moveworkspacetomonitor 2 eDP-1
+  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+}
+
+profile home {
+  output "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ" enable
+  output "eDP-1" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 DP-1
+  exec hyprctl dispatch moveworkspacetomonitor 2 DP-1
+  exec hyprctl dispatch moveworkspacetomonitor 3 DP-1
+}
+
+profile work {
+  output "DP-2" enable mode 3440x1440@59.97
+  output "eDP-1" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
+  exec hyprctl dispatch moveworkspacetomonitor 2 DP-2
+  exec hyprctl dispatch moveworkspacetomonitor 3 DP-2
+}
+
+profile wall-on {
+  output "DP-2" enable mode 3440x1440@59.97
+  output "eDP-1" disable
+  output "HDMI-A-1" enable mode 4096x2160@60.0
+  exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
+  exec hyprctl dispatch moveworkspacetomonitor 2 DP-2
+  exec hyprctl dispatch moveworkspacetomonitor 3 DP-2
+}
+
+profile wall-off {
+  output "DP-2" enable mode 3440x1440@59.97
+  output "eDP-1" disable
+  output "DVI-I-1" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
+  exec hyprctl dispatch moveworkspacetomonitor 2 DP-2
+  exec hyprctl dispatch moveworkspacetomonitor 3 DP-2
+}
+
+profile conf-room {
+  output "eDP-1" disable
+  output "*" enable
+}
