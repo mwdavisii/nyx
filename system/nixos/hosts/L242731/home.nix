@@ -32,12 +32,14 @@
         wlogout.enable = true;
         cava.enable = true;
         kmonad.enable = true;
+        kanshi.enable = true;
       };
       app = {
         alacritty = {
           enable = true;
         };
         mysql-workbench.enable = true;
+        #obsidian.enable = true;
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = true;
