@@ -3,6 +3,13 @@ with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
   plugins = inputs.hyprland-plugins.packages.${pkgs.system};
+  km_ka_restart = pkgs.writeShellScriptBin "km_ka_restart" ''
+    killall -q -9 -r kmonad
+    killall -q -9 -r kanshi
+    sleep .5
+    nohup kanshi &
+    nohup ~/.config/kmonad/selectKBD.sh &
+  '';
   wbar_restart = pkgs.writeShellScriptBin "wbar_restart" ''
     killall -q -9 -r waybar
     sleep .1
@@ -97,6 +104,7 @@ in
       wbar_restart
       waybar_start_top
       waybar_start_bottom
+      km_ka_restart
       wallpaper_random
       wallpaper_default
       init_colors

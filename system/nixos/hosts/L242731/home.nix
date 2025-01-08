@@ -39,7 +39,7 @@
           enable = true;
         };
         mysql-workbench.enable = true;
-        #obsidian.enable = true;
+        obsidian.enable = true;
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = true;
@@ -48,6 +48,7 @@
           enable = true;
           makeDefaultBrowser = true;
         };
+        chromium.enable = true;
         obs.enable = true;
 
         scrcpy.enable = true;
