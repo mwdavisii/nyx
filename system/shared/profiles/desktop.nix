@@ -12,6 +12,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       twemoji-color-font
+      kanshi
     ];
     fonts = {
       packages = with pkgs; [

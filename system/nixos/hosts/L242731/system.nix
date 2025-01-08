@@ -13,10 +13,12 @@
   #networking.wireless.enable  = lib.mkForce true;
   networking.networkmanager.enable = lib.mkForce true;
   networking.useDHCP = lib.mkDefault true;
-  # Configure keymap in X11
+  # Configure keymap in X11cccccbkbkjgclckdehngeerehkdvvleuldgtnfuvutvt
+  
   services = {
     libinput.enable = true;
     xserver = {
+      videoDrivers = [ "displaylink" "modesetting" ];
       enable = true;
       xkb = {
         layout = "us";

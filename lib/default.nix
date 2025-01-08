@@ -134,6 +134,7 @@ rec {
                 # useUserPackages = true;
                 useGlobalPkgs = true;
                 useUserPackages = true;
+                backupFileExtension = "backup";
                 extraSpecialArgs =
                   let
                     self = inputs.self;
