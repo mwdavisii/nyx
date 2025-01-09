@@ -12,6 +12,10 @@
       XDG_CURRENT_DESKTOP = "Hyprland";
       XDG_SESSION_DESKTOP = "Hyprland";
       XDG_SESSION_TYPE = "wayland";
+      HYPRCURSOR_THEME = "MyCursor";
+      HYPRCURSOR_SIZE = 24;
+      XCURSOR_THEME = "default";
+      XCURSOR_SIZE = 24;
     };
   };
 }
