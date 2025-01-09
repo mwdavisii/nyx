@@ -5,8 +5,8 @@
   programs.home-manager.enable = true;
   # Install man output for any Nix packages.
   programs.man.enable = true;
-  programs.zsh.enable = true;
   manual.manpages.enable = true;
+  programs.zsh.enable = true;
 
   home = {
     sessionVariables = {
@@ -18,11 +18,11 @@
   nyx = {
     modules = {
       gaming = {
-        bsdgames.enable = true;
+        bsdgames.enable = false; #issue compiling on WSL.
         lutris.enable = true;
         mahjong.enable = true;
         minesweeper.enable = true;
-        #retroarch.enable = true;
+        retroarch.enable = false;
         steam.enable = true;
       };
       desktop = {
@@ -32,21 +32,25 @@
         wlogout.enable = true;
         cava.enable = true;
         kmonad.enable = true;
+        kanshi.enable = true;
       };
       app = {
-        chromium.enable = true;
-        guvcview.enable = true;
         alacritty = {
           enable = true;
         };
+        mysql-workbench.enable = true;
+        obsidian.enable = true;
         kitty.enable = true;
         discord.enable = true;
         firefox.enable = true;
+        jupyter.enable = true;
         chrome = {
           enable = true;
           makeDefaultBrowser = true;
         };
+        chromium.enable = true;
         obs.enable = true;
+
         scrcpy.enable = true;
         qemu.enable = true;
         wezterm = {
@@ -65,10 +69,10 @@
         lua.enable = true;
         nix.enable = true;
         node.enable = true;
-        python.enable = true;
+        python.enable = false; #conflict w/ Jupyter
       };
       shell = {
-        awscliv2.enable = false;
+        awscliv2.enable = true;
         bash.enable = true;
         bat.enable = true;
         btop.enable = true;
@@ -83,6 +87,7 @@
         gnupg = {
           enable = true;
           enableService = true;
+          enableSSHSupport = true;
         };
         jq.enable = true;
         k8sTooling.enable = true;
@@ -92,12 +97,12 @@
         neofetch.enable = true;
         neovim.enable = true;
         networking.enable = true;
-        openssl.enable = true;
         ranger.enable = false;
         starship.enable = true;
         terraform.enable = true;
         tmux.enable = true;
         usbutils.enable = true;
+        wal.enable = true;
         xdg.enable = true;
         zellij.enable = true;
         zsh.enable = true;

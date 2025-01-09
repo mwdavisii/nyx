@@ -31,7 +31,7 @@ rec {
         modules = [
           {
             home = { inherit homeDirectory; };
-            #home.stateVersion = "24.05";
+            #home.stateVersion = "24.11";
             home.username = userConf.userName;
             imports =
               let
@@ -115,7 +115,7 @@ rec {
             }
           ];
       };
-      home.stateVersion = "24.05";
+      home.stateVersion = "24.11";
     };
 
   mkNixSystemConfiguration = name: { config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? { }, }:
@@ -134,6 +134,7 @@ rec {
                 # useUserPackages = true;
                 useGlobalPkgs = true;
                 useUserPackages = true;
+                backupFileExtension = "backup";
                 extraSpecialArgs =
                   let
                     self = inputs.self;
@@ -146,7 +147,7 @@ rec {
           )
           (
             { ... }: {
-              system.stateVersion = "24.05";
+              system.stateVersion = "24.11";
             }
           )
           (inputs.nixos-wsl.nixosModules.wsl)

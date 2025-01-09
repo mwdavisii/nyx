@@ -12,7 +12,7 @@
     sessionVariables = {
       PATH = "$PATH::/mnt/c/Program\ Files/Microsoft\ VS\ Code/bin:/mnt/c/Windows:/mnt/c/ProgramData/chocolatey/bin";
     };
-    stateVersion = "24.05";
+    stateVersion = "24.11";
     packages = with pkgs; [
       rustup
       vhs
@@ -24,29 +24,6 @@
 
   nyx = {
     modules = {
-      gaming = {
-        bsdgames.enable = true;
-        lutris.enable = false;
-        mahjong.enable = false;
-        minesweeper.enable = false;
-        retroarch.enable = false;
-        steam.enable = false;
-      };
-      app = {
-        alacritty = {
-          enable = false;
-        };
-        kitty.enable = false;
-        discord.enable = false;
-        firefox.enable = false;
-        qemu.enable = true;
-        obs.enable = true;
-        wezterm = {
-          enable = false;
-          package = null;
-          fontSize = 14;
-        };
-      };
       dev = {
         cc.enable = true;
         rust.enable = true;
