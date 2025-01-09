@@ -189,9 +189,9 @@ rec {
                       rm -rf ~/Applications/Nix
                       mkdir -p ~/Applications/Nix
                       chown mdavis67 ~/Applications/Nix
-                      find ${config.system.build.applications}/Applications -maxdepth 1 -type l | while read f; do
-                      src="$(/usr/bin/stat -f%Y $f)"
-                      appname="$(basename $src)"
+                      find ${config.system.build.applications}/Applications -maxdepth 1 -type l | while read -r f; do
+                      src="$(/usr/bin/stat -f%Y "$f")"
+                      appname="$(basename "$src")"
                       osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Users/mdavis67/Applications/Nix/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
                   done
                 ''
