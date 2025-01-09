@@ -6,22 +6,23 @@
     modules = {
       user.home = ./home.nix;
       system = {
+        acceleratedgraphics.enable = true;
         bluetooth.enable = true;
         garbagecollection.enable = true;
         hyprlogin.enable = true;
-        opengl.enable = true;
-        openvpn.enable = true;
-        openrgb.enable = true;
+        openvpn.enable = false;
+        openrgb.enable = false;
         centraltimezone.enable = true;
-        yubilogin.enable = true;
+        yubilogin.enable = false;
         hyprland.enable = true;
         kmonad.enable = true;
+        #kanshi.enable = true;
       };
     };
 
     secrets = {
-      awsSSHKeys.enable = true;
-      awsConfig.enable = true;
+      awsSSHKeys.enable = false;
+      awsConfig.enable = false;
       userSSHKeys.enable = true;
       userPGPKeys.enable = true;
       workvpn.enable = true;
