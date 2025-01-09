@@ -17,7 +17,8 @@ in
     xdg.configFile."kanshi".source = ../../../../config/.config/kanshi;
     services.kanshi = {
       enable = true;
-      systemdTarget = "graphical-session.target";
+      #systemdTarget = "graphical-session.target";
+      systemdTarget = "hyprland-session.target";
     };
   };
 }
