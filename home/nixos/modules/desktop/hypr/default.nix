@@ -16,6 +16,9 @@ let
     waybar_start_top &
     waybar_start_bottom &
   '';
+  cava_start = pkgs.writeShellScriptBin "cava_start" ''
+    sleep 1 && cava
+  '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
     if command -v waybar >/dev/null 2>&1; then 
       waybar -c ~/.config/waybar/top.jsonc -s ~/.config/waybar/style.css
@@ -109,6 +112,7 @@ in
       rofiWindow
       hyprlock
       hypridle
+      cava_start
     ];
 
     #wal template for hyprland
