@@ -5,7 +5,7 @@
   nyx = {
     modules = {
       user.home = ./home.nix;
-      system.yabai.enable = true;
+      system.yabai.enable = false;
     };
 
     secrets = {
@@ -14,7 +14,7 @@
       userSSHKeys.enable = true;
       userPGPKeys.enable = true;
     };
-
+ 
     profiles = {
       macbook.enable = true;
     };
