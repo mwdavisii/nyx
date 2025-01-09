@@ -14,7 +14,7 @@ profile home {
 }
 
 profile work {
-  output "DP-1" enable mode 3440x1440@59.97
+  output "DP-2" enable
   output "eDP-1" disable
   exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
   exec hyprctl dispatch moveworkspacetomonitor 2 DP-2
@@ -22,24 +22,24 @@ profile work {
 }
 
 profile wall-on {
-  output "DP-1" enable mode 3440x1440@59.97
+  output "DP-2" enable
+  output "DVI-I-1" enable mode 4096x2160@30.00Hz
   output "eDP-1" disable
-  output "HDMI-A-1" enable mode 4096x2160@60.0
   exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-2
+  exec hyprctl dispatch moveworkspacetomonitor 2 DVI-I-1
   exec hyprctl dispatch moveworkspacetomonitor 3 DP-2
 }
 
 profile wall-off {
-  output "DP-1" enable mode 3440x1440@59.97
-  output "eDP-1" disable
+  output "DP-2" enable
   output "DVI-I-1" disable
+  output "eDP-1" disable
   exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
   exec hyprctl dispatch moveworkspacetomonitor 2 DP-2
   exec hyprctl dispatch moveworkspacetomonitor 3 DP-2
 }
 
-profile conf-room {
-  output "eDP-1" disable
+profile room {
+  output "eDP-1" enable
   output "*" enable
 }
