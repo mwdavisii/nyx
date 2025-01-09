@@ -90,8 +90,6 @@ in
       mesa
       xwayland
       xdg-desktop-portal-hyprland
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal
       gnome-keyring
       acpi
       mpd
