@@ -71,19 +71,19 @@ window#waybar.empty {
 }
 
 #workspaces button:hover {
-  background-color: #e6b9c6;
+  background-color: @background;
   color: black;
   border-radius: 16px;
+  font-weight: normal
 }
 
 #mode {
   margin: 6px;
   color: @color4;
-  font-weight: bold;
 }
 
 #clock {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 #battery.charging,
@@ -149,5 +149,5 @@ button:hover {
 
 tooltip {
   background-color: @foreground;
-  color: @background;
+  color: black;
 }
