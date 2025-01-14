@@ -5,6 +5,14 @@ profile undocked {
   exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
 }
 
+profile work {
+  output "DP-1" enable
+  output "eDP-1" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 eDP-1
+  exec hyprctl dispatch moveworkspacetomonitor 2 eDP-1
+  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+}
+
 profile home {
   output "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ" enable
   output "eDP-1" disable
