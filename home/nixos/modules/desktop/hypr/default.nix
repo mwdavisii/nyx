@@ -31,7 +31,7 @@ let
   '';
   rofiWindow = pkgs.writeShellScriptBin "rofiWindow" ''
     #!/usr/bin/env bash
-    rofi -show drun 
+    rofi -show drun q
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
