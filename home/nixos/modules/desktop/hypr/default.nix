@@ -90,7 +90,7 @@ in
       waybar
       dunst
       swww
-      mesa
+      mesa  
       xwayland
       xdg-desktop-portal-hyprland
       gnome-keyring
@@ -98,6 +98,7 @@ in
       mpd
       hyprpicker
       qt6ct
+      libsForQt5.qtstyleplugin-kvantum
       libsForQt5.qt5ct
       glfw-wayland
       pywal
@@ -132,7 +133,10 @@ in
         plugins.hyprtrails
       ];
       enable = true;
-      systemd.enable = true;
+      systemd = {
+        enable = true;
+        variables = ["--all"];
+      };
       xwayland.enable = true;
 
     };
