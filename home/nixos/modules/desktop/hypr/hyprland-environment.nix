@@ -16,6 +16,7 @@
       HYPRCURSOR_SIZE = 24;
       XCURSOR_THEME = "default";
       XCURSOR_SIZE = 24;
+      QT_STYLE_OVERRIDE = "adwaita-dark";
     };
   };
 }

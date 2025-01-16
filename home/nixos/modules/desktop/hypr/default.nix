@@ -16,6 +16,9 @@ let
     waybar_start_top &
     waybar_start_bottom &
   '';
+  cava_start = pkgs.writeShellScriptBin "cava_start" ''
+    sleep 1 && cava
+  '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
     if command -v waybar >/dev/null 2>&1; then 
       waybar -c ~/.config/waybar/top.jsonc -s ~/.config/waybar/style.css
@@ -28,7 +31,7 @@ let
   '';
   rofiWindow = pkgs.writeShellScriptBin "rofiWindow" ''
     #!/usr/bin/env bash
-    rofi -show drun 
+    rofi -show drun q
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
@@ -87,7 +90,7 @@ in
       waybar
       dunst
       swww
-      mesa
+      mesa  
       xwayland
       xdg-desktop-portal-hyprland
       gnome-keyring
@@ -95,6 +98,7 @@ in
       mpd
       hyprpicker
       qt6ct
+      libsForQt5.qtstyleplugin-kvantum
       libsForQt5.qt5ct
       glfw-wayland
       pywal
@@ -109,6 +113,7 @@ in
       rofiWindow
       hyprlock
       hypridle
+      cava_start
     ];
 
     #wal template for hyprland
@@ -128,7 +133,10 @@ in
         plugins.hyprtrails
       ];
       enable = true;
-      systemd.enable = true;
+      systemd = {
+        enable = true;
+        variables = ["--all"];
+      };
       xwayland.enable = true;
 
     };
