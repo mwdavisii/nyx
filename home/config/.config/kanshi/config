@@ -1,59 +1,61 @@
 profile undocked {
-  output "eDP-1" enable mode 1920x1080@60.0
-  exec hyprctl dispatch moveworkspacetomonitor 1 eDP-1
-  exec hyprctl dispatch moveworkspacetomonitor 2 eDP-1
-  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+  output "BOE 0x0BAA Unknown" enable mode 1920x1080@60.0
+  exec hyprctl dispatch moveworkspacetomonitor 1 BOE 0x0BAA Unknown
+  exec hyprctl dispatch moveworkspacetomonitor 2 BOE 0x0BAA Unknown
+  exec hyprctl dispatch moveworkspacetomonitor 3 BOE 0x0BAA Unknown
 }
 
 profile work {
-  output "DP-1" enable
-  output "eDP-1" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 eDP-1
-  exec hyprctl dispatch moveworkspacetomonitor 2 eDP-1
-  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+  output "Dell Inc. DELL P3424WE BFY96T3" enable
+  output "BOE 0x0BAA Unknown" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 BOE 0x0BAA Unknown
+  exec hyprctl dispatch moveworkspacetomonitor 2 BOE 0x0BAA Unknown
+  exec hyprctl dispatch moveworkspacetomonitor 3 BOE 0x0BAA Unknown
 }
 
 profile home {
   output "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ" enable
-  output "eDP-1" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-1
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-1
-  exec hyprctl dispatch moveworkspacetomonitor 3 DP-1
+  output "BOE 0x0BAA Unknown" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
+  exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
+  exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
 }
 
 profile wall-on-open {
-  output "DP-1" enable
-  output "DVI-I-1" enable mode 4096x2160@30.00Hz
-  output "eDP-1" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
-  exec hyprctl dispatch moveworkspacetomonitor 2 DVI-I-1
-  exec hyprctl dispatch moveworkspacetomonitor 3 DP-2
+  output "Dell Inc. DELL P3424WE BFY96T3" enable
+  output "Samsung Electric Company SAMSUNG 0x01000E00" enable mode 4096x2160@30.00Hz
+  output "BOE 0x0BAA Unknown" enable
+  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
+  exec hyprctl dispatch moveworkspacetomonitor 2 "Samsung Electric Company SAMSUNG 0x01000E00"
+  exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. DELL P3424WE BFY96T3"
 }
 
 profile wall-off-open {
-  output "DP-1" enable
-  output "DVI-I-1" disable
-  output "eDP-1" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-2
-  exec hyprctl dispatch moveworkspacetomonitor 3 DP-2
+  output "Dell Inc. DELL P3424WE BFY96T3" enable
+  output "Samsung Electric Company SAMSUNG 0x01000E00" disable
+  output "BOE 0x0BAA Unknown" enable
+  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
+  exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. DELL P3424WE BFY96T3"
+  exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. DELL P3424WE BFY96T3"
 }
 
 profile wall-on-closed {
-  output "DP-1" enable
-  output "DVI-I-1" enable mode 4096x2160@30.00Hz
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
-  exec hyprctl dispatch moveworkspacetomonitor 2 DVI-I-1
+  output "Dell Inc. DELL P3424WE BFY96T3" enable
+  output "Samsung Electric Company SAMSUNG 0x01000E00" enable mode 4096x2160@30.00Hz
+  output "BOE 0x0BAA Unknown" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
+  exec hyprctl dispatch moveworkspacetomonitor 2 "Samsung Electric Company SAMSUNG 0x01000E00"
 }
 
 profile wall-off-closed {
-  output "DP-1" enable
-  output "DVI-I-1" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-2
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-2
+  output "Dell Inc. DELL P3424WE BFY96T3" enable
+  output "Samsung Electric Company SAMSUNG 0x01000E00" disable
+  output "BOE 0x0BAA Unknown" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
+  exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. DELL P3424WE BFY96T3"
 }
 
 profile room {
-  output "eDP-1" enable
+  output "BOE 0x0BAA Unknown" enable
   output "*" enable
 }
