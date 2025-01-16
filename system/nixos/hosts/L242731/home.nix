@@ -73,6 +73,7 @@
       };
       shell = {
         awscliv2.enable = true;
+        azurecli.enable = true;
         bash.enable = true;
         bat.enable = true;
         btop.enable = true;
@@ -100,6 +101,7 @@
         ranger.enable = false;
         starship.enable = true;
         terraform.enable = true;
+        opentofu.enable = true;
         tmux.enable = true;
         usbutils.enable = true;
         wal.enable = true;
