@@ -21,6 +21,22 @@ profile home {
   exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
 }
 
+profile wall-off-closed {
+  output "Dell Inc. DELL P3424WE BFY96T3" enable
+  output "Samsung Electric Company SAMSUNG 0x01000E00" disable
+  output "BOE 0x0BAA Unknown" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
+  exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. DELL P3424WE BFY96T3"
+}
+
+profile wall-on-closed {
+  output "Dell Inc. DELL P3424WE BFY96T3" enable
+  output "Samsung Electric Company SAMSUNG 0x01000E00" enable mode 4096x2160@30.00Hz
+  output "BOE 0x0BAA Unknown" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
+  exec hyprctl dispatch moveworkspacetomonitor 2 "Samsung Electric Company SAMSUNG 0x01000E00"
+}
+
 profile wall-on-open {
   output "Dell Inc. DELL P3424WE BFY96T3" enable
   output "Samsung Electric Company SAMSUNG 0x01000E00" enable mode 4096x2160@30.00Hz
@@ -37,22 +53,6 @@ profile wall-off-open {
   exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
   exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. DELL P3424WE BFY96T3"
   exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. DELL P3424WE BFY96T3"
-}
-
-profile wall-on-closed {
-  output "Dell Inc. DELL P3424WE BFY96T3" enable
-  output "Samsung Electric Company SAMSUNG 0x01000E00" enable mode 4096x2160@30.00Hz
-  output "BOE 0x0BAA Unknown" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
-  exec hyprctl dispatch moveworkspacetomonitor 2 "Samsung Electric Company SAMSUNG 0x01000E00"
-}
-
-profile wall-off-closed {
-  output "Dell Inc. DELL P3424WE BFY96T3" enable
-  output "Samsung Electric Company SAMSUNG 0x01000E00" disable
-  output "BOE 0x0BAA Unknown" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
-  exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. DELL P3424WE BFY96T3"
 }
 
 profile room {
