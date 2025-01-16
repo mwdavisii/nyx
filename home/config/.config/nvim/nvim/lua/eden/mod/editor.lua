@@ -1,16 +1,7 @@
-return {
+local spec = {
   -- file explorer
   {
     "nvim-neo-tree/neo-tree.nvim",
-    opts = {
-      filesystem = {
-        filtered_items = {
-          visible = true,
-          hide_dotfiles = false,
-          hide_gitignored = true,
-        },
-      }
-    },
     cmd = "Neotree",
     keys = {
       {
@@ -23,8 +14,20 @@ return {
         function() require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() }) end,
         desc = "Explorer NeoTree (cwd)",
       },
-      { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (root dir)", remap = true },
-      { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+      {
+        "<leader>e",
+        function()
+          require("neo-tree.command").execute({ toggle = true, reveal = true, dir = require("eden.util").get_root() })
+        end,
+        desc = "Explorer NeoTree (root dir)",
+        remap = true,
+      },
+      {
+        "<leader>E",
+        function() require("neo-tree.command").execute({ toggle = true, reveal = true, dir = vim.loop.cwd() }) end,
+        desc = "Explorer NeoTree (cwd)",
+        remap = true,
+      },
     },
     deactivate = function() vim.cmd([[Neotree close]]) end,
     init = function()
@@ -107,7 +110,12 @@ return {
   {
     "RRethy/vim-illuminate",
     event = { "BufReadPost", "BufNewFile" },
-    opts = { delay = 200 },
+    opts = {
+      delay = 200,
+      filetypes_denylist = {
+        "regedit",
+      },
+    },
     config = function(_, opts)
       require("illuminate").configure(opts)
 
@@ -137,6 +145,7 @@ return {
       { "[[", desc = "Prev Reference" },
     },
   },
+
   -- buffer remove
   {
     "echasnovski/mini.bufremove",
@@ -236,20 +245,37 @@ return {
     cmd = { "TroubleToggle", "Trouble" },
     opts = { use_diagnostic_signs = true },
     keys = {
-      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
-      { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
-      { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location List (Trouble)" },
-      { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List (Trouble)" },
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
       {
         "[q",
         function()
           if require("trouble").is_open() then
-            require("trouble").previous({ skip_groups = true, jump = true })
+            require("trouble").prev({ skip_groups = true, jump = true })
           else
-            vim.cmd.cprev()
+            local ok, err = pcall(vim.cmd.cprev)
+            if not ok then vim.notify(err, vim.log.levels.ERROR) end
           end
         end,
-        desc = "Previous trouble/quickfix item",
+        desc = "Previous Trouble/Quickfix Item",
       },
       {
         "]q",
@@ -257,28 +283,15 @@ return {
           if require("trouble").is_open() then
             require("trouble").next({ skip_groups = true, jump = true })
           else
-            vim.cmd.cnext()
+            local ok, err = pcall(vim.cmd.cnext)
+            if not ok then vim.notify(err, vim.log.levels.ERROR) end
           end
         end,
-        desc = "Next trouble/quickfix item",
+        desc = "Next Trouble/Quickfix Item",
       },
     },
   },
-  -- mini icons
-  {
-    "echasnovski/mini.icons",
-    opts = {},
-    lazy = true,
-    specs = {
-      { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
-    },
-    init = function()
-      package.preload["nvim-web-devicons"] = function()
-        require("mini.icons").mock_nvim_web_devicons()
-        return package.loaded["nvim-web-devicons"]
-      end
-    end,
-  },
+
   -- todo comments
   {
     "folke/todo-comments.nvim",
@@ -333,4 +346,93 @@ return {
       -- })
     end,
   },
+
+  {
+    "EdenEast/reg.nvim",
+    dev = true,
+  },
+
+  {
+    "stevearc/overseer.nvim",
+    cmd = {
+      "OverseerOpen",
+      "OverseerClose",
+      "OverseerToggle",
+      "OverseerSaveBundle",
+      "OverseerLoadBundle",
+      "OverseerDeleteBundle",
+      "OverseerRunCmd",
+      "OverseerRun",
+      "OverseerInfo",
+      "OverseerBuild",
+      "OverseerQuickAction",
+      "OverseerTaskAction",
+      "OverseerClearCache",
+    },
+    opts = {
+      dap = false,
+      task_list = {
+        bindings = {
+          ["<C-h>"] = false,
+          ["<C-j>"] = false,
+          ["<C-k>"] = false,
+          ["<C-l>"] = false,
+        },
+      },
+      form = {
+        win_opts = {
+          winblend = 0,
+        },
+      },
+      confirm = {
+        win_opts = {
+          winblend = 0,
+        },
+      },
+      task_win = {
+        win_opts = {
+          winblend = 0,
+        },
+      },
+    },
+    -- stylua: ignore
+    keys = {
+      { "<leader>ow", "<cmd>OverseerToggle<cr>",      desc = "Task list" },
+      { "<leader>oo", "<cmd>OverseerRun<cr>",         desc = "Run task" },
+      { "<leader>oq", "<cmd>OverseerQuickAction<cr>", desc = "Action recent task" },
+      { "<leader>oi", "<cmd>OverseerInfo<cr>",        desc = "Overseer Info" },
+      { "<leader>ob", "<cmd>OverseerBuild<cr>",       desc = "Task builder" },
+      { "<leader>ot", "<cmd>OverseerTaskAction<cr>",  desc = "Task action" },
+      { "<leader>oc", "<cmd>OverseerClearCache<cr>",  desc = "Clear cache" },
+    },
+  },
 }
+
+if vim.g.obsidian_workspace ~= nil then
+  -- Example:
+  -- vim.api.nvim_create_autocmd("User", {
+  --   group = vim.api.nvim_create_augroup("eden_local", { clear = true }),
+  --   pattern = "EdenLocalPre",
+  --   callback = function()
+  --     print("This is something else")
+  --     print("Again")
+  --     vim.g.obsidian_workspace = { {
+  --       name = "Codex",
+  --       path = "~/vaults/Codex/",
+  --     } }
+  --   end,
+  -- })
+  spec[#spec + 1] = {
+    "epwalsh/obsidian.nvim",
+    lazy = true,
+    ft = "markdown",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("obsidian").setup({
+        workspace = vim.g.obsidian_workspace,
+      })
+    end,
+  }
+end
+
+return spec
