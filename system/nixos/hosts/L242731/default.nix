@@ -16,6 +16,7 @@
         yubilogin.enable = false;
         hyprland.enable = true;
         kmonad.enable = true;
+        docker.enable = true;
         #kanshi.enable = true;
       };
     };
