@@ -26,7 +26,6 @@
       awsConfig.enable = false;
       userSSHKeys.enable = true;
       userPGPKeys.enable = true;
-      workvpn.enable = true;
     };
 
     profiles = {
