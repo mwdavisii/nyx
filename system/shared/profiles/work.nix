@@ -11,7 +11,7 @@ in
 
     config = mkIf cfg.enable {
       environment.variables = {
-        IS_WORK="Y"
+        IS_WORK="Y";
     };
   };
 }
