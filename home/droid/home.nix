@@ -4,7 +4,7 @@
   # Manage home-manager with home-manager (inception)
   programs.home-manager.enable = true;
   home = {      
-    stateVersion = "24.11";
+    stateVersion = "25.05";
     
     packages = with pkgs; [
       vim

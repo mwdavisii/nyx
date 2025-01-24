@@ -4,7 +4,7 @@
 #import shared scripts
 Import-Module ..\shared\common.psm1 -Force
 
-$NixPackageVersion = "nixos-24.11"
+$NixPackageVersion = "nixos-25.05"
 #$sshPath = "~\.ssh"
 
 function Build-VirtualBox {
