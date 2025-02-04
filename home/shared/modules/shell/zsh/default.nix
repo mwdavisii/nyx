@@ -56,7 +56,7 @@ in
       default = true;
       description = "Enable zsh syntax highlighting";
     };
-
+    
     plugins = mkOption {
       type = types.listOf pluginModule;
       default = [ ];
