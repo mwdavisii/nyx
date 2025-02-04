@@ -124,9 +124,9 @@ toggle-tiling:
   key: t
 
 # Rerun the current layout's algorithm.
-#reevaluate-windows:
-#  mod: mod1
-#  key: z
+reevaluate-windows:
+  mod: mod1
+  key: z
 
 # disable screen padding on builtin display
 #disable-padding-on-builtin-display: false
@@ -138,11 +138,12 @@ toggle-tiling:
 
 # List of bundle identifiers for applications to either be automatically floating or 
 # automatically tiled based on floating-is-blacklist (default []).
-#floating: [
-#  "com.apple.finder",
-#  "org.alacritty",
-#  "com.apple.systempreferences"
-#]
+floating: [
+  "com.apple.finder",
+  "org.alacritty",
+  "org.kitty",
+  "com.apple.systempreferences"
+]
 
 # Boolean flag determining behavior of the floating list. true if the applications should be floating and all others tiled. false if the applications should be tiled and all others floating (default true).
 #floating-is-blacklist: true
