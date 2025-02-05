@@ -19,6 +19,7 @@ in
       (azure-cli.withExtensions [ 
         azure-cli.extensions.aks-preview 
         azure-cli-extensions.k8s-extension
+        azure-cli.extensions.dns-resolver
         #azure-cli-extensions.k8s-configuration
         #azure-cli.extensions.k8s-configuration 
       ])
