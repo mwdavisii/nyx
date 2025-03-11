@@ -162,7 +162,7 @@ rec {
         darwinModules = [
           (
             {
-              services.nix-daemon.enable = true;
+              ids.gids.nixbld = 30000;
             }
           )
           (inputs.agenix.darwinModules.default)
