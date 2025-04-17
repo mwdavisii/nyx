@@ -14,6 +14,7 @@ in
         terraform
         terraform-ls
         tflint
+        opentofu
       ];
   };
 }
