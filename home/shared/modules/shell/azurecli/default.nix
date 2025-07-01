@@ -20,6 +20,7 @@ in
         azure-cli.extensions.aks-preview 
         azure-cli-extensions.k8s-extension
         azure-cli.extensions.dns-resolver
+        azure-cli.extensions.ssh
         #azure-cli-extensions.k8s-configuration
         #azure-cli.extensions.k8s-configuration 
       ])
