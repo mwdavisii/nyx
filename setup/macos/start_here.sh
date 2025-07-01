@@ -8,7 +8,7 @@
 
 mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
-echo "build-users-group = nixbld" >> ~/.config/nix/nix.conf
+#echo "build-users-group = nixbld" >> ~/.config/nix/nix.conf
 rm ~/.bashrc ~/.zshhrc
 
 # install homebrew
