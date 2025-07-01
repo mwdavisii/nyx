@@ -116,7 +116,7 @@
         in
         [
           (self.overlay."${system}")
-          (nur.overlay)
+          (nur.overlays.default)
           # (_:_: { inherit (eww.packages."${system}") eww; })
         ] ++ ovs
       );
