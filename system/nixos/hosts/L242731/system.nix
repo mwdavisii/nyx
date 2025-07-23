@@ -27,12 +27,14 @@
 
   services = {
     libinput.enable = true;
+    #i18n.consoleUseXkbConfig = true;
     xserver = {
       videoDrivers = [ "modesetting" ];
       enable = true;
       xkb = {
         layout = "us";
-        variant = "";
+        variant = "colemak";
+        options = "grp:alt_shift_toggle";
       };
     };
     printing.enable = true;
