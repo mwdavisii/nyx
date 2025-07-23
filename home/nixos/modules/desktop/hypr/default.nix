@@ -92,7 +92,6 @@ in
       swww
       mesa  
       xwayland
-      xdg-desktop-portal-hyprland
       gnome-keyring
       acpi
       mpd

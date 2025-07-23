@@ -68,7 +68,7 @@
         dhall.enable = true;
         lua.enable = true;
         nix.enable = true;
-        node.enable = true;
+        node.enable = false;
         python.enable = false; #conflict w/ Jupyter
       };
       shell = {
