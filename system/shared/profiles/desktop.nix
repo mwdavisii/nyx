@@ -70,7 +70,7 @@ in
         nerd-fonts.monofur
         nerd-fonts.monoid
         nerd-fonts.mononoki
-        nerd-fonts.mplus
+        nerd-fonts."m+"
         nerd-fonts.noto
         nerd-fonts.open-dyslexic
         nerd-fonts.overpass

@@ -28,7 +28,7 @@
   services = {
     libinput.enable = true;
     xserver = {
-      videoDrivers = [ "displaylink" "modesetting" ];
+      videoDrivers = [ "modesetting" ];
       enable = true;
       xkb = {
         layout = "us";
