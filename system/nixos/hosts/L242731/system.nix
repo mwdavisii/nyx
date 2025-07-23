@@ -33,7 +33,7 @@
       enable = true;
       xkb = {
         layout = "us,us";
-        variant = ",colemak";
+        variant = "colemak,";
         options = "grp:alt_shift_toggle";
       };
     };
