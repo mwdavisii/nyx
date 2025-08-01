@@ -33,6 +33,7 @@
         cava.enable = true;
         kmonad.enable = true;
         kanshi.enable = true;
+        vial.enable = true;
       };
       app = {
         alacritty = {
