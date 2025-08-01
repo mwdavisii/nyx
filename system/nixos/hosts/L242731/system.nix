@@ -32,8 +32,8 @@
       videoDrivers = [ "modesetting" ];
       enable = true;
       xkb = {
-        layout = "us,us";
-        variant = "colemak,";
+        layout = "us";
+        #variant = "colemak,";
         options = "grp:alt_shift_toggle";
       };
     };
