@@ -17,6 +17,7 @@
         hyprland.enable = true;
         kmonad.enable = true;
         docker.enable = true;
+        vial.enable = true;
         #kanshi.enable = true;
       };
     };

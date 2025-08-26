@@ -92,10 +92,10 @@ in
       swww
       mesa  
       xwayland
-      xdg-desktop-portal-hyprland
       gnome-keyring
       acpi
       mpd
+      #xdg-desktop-portal-hyprland
       hyprpicker
       qt6ct
       libsForQt5.qtstyleplugin-kvantum
