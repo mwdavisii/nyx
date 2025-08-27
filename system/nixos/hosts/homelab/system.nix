@@ -15,5 +15,6 @@
     services = {
       openssh.enable = true;
       tumbler.enable = true;
+    };
   };
-};
+}
