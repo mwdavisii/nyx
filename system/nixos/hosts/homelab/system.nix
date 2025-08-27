@@ -30,7 +30,7 @@
         enable = false;
         alsa.enable = false;
         alsa.support32Bit = false;
-        pulse.enable =falsetrue;q
+        pulse.enable =false;
       };
     };
 
