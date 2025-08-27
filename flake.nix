@@ -148,7 +148,7 @@
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
         L241729 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
         L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
-        homelab-01 = { hostname = "homelab-01"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #work dell, nixos
+        homelab = { hostname = "homelab-01"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #work dell, nixos
       };
 
       top =
