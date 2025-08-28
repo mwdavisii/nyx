@@ -32,7 +32,7 @@
     # Secrets
     agenix.url = "github:ryantm/agenix";
     secrets = {
-      url = "git+ssh://git@github.com/mwdavisii/nix-secrets/ffd9cdc8962a2f3f294903e582f014c1326fe3e8";
+      url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
       flake = false;
     };
     # MacOS
