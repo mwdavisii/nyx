@@ -62,7 +62,6 @@
         rust.enable = false;
         go.enable = false;
         dhall.enable = false;
-        k3s.enable = true;
         lua.enable = true;
         nix.enable = false;
         node.enable = false;
@@ -87,6 +86,7 @@
         };
         jq.enable = true;
         k8sTooling.enable = false;
+        k3sTooling.enable = false;
         lf.enable = true;
         lorri.enable = true;
         mcfly.enable = true;
