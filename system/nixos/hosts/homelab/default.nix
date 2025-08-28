@@ -15,6 +15,7 @@
         yubilogin.enable = false;
         kmonad.enable = false;
         hyprland.enable = false;
+        k3s.enable = true;
       };
     };
     
