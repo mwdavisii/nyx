@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let cfg = config.nyx.modules.dev.k3sTooling;
+let cfg = config.nyx.modules.shell.k3sTooling;
 in
 {
-  options.nyx.modules.dev.k3sTooling = {
+  options.nyx.modules.shell.k3sTooling = {
         enable = mkEnableOption "K3s Installation";
     };
   config = mkIf cfg.enable {
