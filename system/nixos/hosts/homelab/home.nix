@@ -70,7 +70,7 @@
       };
       shell = {
         awscliv2.enable = false;
-        bash.enable = treu;
+        bash.enable = true;
         bat.enable = true;
         btop.enable = true;
         direnv.enable = false;
