@@ -34,6 +34,7 @@
     secrets = {
       url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
       flake = false;
+      allRefs = true;
     };
 
     # MacOS
