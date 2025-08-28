@@ -86,7 +86,7 @@
           enableService = false;
         };
         jq.enable = true;
-        k8sTooling.enable = true;
+        k8sTooling.enable = false;
         lf.enable = true;
         lorri.enable = true;
         mcfly.enable = true;
