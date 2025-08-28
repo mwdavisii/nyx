@@ -14,7 +14,6 @@ in
         jq
         k9s
         fluxcd
-        kubectl
         kustomize
         flux
         open-policy-agent
