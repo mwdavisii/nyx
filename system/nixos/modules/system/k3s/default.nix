@@ -14,11 +14,10 @@ in
       clusterInit = true;               # first/only server needs this once
       extraFlags = [
         "--bind-address=0.0.0.0"
-        "--tls-san=k3s.lan"             # DNS only; no IPs committed
+        "--tls-san=k3s.mwdavisii.com"             # DNS only; no IPs committed
         "--write-kubeconfig-mode=0644"
       ];
     };
-
     # Open the guest firewall for the API
     networking.firewall.allowedTCPPorts = [ 6443 ];
   };
