@@ -13,7 +13,11 @@ in
       role = "server"; # This sets it up as a server/master node
       
       # This is important for installing Istio later, as it prevents conflicts.
-      extraFlags = "--disable=traefik"; 
+      extraFlags = [
+        "--bind-address=0.0.0.0"
+        "--tls-san=k3s.mwdavisii.com"
+        "--write-kubeconfig-mode=0644"
+      ];
     };
-};
+  };
 }
