@@ -14,7 +14,6 @@
     # Configure keymap in X11
     services = {
       openssh.enable = true;
-      tumbler.enable = true;
     };
   };
 }
