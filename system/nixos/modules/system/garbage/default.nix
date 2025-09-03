@@ -7,10 +7,11 @@ in
     enable = mkEnableOption "garbagecollection"; 
   };
   config = mkIf cfg.enable {
+    nix.settings.auto-optimise-store = true;
   #Garbage colector
     nix.gc = {
         automatic = true;
-        dates = "weekly";
+        interval = "1d";
         options = "--delete-older-than 7d";
     };
 

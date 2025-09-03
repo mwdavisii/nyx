@@ -62,10 +62,10 @@
         rust.enable = false;
         go.enable = false;
         dhall.enable = false;
-        lua.enable = true;
+        lua.enable = false;
         nix.enable = false;
         node.enable = false;
-        python.enable = true;
+        python.enable = false;
       };
       shell = {
         awscliv2.enable = false;
@@ -95,11 +95,11 @@
         openssl.enable = true;
         ranger.enable = true;
         starship.enable = true;
-        terraform.enable = true;
-        tmux.enable = true;
-        usbutils.enable = true;
-        xdg.enable = true;
-        zellij.enable = true;
+        terraform.enable = false;
+        tmux.enable = false;
+        usbutils.enable = false;
+        xdg.enable = false;
+        zellij.enable = false;
         zsh.enable = true;
       };
     };
