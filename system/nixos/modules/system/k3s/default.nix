@@ -7,17 +7,19 @@ in
     enable = mkEnableOption "K3s Install Settings";
   };
 
-  config = mkIf cfg.enable {
+    config = mkIf cfg.enable {
     services.k3s = {
       enable = true;
-      role = "server"; # This sets it up as a server/master node
-      
-      # This is important for installing Istio later, as it prevents conflicts.
+      role = "server";                  # run the server
+      clusterInit = true;               # first/only server needs this once
       extraFlags = [
         "--bind-address=0.0.0.0"
-        "--tls-san=k3s.mwdavisii.com"
+        "--tls-san=k3s.lan"             # DNS only; no IPs committed
         "--write-kubeconfig-mode=0644"
       ];
     };
+
+    # Open the guest firewall for the API
+    networking.firewall.allowedTCPPorts = [ 6443 ];
   };
 }

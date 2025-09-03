@@ -10,6 +10,6 @@ in
 
   config = mkIf cfg.enable {
     services.openssh.enable = true;
-    services.openssh.passwordAuthentication = true;
+    services.openssh.settings.PasswordAuthentication = true;
   };
 }
