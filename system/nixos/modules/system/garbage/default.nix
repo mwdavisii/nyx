@@ -11,7 +11,7 @@ in
   #Garbage colector
     nix.gc = {
         automatic = true;
-        interval = "1d";
+        dates = "daily";
         options = "--delete-older-than 7d";
     };
 
