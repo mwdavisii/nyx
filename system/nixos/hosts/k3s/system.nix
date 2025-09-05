@@ -8,13 +8,14 @@
 
     ];
   config = {
-   { config, pkgs, ... }:
-
-{
+    services = {
+      openssh.enable = true;
+      qemuGuest.enable = true;
+ 
+    };
     #### Interfaces ####
     # Trunk: carry VLANs, no L3 config on the host for now
     networking.interfaces.ens18.useDHCP = false;
-
 
     # Infra (VLAN 250)
     networking.interfaces.ens19 = {
@@ -59,11 +60,5 @@
     #### DNS (system-wide) ####
     # Keep DNS on your preferred segment (often infra):
     networking.nameservers = [ "192.168.0.2" "10.40.250.2"];
-  
-    services = {
-      openssh.enable = true;
-      qemuGuest.enable = true;
- 
-    };
   };
 }
