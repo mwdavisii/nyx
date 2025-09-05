@@ -13,38 +13,52 @@
       qemuGuest.enable = true;
  
     };
-  #### Interfaces ####
-    networking.interfaces.ens18.useDHCP = false; # trunk, no L3
+    #### Use systemd-networkd ####
+    networking.useNetworkd = true;
+    networking.useDHCP = false;   # we’ll set addresses explicitly
 
-    networking.interfaces.ens19 = {
-      useDHCP = false;
-      ipv4.addresses = [{ address = "10.40.250.21"; prefixLength = 24; }];
-      ipv4.routes = [
-        { address = "0.0.0.0"; prefixLength = 0; via = "10.40.250.1"; table = 250; }
-        # connected route auto-exists; explicit is optional:
-        { address = "10.40.250.0"; prefixLength = 24; table = 250; }
+    # Optional: disable NetworkManager if it’s enabled elsewhere
+    # networking.networkmanager.enable = false;
+
+    #### ens18: trunk only (no L3) ####
+    systemd.network.networks."10-ens18" = {
+      matchConfig.Name = "ens18";
+      networkConfig.LinkLocalAddressing = "no";
+    };
+
+    #### ens19: Infrastructure (10.40.250.21/24 via 10.40.250.1) ####
+    systemd.network.networks."20-ens19" = {
+      matchConfig.Name = "ens19";
+      address = [ "10.40.250.21/24" ];
+
+      # Policy: traffic FROM 10.40.250.21 uses table 250 (priority 1000)
+      routingPolicyRules = [
+        { routingPolicyRuleConfig = { From = "10.40.250.21/32"; Table = 250; Priority = 1000; }; }
+      ];
+
+      # Routes in table 250 (default + connected)
+      routes = [
+        { routeConfig = { Destination = "0.0.0.0/0"; Gateway = "10.40.250.1"; Table = 250; }; }
+        { routeConfig = { Destination = "10.40.250.0/24"; Table = 250; }; }
       ];
     };
 
-    networking.interfaces.ens20 = {
-      useDHCP = false;
-      ipv4.addresses = [{ address = "10.40.50.21"; prefixLength = 24; }];
-      ipv4.routes = [
-        { address = "0.0.0.0"; prefixLength = 0; via = "10.40.50.1"; table = 150; }
-        { address = "10.40.50.0"; prefixLength = 24; table = 150; }
+    #### ens20: Home Automation (10.40.50.21/24 via 10.40.50.1) ####
+    systemd.network.networks."30-ens20" = {
+      matchConfig.Name = "ens20";
+      address = [ "10.40.50.21/24" ];
+
+      # Policy: traffic FROM 10.40.50.21 uses table 150 (priority 1001)
+      routingPolicyRules = [
+        { routingPolicyRuleConfig = { From = "10.40.50.21/32"; Table = 150; Priority = 1001; }; }
+      ];
+
+      # Routes in table 150 (default + connected)
+      routes = [
+        { routeConfig = { Destination = "0.0.0.0/0"; Gateway = "10.40.50.1"; Table = 150; }; }
+        { routeConfig = { Destination = "10.40.50.0/24"; Table = 150; }; }
       ];
     };
-
-    #### iproute2 tables + rules (policy routing) ####
-    networking.iproute2.tables = {
-      infra250 = 250;
-      ha50     = 150;
-    };
-
-    networking.iproute2.rules = [
-      { family = "ipv4"; from = "10.40.250.21/32"; priority = 1000; routingTable = "infra250"; }
-      { family = "ipv4"; from = "10.40.50.21/32";  priority = 1001; routingTable = "ha50";     }
-    ];
 
     #### rp_filter loose for multi-homing ####
     boot.kernel.sysctl = {
