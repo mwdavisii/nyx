@@ -17,6 +17,7 @@
         hyprland.enable = false;
         k3s.enable = true;
         ssh.enable = true;
+        qemu.enable = true;
       };
     };
     
