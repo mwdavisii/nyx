@@ -14,6 +14,7 @@
     # Configure keymap in X11
     services = {
       openssh.enable = true;
+      qemuGuest.enable = true;
  
     };
   };
