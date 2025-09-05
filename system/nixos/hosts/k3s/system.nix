@@ -63,7 +63,6 @@
       "net.ipv4.conf.default.rp_filter" = "2";
     };
     
-    networkConfig.DefaultRouteOnDevice = true;
     networking.nameservers = [ "192.168.0.2" "10.40.250.2"];
   };
 }
