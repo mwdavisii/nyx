@@ -48,7 +48,7 @@
         };
         obs.enable = false;
         scrcpy.enable = false;
-        qemu.enable = false;
+        qemu.enable = true;
         wezterm = {
           enable = false; #having issue with wezterm and wayland
           package = null;
