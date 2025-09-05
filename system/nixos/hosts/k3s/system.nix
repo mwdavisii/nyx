@@ -26,7 +26,8 @@
     systemd.network.networks."20-ens19" = {
       matchConfig.Name = "ens19";
       address = [ "10.40.250.21/24" ];
-
+      dns = [ "192.168.0.2" "10.40.250.2"];
+      networkConfig.DefaultRouteOnDevice = true;
       # Policy rule: traffic FROM 10.40.250.21 → table 250 (priority 1000)
       routingPolicyRules = [
         { From = "10.40.250.21/32"; Table = 250; Priority = 1000; Family = "ipv4"; }
@@ -36,7 +37,6 @@
       routes = [
         { Destination = "0.0.0.0/0"; Gateway = "10.40.250.1"; Table = 250; }
         { Destination = "10.40.250.0/24"; Table = 250; }
-        
         { Destination = "0.0.0.0/0"; Gateway = "10.40.250.1"; }
       ];
     };
@@ -63,6 +63,7 @@
       "net.ipv4.conf.all.rp_filter" = "2";
       "net.ipv4.conf.default.rp_filter" = "2";
     };
+    
     networkConfig.DefaultRouteOnDevice = true;
     networking.nameservers = [ "192.168.0.2" "10.40.250.2"];
   };
