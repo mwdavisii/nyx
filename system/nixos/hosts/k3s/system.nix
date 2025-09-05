@@ -27,7 +27,6 @@
       matchConfig.Name = "ens19";
       address = [ "10.40.250.21/24" ];
       dns = [ "192.168.0.2" "10.40.250.2"];
-      networkConfig.DefaultRouteOnDevice = true;
       # Policy rule: traffic FROM 10.40.250.21 → table 250 (priority 1000)
       routingPolicyRules = [
         { From = "10.40.250.21/32"; Table = 250; Priority = 1000; Family = "ipv4"; }
