@@ -33,7 +33,7 @@
       }
     ];
     networking.defaultGateway = "10.40.250.1";
-    networking.nameservers = ["10.40.250.2" "192.168.0.2"];
+    networking.nameservers = ["192.168.0.2" "10.40.250.2"];
     time.hardwareClockInLocalTime = true;
     # Configure keymap in X11
     services = {
