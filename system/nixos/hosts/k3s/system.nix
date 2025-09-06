@@ -12,21 +12,21 @@
     networking.useDHCP = lib.mkDefault false;
 
     #host
-    networking.interfaces.eth18.ip4addresses = [
+    networking.interfaces.ens18.ipv4.addresses = [
     {
       address = "10.40.250.201";
       prefixLength = 24;
     }
     ];
     #IoT vlan
-    networking.interfaces.eth19.ip4.addresses = [
+    networking.interfaces.ens19.ipv4.addresses = [
       {
         address = "10.40.40.40";
         prefixLength = 24;
       }
     ];
     # Security VLAN
-    networking.interfaces.eth20.ip4.addresses = [
+    networking.interfaces.ens20.ipv4.addresses = [
       {
         address = "10.40.70.40";
         prefixLength = 24;
