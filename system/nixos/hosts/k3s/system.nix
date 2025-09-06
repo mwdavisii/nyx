@@ -7,24 +7,15 @@
       ./hardware.nix
 
     ];
-    config = {
-      services = {
-        openssh.enable = true;
-        qemuGuest.enable = true;
-  
-      };
-    networking.useNetworkd = true;
-    networking.useDHCP = false;
-
-    systemd.network.networks."20-ens18" = {
-      matchConfig.Name = "ens18";          # Infra (tag 250 in Proxmox)
-      address = [ "10.40.250.21/24" ];
-      gateway = [ "10.40.250.1" ];
-      dns = [ "192.168.0.2" "10.250.0.2" ];
+  config = {
+    networking.networkmanager.enable = lib.mkForce true;
+    networking.useDHCP = lib.mkDefault true;
+    time.hardwareClockInLocalTime = true;
+    # Configure keymap in X11
+    services = {
+      openssh.enable = true;
+      qemuGuest.enable = true;
+ 
     };
-
-    systemd.network.networks."30-ens19" = {
-      matchConfig.Name = "ens19";          # HA (tag 50 in Proxmox)
-      address = [ "10.40.50.21/24" ];
-    };
+  };
 }
