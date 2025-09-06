@@ -16,25 +16,15 @@
     networking.useNetworkd = true;
     networking.useDHCP = false;
 
-    # Infra VLAN 250 (net1 → ens19)
-    systemd.network.networks."20-ens19" = {
-      matchConfig.Name = "ens19";
+    systemd.network.networks."20-ens18" = {
+      matchConfig.Name = "ens18";          # Infra (tag 250 in Proxmox)
       address = [ "10.40.250.21/24" ];
       gateway = [ "10.40.250.1" ];
-      dns = [ "10.40.250.2" "1.1.1.1" ];
-      domains = [ "~." ];
+      dns = [ "192.168.0.2" "10.250.0.2" ];
     };
 
-    # HA VLAN 50 (net2 → ens20)
-    systemd.network.networks."30-ens20" = {
-      matchConfig.Name = "ens20";
+    systemd.network.networks."30-ens19" = {
+      matchConfig.Name = "ens19";          # HA (tag 50 in Proxmox)
       address = [ "10.40.50.21/24" ];
     };
-
-    # If you want net0/ens18 up but unused
-    systemd.network.networks."10-ens18" = {
-      matchConfig.Name = "ens18";
-      networkConfig.LinkLocalAddressing = "no";
-    };
-  };
 }
