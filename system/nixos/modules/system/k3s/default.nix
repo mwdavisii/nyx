@@ -19,6 +19,7 @@ in
         "--tls-san=10.40.250.201>"
         "--tls-san=127.0.0.1"            # DNS only; no IPs committed
         "--write-kubeconfig-mode=0644"
+        "--disable servicelb"
       ];
     };
     # Open the guest firewall for the API
