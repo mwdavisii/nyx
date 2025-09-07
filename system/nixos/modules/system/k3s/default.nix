@@ -13,7 +13,7 @@ in
       role = "server";                  # run the server
       clusterInit = true;               # first/only server needs this once
       extraFlags = [
-        "--bind-address=0.0.0.0"
+        "--bind-address=10.40.250.201"
         "--advertise-address=10.40.250.201"
         "--tls-san=k3s.mwdavisii.com" 
         "--tls-san=10.40.250.201>"
