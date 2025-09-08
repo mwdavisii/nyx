@@ -24,6 +24,8 @@ let
     "wheel"
     "video"
     "netdev"
+    "k3s"
+    "kvm"
   ];
 in
 {
