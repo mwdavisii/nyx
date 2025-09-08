@@ -23,6 +23,10 @@ in
       ];
     };
     # Open the guest firewall for the API
-    networking.firewall.allowedTCPPorts = [ 6443 ];
+    networking.firewall = {
+      allowedTCPPorts = [ 
+        6443
+        179 ];
+      trustedInterfaces = [ "cni0" "flannel.1" "ens18"];
+    }; 
   };
-}
