@@ -33,6 +33,7 @@
         cava.enable = true;
         kmonad.enable = true;
         kanshi.enable = true;
+        vial.enable = true;
       };
       app = {
         alacritty = {
@@ -68,7 +69,7 @@
         dhall.enable = true;
         lua.enable = true;
         nix.enable = true;
-        node.enable = true;
+        node.enable = false;
         python.enable = false; #conflict w/ Jupyter
       };
       shell = {
