@@ -35,6 +35,14 @@
     networking.defaultGateway = "10.40.250.1";
     networking.nameservers = ["192.168.0.2" "10.40.250.2"];
     time.hardwareClockInLocalTime = true;
+
+    networking.firewall = {
+      enable = true;
+      allowedTCPPorts = [ 
+        6443
+        179 ];
+      trustedInterfaces = [ "cni0" "flannel.1" "ens18"];
+
     # Configure keymap in X11
     services = {
       openssh.enable = true;
