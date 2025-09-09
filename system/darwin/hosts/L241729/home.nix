@@ -85,7 +85,7 @@
       lorri.enable = false;
       mcfly.enable = true;
       neofetch.enable = true;
-      neovim.enable = true;
+      nixvim.enable = true;
       networking.enable = true;
       starship.enable = true;
       terraform.enable = true;

@@ -13,7 +13,7 @@ in
     home = {
       packages = with pkgs;
         [
-          libsForQt5.kmines
+          kdePackages.kmines
         ];
     };
   };
