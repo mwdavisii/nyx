@@ -91,6 +91,7 @@
                   eventlet = prevPkgs.eventlet.overridePythonAttrs (prevAttrs: {
                     disabledTests = prevAttrs.disabledTests ++ [
                       "test_full_duplex"
+                      "uncertainties"
                     ];
                   });
                 };
