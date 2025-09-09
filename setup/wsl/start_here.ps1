@@ -13,7 +13,7 @@ Install-Module -Name PSGitHub
 $release = Get-GitHubRelease -Owner nix-community -Repository NixOS-WSL
 $version = $release.tag_name.Split(" ")[0]
 Write-Host "The latest release for NixOS-WSL is v$version"
-$nixOSWSLdownloadUrl = "https://github.com/nix-community/NixOS-WSL/releases/download/$version/nixos-wsl.tar.gz"
+$nixOSWSLdownloadUrl = "https://github.com/nix-community/NixOS-WSL/releases/download/$version/nixos.wsl"
 
 
 write-host "Updating WSL to the latest version."
@@ -53,11 +53,11 @@ if ($decision -eq 0) {
 
 write-host "Downloading NixOS."
 set-location ~
-Invoke-WebRequest $nixOSWSLdownloadUrl -OutFile nixos-wsl.tar.gz
+Invoke-WebRequest $nixOSWSLdownloadUrl -OutFile ~\nixos.wsl
 
 write-host "Installing NixOS"
 New-item NixOS -Type Directory
-wsl --import NixOS .\NixOS\ .\nixos-wsl.tar.gz --version 2
+wsl --import NixOS .\NixOS\ .\nixos.wsl
 
 
 $question = 'Set NixOS as default?'
