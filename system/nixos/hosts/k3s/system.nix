@@ -51,7 +51,7 @@
         80
         8080];
       trustedInterfaces = [ "cni0" "flannel.1" "ens18"];
-
+    };
     # Configure keymap in X11
     services = {
       openssh.enable = true;
