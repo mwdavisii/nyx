@@ -48,7 +48,8 @@
         6443
         53
         443
-        80];
+        80
+        8080];
       trustedInterfaces = [ "cni0" "flannel.1" "ens18"];
 
     # Configure keymap in X11
