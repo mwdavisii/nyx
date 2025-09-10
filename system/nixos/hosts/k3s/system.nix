@@ -39,11 +39,11 @@
       }
     ];
     networking.defaultGateway = "10.40.250.1";
-    networking.nameservers = ["10.40.250.53" "10.40.250.54"];
+    networking.nameservers = ["10.40.250.54" "10.40.250.53"];
     time.hardwareClockInLocalTime = true;
 
     networking.firewall = {
-      enable = true;
+      enable = false;
       allowedTCPPorts = [ 
         6443
         53
