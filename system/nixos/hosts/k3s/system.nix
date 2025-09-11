@@ -49,8 +49,9 @@
         53
         443
         80
-        8080];
-      trustedInterfaces = [ "cni0" "flannel.1" "ens18"];
+        8080
+        3012];
+      trustedInterfaces = [ "cni0" "flannel.1" "ens18" "ens19" "ens20" "ens21"];
     };
     # Configure keymap in X11
     services = {
@@ -60,5 +61,3 @@
     };
   };
 }
-
-
