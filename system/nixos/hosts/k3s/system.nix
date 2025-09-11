@@ -8,6 +8,11 @@
 
     ];
   config = {
+    boot.kernel.sysctl = {
+      "net.ipv4.conf.all.rp_filter" = "2";
+      "net.ipv4.conf.default.rp_filter" = "2";
+      "net.ipv4.ip_forward" = "1";
+    };
     networking.networkmanager.enable = lib.mkForce false;
     networking.useDHCP = lib.mkDefault false;
 
