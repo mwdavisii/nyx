@@ -57,8 +57,6 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [
-    (lib.asserts.assertMsg (resolvedNodeIp != null)
-      ''nyx.modules.system.k3s: Either set `address` or set `interface` to auto-detect an IP.'')
     {
       services.k3s = {
         enable = true;
