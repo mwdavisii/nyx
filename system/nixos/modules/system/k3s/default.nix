@@ -5,20 +5,6 @@ with lib;
 let
   inherit (lib) mkIf mkMerge mkOption mkEnableOption types optional optionals concatMap;
   cfg = config.nyx.modules.system.k3s;
-
-  # Helper: first IPv4 address on a given interface, or null if missing
-  firstIPv4On = ifName:
-    let
-      iface = config.networking.interfaces.${ifName} or null;
-      addrs = if iface == null then [] else (iface.ipv4.addresses or []);
-    in if addrs == [] then null else addrs.[0].address;
-
-  # Resolve node/advertise IP
-  resolvedNodeIp =
-    if cfg.address != null then cfg.address
-    else if cfg.interface != null then firstIPv4On cfg.interface
-    else null;
-
   # Make --tls-san flags
   tlsSansFlags = map (s: "--tls-san=${s}") cfg.tlsSans;
 in
@@ -30,7 +16,7 @@ in
     address = mkOption {
       type = types.nullOr types.str;
       default = null;
-      example = "10.40.250.201";
+      example = "10.40.40.40";
       description = ''
         IPv4 address for k3s (--node-ip and --advertise-address). If null,
         we'll use the first IPv4 found on `interface`.
@@ -58,7 +44,7 @@ in
       type = types.listOf types.str;
       # Hostname + localhost by default; you can add FQDNs/IPs in your host config
       default = [ config.networking.hostName "127.0.0.1" ];
-      example = [ "k3s.mydomain.com" "10.40.250.201" ];
+      example = [ "k3s.mydomain.com" "10.40.40.40" ];
       description = "Values to pass as --tls-san (list).";
     };
     networkingBackend = lib.mkOption {
