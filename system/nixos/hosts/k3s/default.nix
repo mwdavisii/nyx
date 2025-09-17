@@ -19,7 +19,7 @@
           enable = true;
           interface = "ens18";
           address = "10.40.250.201";
-          tlsSans = [ "k3s.local" "10.40.250.201" "127.0.0.1"];
+          tlsSans = [ "k3s.mwdavisii.com" "10.40.250.201" "127.0.0.1"];
           networkingBackend = "metallb";
         };
         ssh.enable = true;
