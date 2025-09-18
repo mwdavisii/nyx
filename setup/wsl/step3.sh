@@ -37,7 +37,7 @@ echo -e "It looks like you're setting up WSL2 for the first time. There are 3 pr
 echo " "
 echo "The options are:"
 echo -e "  ${BBlue}- \"nixos\"    ${Cyan} -- Default with no secrets or public keys applied." 
-echo -e "  ${BBlue}- \"ares\" 	  ${Cyan} -- Designed for mixed-user. Includes personal keys, but no system access keys." 
+echo -e "  ${BBlue}- \"ares\" 	  ${Cyan} -- Designed for mixed-use. Includes personal keys, but no system access keys." 
 echo " "
 echo -e "${Color_Off}"
 select opt in "${options[@]}"
@@ -50,9 +50,3 @@ do
 done
 echo -e "${Color_Off}"
 sudo nixos-rebuild switch --flake ../../#$opt
-if [ $? -eq 0 ]; then
-    echo -e "${Green}Finished!"
-    echo -e "${Green}PS: If you've elected to install vs code, you will want to run the following lines the first time you build wsl2:"
-    echo -e "${Cyan}    \"\$systemctl --user enable auto-fix-vscode-server.service\""
-    echo -e "${Cyan}    \"\$ln -sfT /run/current-system/etc/systemd/user/auto-fix-vscode-server.service ~/.config/systemd/user/auto-fix-vscode-server.service\""
-fi
