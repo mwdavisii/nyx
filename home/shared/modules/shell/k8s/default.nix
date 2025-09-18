@@ -17,6 +17,7 @@ in
       kustomize
       flux
       open-policy-agent
+      cilium-cli
     ];
   };
 }
