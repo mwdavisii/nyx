@@ -61,7 +61,6 @@ in
       services.k3s = {
         enable = true;
         role = "server";
-        nodeIp = cfg.address;
         clusterInit = true;
         extraFlags =
           [
