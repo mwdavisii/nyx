@@ -45,6 +45,7 @@
     ];
     networking.defaultGateway = "10.40.250.1";
     networking.nameservers = ["10.40.250.54" "10.40.250.53"];
+    networking.nameservers = ["10.40.250.53" "10.40.250.54"];
     time.hardwareClockInLocalTime = true;
 
     networking.firewall = {
