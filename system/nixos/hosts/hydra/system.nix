@@ -19,33 +19,32 @@
     #host
     networking.interfaces.ens18.ipv4.addresses = [
     {
-      address = "10.40.250.201";
+      address = "10.40.250.221";
       prefixLength = 24;
     }
     ];
     #IoT vlan
     networking.interfaces.ens19.ipv4.addresses = [
       {
-        address = "10.40.40.40";
+        address = "10.40.40.30";
         prefixLength = 24;
       }
     ];
     # Security VLAN
     networking.interfaces.ens20.ipv4.addresses = [
       {
-        address = "10.40.70.40";
+        address = "10.40.70.30";
         prefixLength = 24;
       }
     ];
     networking.interfaces.ens21.ipv4.addresses = [
       {
-        address = "10.40.200.40";
+        address = "10.40.200.30";
         prefixLength = 24;
       }
     ];
     networking.defaultGateway = "10.40.250.1";
     networking.nameservers = ["10.40.250.54" "10.40.250.53"];
-    networking.nameservers = ["10.40.250.53" "10.40.250.54"];
     time.hardwareClockInLocalTime = true;
 
     networking.firewall = {
