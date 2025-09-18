@@ -121,7 +121,7 @@ in
     }
 
     {
-      #home.file.".zshenv".source = ../../../../config/.zshenv;
+      home.file.".zshenv".source = ../../../../config/.zshenv;
       xdg.configFile."zsh".source = ../../../../config/.config/zsh;
     }
 
