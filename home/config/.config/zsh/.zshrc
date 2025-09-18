@@ -11,7 +11,12 @@
 function_profile=false
 command_profile=false
 
-
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt autocd extendedglob
+unsetopt beep
+bindkey -v
 
 
 if [[ $function_profile == true ]]; then
@@ -73,4 +78,4 @@ if [ $(command -v flux) ]; then
 fi 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh #fuzzyfind
 
-source ~/.cache/wal/colors-tty.sh
+#source ~/.cache/wal/colors-tty.sh
