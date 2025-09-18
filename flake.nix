@@ -33,10 +33,9 @@
     # Secrets
     agenix.url = "github:ryantm/agenix";
     secrets = {
-      url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
+      url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git?rev=ffd9cdc8962a2f3f294903e582f014c1326fe3e8";
       flake = false;
     };
-
     # MacOS
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
     darwin = {
@@ -93,6 +92,7 @@
                   eventlet = prevPkgs.eventlet.overridePythonAttrs (prevAttrs: {
                     disabledTests = prevAttrs.disabledTests ++ [
                       "test_full_duplex"
+                      "uncertainties"
                     ];
                   });
                 };
@@ -149,6 +149,8 @@
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
         L241729 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
         L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
+        k3s = { hostname = "k3s"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Prodesk 400 G6
+        hydra = { hostname = "hydra"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
       };
 
       top =
