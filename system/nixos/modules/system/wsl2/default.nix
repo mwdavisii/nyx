@@ -20,8 +20,7 @@ in
       startMenuLaunchers = true;
       docker-desktop.enable = false;
     };
-    
-    services.vscode-server.enable = true;
+    programs.nix-ld.enable = true;
     system.stateVersion = "25.05";
     programs.zsh.enable = true;
     time.timeZone = "America/Chicago";
