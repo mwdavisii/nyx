@@ -67,8 +67,6 @@ in
             "--bind-address=0.0.0.0"
             "--advertise-address=${cfg.address}"
             "--write-kubeconfig-mode=0644"
-            "--clusterCIDR = ${cfg.clusterCIDR}"
-            "--serviceCIDR = ${cfg.serviceCIDR}"
           ]
           ++ tlsSansFlags
           ++ (if cfg.networkingBackend == "cilium" then [
