@@ -15,6 +15,7 @@
       url = "git+https://github.com/hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
+    nixvim.url = "github:nix-community/nixvim";
     #hardware
     disko = {
       url = "github:nix-community/disko";
