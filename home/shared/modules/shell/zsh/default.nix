@@ -121,7 +121,7 @@ in
     }
 
     {
-      home.file.".zshenv".source = ../../../../config/.zshenv;
+      #home.file.".zshenv".source = ../../../../config/.zshenv;
       xdg.configFile."zsh".source = ../../../../config/.config/zsh;
     }
 
@@ -145,10 +145,6 @@ in
 
     (mkIf (cfg.profileExtra != "") {
       xdg.dataFile."zsh/nyx_zprofile".text = cfg.profileExtra;
-    })
-
-    (mkIf (cfg.envExtra != "") {
-      xdg.dataFile."zsh/nyx_zshenv".text = cfg.envExtra;
     })
 
     (mkIf (cfg.plugins != [ ]) {
