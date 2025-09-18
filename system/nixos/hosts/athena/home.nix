@@ -106,7 +106,7 @@
         lorri.enable = false;
         mcfly.enable = true;
         neofetch.enable = true;
-        neovim.enable = true;
+        nixvim.enable = true;
         networking.enable = true;
         ranger.enable = false; #prefer lf
         starship.enable = true;

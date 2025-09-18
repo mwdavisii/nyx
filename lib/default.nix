@@ -135,6 +135,9 @@ rec {
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "backup";
+                sharedModules = [
+                  inputs.nixvim.homeModules.nixvim
+                ];
                 extraSpecialArgs =
                   let
                     self = inputs.self;

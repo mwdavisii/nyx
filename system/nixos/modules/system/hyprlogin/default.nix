@@ -1,7 +1,7 @@
 { config, lib, pkgs, modulesPath, hostName, userConf, ... }:
 with lib;
 let
-  tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
+  tuigreet = "${pkgs.tuigreet}/bin/tuigreet";
   cfg = config.nyx.modules.system.hyprlogin;
 in
 {
