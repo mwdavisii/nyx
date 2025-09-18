@@ -67,6 +67,7 @@ in
             "--bind-address=0.0.0.0"
             "--advertise-address=${cfg.address}"
             "--write-kubeconfig-mode=0644"
+            "--node-ip=${cfg.address}"
           ]
           ++ tlsSansFlags
           ++ (if cfg.networkingBackend == "cilium" then [
