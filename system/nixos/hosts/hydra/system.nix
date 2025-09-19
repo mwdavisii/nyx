@@ -65,7 +65,7 @@
       allowedUDPPorts = [ 
         53
       ];
-      trustedInterfaces = [ "cni0" "flannel.1" "ens18" "ens19" "ens20" "ens21"];
+      trustedInterfaces = [ "cni0" "flannel.1" "ens18" "ens19" "ens20" "ens21" "ens22"];
     };
     # Configure keymap in X11
     services = {
