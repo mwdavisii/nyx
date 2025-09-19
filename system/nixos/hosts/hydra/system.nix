@@ -37,6 +37,12 @@
         prefixLength = 24;
       }
     ];
+    networking.interfaces.ens22.ipv4.addresses = [
+      {
+        address = "10.40.250.30";
+        prefixLength = 24;
+      }
+    ];
     networking.interfaces.ens21.ipv4.addresses = [
       {
         address = "10.40.200.30";
