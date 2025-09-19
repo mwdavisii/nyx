@@ -18,7 +18,7 @@ in
       flux
       open-policy-agent
       cilium-cli
-      helm
+      kubernetes-helm
     ];
   };
 }
