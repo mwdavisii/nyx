@@ -72,7 +72,10 @@ in
           ++ tlsSansFlags
           ++ (if cfg.networkingBackend == "cilium" then [
               "--flannel-backend=none"
+              "--disable-kube-proxy"
               "--disable-network-policy"
+              "--disable=servicelb"
+              "--disable=traefik"
             ] else if cfg.networkingBackend == "metallb" then [
               "--disable servicelb"
             ] else []
