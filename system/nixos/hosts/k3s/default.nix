@@ -17,7 +17,7 @@
         hyprland.enable = false;
         k3s = {
           enable = true;
-          interface = "ens18";
+          interface = "enp6s18";
           address = "10.40.250.201";
           tlsSans = [ "k3s.mwdavisii.com" "10.40.250.201" "127.0.0.1"];
           networkingBackend = "metallb";
