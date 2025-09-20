@@ -19,33 +19,33 @@
     #host
     networking.interfaces.ens18.ipv4.addresses = [
     {
-      address = "10.40.250.221";
+      address = "10.40.250.231";
       prefixLength = 24;
     }
     ];
     #IoT vlan
     networking.interfaces.ens19.ipv4.addresses = [
       {
-        address = "10.40.40.30";
+        address = "10.40.40.20";
         prefixLength = 24;
       }
     ];
     # Security VLAN
     networking.interfaces.ens20.ipv4.addresses = [
       {
-        address = "10.40.70.30";
+        address = "10.40.70.20";
         prefixLength = 24;
       }
     ];
     networking.interfaces.ens22.ipv4.addresses = [
       {
-        address = "10.40.250.30";
+        address = "10.40.250.20";
         prefixLength = 24;
       }
     ];
     networking.interfaces.ens21.ipv4.addresses = [
       {
-        address = "10.40.200.30";
+        address = "10.40.200.20";
         prefixLength = 24;
       }
     ];

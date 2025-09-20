@@ -21,6 +21,7 @@
           address = "10.40.250.221";
           tlsSans = [ "hydra.mwdavisii.com" "hydra.local" "10.40.250.221" "127.0.0.1"];
           networkingBackend = "cilium";
+          taintControlPlane = true;
         };
         ssh.enable = true;
         qemu.enable = true;

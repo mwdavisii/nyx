@@ -47,13 +47,20 @@ in
       example = [ "k3s.mydomain.com" "10.40.40.40" ];
       description = "Values to pass as --tls-san (list).";
     };
+    
     networkingBackend = lib.mkOption {
       type = lib.types.enum [ "metallb" "cilium" "traefik" ];
       description = ''
       Which networking / load balancer stack to use for K3s.
       Must be either "metallb" or "cilium".
       '';
-      };
+    };
+    
+    taintControlPlane = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Taint the control-plane node to prevent scheduling of workloads.";
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
