@@ -77,6 +77,7 @@ in
             "--node-ip=${cfg.address}"
           ]
           ++ tlsSansFlags
+          ++ (optional cfg.taintControlPlane "--node-taint=node-role.kubernetes.io/control-plane=true:NoSchedule")
           ++ (if cfg.networkingBackend == "cilium" then [
               "--flannel-backend=none"
               "--disable-kube-proxy"
