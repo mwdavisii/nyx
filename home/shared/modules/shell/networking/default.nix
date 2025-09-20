@@ -14,6 +14,8 @@ in
         inetutils
         nmap
         dig
+        arp-scan
+        arp
     ];
   };
 }
