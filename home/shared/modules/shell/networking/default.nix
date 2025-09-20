@@ -15,7 +15,6 @@ in
         nmap
         dig
         arp-scan
-        arp
     ];
   };
 }
