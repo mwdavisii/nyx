@@ -19,35 +19,9 @@
     #host
     networking.interfaces.ens18.ipv4.addresses = [
     {
-      address = "10.40.250.231";
+      address = "10.40.250.201";
       prefixLength = 24;
     }
-    ];
-    #IoT vlan
-    networking.interfaces.ens19.ipv4.addresses = [
-      {
-        address = "10.40.40.20";
-        prefixLength = 24;
-      }
-    ];
-    # Security VLAN
-    networking.interfaces.ens20.ipv4.addresses = [
-      {
-        address = "10.40.70.20";
-        prefixLength = 24;
-      }
-    ];
-    networking.interfaces.ens22.ipv4.addresses = [
-      {
-        address = "10.40.250.20";
-        prefixLength = 24;
-      }
-    ];
-    networking.interfaces.ens21.ipv4.addresses = [
-      {
-        address = "10.40.200.20";
-        prefixLength = 24;
-      }
     ];
     networking.defaultGateway = "10.40.250.1";
     networking.nameservers = ["10.40.250.54" "10.40.250.53"];
@@ -56,16 +30,7 @@
     networking.firewall = {
       enable = false;
       allowedTCPPorts = [ 
-        6443
-        53
-        443
-        80
-        8080
-        3012];
-      allowedUDPPorts = [ 
-        53
-      ];
-      trustedInterfaces = [ "cni0" "flannel.1" "ens18" "ens19" "ens20" "ens21" "ens22"];
+        6443];
     };
     # Configure keymap in X11
     services = {
