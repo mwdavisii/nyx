@@ -23,7 +23,7 @@
           networkingBackend = "cilium";
           taintControlPlane = true;
           role = "agent";
-          serverAddress = "10.40.250.100"
+          serverAddress = "10.40.250.100";
         };
         ssh.enable = true;
         qemu.enable = true;
