@@ -111,11 +111,9 @@ in
               "--disable=servicelb"
             ];
       })
-
-      # --- Agent-specific configuration (CORRECTED) ---
       (lib.optionalAttrs (cfg.role == "agent") {
-        serverUrl = "https://"+cfg.serverAddress+":6443";
-        tokenFile = cfg.tokenFile;
+        #serverUrl = "https://"+cfg.serverAddress+":6443";
+        #tokenFile = cfg.tokenFile;
         extraFlags =
           [
             "--node-ip=${cfg.address}"
