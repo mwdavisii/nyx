@@ -22,7 +22,7 @@
           tlsSans = [ "hydra.mwdavisii.com" "hydra.local" "10.40.250.220" "127.0.0.1"];
           networkingBackend = "cilium";
           taintControlPlane = true;
-          role = server;
+          role = "server";
         };
         ssh.enable = true;
         qemu.enable = true;
