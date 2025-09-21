@@ -24,7 +24,7 @@
           taintControlPlane = true;
           role = "agent";
           serverAddress = "10.40.250.100";
-          tokenFile="/etc/nixos/k3s.token"
+          tokenFile="/etc/nixos/k3s.token";
         };
         ssh.enable = true;
         qemu.enable = true;
