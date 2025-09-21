@@ -149,7 +149,10 @@
         L241729 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
         L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
         k3s = { hostname = "k3s"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Prodesk 400 G6
-        hydra = { hostname = "hydra"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
+        kefali-01 = { hostname = "kefali-01"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
+        kefali-02 = { hostname = "kefali-02"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
+        kefali-03 = { hostname = "kefali-03"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
+        kefali-04 = { hostname = "kefali-04"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
       };
 
       top =
