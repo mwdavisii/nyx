@@ -23,13 +23,12 @@
           networkingBackend = "cilium";
           taintControlPlane = true;
           role = "agent";
-          serverAddress = "10.40.250.100";
+          serverAddress = "10.40.250.101";
         };
         ssh.enable = true;
         qemu.enable = true;
       };
-    };
-    
+    };    
     secrets = {
       awsSSHKeys.enable = false;
       awsConfig.enable = false;
