@@ -118,11 +118,7 @@ in
         extraFlags =
           [
             "--node-ip=${cfg.address}"
-          ]
-          ++ lib.optionals (cfg.networkingBackend == "cilium") [
-              "--disable-kube-proxy"
-              "--disable-network-policy"
-            ];
+          ];
       })
     ];
 
