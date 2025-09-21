@@ -89,7 +89,7 @@ in
       }
 
       # --- Server-specific configuration ---
-      (lib.mkIf (cfg.role == "server") {
+      (lib.optionalAttrs (cfg.role == "server") {
         clusterInit = true;
         extraFlags =
           [
@@ -113,9 +113,7 @@ in
       })
 
       # --- Agent-specific configuration (CORRECTED) ---
-      (lib.mkIf (cfg.role == "agent") {
-        # The option is `serverUrl`, not `serverAddress`.
-        # We now construct the URL for you from the serverAddress option.
+      (lib.optionalAttrs (cfg.role == "agent") {
         serverUrl = "https://"+cfg.serverAddress+":6443";
         tokenFile = cfg.tokenFile;
         extraFlags =
