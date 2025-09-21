@@ -112,9 +112,11 @@ in
             ];
       })
 
-      # --- Agent-specific configuration ---
+      # --- Agent-specific configuration (CORRECTED) ---
       (lib.mkIf (cfg.role == "agent") {
-        serverAddress = cfg.serverAddress;
+        # The option is `serverUrl`, not `serverAddress`.
+        # We now construct the URL for you from the serverAddress option.
+        serverUrl = "https://"+cfg.serverAddress+":6443";
         tokenFile = cfg.tokenFile;
         extraFlags =
           [
@@ -127,7 +129,8 @@ in
             ];
       })
     ];
+
     # Open the API port only on the server
     networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
-  };  
+  };
 }
