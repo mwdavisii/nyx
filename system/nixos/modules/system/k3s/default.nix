@@ -55,19 +55,38 @@ in
       Must be either "metallb" or "cilium".
       '';
     };
-    
+
+    role = lib.mkOption {
+      type = lib.types.enum [ "server" "agent" ];
+      default = "server";
+      description = "Role of the k3s node.";
+    };
+
+    serverAddress = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "The IP address of the k3s server. Required for agents.";
+    };
+
+    tokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "Path to the file containing the cluster join token. Required for agents.";
+    };
+
     taintControlPlane = mkOption {
       type = types.bool;
       default = false;
       description = "Taint the control-plane node to prevent scheduling of workloads.";
     };
   };
+  config = lib.mkIf cfg.enable {
+    services.k3s = {
+      enable = true;
+      role = cfg.role;
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      services.k3s = {
-        enable = true;
-        role = "server";
+      # --- Server-specific configuration ---
+      server = lib.mkIf (cfg.role == "server") {
         clusterInit = true;
         extraFlags =
           [
@@ -77,20 +96,37 @@ in
             "--node-ip=${cfg.address}"
           ]
           ++ tlsSansFlags
-          ++ (optional cfg.taintControlPlane "--node-taint=node-role.kubernetes.io/control-plane=true:NoSchedule")
-          ++ (if cfg.networkingBackend == "cilium" then [
+          # Cilium-specific flags
+          ++ lib.optionals (cfg.networkingBackend == "cilium") [
               "--flannel-backend=none"
               "--disable-kube-proxy"
               "--disable-network-policy"
               "--disable=servicelb"
               "--disable=traefik"
-            ] else if cfg.networkingBackend == "metallb" then [
-              "--disable servicelb"
-            ] else []
-          );
+            ]
+          # MetalLB-specific flags (This is the corrected part)
+          ++ lib.optionals (cfg.networkingBackend == "metallb") [
+              "--disable=servicelb"
+            ];
       };
-      # Open the API port
-      networking.firewall.allowedTCPPorts = [ 6443];
-    }
-  ]);
+
+      # --- Agent-specific configuration ---
+      agent = lib.mkIf (cfg.role == "agent") {
+        serverAddress = cfg.serverAddress;
+        tokenFile = cfg.tokenFile;
+        extraFlags = 
+          [
+            "--node-ip=${cfg.address}"
+          ]
+          ++ (if cfg.networkingBackend == "cilium" then [
+              "--flannel-backend=none"
+              "--disable-kube-proxy"
+              "--disable-network-policy"
+            ] else []);
+      };
+    };
+
+    # Open the API port only on the server
+    networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
+  };
 }

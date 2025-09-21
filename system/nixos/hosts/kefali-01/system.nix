@@ -19,7 +19,7 @@
     #host
     networking.interfaces.ens18.ipv4.addresses = [
     {
-      address = "10.40.250.231";
+      address = "10.40.250.202";
       prefixLength = 24;
     }
     ];
