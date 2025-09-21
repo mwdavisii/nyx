@@ -120,7 +120,6 @@ in
             "--node-ip=${cfg.address}"
           ]
           ++ lib.optionals (cfg.networkingBackend == "cilium") [
-              "--flannel-backend=none"
               "--disable-kube-proxy"
               "--disable-network-policy"
             ];
