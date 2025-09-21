@@ -125,6 +125,15 @@ in
     ];
 
     # Open the API port only on the server
-    networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
+    networking.firewall = {
+      enable = true; # Ensure the firewall is explicitly managed
+      allowedTCPPorts = [ 
+        6443 # Kubernetes API Server
+        4240 # Cilium Health Checks
+      ];
+      allowedUDPPorts = [ 
+        8472 # Cilium VXLAN Tunnel
+      ];
+    };
   };
 }
