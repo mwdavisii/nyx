@@ -81,12 +81,15 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    services.k3s = {
-      enable = true;
-      role = cfg.role;
+    services.k3s = lib.mkMerge [
+      # --- Common configuration for both roles ---
+      {
+        enable = true;
+        role = cfg.role;
+      }
 
       # --- Server-specific configuration ---
-      server = lib.mkIf (cfg.role == "server") {
+      (lib.mkIf (cfg.role == "server") {
         clusterInit = true;
         extraFlags =
           [
@@ -96,7 +99,7 @@ in
             "--node-ip=${cfg.address}"
           ]
           ++ tlsSansFlags
-          # Cilium-specific flags
+          ++ lib.optionals (cfg.taintControlPlane) [ "--node-taint=node-role.kubernetes.io/control-plane=true:NoSchedule" ]
           ++ lib.optionals (cfg.networkingBackend == "cilium") [
               "--flannel-backend=none"
               "--disable-kube-proxy"
@@ -104,29 +107,27 @@ in
               "--disable=servicelb"
               "--disable=traefik"
             ]
-          # MetalLB-specific flags (This is the corrected part)
           ++ lib.optionals (cfg.networkingBackend == "metallb") [
               "--disable=servicelb"
             ];
-      };
+      })
 
       # --- Agent-specific configuration ---
-      agent = lib.mkIf (cfg.role == "agent") {
+      (lib.mkIf (cfg.role == "agent") {
         serverAddress = cfg.serverAddress;
         tokenFile = cfg.tokenFile;
-        extraFlags = 
+        extraFlags =
           [
             "--node-ip=${cfg.address}"
           ]
-          ++ (if cfg.networkingBackend == "cilium" then [
+          ++ lib.optionals (cfg.networkingBackend == "cilium") [
               "--flannel-backend=none"
               "--disable-kube-proxy"
               "--disable-network-policy"
-            ] else []);
-      };
-    };
-
+            ];
+      })
+    ];
     # Open the API port only on the server
     networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
-  };
+  };  
 }
