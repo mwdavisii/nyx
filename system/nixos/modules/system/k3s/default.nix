@@ -106,6 +106,8 @@ in
               "--disable-network-policy"
               "--disable=servicelb"
               "--disable=traefik"
+              "--cluster-cidr=${cfg.clusterCIDR}"
+              "--service-cidr=${cfg.serviceCIDR}"
             ]
           ++ lib.optionals (cfg.networkingBackend == "metallb") [
               "--disable=servicelb"
