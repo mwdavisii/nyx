@@ -88,7 +88,7 @@ in
         role = cfg.role;
       }
 
-      # --- Server-specific configuration ---
+      # Server config
       (lib.optionalAttrs (cfg.role == "server") {
         clusterInit = true;
         extraFlags =
@@ -111,9 +111,10 @@ in
               "--disable=servicelb"
             ];
       })
+      # Agent config
       (lib.optionalAttrs (cfg.role == "agent") {
-        #serverUrl = "https://"+cfg.serverAddress+":6443";
-        #tokenFile = cfg.tokenFile;
+        serverAddr= "https://"+cfg.serverAddress+":6443";
+        tokenFile = cfg.tokenFile;
         extraFlags =
           [
             "--node-ip=${cfg.address}"
