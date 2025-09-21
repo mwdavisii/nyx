@@ -18,8 +18,8 @@
         k3s = {
           enable = true;
           interface = "ens18";
-          address = "10.40.250.220";
-          tlsSans = [ "hydra.mwdavisii.com" "hydra.local" "10.40.250.220" "127.0.0.1"];
+          address = "10.40.250.100";
+          tlsSans = [ "hydra.mwdavisii.com" "hydra.local" "10.40.250.100" "127.0.0.1"];
           networkingBackend = "cilium";
           taintControlPlane = true;
           role = "server";
