@@ -31,7 +31,6 @@
           ];
           networkingBackend = "cilium";
           taintControlPlane = true;
-          role = "server";
         };
         ssh.enable = true;
         qemu.enable = true;

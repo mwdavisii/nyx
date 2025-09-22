@@ -23,13 +23,6 @@ in
       '';
     };
 
-    # …or tell us which NIC to read from
-    interface = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = "Interface to auto-detect the primary IPv4 from.";
-    };
-
     clusterCIDR = mkOption {
       type = types.str;
       default = "10.42.0.0/16";
@@ -56,12 +49,6 @@ in
       '';
     };
 
-    role = lib.mkOption {
-      type = lib.types.enum [ "server" "agent" ];
-      default = "server";
-      description = "Role of the k3s node.";
-    };
-
     serverAddress = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -85,11 +72,7 @@ in
       # --- Common configuration for both roles ---
       {
         enable = true;
-        role = cfg.role;
-      }
-
-      # Server config
-      (lib.optionalAttrs (cfg.role == "server") {
+        role = "server";
         clusterInit = true;
         extraFlags =
           [
@@ -112,16 +95,7 @@ in
           ++ lib.optionals (cfg.networkingBackend == "metallb") [
               "--disable=servicelb"
             ];
-      })
-      # Agent config
-      (lib.optionalAttrs (cfg.role == "agent") {
-        serverAddr= "https://"+cfg.serverAddress+":6443";
-        tokenFile = cfg.tokenFile;
-        extraFlags =
-          [
-            "--node-ip=${cfg.address}"
-          ];
-      })
+        }
     ];
 
     # Open the API port only on the server
