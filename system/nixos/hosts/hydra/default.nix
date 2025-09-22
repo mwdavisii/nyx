@@ -19,13 +19,16 @@
           enable = true;
           interface = "ens18";
           address = "10.40.250.100";
-            "hydra"                 # short hostname
-            "hydra.mwdavisii.com"   # FQDN you already have
-            "hydra.local"           # mDNS/host-only name you already have
-            "10.40.250.100"         # node IP you already have
-            "10.40.250.221"         # (if/when you put a VIP/LB in front)
-            "10.43.0.1"             # clusterIP for kubernetes.default (if using it)
-            "127.0.0.1"             # you already have; harmless
+          tlsSans = [
+            "hydra"
+            "hydra.mwdavisii.com"
+            "hydra.home.arpa"
+            "hydra.local"
+            "10.40.250.100"
+            "10.40.250.221"
+            "10.43.0.1"
+            "127.0.0.1"
+          ];
           networkingBackend = "cilium";
           taintControlPlane = true;
           role = "server";
