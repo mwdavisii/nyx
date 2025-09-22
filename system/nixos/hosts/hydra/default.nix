@@ -18,9 +18,20 @@
         k3s = {
           enable = true;
           interface = "ens18";
-          address = "10.40.250.221";
-          tlsSans = [ "hydra.mwdavisii.com" "hydra.local" "10.40.250.221" "127.0.0.1"];
+          address = "10.40.250.100";
+          tlsSans = [
+            "hydra"
+            "hydra.mwdavisii.com"
+            "hydra.home.arpa"
+            "hydra.local"
+            "10.40.250.100"
+            "10.40.250.221"
+            "10.43.0.1"
+            "127.0.0.1"
+          ];
           networkingBackend = "cilium";
+          taintControlPlane = true;
+          role = "server";
         };
         ssh.enable = true;
         qemu.enable = true;
@@ -40,4 +51,3 @@
     };
   };
 }
-
