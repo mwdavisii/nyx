@@ -99,6 +99,7 @@
         tmux.enable = false;
         usbutils.enable = false;
         xdg.enable = false;
+        yq.enable = true;
         zellij.enable = false;
         zsh.enable = true;
       };
