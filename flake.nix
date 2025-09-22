@@ -15,6 +15,7 @@
       url = "git+https://github.com/hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
+    nixvim.url = "github:nix-community/nixvim";
     #hardware
     disko = {
       url = "github:nix-community/disko";
@@ -56,7 +57,6 @@
     };
 
     # WSL
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -137,16 +137,13 @@
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
-        athena = { hostname = "athena"; user = "mwdavisii"; buildTarget = "nixos"; };
         ares = { user = "nixos"; hostname = "ares"; buildTarget = "nixos"; }; #WSL
-        asahi = { user = "mwdavisii"; system = "aarch64-darwin"; hostname = "asahi"; buildTarget = "nixos"; }; #WSL
         hephaestus = { hostname = "hephaestus"; user = "mwdavisii"; buildTarget = "nixos"; }; #home machine
         livecd = { hostname = "worklt"; user = "mwdavisii"; buildTarget = "iso"; }; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
-        mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
         nixos = { user = "nixos"; hostname = "nixos"; buildTarget = "nixos"; }; #WSL
-        olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Work Laptop (Host OS)
+        olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Lenovo laptop
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
-        L241729 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
+        L241729 = { system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; }; #work macbook
         L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
         hydra = { hostname = "hydra"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
       };

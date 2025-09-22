@@ -79,8 +79,8 @@ Below are descriptions of the hosts configurations. If you have access to window
 ├─── nixos
 ├───── hosts
 ├─────── ares           # => Personal WSL w/ personal credential decryption
-├─────── athena         # => Personal laptop - Alienware m15 R6 / i7 / RTX 3080 / nixos only
 ├─────── hephaestus     # => Home machine - Custom Build / i9 / AMD 7900xt / dual boot nixos+win
+├─────── hydra          # => Home lab k3s VM on proxmox w/ cilium
 ├─────── livecd         # => Bootable installer ISO w/ custom shell
 ├─────── olenos         # => Work laptop - Thinkpad x13 / i7 / integrated graphics / nixos only
 ├─────── virtualbox     # => Oracle Virtualbox Image (Gnome + Shell)

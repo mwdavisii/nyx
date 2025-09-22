@@ -135,6 +135,9 @@ rec {
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "backup";
+                sharedModules = [
+                  inputs.nixvim.homeModules.nixvim
+                ];
                 extraSpecialArgs =
                   let
                     self = inputs.self;
@@ -151,7 +154,6 @@ rec {
             }
           )
           (inputs.nixos-wsl.nixosModules.wsl)
-          (vscode-server.nixosModules.default)
           (disko.nixosModules.disko)
           (inputs.agenix.nixosModules.default)
           (import ../system/nixos/modules)

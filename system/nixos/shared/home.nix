@@ -56,8 +56,9 @@
         lf.enable = true;
         lorri.enable = false;
         mcfly.enable = true;
-        neovim.enable = true;
+        nixvim.enable = true;
         networking.enable = true;
+        wal.enable = true;
         starship.enable = true;
         terraform.enable = true;
         tmux.enable = true;
