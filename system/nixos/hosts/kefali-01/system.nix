@@ -23,8 +23,8 @@
       prefixLength = 24;
     }
     ];
-
-        networking.interfaces.ens19.ipv4.addresses = [
+    /*
+    networking.interfaces.ens19.ipv4.addresses = [
       {
         address = "10.40.20.101";
         prefixLength = 24;
@@ -65,11 +65,11 @@
         prefixLength = 24;
       }
     ];
-
+    */
     networking.defaultGateway = "10.40.250.1";
     networking.nameservers = ["10.40.250.54" "10.40.250.53"];
     time.hardwareClockInLocalTime = true;
-    
+
     # Configure keymap in X11
     services = {
       openssh.enable = true;
