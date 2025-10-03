@@ -55,8 +55,8 @@
       go.enable = true;
       dhall.enable = true;
       lua.enable = true;
-      nix.enable = true;
-      node.enable = true;
+      nix.enable = false;
+      node.enable = false;
       python.enable = true;
     };
     shell = {
