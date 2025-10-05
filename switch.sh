@@ -7,7 +7,7 @@ if [[ $osName == "Darwin" ]]; then
     # disable because nixos.org certs aren't trusted.
     warp-cli disconnect
   fi
-  darwin-rebuild --show-trace switch --flake .
+  sudo --preserve-env=SSH_AUTH_SOCK darwin-rebuild switch --flake .
 elif [[ $userName == "nix-on-droid" ]]; then
   nix-on-droid switch --show-trace --flake .
 else

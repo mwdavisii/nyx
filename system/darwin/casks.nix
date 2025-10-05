@@ -3,8 +3,8 @@ _:
 [
   #desktop toools
   "whichspace"
-  "dozer"
-  "amethyst"
+  #"dozer"
+  #"amethyst"
   "hammerspoon"
   "sublime-text"
 
