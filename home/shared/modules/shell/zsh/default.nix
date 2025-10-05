@@ -88,7 +88,13 @@ in
 
     envExtra = mkOption {
       type = types.lines;
-      default = "";
+      default = ''
+
+        export ZDOTDIR="$HOME/.config/zsh"
+
+        [[ -f $HOME/.local/share/zsh/nyx_zshenv ]] && . $HOME/.local/share/zsh/nyx_zshenv
+        [[ -f $HOME/.local/share/zsh/zshenv ]] && . $HOME/.local/share/zsh/zshenv
+        '';
       description = "Extra commands that should be added to <filename>.zshenv</filename>.";
     };
 
@@ -103,11 +109,7 @@ in
 
     initExtra = mkOption {
       type = types.lines;
-      default = ''
-        export ZDOTDIR="$HOME/.config/zsh"
-        [[ -f $HOME/.local/share/zsh/nyx_zshenv ]] && . $HOME/.local/share/zsh/nyx_zshenv
-        [[ -f $HOME/.local/share/zsh/zshenv ]] && . $HOME/.local/share/zsh/zshenv
-      '';
+      default = "";
       description = ''
         Extra commands that should be run when initializing an
         interactive shell.
@@ -145,6 +147,10 @@ in
         "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"}
       '';
     }
+
+    (mkIf (cfg.envExtra != "") {
+      home.file.".zshenv".text = cfg.envExtra;
+    })
 
     (mkIf (cfg.profileExtra != "") {
       xdg.dataFile."zsh/nyx_zprofile".text = cfg.profileExtra;
