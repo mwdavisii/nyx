@@ -16,7 +16,6 @@ in
       kubectl
       kustomize
       flux
-      open-policy-agent
       cilium-cli
       kubernetes-helm
     ];

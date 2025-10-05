@@ -58,25 +58,34 @@ in
           wantURIs = concatMapStrings
             (entry: "${entryURI entry.path}\n")
             cfg.entries;
+          primaryUser = userConf.userName;
+          asPrimaryUser = ''launchctl asuser "$(id -u -- ${primaryUser})" sudo --user=${primaryUser} --set-home --'';
+          entryOptions = entry: if entry.options == "" then "" else " ${entry.options}";
           createEntries = concatMapStrings
-            (entry: "${dockutil}/bin/dockutil --no-restart --add '${entry.path}' --section ${entry.section} ${entry.options}\n")
+            (entry:
+              "${asPrimaryUser} ${dockutil}/bin/dockutil --no-restart --add ${escapeShellArg (normalize entry.path)} --section ${escapeShellArg entry.section}${entryOptions entry}\n"
+            )
             cfg.entries;
         in
         {
           system.primaryUser = userConf.userName;
           system.defaults.dock.autohide = cfg.autohide;          
-          system.activationScripts.activateSettings.text = ''
-            echo >&2 "Setting up the Dock..."
-            haveURIs="$(${dockutil}/bin/dockutil --list | ${pkgs.coreutils}/bin/cut -f2)"
-            if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >&2 ; then
-              echo >&2 "Resetting Dock."
-              ${dockutil}/bin/dockutil --no-restart --remove all
-              ${createEntries}
-              killall Dock
-            else
-              echo >&2 "Dock setup complete."
-            fi
-          '';
+          system.activationScripts.postActivation.text =
+            mkAfter ''
+              echo >&2 "Setting up the Dock..."
+              haveURIs="$(
+                ${asPrimaryUser} ${dockutil}/bin/dockutil --list |
+                ${pkgs.coreutils}/bin/cut -f2
+              )"
+              if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >&2 ; then
+                echo >&2 "Resetting Dock."
+                ${asPrimaryUser} ${dockutil}/bin/dockutil --no-restart --remove all
+                ${createEntries}
+                ${asPrimaryUser} /usr/bin/killall Dock || true
+              else
+                echo >&2 "Dock setup complete."
+              fi
+            '';
         }
       );
 }

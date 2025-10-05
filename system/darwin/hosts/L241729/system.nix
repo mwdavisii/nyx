@@ -34,8 +34,6 @@ with lib;
                 "Microsoft To Do" = 1274495053;
                 "Microsoft Word" = 462054704;
                 "Keeper Password Manager" = 414781829;
-                #"Keeper for Safari" = -2145249260; It doesn't like this and apparently can't be installed this way.
-                "Xcode" = 497799835;
             };
         };
         system = {
