@@ -5,6 +5,7 @@ _:
   "whichspace"
   #"dozer"
   #"amethyst"
+  "nikitabobko/tap/aerospace"
   "hammerspoon"
   "sublime-text"
 
