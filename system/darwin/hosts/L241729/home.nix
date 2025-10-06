@@ -30,7 +30,8 @@
       wallpaper.enable = true;
       hammerspoon.enable = true;
       karabiner.enable = true;
-      amethyst.enable = true; #amethyst is installed by brew cask, this copies config files
+      amethyst.enable = false; #amethyst is installed by brew cask, this copies config files
+      aerospace.enable = true; #aerospace is installed by brew cask, this copies config files
     };
     app = {
       iterm2.enable = true;
