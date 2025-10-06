@@ -5,7 +5,7 @@ let
   cfg = config.nyx.modules.desktop.aerospace;
 in
 {
-  options.nyx.modules.desktop.amethyst = {
+  options.nyx.modules.desktop.aerospace = {
     enable = mkEnableOption "aerospace";
   };
 
