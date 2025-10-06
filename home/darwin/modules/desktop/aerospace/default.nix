@@ -10,6 +10,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    xdg.configFile."aerospace".source = ../../../../config/.config/aerospace;
+    home.file.".aerospace.toml".source = ../../../../config/.config/aerospace/aerospace.toml;
   };
 }
