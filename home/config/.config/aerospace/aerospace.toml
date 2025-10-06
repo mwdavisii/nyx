@@ -1,0 +1,107 @@
+# ---------- Core layout: BSP-ish feel ----------
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+# Alternate H/V in nested containers to emulate BSP
+enable-normalization-opposite-orientation-for-nested-containers = true
+# Keep intentional splits so your tree shape persists
+enable-normalization-flatten-containers = false
+
+[gaps]
+outer.left = 8
+outer.right = 8
+outer.top = 8
+outer.bottom = 8
+inner.horizontal = 0
+inner.vertical = 0
+
+# ---------- Main keybinds (Hyper = cmd+ctrl+alt) ----------
+[mode.main.binding]
+
+# Focus with arrows (avoids conflict with Kitty on K)
+cmd-ctrl-alt-left  = 'focus left'
+cmd-ctrl-alt-right = 'focus right'
+cmd-ctrl-alt-up    = 'focus up'
+cmd-ctrl-alt-down  = 'focus down'
+
+# Move/Swap window
+cmd-ctrl-alt-shift-h = 'move left'
+cmd-ctrl-alt-shift-j = 'move down'
+cmd-ctrl-alt-shift-k = 'move up'
+cmd-ctrl-alt-shift-l = 'move right'
+
+# Tree shaping
+cmd-ctrl-alt-backslash = 'split opposite'
+cmd-ctrl-alt-y = 'join-with left'
+cmd-ctrl-alt-u = 'join-with up'
+cmd-ctrl-alt-i = 'join-with down'
+cmd-ctrl-alt-o = 'join-with right'  # keep 'o' for join-with right
+
+# Fullscreen / float toggle / close
+cmd-ctrl-alt-g = 'fullscreen'
+cmd-ctrl-alt-p = 'layout floating tiling'
+cmd-ctrl-alt-q = 'close'
+
+# Resize smart
+cmd-ctrl-alt-minus = 'resize smart -80'
+cmd-ctrl-alt-equal = 'resize smart +80'
+
+# Workspaces 1–10
+cmd-ctrl-alt-1 = 'workspace 1'
+cmd-ctrl-alt-2 = 'workspace 2'
+cmd-ctrl-alt-3 = 'workspace 3'
+cmd-ctrl-alt-4 = 'workspace 4'
+cmd-ctrl-alt-5 = 'workspace 5'
+cmd-ctrl-alt-6 = 'workspace 6'
+cmd-ctrl-alt-7 = 'workspace 7'
+cmd-ctrl-alt-8 = 'workspace 8'
+cmd-ctrl-alt-9 = 'workspace 9'
+cmd-ctrl-alt-0 = 'workspace 10'
+
+# Move window to workspace
+cmd-ctrl-alt-shift-1 = 'move-node-to-workspace 1'
+cmd-ctrl-alt-shift-2 = 'move-node-to-workspace 2'
+cmd-ctrl-alt-shift-3 = 'move-node-to-workspace 3'
+cmd-ctrl-alt-shift-4 = 'move-node-to-workspace 4'
+cmd-ctrl-alt-shift-5 = 'move-node-to-workspace 5'
+cmd-ctrl-alt-shift-6 = 'move-node-to-workspace 6'
+cmd-ctrl-alt-shift-7 = 'move-node-to-workspace 7'
+cmd-ctrl-alt-shift-8 = 'move-node-to-workspace 8'
+cmd-ctrl-alt-shift-9 = 'move-node-to-workspace 9'
+cmd-ctrl-alt-shift-0 = 'move-node-to-workspace 10'
+
+# Prev/Next workspace (like e-1 / e+1)
+ctrl-left  = 'workspace prev'
+ctrl-right = 'workspace next'
+
+# Quick layout cycling
+cmd-ctrl-alt-slash = 'layout tiles horizontal vertical'
+cmd-ctrl-alt-comma = 'layout accordion horizontal vertical'
+
+# ---------- App launchers ----------
+cmd-ctrl-alt-enter  = 'exec-and-forget open -a Alacritty'
+cmd-ctrl-alt-a      = 'exec-and-forget open -a Alacritty'
+cmd-ctrl-alt-k      = 'exec-and-forget open -a Kitty'
+cmd-ctrl-alt-b      = 'exec-and-forget open -a "Google Chrome"'
+cmd-ctrl-alt-f      = 'exec-and-forget open -a "Finder"'
+cmd-ctrl-alt-c      = 'exec-and-forget open -a "Visual Studio Code"'
+cmd-ctrl-alt-n      = 'exec-and-forget open -a "Obsidian"'
+
+# Chrome PWAs (Teams/Outlook/Messages)
+cmd-ctrl-alt-t = 'exec-and-forget "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --profile-directory=Default --app-id=cifhbcnohmdccbgoicgdjpfamggdegmo'
+cmd-ctrl-alt-shift-o = 'exec-and-forget "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --profile-directory=Default --app-id=faolnafnngnfdaknnbpnkhgohbobgegn'
+cmd-ctrl-alt-m = 'exec-and-forget "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph'
+
+# ---------- Per-app rules ----------
+[[on-window-detected]]
+if.app-name-regex-substring = 'Alacritty'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Kitty'
+run = ['layout floating']
+
+# Keep password prompts visible
+[[on-window-detected]]
+if.app-name-regex-substring = 'SecurityAgent'
+run = ['layout floating']
+
