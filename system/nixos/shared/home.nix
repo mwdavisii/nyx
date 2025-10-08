@@ -58,6 +58,7 @@
         mcfly.enable = true;
         nixvim.enable = true;
         networking.enable = true;
+        openssl.enable = true;
         wal.enable = true;
         starship.enable = true;
         terraform.enable = true;
