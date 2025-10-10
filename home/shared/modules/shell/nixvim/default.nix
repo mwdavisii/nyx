@@ -45,7 +45,8 @@ in
         clipboard = "unnamedplus";
       };
       globals.mapleader = " ";
-
+      # icons
+      plugins.web-devicons.enable = true;
       # ===== Treesitter: use Nix-built parsers (no writes to /nix/store)
       plugins.treesitter = {
         enable = true;

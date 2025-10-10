@@ -10,7 +10,6 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs;[
-      jq
       k9s
       fluxcd
       kubectl
@@ -18,6 +17,7 @@ in
       flux
       cilium-cli
       kubernetes-helm
+      sops
     ];
   };
 }
