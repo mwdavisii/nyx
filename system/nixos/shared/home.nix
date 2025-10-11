@@ -65,6 +65,7 @@
         tmux.enable = true;
         usbutils.enable = true;
         xdg.enable = true;
+        yq.enable = true;
         zellij.enable = true;
         zsh.enable = true;
       };

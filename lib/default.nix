@@ -162,11 +162,6 @@ rec {
         ];
         #Darwin = Mac Target
         darwinModules = [
-          (
-            {
-              ids.gids.nixbld = 30000;
-            }
-          )
           (inputs.agenix.darwinModules.default)
           (inputs.home-manager.darwinModules.home-manager)
           (
@@ -174,6 +169,9 @@ rec {
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
+                sharedModules = [
+                  inputs.nixvim.homeModules.nixvim
+                ];
                 extraSpecialArgs =
                   let
                     self = inputs.self;

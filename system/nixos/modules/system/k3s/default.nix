@@ -47,20 +47,49 @@ in
       example = [ "k3s.mydomain.com" "10.40.40.40" ];
       description = "Values to pass as --tls-san (list).";
     };
+    
     networkingBackend = lib.mkOption {
       type = lib.types.enum [ "metallb" "cilium" "traefik" ];
       description = ''
       Which networking / load balancer stack to use for K3s.
       Must be either "metallb" or "cilium".
       '';
-      };
-  };
+    };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      services.k3s = {
+    role = lib.mkOption {
+      type = lib.types.enum [ "server" "agent" ];
+      default = "server";
+      description = "Role of the k3s node.";
+    };
+
+    serverAddress = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "The IP address of the k3s server. Required for agents.";
+    };
+
+    tokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "Path to the file containing the cluster join token. Required for agents.";
+    };
+
+    taintControlPlane = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Taint the control-plane node to prevent scheduling of workloads.";
+    };
+  };
+  config = lib.mkIf cfg.enable {
+    services.k3s = lib.mkMerge [
+      # --- Common configuration for both roles ---
+      {
         enable = true;
-        role = "server";
+        role = cfg.role;
+      }
+
+      # Server config
+      (lib.optionalAttrs (cfg.role == "server") {
         clusterInit = true;
         extraFlags =
           [
@@ -70,17 +99,42 @@ in
             "--node-ip=${cfg.address}"
           ]
           ++ tlsSansFlags
-          ++ (if cfg.networkingBackend == "cilium" then [
+          ++ lib.optionals (cfg.taintControlPlane) [ "--node-taint=node-role.kubernetes.io/control-plane=true:NoSchedule" ]
+          ++ lib.optionals (cfg.networkingBackend == "cilium") [
               "--flannel-backend=none"
               "--disable-kube-proxy"
               "--disable-network-policy"
-            ] else if cfg.networkingBackend == "metallb" then [
-              "--disable servicelb"
-            ] else []
-          );
-      };
-      # Open the API port
-      networking.firewall.allowedTCPPorts = [ 6443];
-    }
-  ]);
+              "--disable=servicelb"
+              "--disable=traefik"
+              "--cluster-cidr=${cfg.clusterCIDR}"
+              "--service-cidr=${cfg.serviceCIDR}"
+            ]
+          ++ lib.optionals (cfg.networkingBackend == "metallb") [
+              "--disable=servicelb"
+            ];
+      })
+      # Agent config
+      (lib.optionalAttrs (cfg.role == "agent") {
+        serverAddr= "https://"+cfg.serverAddress+":6443";
+        tokenFile = cfg.tokenFile;
+        extraFlags =
+          [
+            "--node-ip=${cfg.address}"
+          ];
+      })
+    ];
+
+    # Open the API port only on the server
+    networking.firewall = {
+      enable = true; # Ensure the firewall is explicitly managed
+      trustedInterfaces = [ "cni0" "ens18"];
+      allowedTCPPorts = [ 
+        6443 # Kubernetes API Server
+        4240 # Cilium Health Checks
+      ];
+      allowedUDPPorts = [ 
+        8472 # Cilium VXLAN Tunnel
+      ];
+    };
+  };
 }

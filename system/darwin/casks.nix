@@ -3,8 +3,9 @@ _:
 [
   #desktop toools
   "whichspace"
-  "dozer"
-  "amethyst"
+  #"dozer"
+  #"amethyst"
+  "nikitabobko/tap/aerospace"
   "hammerspoon"
   "sublime-text"
 
