@@ -35,7 +35,7 @@
         python.enable = true;
       };
       shell = {
-        awscliv2.enable = true;
+        awscliv2.enable = false;
         azurecli.enable = true;
         bash.enable = true;
         bat.enable = true;
@@ -58,6 +58,7 @@
         mcfly.enable = true;
         nixvim.enable = true;
         networking.enable = true;
+        openssl.enable = true;
         wal.enable = true;
         starship.enable = true;
         terraform.enable = true;
