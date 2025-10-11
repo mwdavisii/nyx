@@ -6,6 +6,7 @@
       user.home = ../../shared/home.nix;
       system = {
         wsl2.enable = true;
+        docker.enable = true;
       };
     };
     secrets = {
