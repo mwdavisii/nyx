@@ -13,6 +13,7 @@ in
     services.hardware.openrgb.enable = true;
     environment.systemPackages = with pkgs; [
       docker
+      coreutils
     ];
   };
 }
