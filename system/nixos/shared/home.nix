@@ -35,7 +35,7 @@
         python.enable = true;
       };
       shell = {
-        awscliv2.enable = true;
+        awscliv2.enable = false;
         azurecli.enable = true;
         bash.enable = true;
         bat.enable = true;
