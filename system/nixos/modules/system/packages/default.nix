@@ -21,6 +21,8 @@
       mpc-cli
       tty-clock
       playerctl
+      linuxPackages.usbip
+      hwdata
     ];
   };
 }
