@@ -17,8 +17,9 @@ _:
 
 
   # Communication Tools
-  #"telegram"
+  "telegram"
   "whatsapp"
+  "signal"
 
   # Entertainment Tools
   #"steam"
@@ -37,4 +38,5 @@ _:
 
   # AIhic
   "diffusionbee"
+  
 ]

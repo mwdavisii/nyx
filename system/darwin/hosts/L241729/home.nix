@@ -39,7 +39,7 @@
       finicky.enable = true;
       kitty.enable = true;
       discord.enable = true;
-      signal.enable = true;
+      #signal.enable = true;
       #firefox.enable = true;
       obs.enable = false;
       scrcpy.enable = true;
