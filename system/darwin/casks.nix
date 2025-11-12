@@ -29,6 +29,7 @@ _:
   "raycast"
   "finicky"
   "obsidian"
+  "jordanbaird-ice"
   # Design Tools
   #"inkscape"
 
