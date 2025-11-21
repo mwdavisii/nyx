@@ -14,7 +14,7 @@ in
     home.packages = with pkgs;
       [
         lua52Packages.lua
-        sumneko-lua-language-server
+        lua-language-server
       ];
   };
 }

@@ -24,6 +24,11 @@
 
   nyx = {
     modules = {
+      ai = {
+        chatgpt.enable = true;
+        gemini.enable = true;
+        claude.enable = true;
+      };
       dev = {
         cc.enable = true;
         rust.enable = true;
