@@ -45,6 +45,7 @@
         bash.enable = true;
         bat.enable = true;
         direnv.enable = true;
+        etcd.enable= true;
         eza.enable = true;
         fzf.enable = true;
         gcp.enable = true;
