@@ -30,7 +30,8 @@
       wallpaper.enable = true;
       hammerspoon.enable = true;
       karabiner.enable = true;
-      amethyst.enable = true; #amethyst is installed by brew cask, this copies config files
+      amethyst.enable = false; #amethyst is installed by brew cask, this copies config files
+      aerospace.enable = true; #aerospace is installed by brew cask, this copies config files
     };
     app = {
       iterm2.enable = true;
@@ -55,8 +56,8 @@
       go.enable = true;
       dhall.enable = true;
       lua.enable = true;
-      nix.enable = true;
-      node.enable = true;
+      nix.enable = false;
+      node.enable = false;
       python.enable = true;
     };
     shell = {
@@ -85,7 +86,7 @@
       lorri.enable = false;
       mcfly.enable = true;
       neofetch.enable = true;
-      neovim.enable = true;
+      nixvim.enable = true;
       networking.enable = true;
       starship.enable = true;
       terraform.enable = true;

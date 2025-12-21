@@ -88,9 +88,14 @@ in
 
     envExtra = mkOption {
       type = types.lines;
-      default = "";
-      description =
-        "Extra commands that should be added to <filename>.zshenv</filename>.";
+      default = ''
+
+        export ZDOTDIR="$HOME/.config/zsh"
+
+        [[ -f $HOME/.local/share/zsh/nyx_zshenv ]] && . $HOME/.local/share/zsh/nyx_zshenv
+        [[ -f $HOME/.local/share/zsh/zshenv ]] && . $HOME/.local/share/zsh/zshenv
+        '';
+      description = "Extra commands that should be added to <filename>.zshenv</filename>.";
     };
 
     profileExtra = mkOption {
@@ -143,12 +148,12 @@ in
       '';
     }
 
-    (mkIf (cfg.profileExtra != "") {
-      xdg.dataFile."zsh/nyx_zprofile".text = cfg.profileExtra;
+    (mkIf (cfg.envExtra != "") {
+      home.file.".zshenv".text = cfg.envExtra;
     })
 
-    (mkIf (cfg.envExtra != "") {
-      xdg.dataFile."zsh/nyx_zshenv".text = cfg.envExtra;
+    (mkIf (cfg.profileExtra != "") {
+      xdg.dataFile."zsh/nyx_zprofile".text = cfg.profileExtra;
     })
 
     (mkIf (cfg.plugins != [ ]) {

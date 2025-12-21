@@ -7,7 +7,7 @@ let
 in
 {
   options.nyx.modules.shell.openssl = {
-    enable = mkEnableOption "AWS CLI configuration";
+    enable = mkEnableOption "OpenSSL in user shell environment";
   };
 
   config = mkIf cfg.enable {

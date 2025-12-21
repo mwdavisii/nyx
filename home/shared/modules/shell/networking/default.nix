@@ -16,6 +16,12 @@ in
         dig
         arp-scan
         net-tools
+        netdiscover
+        lldpd
+        httpie
+        mtr
+        iperf3
+        gobgp
     ];
   };
 }

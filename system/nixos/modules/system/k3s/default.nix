@@ -126,7 +126,7 @@ in
 
     # Open the API port only on the server
     networking.firewall = {
-      enable = false; # Ensure the firewall is explicitly managed
+      enable = true; # Ensure the firewall is explicitly managed
       trustedInterfaces = [ "cni0" "ens18"];
       allowedTCPPorts = [ 
         6443 # Kubernetes API Server
