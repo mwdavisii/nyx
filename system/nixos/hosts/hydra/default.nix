@@ -17,15 +17,14 @@
         hyprland.enable = false;
         k3s = {
           enable = true;
-          interface = "ens18";
+          #interface = "ens18";
           address = "10.40.250.100";
           tlsSans = [
             "hydra"
             "hydra.mwdavisii.com"
             "hydra.home.arpa"
             "hydra.local"
-            "10.40.250.100"
-            "10.40.250.221"
+            "10.40.250.200"
             "10.43.0.1"
             "127.0.0.1"
           ];
