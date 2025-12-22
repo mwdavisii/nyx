@@ -24,6 +24,11 @@
 
   nyx = {
     modules = {
+      ai = {
+        chatgpt.enable = true;
+        gemini.enable = true;
+        claude.enable = true;
+      };
       dev = {
         cc.enable = true;
         rust.enable = true;
@@ -40,6 +45,7 @@
         bash.enable = true;
         bat.enable = true;
         direnv.enable = true;
+        etcd.enable= true;
         eza.enable = true;
         fzf.enable = true;
         gcp.enable = true;
