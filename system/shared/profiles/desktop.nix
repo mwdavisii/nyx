@@ -13,6 +13,8 @@ in
     environment.systemPackages = with pkgs; [
       twemoji-color-font
       kanshi
+      linuxPackages.usbip
+      hwdata
     ];
     fonts = {
       packages = with pkgs; [
