@@ -17,8 +17,9 @@ _:
 
 
   # Communication Tools
-  #"telegram"
+  "telegram"
   "whatsapp"
+  "signal"
 
   # Entertainment Tools
   #"steam"
@@ -28,6 +29,7 @@ _:
   "raycast"
   "finicky"
   "obsidian"
+  "jordanbaird-ice"
   # Design Tools
   #"inkscape"
 
@@ -37,4 +39,5 @@ _:
 
   # AIhic
   "diffusionbee"
+  
 ]

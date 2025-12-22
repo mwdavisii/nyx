@@ -39,6 +39,7 @@
       finicky.enable = true;
       kitty.enable = true;
       discord.enable = true;
+      #signal.enable = true;
       #firefox.enable = true;
       obs.enable = false;
       scrcpy.enable = true;
@@ -75,7 +76,7 @@
       };
       gnupg = {
         enable = true;
-        enableService = pkgs.hostPlatform.isLinux;
+        enableService = pkgs.stdenv.hostPlatform.isLinux;
         publicKeys = [{
             key = ../../../../home/config/.gnupg/public.key;
           }];

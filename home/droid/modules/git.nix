@@ -2,12 +2,12 @@
 {  
   home.packages = with pkgs; [
     git
-    gitAndTools.git-crypt
-    gitAndTools.delta
-    gitAndTools.gh
-    gitAndTools.glab
-    gitAndTools.git-filter-repo
-    gitAndTools.git-open
+    git-crypt
+    delta
+    gh
+    glab
+    git-filter-repo
+    git-open
   ];
 
   home.file.".gitconfig".text=

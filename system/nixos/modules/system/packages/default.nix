@@ -18,7 +18,7 @@
       slurp
       wl-clipboard
       pamixer
-      mpc-cli
+      mpc
       tty-clock
       playerctl
       linuxPackages.usbip
