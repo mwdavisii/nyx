@@ -71,7 +71,7 @@
       };
       gnupg = {
         enable = true;
-        enableService = pkgs.hostPlatform.isLinux;
+        enableService = pkgs.stdenv.hostPlatform.isLinux;
         publicKeys = [{
             key = ../../../../home/config/.gnupg/public.key;
           }];

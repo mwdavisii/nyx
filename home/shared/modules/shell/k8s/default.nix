@@ -10,14 +10,19 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs;[
-      k9s
-      fluxcd
-      kubectl
-      kustomize
-      flux
-      cilium-cli
-      kubernetes-helm
-      sops
+    yq
+    kustomize
+    cilium-cli
+    kubernetes-helm
+    sops
+    jq 
+    k9s
+    fluxcd
+    kubectl
+    kustomize
+    flux
+    open-policy-agent
+    sops
     ];
   };
 }
