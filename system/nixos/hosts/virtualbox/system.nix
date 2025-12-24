@@ -5,7 +5,7 @@
         ./hardware.nix
         ];
 
-    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+    nixpkgs.stdenv.hostPlatform = lib.mkDefault "x86_64-linux";
     
     # Bootloader.
     boot.loader.grub.enable = true;
