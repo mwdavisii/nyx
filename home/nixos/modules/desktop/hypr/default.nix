@@ -97,10 +97,10 @@ in
       mpd
       #xdg-desktop-portal-hyprland
       hyprpicker
-      qt6ct
-      libsForQt5.qtstyleplugin-kvantum
-      libsForQt5.qt5ct
-      glfw-wayland
+ #    qt6packages.qt6ct
+ #     libsForQt5.qtstyleplugin-kvantum
+ #     libsForQt5.qt5ct
+ #     glfw-wayland
       pywal
       killall
       wbar_restart
@@ -130,7 +130,7 @@ in
         plugins.hyprexpo
         plugins.hyprbars
         plugins.hyprwinwrap
-        plugins.hyprtrails
+      #  plugins.hyprtrails
       ];
       enable = true;
       systemd = {

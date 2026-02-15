@@ -4,7 +4,7 @@
   config = {
     programs.zsh.enable = true;
     environment.systemPackages = with pkgs; [
-      xfce.thunar #file explorer
+      thunar #file explorer
       wget
       vim-full
       zsh

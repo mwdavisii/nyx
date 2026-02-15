@@ -17,6 +17,11 @@
 
   nyx = {
     modules = {
+      ai = {
+        chatgpt.enable = true;
+        gemini.enable = true;
+        claude.enable = true;
+      };
       gaming = {
         bsdgames.enable = true;
         lutris.enable = true;
@@ -64,11 +69,11 @@
         dhall.enable = true;
         lua.enable = true;
         nix.enable = true;
-        node.enable = true;
         python.enable = true;
       };
       shell = {
         awscliv2.enable = false;
+        azurecli.enable = true;
         bash.enable = true;
         bat.enable = true;
         btop.enable = true;
@@ -100,7 +105,8 @@
         usbutils.enable = true;
         xdg.enable = true;
         zellij.enable = true;
-        zsh.enable = true;
+        zsh.enable = false;
+        wal.enable = true;
       };
     };
   };

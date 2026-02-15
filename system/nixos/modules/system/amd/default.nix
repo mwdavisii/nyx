@@ -10,14 +10,12 @@ in
     hardware.graphics = {
       extraPackages = with pkgs; [
         rocmPackages.clr.icd
-        amdvlk
-        driversi686Linux.amdvlk
       ]; 
     };
     environment.systemPackages = with pkgs; [
       radeontop 
       libllvm
-      blender-hip
+      #blender-hip
     ];
     environment.variables = {
       NIXOS_OZONE_WL = "1";
