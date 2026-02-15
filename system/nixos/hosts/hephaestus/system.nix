@@ -36,11 +36,5 @@
 
     # Enable sound with pipewire.
     services.pulseaudio.enable = false;
-
-    xdg.portal = {
-      enable = true;
-      wlr.enable = true;
-      config.common.default = "*";
-    };
   };
 }

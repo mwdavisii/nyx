@@ -125,7 +125,19 @@ in
     xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
     xdg.configFile."waybar".source = ../../../../config/.config/waybar;
-
+    
+    xdg.portal = {
+      enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      config = {
+        common = {
+          # explicit > wildcard
+          default = [
+            "hyprland"
+          ];
+        };
+      };
+    };
     wayland.windowManager.hyprland = {
       plugins = [
         plugins.hyprexpo
