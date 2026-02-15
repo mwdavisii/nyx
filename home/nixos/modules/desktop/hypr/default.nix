@@ -36,12 +36,19 @@ let
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
     if command -v swww >/dev/null 2>&1; then 
+      if ! swww query >/dev/null 2>&1; then
+        swww-daemon > /dev/null 2>&1 &
+        sleep 1
+      fi
       paper=$(find ~/.config/wallpapers/ -name "*" | shuf -n1)
-      swww img $paper --transition-type simple
-      cp $paper ~/active_paper
+      swww img "$paper" --transition-type simple
+      rm -f ~/active_paper
+      cp "$paper" ~/active_paper
       if command -v wal >/dev/null 2>&1; then 
-        wal -i $paper
+        wal -i "$paper"
+        mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
+        rm -f ~/.config/kitty/colors-kitty.conf
         cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/colors-kitty.conf
         wbar_restart &
       fi
@@ -50,11 +57,18 @@ let
   wallpaper_default = pkgs.writeShellScriptBin "wallpaper_default" ''
     #!/usr/bin/env bash
     if command -v swww >/dev/null 2>&1; then
+      if ! swww query >/dev/null 2>&1; then
+        swww-daemon > /dev/null 2>&1 &
+        sleep 1
+      fi
       swww img ~/.config/wallpapers/wall0.png  --transition-type simple
-      cp $paper ~/active_paper
+      rm -f ~/active_paper
+      cp ~/.config/wallpapers/wall0.png ~/active_paper
       if command -v wal >/dev/null 2>&1; then 
         wal -i ~/.config/wallpapers/wall0.png
+        mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
+        rm -f ~/.config/kitty/colors-kitty.conf
         cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/colors-kitty.conf
         wbar_restart &
       fi
@@ -66,6 +80,10 @@ let
     if command -v wal >/dev/null 2>&1; then
       if ! test -f ~/.cache/wal/colors-hyprland; then
         if command -v swww >/dev/null 2>&1; then
+          if ! swww query >/dev/null 2>&1; then
+            swww-daemon > /dev/null 2>&1 &
+            sleep 1
+          fi
           swww img ~/.config/wallpapers/wall0.png  --transition-type simple
         fi
         wal -i ~/.config/wallpapers/wall0.png
@@ -116,6 +134,14 @@ in
       rofiWindow
       cava_start
     ];
+
+    home.pointerCursor = {
+      gtk.enable = true;
+      x11.enable = true;
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+      size = 24;
+    };
 
     #wal template for hyprland
     # we call at each specific file so the directory is still writeable.
