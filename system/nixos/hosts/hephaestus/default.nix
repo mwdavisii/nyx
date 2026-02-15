@@ -15,6 +15,7 @@
         yubilogin.enable = true;
         kmonad.enable = true;
         hyprland.enable = true;
+        steam.enable = true;
       };
     };
     

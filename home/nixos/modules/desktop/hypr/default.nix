@@ -92,17 +92,20 @@ in
       swww
       mesa  
       xwayland
+      hyprpicker
+      hypridle
+      
       gnome-keyring
       acpi
       mpd
-      #xdg-desktop-portal-hyprland
-      hyprpicker
- #    qt6packages.qt6ct
- #     libsForQt5.qtstyleplugin-kvantum
- #     libsForQt5.qt5ct
- #     glfw-wayland
-      pywal
       killall
+      #theming
+      kdePackages.qt6ct
+      libsForQt5.qt5ct
+      libsForQt5.qtstyleplugin-kvantum
+      pywal
+
+      # --- Custom Scripts ---
       wbar_restart
       waybar_start_top
       waybar_start_bottom
@@ -111,8 +114,6 @@ in
       wallpaper_default
       init_colors
       rofiWindow
-      hyprlock
-      hypridle
       cava_start
     ];
 
@@ -130,8 +131,8 @@ in
         plugins.hyprexpo
         plugins.hyprbars
         plugins.hyprwinwrap
-      #  plugins.hyprtrails
       ];
+      package = null;
       enable = true;
       systemd = {
         enable = true;

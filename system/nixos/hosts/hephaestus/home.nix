@@ -28,7 +28,7 @@
         mahjong.enable = true;
         minesweeper.enable = true;
         #retroarch.enable = true;
-        steam.enable = true;
+        #steam.enable = true;
       };
       desktop = {
         hypr.enable = true;

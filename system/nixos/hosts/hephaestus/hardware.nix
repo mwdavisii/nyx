@@ -16,6 +16,7 @@
         #extraModulePackages = [ ];
         loader = {
             efi.canTouchEfiVariables = true;
+            efi.efiSysMountPoint = "/boot";
             grub = {
                 enable = true;
                 devices = [ "nodev" ];
