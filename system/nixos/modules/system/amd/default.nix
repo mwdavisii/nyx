@@ -7,27 +7,23 @@ in
     enable = mkEnableOption "AMD Env Vars"; 
   };
   config = mkIf cfg.enable {
+    services.xserver.videoDrivers = [ "amdgpu" ];
     hardware.graphics = {
+      enable = true;
+      enable32Bit = true;
       extraPackages = with pkgs; [
         rocmPackages.clr.icd
-        amdvlk
-        driversi686Linux.amdvlk
       ]; 
     };
     environment.systemPackages = with pkgs; [
-      radeontop 
-      libllvm
-      blender-hip
+      radeontop       
+      libva-utils     
+      vulkan-tools
     ];
     environment.variables = {
-      NIXOS_OZONE_WL = "1";
-      __GLX_VENDOR_LIBRARY_NAME= "amd";
-      LIBVA_DRIVER_NAME= "radeonsi"; # hardware acceleration
-      __GL_VRR_ALLOWED="1";
-      WLR_NO_HARDWARE_CURSORS = "1";
-      WLR_RENDERER_ALLOW_SOFTWARE = "1";
+      NIXOS_OZONE_WL = "1";           # Electron apps use Wayland
       CLUTTER_BACKEND = "wayland";
-      WLR_RENDERER = "vulkan";    
+      LIBVA_DRIVER_NAME = "radeonsi"; # Force correct VAAPI driver for video decoding
     };
   };
 }
