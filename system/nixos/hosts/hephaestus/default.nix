@@ -15,15 +15,10 @@
         yubilogin.enable = true;
         kmonad.enable = true;
         hyprland.enable = true;
+        steam.enable = true;
       };
     };
     
-    secrets = {
-      awsSSHKeys.enable = false;
-      awsConfig.enable = true;
-      userSSHKeys.enable = true;
-      userPGPKeys.enable = true;
-    };
 
     profiles = {
       desktop = {

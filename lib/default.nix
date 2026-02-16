@@ -31,7 +31,6 @@ rec {
         modules = [
           {
             home = { inherit homeDirectory; };
-            #home.stateVersion = "25.05";
             home.username = userConf.userName;
             imports =
               let
@@ -115,7 +114,7 @@ rec {
             }
           ];
       };
-      home.stateVersion = "25.05";
+      home.stateVersion = "26.05";
     };
 
   mkNixSystemConfiguration = name: { config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? { }, }:
@@ -150,7 +149,7 @@ rec {
           )
           (
             { ... }: {
-              system.stateVersion = "25.05";
+              system.stateVersion = "26.05";
             }
           )
           (inputs.nixos-wsl.nixosModules.wsl)
