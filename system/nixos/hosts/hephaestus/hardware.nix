@@ -5,6 +5,7 @@
     (./disk-config.nix)
     (modulesPath + "/installer/scan/not-detected.nix")
    ];
+    environment.systemPackages = [ pkgs.ntfs3g ];
        # Bootloader.
     boot = {
         kernelPackages = pkgs.linuxPackages_latest;
