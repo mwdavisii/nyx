@@ -10,7 +10,7 @@
       fsType = "vfat";
   };
   
-  fileSystems."/mnt/nix-games" =
+  fileSystems."/home/mwdavisii/nix-games" =
   { device = "/dev/disk/by-uuid/4c8d94e1-1354-488e-b0c1-c97674991237";
     fsType = "ext4"; # or "exfat"
     options = [ "defaults" "nofail" ]; # 'nofail' allows boot without drive
