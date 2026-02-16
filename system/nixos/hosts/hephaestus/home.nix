@@ -12,18 +12,23 @@
     sessionVariables = {
       PATH = "$PATH:~/.local/bin:~/.config/rofi/scripts";
     };
-    stateVersion = "25.05";
+    stateVersion = "26.05";
   };
 
   nyx = {
     modules = {
+      ai = {
+        chatgpt.enable = true;
+        gemini.enable = true;
+        claude.enable = true;
+      };
       gaming = {
         bsdgames.enable = true;
         lutris.enable = true;
         mahjong.enable = true;
         minesweeper.enable = true;
         #retroarch.enable = true;
-        steam.enable = true;
+        #steam.enable = true;
       };
       desktop = {
         hypr.enable = true;
@@ -64,11 +69,11 @@
         dhall.enable = true;
         lua.enable = true;
         nix.enable = true;
-        node.enable = true;
         python.enable = true;
       };
       shell = {
         awscliv2.enable = false;
+        azurecli.enable = true;
         bash.enable = true;
         bat.enable = true;
         btop.enable = true;
@@ -100,7 +105,8 @@
         usbutils.enable = true;
         xdg.enable = true;
         zellij.enable = true;
-        zsh.enable = true;
+        zsh.enable = false;
+        wal.enable = true;
       };
     };
   };

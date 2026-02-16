@@ -52,10 +52,4 @@
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
-
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    config.common.default = "*";
-  };
 }
