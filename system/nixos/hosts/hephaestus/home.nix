@@ -52,6 +52,7 @@
           makeDefaultBrowser = true;
         };
         obs.enable = true;
+        obsidian.enable = true;
         scrcpy.enable = true;
         qemu.enable = true;
         wezterm = {
