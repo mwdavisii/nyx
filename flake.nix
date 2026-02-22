@@ -125,11 +125,12 @@
         nix-on-droid = { user = "droid"; };
         default = { user = "droid"; };
       };
-/*
-      homeManagerConfigurations = mapAttrs' mkHome {
-        mdavis67 = { };
+      homeConfigurations = mapAttrs' lib.mkArchConfiguration {
+        arch-work = {
+          user = "mdavis67";
+          system = "x86_64-linux";
+        };
       };
-*/
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
         L241729 = { hostname = "L241729"; system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
@@ -158,8 +159,8 @@
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
           hometop = genAttrs
-            (builtins.attrNames inputs.self.homeManagerConfigurations)
-            (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
+            (builtins.attrNames inputs.self.homeConfigurations)
+            (attr: inputs.self.homeConfigurations.${attr}.activationPackage);
           darwintop = genAttrs
             (builtins.attrNames inputs.self.darwinConfigurations)
             (attr: inputs.self.darwinConfigurations.${attr}.system);
