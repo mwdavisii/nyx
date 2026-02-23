@@ -105,7 +105,6 @@ in
       nwg-displays
       wayland-protocols
       waybar
-      dunst
       swww
       mesa
       xwayland
@@ -173,78 +172,154 @@ in
       xwayland.enable = true;
     };
 
-    services.dunst = {
+    services.swaync = {
       enable = true;
-      iconTheme = {
-        name = "Papirus-Dark";
-        package = pkgs.papirus-icon-theme;
-      };
       settings = {
-        global = {
-          rounded = "yes";
-          origin = "top-right";
-          monitor = "0";
-          alignment = "left";
-          vertical_alignment = "center";
-          width = "400";
-          height = "400";
-          scale = 0;
-          gap_size = 0;
-          progress_bar = true;
-          transparency = 0;
-          text_icon_padding = 0;
-          separator_color = "frame";
-          sort = "yes";
-          idle_threshold = 120;
-          line_height = 0;
-          markup = "full";
-          show_age_threshold = 60;
-          ellipsize = "middle";
-          ignore_newline = "no";
-          stack_duplicates = true;
-          sticky_history = "yes";
-          history_length = 20;
-          always_run_script = true;
-          corner_radius = 10;
-          follow = "mouse";
-          font = "Source Sans Pro 10";
-          format = "<b>%s</b>\\n%b";
-          frame_color = "#232323";
-          frame_width = 1;
-          offset = "15x15";
-          horizontal_padding = 10;
-          icon_position = "left";
-          indicate_hidden = "yes";
-          min_icon_size = 0;
-          max_icon_size = 64;
-          mouse_left_click = "do_action, close_current";
-          mouse_middle_click = "close_current";
-          mouse_right_click = "close_all";
-          padding = 10;
-          plain_text = "no";
-          separator_height = 2;
-          show_indicators = "yes";
-          shrink = "no";
-          word_wrap = "yes";
-          browser = "/usr/bin/env librewolf -new-tab";
-        };
-        fullscreen_delay_everything = { fullscreen = "delay"; };
-
-        urgency_critical = {
-          background = "#d64e4e";
-          foreground = "#f0e0e0";
-        };
-
-        urgency_low = {
-          background = "#232323";
-          foreground = "#2596be";
-        };
-
-        urgency_normal = {
-          background = "#1e1e2a";
-          foreground = "#2596be";
+        positionX = "right";
+        positionY = "top";
+        layer = "overlay";
+        control-center-margin-top = 10;
+        control-center-margin-bottom = 0;
+        control-center-margin-right = 10;
+        control-center-margin-left = 0;
+        notification-icon-size = 64;
+        timeout = 10;
+        timeout-low = 5;
+        timeout-critical = 0;
+        transition-time = 200;
+        hide-on-clear = false;
+        hide-on-action = true;
+        script-fail-notify = true;
+        widgets = [ "inhibitors" "title" "dnd" "notifications" ];
+        widget-config = {
+          inhibitors = {
+            text = "Inhibitors";
+            button-text = "Clear All";
+            clear-all-button = true;
+          };
+          title = {
+            text = "Notifications";
+            clear-all-button = true;
+            button-text = "Clear All";
+          };
+          dnd = {
+            text = "Do Not Disturb";
+          };
         };
       };
+      style = ''
+        * {
+          all: unset;
+          font-family: "Source Sans Pro", sans-serif;
+          font-size: 13px;
+        }
+
+        .control-center {
+          background: #1e1e2a;
+          border-radius: 10px;
+          border: 1px solid #232323;
+          color: #2596be;
+          padding: 10px;
+        }
+
+        .notification-row {
+          outline: none;
+        }
+
+        .notification-row:focus,
+        .notification-row:hover {
+          opacity: 0.9;
+        }
+
+        .notification {
+          border-radius: 10px;
+          border: 1px solid #232323;
+          margin: 6px;
+          padding: 0;
+        }
+
+        .notification-content {
+          background: #1e1e2a;
+          border-radius: 10px;
+          padding: 10px;
+          color: #2596be;
+        }
+
+        .low .notification-content {
+          background: #232323;
+          color: #2596be;
+        }
+
+        .critical .notification-content {
+          background: #d64e4e;
+          color: #f0e0e0;
+        }
+
+        .notification-default-action {
+          border-radius: 10px;
+        }
+
+        .notification-action {
+          border: 1px solid #232323;
+          border-radius: 5px;
+        }
+
+        .close-button {
+          background: #232323;
+          border-radius: 100%;
+          color: #2596be;
+          min-width: 24px;
+          min-height: 24px;
+        }
+
+        .close-button:hover {
+          background: #d64e4e;
+          color: #f0e0e0;
+        }
+
+        .blank-window {
+          background: alpha(black, 0.0);
+        }
+
+        .widget-title {
+          color: #2596be;
+          font-size: 1.5rem;
+          font-weight: bold;
+          margin: 8px;
+        }
+
+        .widget-title > button {
+          background: #232323;
+          border: 1px solid #2596be;
+          border-radius: 5px;
+          color: #2596be;
+          font-size: 0.9rem;
+        }
+
+        .widget-title > button:hover {
+          background: #2596be;
+          color: #1e1e2a;
+        }
+
+        .widget-dnd {
+          margin: 8px;
+        }
+
+        .widget-dnd > switch {
+          border-radius: 5px;
+          border: 1px solid #232323;
+          background: #232323;
+        }
+
+        .widget-dnd > switch:checked {
+          background: #d64e4e;
+        }
+
+        .widget-dnd > switch slider {
+          background: #2596be;
+          border-radius: 5px;
+        }
+      '';
     };
   };
 }
