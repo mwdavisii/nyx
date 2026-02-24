@@ -2,11 +2,44 @@
 # =============================================================================
 # Nyx bootstrap script for Arch Linux
 # =============================================================================
-# Run this on a fresh Arch install to set up standalone home-manager.
-# The system itself is managed by Arch (pacman/AUR); Nix manages user tooling.
+# Run this AFTER the base Arch install. Nix manages user tooling; the system
+# itself is managed by pacman/AUR.
 #
-# IMPORTANT: Read the entire script before running. Some steps require manual
-# action (e.g. WARP must be installed before Nix to avoid path conflicts).
+# --- PRE-INSTALL (run from the Arch ISO) ------------------------------------
+#
+#  1. Connect to WiFi:
+#       iwctl --passphrase "password" station wlan0 connect "SSID"
+#
+#  2. Run archinstall with the nyx config (pulls non-disk settings from git):
+#       curl -fsSL https://raw.githubusercontent.com/mwdavisii/nyx/arch-build/setup/arch/archinstall.json \
+#         -o /tmp/archinstall.json
+#       archinstall --config /tmp/archinstall.json
+#
+#     In the archinstall menus, you will still be asked to pick:
+#       - Disk(s)       -> select your drive
+#       - Filesystem    -> ** choose ext4 ** (NOT btrfs -- subvol bootstrapping
+#                         is broken in archinstall and causes boot failures)
+#       - Root password -> set it
+#       - User account  -> create mdavis67, mark as sudoer
+#
+#  3. Install, then reboot into the new system.
+#
+# --- POST-INSTALL (run as your user in the new system) ----------------------
+#
+#  4. Install yay (needed for WARP before this script runs):
+#       sudo pacman -S --needed base-devel git
+#       git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
+#       cd /tmp/yay-bin && makepkg -si
+#
+#  5. Install and connect Cloudflare WARP (must be before Nix):
+#       yay -S cloudflare-warp-bin
+#       sudo systemctl enable --now warp-svc
+#       warp-cli registration new
+#       warp-cli connect
+#
+#  6. Run this script:
+#       bash <(curl -fsSL https://raw.githubusercontent.com/mwdavisii/nyx/arch-build/setup/arch/start_here.sh)
+#
 # =============================================================================
 
 set -euo pipefail
