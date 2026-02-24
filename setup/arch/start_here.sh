@@ -37,7 +37,32 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 2 — Cloudflare WARP (optional)
+# Step 2 — Work security tools (AUR)
+# ---------------------------------------------------------------------------
+
+echo ""
+echo "==> Installing work security tools..."
+
+# CrowdStrike Falcon (EDR agent)
+if ! systemctl list-unit-files falcon-sensor.service &>/dev/null; then
+  echo "    Installing CrowdStrike Falcon..."
+  yay -S --noconfirm falcon-sensor
+  sudo systemctl enable --now falcon-sensor
+else
+  echo "    falcon-sensor already installed."
+fi
+
+# Cisco Secure Client (VPN)
+if ! command -v csc-vpn &>/dev/null; then
+  echo "    Installing Cisco Secure Client..."
+  yay -S --noconfirm cisco-secure-client
+  sudo systemctl enable --now vpnagentd
+else
+  echo "    Cisco Secure Client already installed."
+fi
+
+# ---------------------------------------------------------------------------
+# Step 4 — Cloudflare WARP (optional)
 # ---------------------------------------------------------------------------
 # WARP should be installed before Nix when possible — it modifies
 # /etc/resolv.conf and network paths that can conflict if Nix goes first.
@@ -66,7 +91,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 3 — Install Nix (Determinate Systems)
+# Step 5 — Install Nix (Determinate Systems)
 # ---------------------------------------------------------------------------
 
 if ! command -v nix &>/dev/null; then
@@ -79,7 +104,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 4 — Source the Nix profile
+# Step 6 — Source the Nix profile
 # ---------------------------------------------------------------------------
 
 NIX_PROFILE="/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
@@ -92,7 +117,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 5 — Clone the nyx repo (SSH with HTTPS fallback)
+# Step 7 — Clone the nyx repo (SSH with HTTPS fallback)
 # ---------------------------------------------------------------------------
 
 echo ""
@@ -118,7 +143,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 6 — Apply the home-manager configuration
+# Step 8 — Apply the home-manager configuration
 # ---------------------------------------------------------------------------
 
 echo ""
@@ -128,7 +153,7 @@ cd "$NYX_DIR"
 nix run home-manager -- switch --show-trace --flake ".#$HOST"
 
 # ---------------------------------------------------------------------------
-# Step 7 — Enable SDDM
+# Step 9 — Enable SDDM
 # ---------------------------------------------------------------------------
 # Done here rather than at install time so home-manager config is fully in
 # place before the display manager starts Hyprland for the first time.
