@@ -173,8 +173,6 @@ pacstrap /mnt \
   xorg-xwayland \
   wayland-utils \
   \
-  sddm \
-  \
   polkit \
   rtkit \
   \
@@ -284,7 +282,6 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 # --- Enable services (no --now, system isn't booted yet) ---
 systemctl enable NetworkManager
 systemctl enable bluetooth
-# sddm is enabled by start_here.sh after home-manager is applied
 
 CHROOT_EOF
 

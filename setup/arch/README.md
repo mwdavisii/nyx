@@ -59,12 +59,12 @@ All prompts are collected before any destructive action.
    - `@` mounted at `/`
    - `@home` mounted at `/home`
    - `@snapshots` mounted at `/.snapshots`
-3. **Pacstraps** the base system plus all desktop packages (Hyprland, PipeWire, SDDM, NetworkManager, Bluetooth, fonts, etc.)
+3. **Pacstraps** the base system plus all desktop packages (Hyprland, PipeWire, NetworkManager, Bluetooth, fonts, etc.)
 4. **Configures** timezone (America/Chicago), locale (en_US.UTF-8), hostname (arch-work)
 5. **Sets up** mkinitcpio with the `encrypt` hook for LUKS
 6. **Installs** systemd-boot with an entry that unlocks the encrypted root
 7. **Creates** user `mdavis67` (wheel group, sudo access)
-8. **Enables** services: NetworkManager, bluetooth (SDDM is enabled later by start_here.sh)
+8. **Enables** services: NetworkManager, bluetooth
 
 ### After install completes
 
@@ -72,7 +72,7 @@ All prompts are collected before any destructive action.
 reboot
 ```
 
-Remove the installation media when prompted. The system will ask for your LUKS passphrase, then drop you to a **TTY login prompt** — this is intentional. SDDM is not enabled yet so home-manager can configure Hyprland fully before the display manager starts for the first time.
+Remove the installation media when prompted. The system will ask for your LUKS passphrase, then drop you to a **TTY login prompt**.
 
 ## Phase 2 — User Bootstrap (after first login)
 
@@ -107,12 +107,12 @@ chmod +x start_here.sh
 3. **Installs Nix** — via the Determinate Systems installer
 4. **Clones nyx repo** — tries SSH first, falls back to HTTPS if keys aren't set up
 5. **Runs home-manager switch** — applies the `arch-work` flake configuration
-6. **Enables SDDM** — display manager is now safe to start with a fully configured Hyprland
+6. **Configures TTY auto-login** — getty on tty1 logs you in automatically; the zsh login profile launches Hyprland if `$DISPLAY` is unset and you're on tty1
 
 ### After bootstrap completes
 
-- Reboot into SDDM + Hyprland: `sudo reboot`
-- Or restart your shell first if you want to verify: `exec $SHELL`
+- Reboot into Hyprland: `sudo reboot`
+- On every subsequent boot: LUKS passphrase → auto-login → Hyprland starts automatically
 - If PipeWire audio isn't working: `systemctl --user start pipewire pipewire-pulse wireplumber`
 - If you skipped WARP, install it later:
   ```bash

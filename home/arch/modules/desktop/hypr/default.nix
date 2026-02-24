@@ -160,6 +160,13 @@ in
         };
       };
     };
+    # Auto-start Hyprland on tty1 login (no display manager)
+    programs.zsh.loginExtra = ''
+      if [ -z "$DISPLAY" ] && [ "''${XDG_VTNR}" -eq 1 ]; then
+        exec Hyprland
+      fi
+    '';
+
     wayland.windowManager.hyprland = {
       # Plugins installed via AUR to avoid ABI mismatch with pacman's hyprland binary
       plugins = [];
