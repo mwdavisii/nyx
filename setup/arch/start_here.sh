@@ -168,7 +168,17 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 8 — Apply the home-manager configuration
+# Step 8 — Remove bash skeleton files that collide with home-manager
+# ---------------------------------------------------------------------------
+# useradd creates .bash_profile, .bashrc, .bash_logout stubs. home-manager
+# refuses to overwrite files it didn't create, so remove them first.
+
+echo ""
+echo "==> Removing bash skeleton files to prevent home-manager collisions..."
+rm -f "$HOME"/.bash_profile "$HOME"/.bashrc "$HOME"/.bash_logout "$HOME"/.bash_history
+
+# ---------------------------------------------------------------------------
+# Step 9 — Apply the home-manager configuration
 # ---------------------------------------------------------------------------
 
 echo ""
@@ -178,7 +188,7 @@ cd "$NYX_DIR"
 nix run home-manager -- switch --show-trace --flake ".#$HOST"
 
 # ---------------------------------------------------------------------------
-# Step 9 — TTY auto-login
+# Step 10 — TTY auto-login
 # ---------------------------------------------------------------------------
 # No display manager. getty auto-logs in on tty1; the zsh login profile
 # (managed by home-manager) launches Hyprland automatically.
