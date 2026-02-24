@@ -2,7 +2,7 @@
 # =============================================================================
 # Nyx Arch Linux installer — run from archiso live environment
 # =============================================================================
-# Full disk install with LUKS2 encryption and systemd-boot.
+# Full disk install with LUKS2 encryption, Btrfs, and systemd-boot.
 #
 # Usage (from archiso):
 #   curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/install.sh
@@ -117,12 +117,22 @@ echo -n "$LUKS_PASS" | cryptsetup luksFormat --type luks2 "$PART_ROOT" -
 info "Opening LUKS container..."
 echo -n "$LUKS_PASS" | cryptsetup open "$PART_ROOT" "$CRYPT_NAME" -
 
-info "Formatting root filesystem (ext4)..."
-mkfs.ext4 -F "/dev/mapper/$CRYPT_NAME"
+info "Formatting root filesystem (btrfs)..."
+mkfs.btrfs -f "/dev/mapper/$CRYPT_NAME"
 
-info "Mounting filesystems..."
+info "Creating btrfs subvolumes..."
 mount "/dev/mapper/$CRYPT_NAME" /mnt
-mkdir -p /mnt/boot
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
+btrfs subvolume create /mnt/@snapshots
+umount /mnt
+
+info "Mounting subvolumes..."
+BTRFS_OPTS="compress=zstd,noatime,space_cache=v2"
+mount -o "subvol=@,$BTRFS_OPTS" "/dev/mapper/$CRYPT_NAME" /mnt
+mkdir -p /mnt/{home,.snapshots,boot}
+mount -o "subvol=@home,$BTRFS_OPTS" "/dev/mapper/$CRYPT_NAME" /mnt/home
+mount -o "subvol=@snapshots,$BTRFS_OPTS" "/dev/mapper/$CRYPT_NAME" /mnt/.snapshots
 mount "$PART_EFI" /mnt/boot
 
 # ===========================================================================
@@ -132,7 +142,7 @@ mount "$PART_EFI" /mnt/boot
 info "Installing base system and packages via pacstrap..."
 
 pacstrap /mnt \
-  base linux linux-firmware \
+  base linux linux-firmware btrfs-progs \
   sudo vim git curl \
   \
   base-devel \
