@@ -14,5 +14,4 @@ elif [ -f /etc/arch-release ]; then
   home-manager switch --show-trace --flake .#$hostName
 else
   sudo nixos-rebuild switch --show-trace --flake .#$hostName
-  #pkill gpg-agent #force any changes to gpg
 fi

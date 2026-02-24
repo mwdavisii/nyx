@@ -126,7 +126,7 @@
         default = { user = "droid"; };
       };
       homeConfigurations = mapAttrs' lib.mkArchConfiguration {
-        arch-work = {
+        L242731 = {
           user = "mdavis67";
           system = "x86_64-linux";
         };
@@ -143,7 +143,7 @@
         nixos = { user = "nixos"; hostname = "nixos"; buildTarget = "nixos"; }; #WSL
         olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Lenovo laptop
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
-        L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
+        #L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
         hydra = { hostname = "hydra"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
       };
 

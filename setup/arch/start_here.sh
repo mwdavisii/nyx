@@ -16,8 +16,23 @@ set -euo pipefail
 NYX_REPO_SSH="git@github.com:mwdavisii/nyx.git"
 NYX_REPO_HTTPS="https://github.com/mwdavisii/nyx.git"
 NYX_DIR="$HOME/code/nyx"
-HOST="arch-work"
-NYX_BRANCH="arch-build"
+HOST="L242731"
+NYX_BRANCH="main"
+
+
+### Get Inputs
+# Host Name
+echo ""
+read -rp "==> Hostname [${HOST}]: " host_input
+HOST="${host_input:-$HOST}"
+echo "    Using hostname: $HOST"
+
+#Branch Name
+echo ""
+read -rp "==> Nyx branch to use [${NYX_BRANCH}]: " branch_input
+NYX_BRANCH="${branch_input:-$NYX_BRANCH}"
+echo "    Using branch: $NYX_BRANCH"
+
 
 # ---------------------------------------------------------------------------
 # Step 1 — AUR helper (yay)
@@ -47,7 +62,7 @@ echo "==> Installing work security tools..."
 if ! systemctl list-unit-files falcon-sensor.service &>/dev/null; then
   echo "    Installing CrowdStrike Falcon..."
   yay -S --noconfirm falcon-sensor
-  sudo systemctl enable --now falcon-sensor
+  #sudo systemctl enable --now falcon-sensor / this enable will fail with customer id.
 else
   echo "    falcon-sensor already installed."
 fi
@@ -134,11 +149,6 @@ fi
 # ---------------------------------------------------------------------------
 # Step 7 — Clone the nyx repo (SSH with HTTPS fallback)
 # ---------------------------------------------------------------------------
-
-echo ""
-read -rp "==> Nyx branch to use [${NYX_BRANCH}]: " branch_input
-NYX_BRANCH="${branch_input:-$NYX_BRANCH}"
-echo "    Using branch: $NYX_BRANCH"
 
 if [ ! -d "$NYX_DIR" ]; then
   echo ""
