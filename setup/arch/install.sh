@@ -61,9 +61,19 @@ echo ""
 # Disk selection
 info "Available disks:"
 echo ""
-lsblk -d -o NAME,SIZE,TYPE,MODEL | grep -E 'disk'
+mapfile -t DISKS < <(lsblk -d -o NAME,SIZE,MODEL --noheadings | grep -v "loop")
+for i in "${!DISKS[@]}"; do
+  printf "  [%d] %s\n" "$((i+1))" "${DISKS[$i]}"
+done
 echo ""
-read -rp "Enter target disk (e.g. /dev/nvme0n1 or /dev/sda): " TARGET_DISK
+while true; do
+  read -rp "Select disk number [1-${#DISKS[@]}]: " DISK_NUM
+  if [[ "$DISK_NUM" =~ ^[0-9]+$ ]] && (( DISK_NUM >= 1 && DISK_NUM <= ${#DISKS[@]} )); then
+    TARGET_DISK="/dev/$(echo "${DISKS[$((DISK_NUM-1))]}" | awk '{print $1}')"
+    break
+  fi
+  echo "  Invalid selection. Enter a number between 1 and ${#DISKS[@]}."
+done
 [[ -b "$TARGET_DISK" ]] || die "Not a valid block device: $TARGET_DISK"
 
 # Passwords
