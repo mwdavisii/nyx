@@ -33,13 +33,13 @@ die()   { echo "FATAL: $*" >&2; exit 1; }
 prompt_password() {
   local desc="$1" pw pw2
   while true; do
-    read -rsp "Enter $desc: " pw; echo
-    read -rsp "Confirm $desc: " pw2; echo
+    read -rsp "Enter $desc: " pw; echo >&2
+    read -rsp "Confirm $desc: " pw2; echo >&2
     if [[ "$pw" == "$pw2" ]]; then
       echo "$pw"
       return
     fi
-    echo "Passwords do not match. Try again."
+    echo "Passwords do not match. Try again." >&2
   done
 }
 
@@ -115,7 +115,7 @@ info "Creating LUKS2 container on $PART_ROOT..."
 echo -n "$LUKS_PASS" | cryptsetup luksFormat --type luks2 "$PART_ROOT" -
 
 info "Opening LUKS container..."
-echo -n "$LUKS_PASS" | cryptsetup open "$PART_ROOT" "$CRYPT_NAME" -
+echo -n "$LUKS_PASS" | cryptsetup open --key-file - "$PART_ROOT" "$CRYPT_NAME"
 
 info "Formatting root filesystem (btrfs)..."
 mkfs.btrfs -f "/dev/mapper/$CRYPT_NAME"
