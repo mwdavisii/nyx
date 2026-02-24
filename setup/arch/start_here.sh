@@ -121,6 +121,16 @@ cd "$NYX_DIR"
 nix run home-manager -- switch --show-trace --flake ".#$HOST"
 
 # ---------------------------------------------------------------------------
+# Step 7 — Enable SDDM
+# ---------------------------------------------------------------------------
+# Done here rather than at install time so home-manager config is fully in
+# place before the display manager starts Hyprland for the first time.
+
+echo ""
+echo "==> Enabling SDDM..."
+sudo systemctl enable sddm
+
+# ---------------------------------------------------------------------------
 # Done
 # ---------------------------------------------------------------------------
 
@@ -148,6 +158,6 @@ echo ""
 echo " Or use the switch script from the repo root:"
 echo "   ./switch.sh"
 echo ""
-echo " SDDM + Hyprland should already be active."
-echo " If not, reboot and select Hyprland from the session menu."
+echo " Reboot to start SDDM and land in Hyprland:"
+echo "   sudo reboot"
 echo "================================================================"

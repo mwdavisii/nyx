@@ -157,7 +157,7 @@ info "Installing base system and packages via pacstrap..."
 
 pacstrap /mnt \
   base linux linux-firmware btrfs-progs \
-  sudo vim git curl \
+  sudo vim git curl foot \
   \
   base-devel \
   \
@@ -279,7 +279,7 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 # --- Enable services (no --now, system isn't booted yet) ---
 systemctl enable NetworkManager
 systemctl enable bluetooth
-systemctl enable sddm
+# sddm is enabled by start_here.sh after home-manager is applied
 
 CHROOT_EOF
 
