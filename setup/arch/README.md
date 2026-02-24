@@ -41,10 +41,11 @@ The script will prompt for:
 
 | Prompt | Notes |
 |---|---|
-| Target disk | e.g. `/dev/nvme0n1` or `/dev/sda` — **this disk will be wiped** |
+| Target disk | Selected by number from a list — **this disk will be wiped** |
+| Username | Your Linux username — defaults to `mdavis67`, press enter to accept |
 | LUKS passphrase | Disk encryption password — entered on every boot |
 | Root password | For the root account |
-| User password | For the `mdavis67` account |
+| User password | For your user account |
 | Final confirmation | Type `YES` to proceed |
 
 All prompts are collected before any destructive action.
@@ -75,7 +76,7 @@ Remove the installation media when prompted. The system will ask for your LUKS p
 
 ## Phase 2 — User Bootstrap (after first login)
 
-Login as `mdavis67` at the TTY prompt.
+Login as your user at the TTY prompt.
 
 ### Reconnect to WiFi
 

@@ -18,7 +18,7 @@ set -euo pipefail
 # Configuration
 # ---------------------------------------------------------------------------
 HOSTNAME="arch-work"
-USERNAME="mdavis67"
+USERNAME=""
 TIMEZONE="America/Chicago"
 LOCALE="en_US.UTF-8"
 CRYPT_NAME="cryptroot"
@@ -75,6 +75,11 @@ while true; do
   echo "  Invalid selection. Enter a number between 1 and ${#DISKS[@]}."
 done
 [[ -b "$TARGET_DISK" ]] || die "Not a valid block device: $TARGET_DISK"
+
+# Username
+echo ""
+read -rp "Username [mdavis67]: " username_input
+USERNAME="${username_input:-mdavis67}"
 
 # Passwords
 echo ""
