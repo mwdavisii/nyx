@@ -33,8 +33,5 @@
         pulse.enable = true;
       };
     };
-
-    # Enable sound with pipewire.
-    services.pulseaudio.enable = false;
   };
 }

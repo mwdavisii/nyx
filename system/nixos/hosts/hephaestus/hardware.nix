@@ -13,7 +13,7 @@
             availableKernelModules = [ "ata_piix" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
             kernelModules = [ "amdgpu" ];
         };
-        kernelParams = [ "amdgpu" ];
+        kernelParams = [ "amdgpu" "snd_hda_intel.model=creative-sbz"];
         #extraModulePackages = [ ];
         loader = {
             efi.canTouchEfiVariables = true;
