@@ -279,6 +279,18 @@ echo "${USERNAME}:${USER_PASS}" | chpasswd
 # --- Sudoers ---
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
+# --- kmonad prerequisites ---
+# Create uinput group (for /dev/uinput access)
+groupadd -f uinput
+# Add user to input and uinput groups
+usermod -aG input,uinput ${USERNAME}
+# udev rule so GROUP="uinput" owns /dev/uinput at boot
+cat > /etc/udev/rules.d/40-uinput.rules << 'UDEVRULES'
+KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
+UDEVRULES
+# Load uinput kernel module at boot
+echo "uinput" > /etc/modules-load.d/uinput.conf
+
 # --- Enable services (no --now, system isn't booted yet) ---
 systemctl enable NetworkManager
 systemctl enable bluetooth

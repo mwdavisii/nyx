@@ -62,6 +62,21 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# Step 3 — AUR utilities
+# ---------------------------------------------------------------------------
+
+echo ""
+echo "==> Installing AUR utilities..."
+
+# kmonad — keyboard remapper (needs uinput group + udev rules from install.sh)
+if ! command -v kmonad &>/dev/null; then
+  echo "    Installing kmonad..."
+  yay -S --noconfirm kmonad-bin
+else
+  echo "    kmonad already installed: $(kmonad --version 2>/dev/null || echo 'version unknown')"
+fi
+
+# ---------------------------------------------------------------------------
 # Step 4 — Cloudflare WARP (optional)
 # ---------------------------------------------------------------------------
 # WARP should be installed before Nix when possible — it modifies

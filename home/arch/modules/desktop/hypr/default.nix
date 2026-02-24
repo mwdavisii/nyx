@@ -148,6 +148,17 @@ in
     xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
     xdg.configFile."waybar".source = ../../../../config/.config/waybar;
+    xdg.configFile."kmonad".source = ../../../../config/.config/kmonad;
+
+    # Seed the wal color cache from the template so Hyprland's
+    # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
+    # (init_colors runs exec-once which is too late — source= is parsed at startup).
+    home.activation.seedWalColors = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      if [ ! -f "$HOME/.cache/wal/colors-hyprland" ]; then
+        $DRY_RUN_CMD mkdir -p "$HOME/.cache/wal"
+        $DRY_RUN_CMD cp "$HOME/.config/wal/templates/colors-hyprland" "$HOME/.cache/wal/colors-hyprland"
+      fi
+    '';
 
     xdg.portal = {
       enable = true;
