@@ -17,6 +17,7 @@ NYX_REPO_SSH="git@github.com:mwdavisii/nyx.git"
 NYX_REPO_HTTPS="https://github.com/mwdavisii/nyx.git"
 NYX_DIR="$HOME/code/nyx"
 HOST="arch-work"
+NYX_BRANCH="arch-build"
 
 # ---------------------------------------------------------------------------
 # Step 1 — AUR helper (yay)
@@ -94,20 +95,26 @@ fi
 # Step 5 — Clone the nyx repo (SSH with HTTPS fallback)
 # ---------------------------------------------------------------------------
 
+echo ""
+read -rp "==> Nyx branch to use [${NYX_BRANCH}]: " branch_input
+NYX_BRANCH="${branch_input:-$NYX_BRANCH}"
+echo "    Using branch: $NYX_BRANCH"
+
 if [ ! -d "$NYX_DIR" ]; then
   echo ""
-  echo "==> Cloning nyx repo to $NYX_DIR..."
+  echo "==> Cloning nyx repo ($NYX_BRANCH) to $NYX_DIR..."
   mkdir -p "$(dirname "$NYX_DIR")"
-  if git clone "$NYX_REPO_SSH" "$NYX_DIR" 2>/dev/null; then
+  if git clone -b "$NYX_BRANCH" "$NYX_REPO_SSH" "$NYX_DIR" 2>/dev/null; then
     echo "    Cloned via SSH."
   else
     echo "    SSH clone failed (keys not set up?). Falling back to HTTPS..."
-    git clone "$NYX_REPO_HTTPS" "$NYX_DIR"
+    git clone -b "$NYX_BRANCH" "$NYX_REPO_HTTPS" "$NYX_DIR"
     echo "    Cloned via HTTPS. Switch remote to SSH later:"
     echo "      cd $NYX_DIR && git remote set-url origin $NYX_REPO_SSH"
   fi
 else
   echo "==> Repo already present at $NYX_DIR"
+  git -C "$NYX_DIR" checkout "$NYX_BRANCH"
 fi
 
 # ---------------------------------------------------------------------------
