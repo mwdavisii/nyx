@@ -1,90 +1,27 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Nyx bootstrap script for Arch Linux
+# Nyx bootstrap script for Arch Linux — post-boot phase
 # =============================================================================
-# Run this AFTER the base Arch install. Nix manages user tooling; the system
-# itself is managed by pacman/AUR.
-#
-# --- PRE-INSTALL (run from the Arch ISO) ------------------------------------
-#
-#  1. Connect to WiFi:
-#       iwctl --passphrase "password" station wlan0 connect "SSID"
-#
-#  2. Run archinstall with the nyx config (pulls non-disk settings from git):
-#       curl -fsSL https://raw.githubusercontent.com/mwdavisii/nyx/arch-build/setup/arch/archinstall.json \
-#         -o /tmp/archinstall.json
-#       archinstall --config /tmp/archinstall.json
-#
-#     In the archinstall menus, you will still be asked to pick:
-#       - Disk(s)       -> select your drive
-#       - Filesystem    -> ** choose ext4 ** (NOT btrfs -- subvol bootstrapping
-#                         is broken in archinstall and causes boot failures)
-#       - Root password -> set it
-#       - User account  -> create mdavis67, mark as sudoer
-#
-#  3. Install, then reboot into the new system.
-#
-# --- POST-INSTALL (run as your user in the new system) ----------------------
-#
-#  4. Install yay (needed for WARP before this script runs):
-#       sudo pacman -S --needed base-devel git
-#       git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
-#       cd /tmp/yay-bin && makepkg -si
-#
-#  5. Install and connect Cloudflare WARP (must be before Nix):
-#       yay -S cloudflare-warp-bin
-#       sudo systemctl enable --now warp-svc
-#       warp-cli registration new
-#       warp-cli connect
-#
-#  6. Run this script:
-#       bash <(curl -fsSL https://raw.githubusercontent.com/mwdavisii/nyx/arch-build/setup/arch/start_here.sh)
-#
+# Run this after first login on a system installed by install.sh.
+# System packages and services are already in place — this script handles:
+#   1. yay (AUR helper)
+#   2. Cloudflare WARP (optional, via AUR)
+#   3. Nix (Determinate Systems installer)
+#   4. Clone the nyx repo
+#   5. home-manager switch
 # =============================================================================
 
 set -euo pipefail
 
-NYX_REPO="git@github.com:mwdavisii/nyx.git"
+NYX_REPO_SSH="git@github.com:mwdavisii/nyx.git"
+NYX_REPO_HTTPS="https://github.com/mwdavisii/nyx.git"
 NYX_DIR="$HOME/code/nyx"
 HOST="arch-work"
 
 # ---------------------------------------------------------------------------
-# Step 0 — Pre-flight: Cloudflare WARP
-# ---------------------------------------------------------------------------
-# WARP MUST be installed before Nix. It modifies /etc/resolv.conf and some
-# network paths that can conflict if Nix is installed first.
-#
-# Install via AUR:
-#   yay -S cloudflare-warp-bin
-#
-#   # After install, register and connect:
-#   sudo systemctl enable --now warp-svc
-#   warp-cli registration new
-#   warp-cli connect
-#
-# ---------------------------------------------------------------------------
-
-echo "==> Checking for Cloudflare WARP..."
-if ! command -v warp-cli &>/dev/null; then
-  echo ""
-  echo "  *** Cloudflare WARP not found. ***"
-  echo ""
-  echo "  Install it before continuing:"
-  echo "    yay -S cloudflare-warp-bin"
-  echo "  Then run:"
-  echo "    sudo systemctl enable --now warp-svc"
-  echo "    warp-cli registration new"
-  echo "    warp-cli connect"
-  echo ""
-  echo "  Re-run this script after WARP is installed and connected."
-  exit 1
-fi
-echo "    WARP found: $(warp-cli --version 2>/dev/null || echo 'version unknown')"
-
-# ---------------------------------------------------------------------------
 # Step 1 — AUR helper (yay)
 # ---------------------------------------------------------------------------
-# Required before AUR packages. base-devel must be installed first.
+# Can't run makepkg as root in chroot, so yay is installed post-boot.
 
 if ! command -v yay &>/dev/null; then
   echo ""
@@ -99,120 +36,36 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 2 — System packages via pacman
+# Step 2 — Cloudflare WARP (optional)
 # ---------------------------------------------------------------------------
-# These must live at the OS level — system services, compositors, and audio
-# infrastructure cannot be managed purely by Nix on a non-NixOS host.
+# WARP should be installed before Nix when possible — it modifies
+# /etc/resolv.conf and network paths that can conflict if Nix goes first.
+# However, it is NOT a hard requirement. The script continues either way.
 
 echo ""
-echo "==> Installing system packages via pacman..."
-
-PACMAN_PKGS=(
-  # Build tools
-  base-devel
-  git
-
-  # Wayland compositor stack
-  hyprland
-  hyprlock
-  xdg-desktop-portal-hyprland
-  xdg-desktop-portal-gtk
-  xorg-xwayland
-  wayland-utils
-
-  # Display manager — SDDM (≥0.20.0, "works flawlessly" per Hyprland wiki)
-  # Picks up Hyprland's desktop entry automatically; no config file needed.
-  sddm
-
-  # Security infrastructure
-  polkit
-  rtkit
-
-  # Audio — PipeWire stack
-  pipewire
-  wireplumber
-  pipewire-alsa
-  pipewire-pulse
-  pipewire-jack
-  pavucontrol
-  pamixer
-  playerctl
-
-  # Network — WiFi and management
-  networkmanager
-  wpa_supplicant
-  iw
-  wireless_tools
-  network-manager-applet
-  nm-connection-editor
-
-  # Bluetooth
-  bluez
-  bluez-utils
-  blueman
-
-  # Wayland / display utilities
-  # (equivalent to NixOS packages module — not covered by home-manager on Arch)
-  wlr-randr
-  grim
-  slurp
-  wl-clipboard
-  kanshi
-
-  # File management
-  thunar
-  gvfs
-  tumbler
-
-  # Input handling
-  libinput
-
-  # System utilities
-  acpi
-  linux-firmware
-
-  # Fonts — system baseline (nerd fonts come via Nix home-manager)
-  noto-fonts
-  noto-fonts-cjk
-  noto-fonts-emoji
-  ttf-firacode-nerd
-)
-
-sudo pacman -S --needed --noconfirm "${PACMAN_PKGS[@]}"
+echo "==> Checking for Cloudflare WARP..."
+if ! command -v warp-cli &>/dev/null; then
+  echo ""
+  echo "  Cloudflare WARP is not installed."
+  echo "  It's recommended to install it before Nix to avoid path conflicts."
+  echo ""
+  read -rp "  Install WARP now via yay? [Y/n] " warp_choice
+  if [[ "${warp_choice,,}" != "n" ]]; then
+    yay -S --noconfirm cloudflare-warp-bin
+    echo ""
+    echo "  WARP installed. After this script finishes, register and connect:"
+    echo "    sudo systemctl enable --now warp-svc"
+    echo "    warp-cli registration new"
+    echo "    warp-cli connect"
+  else
+    echo "  Skipping WARP. You can install it later: yay -S cloudflare-warp-bin"
+  fi
+else
+  echo "    WARP found: $(warp-cli --version 2>/dev/null || echo 'version unknown')"
+fi
 
 # ---------------------------------------------------------------------------
-# Step 3 — AUR packages
-# ---------------------------------------------------------------------------
-# cloudflare-warp-bin is already installed (Step 0 pre-flight).
-# Add any additional AUR packages here as needed.
-
-# (no additional AUR packages required at this time)
-
-# ---------------------------------------------------------------------------
-# Step 4 — Enable system services
-# ---------------------------------------------------------------------------
-
-echo ""
-echo "==> Enabling system services..."
-
-# NetworkManager — handles WiFi, ethernet, and VPN
-sudo systemctl enable --now NetworkManager
-
-# Bluetooth
-sudo systemctl enable --now bluetooth
-
-# PipeWire — user-level services; best-effort since we may not have a full session
-echo "    Enabling PipeWire user services (best-effort)..."
-systemctl --user enable pipewire.socket pipewire-pulse.socket wireplumber || \
-  echo "    (PipeWire user services will activate on next login)"
-
-# SDDM — enabled here, starts on next boot.
-# The hyprland package ships /usr/share/wayland-sessions/hyprland.desktop
-# which SDDM picks up automatically. No config file needed.
-sudo systemctl enable sddm
-
-# ---------------------------------------------------------------------------
-# Step 5 — Install Nix (Determinate Systems)
+# Step 3 — Install Nix (Determinate Systems)
 # ---------------------------------------------------------------------------
 
 if ! command -v nix &>/dev/null; then
@@ -225,7 +78,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 6 — Source the Nix profile
+# Step 4 — Source the Nix profile
 # ---------------------------------------------------------------------------
 
 NIX_PROFILE="/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
@@ -238,20 +91,27 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 7 — Clone the nyx repo (if not already present)
+# Step 5 — Clone the nyx repo (SSH with HTTPS fallback)
 # ---------------------------------------------------------------------------
 
 if [ ! -d "$NYX_DIR" ]; then
   echo ""
   echo "==> Cloning nyx repo to $NYX_DIR..."
   mkdir -p "$(dirname "$NYX_DIR")"
-  git clone "$NYX_REPO" "$NYX_DIR"
+  if git clone "$NYX_REPO_SSH" "$NYX_DIR" 2>/dev/null; then
+    echo "    Cloned via SSH."
+  else
+    echo "    SSH clone failed (keys not set up?). Falling back to HTTPS..."
+    git clone "$NYX_REPO_HTTPS" "$NYX_DIR"
+    echo "    Cloned via HTTPS. Switch remote to SSH later:"
+    echo "      cd $NYX_DIR && git remote set-url origin $NYX_REPO_SSH"
+  fi
 else
   echo "==> Repo already present at $NYX_DIR"
 fi
 
 # ---------------------------------------------------------------------------
-# Step 8 — Apply the home-manager configuration
+# Step 6 — Apply the home-manager configuration
 # ---------------------------------------------------------------------------
 
 echo ""
@@ -275,6 +135,12 @@ echo ""
 echo " PipeWire audio: if not working after first login, run:"
 echo "   systemctl --user start pipewire pipewire-pulse wireplumber"
 echo ""
+echo " If you skipped WARP, install it now:"
+echo "   yay -S cloudflare-warp-bin"
+echo "   sudo systemctl enable --now warp-svc"
+echo "   warp-cli registration new"
+echo "   warp-cli connect"
+echo ""
 echo " For ongoing use:"
 echo "   cd $NYX_DIR"
 echo "   home-manager switch --flake .#$HOST"
@@ -282,5 +148,6 @@ echo ""
 echo " Or use the switch script from the repo root:"
 echo "   ./switch.sh"
 echo ""
-echo " SDDM will activate on next boot → select Hyprland from the session menu."
+echo " SDDM + Hyprland should already be active."
+echo " If not, reboot and select Hyprland from the session menu."
 echo "================================================================"
