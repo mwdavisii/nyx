@@ -139,6 +139,10 @@ mount "$PART_EFI" /mnt/boot
 # Phase 2 — Pacstrap
 # ===========================================================================
 
+info "Initializing pacman keyring..."
+pacman-key --init
+pacman-key --populate archlinux
+
 info "Installing base system and packages via pacstrap..."
 
 pacstrap /mnt \
@@ -230,7 +234,7 @@ echo "LANG=${LOCALE}" > /etc/locale.conf
 echo "${HOSTNAME}" > /etc/hostname
 
 # --- mkinitcpio — add encrypt hook ---
-sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block encrypt filesystems fsck)/' /etc/mkinitcpio.conf
+sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block encrypt btrfs filesystems fsck)/' /etc/mkinitcpio.conf
 mkinitcpio -P
 
 # --- systemd-boot ---
@@ -249,7 +253,7 @@ cat > /boot/loader/entries/arch.conf <<ENTRY
 title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /initramfs-linux.img
-options cryptdevice=UUID=${LUKS_UUID}:${CRYPT_NAME} root=/dev/mapper/${CRYPT_NAME} rw
+options cryptdevice=UUID=${LUKS_UUID}:${CRYPT_NAME} root=/dev/mapper/${CRYPT_NAME} rootflags=subvol=@ rw
 ENTRY
 
 # --- Root password ---
