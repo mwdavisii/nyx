@@ -63,7 +63,7 @@ All prompts are collected before any destructive action.
 5. **Sets up** mkinitcpio with the `encrypt` hook for LUKS
 6. **Installs** systemd-boot with an entry that unlocks the encrypted root
 7. **Creates** user `mdavis67` (wheel group, sudo access)
-8. **Enables** services: NetworkManager, bluetooth, sddm
+8. **Enables** services: NetworkManager, bluetooth (SDDM is enabled later by start_here.sh)
 
 ### After install completes
 
@@ -71,11 +71,27 @@ All prompts are collected before any destructive action.
 reboot
 ```
 
-Remove the installation media when prompted. The system will ask for your LUKS passphrase on boot, then present the SDDM login screen.
+Remove the installation media when prompted. The system will ask for your LUKS passphrase, then drop you to a **TTY login prompt** — this is intentional. SDDM is not enabled yet so home-manager can configure Hyprland fully before the display manager starts for the first time.
 
 ## Phase 2 — User Bootstrap (after first login)
 
-Login as `mdavis67`, open a terminal, and run:
+Login as `mdavis67` at the TTY prompt.
+
+### Reconnect to WiFi
+
+The archiso connection does not carry over. Use NetworkManager (already installed and running):
+
+```bash
+sudo nmtui
+```
+
+Navigate to **Activate a connection**, select your network, enter the passphrase, then **Back** and quit. Verify with `ping -c 3 archlinux.org`.
+
+> Note: `iwctl` is only available on the Arch ISO. The installed system uses `nmtui` / `nmcli` instead.
+
+### Run the bootstrap
+
+
 
 ```bash
 curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/start_here.sh
@@ -90,10 +106,12 @@ chmod +x start_here.sh
 3. **Installs Nix** — via the Determinate Systems installer
 4. **Clones nyx repo** — tries SSH first, falls back to HTTPS if keys aren't set up
 5. **Runs home-manager switch** — applies the `arch-work` flake configuration
+6. **Enables SDDM** — display manager is now safe to start with a fully configured Hyprland
 
 ### After bootstrap completes
 
-- Restart your shell: `exec $SHELL`
+- Reboot into SDDM + Hyprland: `sudo reboot`
+- Or restart your shell first if you want to verify: `exec $SHELL`
 - If PipeWire audio isn't working: `systemctl --user start pipewire pipewire-pulse wireplumber`
 - If you skipped WARP, install it later:
   ```bash
