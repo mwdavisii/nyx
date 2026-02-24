@@ -108,13 +108,13 @@ chmod +x start_here.sh
 4. **Cloudflare WARP** — optional, prompts to install via yay. Recommended before Nix to avoid DNS/path conflicts
 5. **Installs Nix** — via the Determinate Systems installer
 6. **Clones nyx repo** — tries SSH first, falls back to HTTPS if keys aren't set up
-7. **Runs home-manager switch** — applies the `arch-work` flake configuration
-8. **Configures TTY auto-login** — getty on tty1 logs you in automatically; the zsh login profile launches Hyprland if `$DISPLAY` is unset and you're on tty1
+7. **Clears bash skeleton files** — removes `~/.bashrc`, `~/.bash_profile`, etc. before home-manager switch to avoid collisions
+8. **Runs home-manager switch** — applies the `arch-work` flake configuration
 
 ### After bootstrap completes
 
-- Reboot into Hyprland: `sudo reboot`
-- On every subsequent boot: LUKS passphrase → auto-login → Hyprland starts automatically
+- Reboot: `sudo reboot`
+- On every subsequent boot: LUKS passphrase → TTY login prompt → enter credentials → Hyprland launches automatically
 - If PipeWire audio isn't working: `systemctl --user start pipewire pipewire-pulse wireplumber`
 - If you skipped WARP, install it later:
   ```bash

@@ -188,22 +188,6 @@ cd "$NYX_DIR"
 nix run home-manager -- switch --show-trace --flake ".#$HOST"
 
 # ---------------------------------------------------------------------------
-# Step 10 — TTY auto-login
-# ---------------------------------------------------------------------------
-# No display manager. getty auto-logs in on tty1; the zsh login profile
-# (managed by home-manager) launches Hyprland automatically.
-
-echo ""
-echo "==> Configuring TTY auto-login for $USER on tty1..."
-sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
-sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf > /dev/null <<EOF
-[Service]
-ExecStart=
-ExecStart=-/sbin/agetty --autologin $USER --noclear %I \$TERM
-EOF
-sudo systemctl daemon-reload
-
-# ---------------------------------------------------------------------------
 # Done
 # ---------------------------------------------------------------------------
 

@@ -171,7 +171,7 @@ in
         };
       };
     };
-    # Auto-start Hyprland on tty1 login (no display manager)
+    # Launch Hyprland automatically after login on tty1 (no display manager)
     programs.zsh.loginExtra = ''
       if [ -z "$DISPLAY" ] && [ "''${XDG_VTNR}" -eq 1 ]; then
         exec Hyprland
