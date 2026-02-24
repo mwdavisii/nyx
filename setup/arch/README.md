@@ -103,11 +103,13 @@ chmod +x start_here.sh
 ### What the bootstrap does
 
 1. **Installs yay** — AUR helper (can't build packages as root in chroot, so this runs post-boot)
-2. **Cloudflare WARP** — optional, prompts to install via yay. Recommended before Nix to avoid DNS/path conflicts
-3. **Installs Nix** — via the Determinate Systems installer
-4. **Clones nyx repo** — tries SSH first, falls back to HTTPS if keys aren't set up
-5. **Runs home-manager switch** — applies the `arch-work` flake configuration
-6. **Configures TTY auto-login** — getty on tty1 logs you in automatically; the zsh login profile launches Hyprland if `$DISPLAY` is unset and you're on tty1
+2. **Work security tools** — CrowdStrike Falcon and Cisco Secure Client via yay
+3. **AUR utilities** — kmonad-bin and other tools
+4. **Cloudflare WARP** — optional, prompts to install via yay. Recommended before Nix to avoid DNS/path conflicts
+5. **Installs Nix** — via the Determinate Systems installer
+6. **Clones nyx repo** — tries SSH first, falls back to HTTPS if keys aren't set up
+7. **Runs home-manager switch** — applies the `arch-work` flake configuration
+8. **Configures TTY auto-login** — getty on tty1 logs you in automatically; the zsh login profile launches Hyprland if `$DISPLAY` is unset and you're on tty1
 
 ### After bootstrap completes
 

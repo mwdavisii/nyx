@@ -162,7 +162,7 @@ info "Installing base system and packages via pacstrap..."
 
 pacstrap /mnt \
   base linux linux-firmware btrfs-progs \
-  sudo vim git curl foot \
+  sudo vim git curl foot zsh \
   \
   base-devel \
   \
@@ -273,7 +273,7 @@ ENTRY
 echo "root:${ROOT_PASS}" | chpasswd
 
 # --- Create user ---
-useradd -m -G wheel -s /bin/bash ${USERNAME}
+useradd -m -G wheel -s /bin/zsh ${USERNAME}
 echo "${USERNAME}:${USER_PASS}" | chpasswd
 
 # --- Sudoers ---
