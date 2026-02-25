@@ -10,7 +10,7 @@
     "margin-right": 0,
     "modules-left": ["idle_inhibitor", "hyprland/workspaces"],
     "modules-middle": ["custom/playerctl", "custom/playerlabel"],
-    "modules-right": ["group/system", "tray", "custom/randwall", "tray", "battery", "bluetooth", "backlight", "network", "pulseaudio", "clock", "custom/logout_menu", "tray"],
+    "modules-right": ["group/system", "tray", "custom/randwall", "tray", "battery", "bluetooth", "backlight", "network", "pulseaudio", "custom/swaync", "clock", "custom/logout_menu", "tray"],
     // Modules configuration
     "clock": {
       "format-alt": "{:%I:%M %p GMT:%Ez | %m/%d/%Y}",
@@ -207,5 +207,26 @@
     "format": "󰈋",
     "on-click": "hyprpicker -a -f hex",
     "on-click-right": "hyprpicker -a -f rgb"
+  },
+
+  "custom/swaync": {
+    "tooltip": true,
+    "format": "{icon} {}",
+    "format-icons": {
+      "notification": "󰂚<span foreground='red'><sup></sup></span>",
+      "none": "󰂚",
+      "dnd-notification": "󰂛<span foreground='red'><sup></sup></span>",
+      "dnd-none": "󰂛",
+      "inhibited-notification": "󰂚<span foreground='red'><sup></sup></span>",
+      "inhibited-none": "󰂚",
+      "dnd-inhibited-notification": "󰂛<span foreground='red'><sup></sup></span>",
+      "dnd-inhibited-none": "󰂛"
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
   }
 }

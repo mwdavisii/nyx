@@ -125,11 +125,12 @@
         nix-on-droid = { user = "droid"; };
         default = { user = "droid"; };
       };
-/*
-      homeManagerConfigurations = mapAttrs' mkHome {
-        mdavis67 = { };
+      homeConfigurations = mapAttrs' lib.mkArchConfiguration {
+        L242731 = {
+          user = "mdavis67";
+          system = "x86_64-linux";
+        };
       };
-*/
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
         L241729 = { hostname = "L241729"; system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
@@ -142,7 +143,7 @@
         nixos = { user = "nixos"; hostname = "nixos"; buildTarget = "nixos"; }; #WSL
         olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Lenovo laptop
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
-        L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
+        #L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
         hydra = { hostname = "hydra"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
       };
 
@@ -158,8 +159,8 @@
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
           hometop = genAttrs
-            (builtins.attrNames inputs.self.homeManagerConfigurations)
-            (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
+            (builtins.attrNames inputs.self.homeConfigurations)
+            (attr: inputs.self.homeConfigurations.${attr}.activationPackage);
           darwintop = genAttrs
             (builtins.attrNames inputs.self.darwinConfigurations)
             (attr: inputs.self.darwinConfigurations.${attr}.system);
