@@ -1,0 +1,19 @@
+{
+  "archinstall-language": "English",
+  "bootloader": "Systemd-boot",
+  "config_version": "2.8.3",
+  "hostname": "arch-work",
+  "kernels": ["linux"],
+  "locale_config": {
+    "kb_layout": "us",
+    "sys_enc": "UTF-8",
+    "sys_lang": "en_US"
+  },
+  "network_config": {
+    "type": "nm"
+  },
+  "packages": ["git"],
+  "profile_config": null,
+  "swap": true,
+  "timezone": "America/Chicago"
+}
