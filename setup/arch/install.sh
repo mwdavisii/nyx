@@ -292,7 +292,7 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # --- kmonad prerequisites ---
 # Create uinput group (for /dev/uinput access)
-groupadd -f uinput
+groupadd -rf uinput
 # Add user to input and uinput groups
 usermod -aG input,uinput ${USERNAME}
 # udev rule so GROUP="uinput" owns /dev/uinput at boot
