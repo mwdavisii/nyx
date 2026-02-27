@@ -174,6 +174,10 @@ in
     # Launch Hyprland automatically after login on tty1 (no display manager)
     programs.zsh.loginExtra = ''
       if [ -z "$DISPLAY" ] && [ "''${XDG_VTNR}" -eq 1 ]; then
+        # Ensure Nix profile is sourced before launching Hyprland
+        if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        fi
         exec Hyprland
       fi
     '';

@@ -42,6 +42,7 @@ The script will prompt for:
 | Prompt | Notes |
 |---|---|
 | Target disk | Selected by number from a list — **this disk will be wiped** |
+| Hostname | Machine hostname — defaults to `L242731`, press enter to accept |
 | Username | Your Linux username — defaults to `mdavis67`, press enter to accept |
 | LUKS passphrase | Disk encryption password — entered on every boot |
 | Root password | For the root account |
@@ -60,7 +61,7 @@ All prompts are collected before any destructive action.
    - `@home` mounted at `/home`
    - `@snapshots` mounted at `/.snapshots`
 3. **Pacstraps** the base system plus all desktop packages (Hyprland, PipeWire, NetworkManager, Bluetooth, fonts, etc.)
-4. **Configures** timezone (America/Chicago), locale (en_US.UTF-8), hostname (arch-work)
+4. **Configures** timezone (America/Chicago), locale (en_US.UTF-8), hostname (defaults to L242731)
 5. **Sets up** mkinitcpio with the `encrypt` hook for LUKS
 6. **Installs** systemd-boot with an entry that unlocks the encrypted root
 7. **Creates** user `mdavis67` (wheel group, sudo access)
@@ -109,7 +110,7 @@ chmod +x start_here.sh
 5. **Installs Nix** — via the Determinate Systems installer
 6. **Clones nyx repo** — tries SSH first, falls back to HTTPS if keys aren't set up
 7. **Clears bash skeleton files** — removes `~/.bashrc`, `~/.bash_profile`, etc. before home-manager switch to avoid collisions
-8. **Runs home-manager switch** — applies the `arch-work` flake configuration
+8. **Runs home-manager switch** — applies the flake configuration for your hostname
 
 ### After bootstrap completes
 
@@ -128,7 +129,7 @@ chmod +x start_here.sh
 
 ```bash
 cd ~/code/nyx
-home-manager switch --flake .#arch-work
+home-manager switch --flake .#L242731  # or your chosen hostname
 ```
 
 Or from the repo root:

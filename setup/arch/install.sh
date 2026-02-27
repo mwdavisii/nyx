@@ -17,7 +17,7 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-HOSTNAME="arch-work"
+HOSTNAME="L242731"
 USERNAME=""
 TIMEZONE="America/Chicago"
 LOCALE="en_US.UTF-8"
@@ -75,6 +75,11 @@ while true; do
   echo "  Invalid selection. Enter a number between 1 and ${#DISKS[@]}."
 done
 [[ -b "$TARGET_DISK" ]] || die "Not a valid block device: $TARGET_DISK"
+
+# Hostname
+echo ""
+read -rp "Hostname [$HOSTNAME]: " hostname_input
+HOSTNAME="${hostname_input:-$HOSTNAME}"
 
 # Username
 echo ""
