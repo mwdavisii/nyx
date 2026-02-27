@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
-  plugins = inputs.hyprland-plugins.packages.${pkgs.system};
+  plugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
   km_ka_restart = pkgs.writeShellScriptBin "km_ka_restart" ''
     killall -q -9 -r kmonad
     killall -q -9 -r kanshi

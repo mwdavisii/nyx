@@ -106,7 +106,7 @@ in
       # mesa, xwayland) are installed via pacman/AUR — Nix-built versions
       # can't access the system GPU drivers on non-NixOS.
       hypridle
-      inputs.kmonad.packages.${pkgs.system}.default
+      inputs.kmonad.packages.${pkgs.stdenv.hostPlatform.system}.default
 
       gnome-keyring
       acpi
