@@ -29,8 +29,14 @@
       hypr.enable = true;
     };
     app = {
-      alacritty.enable = true;
-      kitty.enable = true;
+      alacritty = {
+        enable = true;
+        package = null;
+      };
+      kitty = {
+        enable = true;
+        package = null;
+      };
       discord.enable = true;
       obs.enable = false;
       scrcpy.enable = true;

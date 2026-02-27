@@ -167,7 +167,7 @@ info "Installing base system and packages via pacstrap..."
 
 pacstrap /mnt \
   base linux linux-firmware btrfs-progs \
-  sudo vim git curl foot zsh \
+  sudo vim git curl foot kitty alacritty zsh \
   \
   base-devel \
   \
