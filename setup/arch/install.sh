@@ -169,6 +169,12 @@ pacstrap /mnt \
   base linux linux-firmware btrfs-progs \
   sudo vim git curl foot kitty alacritty zsh \
   \
+  waybar \
+  rofi \
+  hyprpicker \
+  hypridle \
+  scrcpy \
+  \
   base-devel \
   \
   hyprland \

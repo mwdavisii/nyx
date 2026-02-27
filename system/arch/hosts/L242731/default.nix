@@ -39,7 +39,10 @@
       };
       discord.enable = true;
       obs.enable = false;
-      scrcpy.enable = true;
+      scrcpy = {
+        enable = true;
+        package = null;
+      };
       wezterm = {
         enable = true;
         package = null;

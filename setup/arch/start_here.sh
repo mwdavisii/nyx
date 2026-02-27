@@ -91,6 +91,22 @@ else
   echo "    kmonad already installed: $(kmonad --version 2>/dev/null || echo 'version unknown')"
 fi
 
+# swww — Wayland wallpaper daemon (GPU-dependent, must be system package)
+if ! command -v swww &>/dev/null; then
+  echo "    Installing swww..."
+  yay -S --noconfirm swww
+else
+  echo "    swww already installed."
+fi
+
+# nwg-displays — Wayland display configuration tool
+if ! command -v nwg-displays &>/dev/null; then
+  echo "    Installing nwg-displays..."
+  yay -S --noconfirm nwg-displays
+else
+  echo "    nwg-displays already installed."
+fi
+
 # ---------------------------------------------------------------------------
 # Step 4 — Cloudflare WARP (optional)
 # ---------------------------------------------------------------------------
