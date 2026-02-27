@@ -110,6 +110,7 @@ in
       xwayland
       hyprpicker
       hypridle
+      rofi-wayland
 
       gnome-keyring
       acpi
