@@ -141,9 +141,12 @@ in
       size = 24;
     };
 
-    #wal template for hyprland
+    #wal templates
     home.file.".config/wal/templates/btop".source = ../../../../config/.config/wal/templates/btop;
     home.file.".config/wal/templates/colors-hyprland".source = ../../../../config/.config/wal/templates/colors-hyprland;
+    home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
+    home.file.".config/wal/templates/colors-waybar".source = ../../../../config/.config/wal/templates/colors-waybar;
+    home.file.".config/wal/templates/dunstrc".source = ../../../../config/.config/wal/templates/dunstrc;
     #wallpapers directory
     xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
