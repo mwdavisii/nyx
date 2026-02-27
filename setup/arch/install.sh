@@ -174,7 +174,6 @@ pacstrap /mnt \
   hyprpicker \
   hypridle \
   scrcpy \
-  wlogout \
   \
   base-devel \
   \
