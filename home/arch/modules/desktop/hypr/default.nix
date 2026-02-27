@@ -111,6 +111,7 @@ in
       hyprpicker
       hypridle
       rofi-wayland
+      inputs.kmonad.packages.${pkgs.system}.default
 
       gnome-keyring
       acpi
