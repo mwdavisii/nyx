@@ -172,7 +172,8 @@ in
       };
     };
     # Launch Hyprland automatically after login on tty1 (no display manager)
-    programs.zsh.loginExtra = ''
+    # Use the custom zsh module's profileExtra hook instead of programs.zsh.loginExtra
+    nyx.modules.shell.zsh.profileExtra = ''
       if [ -z "$DISPLAY" ] && [ "''${XDG_VTNR}" -eq 1 ]; then
         # Ensure Nix profile is sourced before launching Hyprland
         if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
