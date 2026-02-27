@@ -110,7 +110,7 @@ in
       xwayland
       hyprpicker
       hypridle
-      rofi-wayland
+      rofi
       inputs.kmonad.packages.${pkgs.system}.default
 
       gnome-keyring
