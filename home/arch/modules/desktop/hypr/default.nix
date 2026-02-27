@@ -149,6 +149,7 @@ in
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
     xdg.configFile."waybar".source = ../../../../config/.config/waybar;
     xdg.configFile."kmonad".source = ../../../../config/.config/kmonad;
+    xdg.configFile."wlogout".source = ../../../../config/.config/wlogout;
 
     # Seed the wal color cache from the template so Hyprland's
     # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
