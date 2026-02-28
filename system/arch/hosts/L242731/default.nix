@@ -28,6 +28,11 @@
     desktop = {
       hypr.enable = true;
     };
+    ai = {
+      chatgpt.enable = true;
+      gemini.enable = true;
+      claude.enable = true;
+    };
     app = {
       alacritty = {
         enable = true;
@@ -66,6 +71,7 @@
       bash.enable = true;
       bat.enable = true;
       direnv.enable = true;
+      etcd.enable= true;
       eza.enable = true;
       fzf.enable = true;
       gcp.enable = true;
@@ -88,11 +94,14 @@
       neofetch.enable = true;
       nixvim.enable = true;
       networking.enable = true;
+      openssl.enable = true;
       starship.enable = true;
       terraform.enable = true;
       tmux.enable = true;
       wal.enable = true;
+      usbutils.enable = true;
       xdg.enable = true;
+      yq.enable = true;
       zellij.enable = true;
       zsh.enable = true;
     };
