@@ -32,6 +32,19 @@ let
     #!/usr/bin/env bash
     rofi -show drun q
   '';
+  rofiPowerMenu = pkgs.writeShellScriptBin "rofiPowerMenu" ''
+    #!/usr/bin/env bash
+    options="󰌾 Lock\n󰗼 Logout\n󰤄 Suspend\n󰋊 Hibernate\n󰜉 Reboot\n󰐥 Shutdown"
+    chosen=$(echo -e "$options" | rofi -dmenu -i -p "Power" -theme-str 'window {width: 250px;} listview {lines: 6;}')
+    case "$chosen" in
+      "󰌾 Lock")       hyprlock ;;
+      "󰗼 Logout")     loginctl terminate-user "$USER" ;;
+      "󰤄 Suspend")    systemctl suspend ;;
+      "󰋊 Hibernate")  systemctl hibernate ;;
+      "󰜉 Reboot")     systemctl reboot ;;
+      "󰐥 Shutdown")   systemctl poweroff ;;
+    esac
+  '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
     if command -v swww >/dev/null 2>&1; then
@@ -127,6 +140,7 @@ in
       wallpaper_default
       init_colors
       rofiWindow
+      rofiPowerMenu
       cava_start
     ];
 
@@ -149,7 +163,7 @@ in
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
     xdg.configFile."waybar".source = ../../../../config/.config/waybar;
     xdg.configFile."kmonad".source = ../../../../config/.config/kmonad;
-    xdg.configFile."wlogout".source = ../../../../config/.config/wlogout;
+
 
     # Seed the wal color cache from the template so Hyprland's
     # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot

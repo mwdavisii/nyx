@@ -34,7 +34,7 @@
         hypr.enable = true;
         rofi.enable = true;
         gtk.enable = true;
-        wlogout.enable = true;
+
         cava.enable = true;
         kmonad.enable = true;
       };

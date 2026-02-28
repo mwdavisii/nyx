@@ -107,13 +107,6 @@ else
   echo "    nwg-displays already installed."
 fi
 
-# wlogout — Wayland logout/shutdown menu
-if ! command -v wlogout &>/dev/null; then
-  echo "    Installing wlogout..."
-  yay -S --noconfirm wlogout
-else
-  echo "    wlogout already installed."
-fi
 
 # ---------------------------------------------------------------------------
 # Step 4 — Cloudflare WARP (optional)
