@@ -31,7 +31,10 @@
       "Bash(sudo ls:*)",
       "Bash(sudo blkid:*)",
       "Bash(parted:*)",
-      "Bash(sudo parted:*)"
+      "Bash(sudo parted:*)",
+      "Bash(find:*)",
+      "Bash(xargs:*)",
+      "Bash(git -C /home/mwdavisii/code/nyx add home/shared/modules/desktop/ system/arch/hosts/prometheus/default.nix)"
     ]
   }
 }

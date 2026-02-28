@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   programs.home-manager.enable = true;
@@ -26,7 +26,16 @@
 
   nyx.modules = {
     desktop = {
-      hypr.enable = true;
+      hypr = {
+        enable = true;
+        gpuPackages = false;
+        plugins = false;
+        ttyLaunch = true;
+      };
+      kmonad = {
+        enable = true;
+        package = inputs.kmonad.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      };
     };
     # Note gaming stuff is installed via arch packages because of NixGL
     ai = {

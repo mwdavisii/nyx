@@ -91,7 +91,8 @@ sudo pacman -S --needed --noconfirm \
   xdg-desktop-portal-gtk \
   xorg-xwayland \
   wayland-utils \
-  \
+  gnome-keyring \
+  libsecret \
   polkit \
   rtkit \
   ntfs-3g \
