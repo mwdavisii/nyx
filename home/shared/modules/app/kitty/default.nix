@@ -21,6 +21,7 @@ in
   config = mkIf cfg.enable {
     programs.kitty = {
       enable = true;
+      package = cfg.package;
     };
     xdg.configFile."kitty".source = ../../../../config/.config/kitty;
   };

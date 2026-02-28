@@ -146,6 +146,11 @@ in
         ${optionalString cfg.enableSyntaxHighlighting
         "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"}
       '';
+
+      # Create .zshrc to source nyx_zshrc
+      home.file.".zshrc".text = ''
+        [[ -f $HOME/.local/share/zsh/nyx_zshrc ]] && . $HOME/.local/share/zsh/nyx_zshrc
+      '';
     }
 
     (mkIf (cfg.envExtra != "") {
@@ -154,6 +159,11 @@ in
 
     (mkIf (cfg.profileExtra != "") {
       xdg.dataFile."zsh/nyx_zprofile".text = cfg.profileExtra;
+
+      # Create .zprofile to source nyx_zprofile
+      home.file.".zprofile".text = ''
+        [[ -f $HOME/.local/share/zsh/nyx_zprofile ]] && . $HOME/.local/share/zsh/nyx_zprofile
+      '';
     })
 
     (mkIf (cfg.plugins != [ ]) {

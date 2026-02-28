@@ -1,6 +1,6 @@
 # Arch Linux Install Guide
 
-Two-phase setup: **install.sh** builds the system from archiso, **start_here.sh** bootstraps user tooling after first boot.
+Three-phase setup: **01-install.sh** builds a minimal bootable system from archiso, **02-install-packages.sh** installs all desktop packages, **03-setup-nix.sh** bootstraps Nix and home-manager.
 
 ## Prerequisites
 
@@ -32,9 +32,9 @@ ping -c 3 archlinux.org
 ### Run the installer
 
 ```bash
-curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/install.sh
-chmod +x install.sh
-./install.sh
+curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/01-install.sh
+chmod +x 01-install.sh
+./01-install.sh
 ```
 
 The script will prompt for:
@@ -42,6 +42,7 @@ The script will prompt for:
 | Prompt | Notes |
 |---|---|
 | Target disk | Selected by number from a list — **this disk will be wiped** |
+| Hostname | Machine hostname — defaults to `L242731`, press enter to accept |
 | Username | Your Linux username — defaults to `mdavis67`, press enter to accept |
 | LUKS passphrase | Disk encryption password — entered on every boot |
 | Root password | For the root account |
@@ -59,12 +60,12 @@ All prompts are collected before any destructive action.
    - `@` mounted at `/`
    - `@home` mounted at `/home`
    - `@snapshots` mounted at `/.snapshots`
-3. **Pacstraps** the base system plus all desktop packages (Hyprland, PipeWire, NetworkManager, Bluetooth, fonts, etc.)
-4. **Configures** timezone (America/Chicago), locale (en_US.UTF-8), hostname (arch-work)
+3. **Pacstraps** a minimal base system (base, linux, linux-firmware, btrfs-progs, sudo, vim, git, curl, zsh, base-devel, networkmanager)
+4. **Configures** timezone (America/Chicago), locale (en_US.UTF-8), hostname (defaults to L242731)
 5. **Sets up** mkinitcpio with the `encrypt` hook for LUKS
 6. **Installs** systemd-boot with an entry that unlocks the encrypted root
 7. **Creates** user `mdavis67` (wheel group, sudo access)
-8. **Enables** services: NetworkManager, bluetooth
+8. **Enables** NetworkManager
 
 ### After install completes
 
@@ -74,7 +75,7 @@ reboot
 
 Remove the installation media when prompted. The system will ask for your LUKS passphrase, then drop you to a **TTY login prompt**.
 
-## Phase 2 — User Bootstrap (after first login)
+## Phase 2 — Desktop Packages (after first login)
 
 Login as your user at the TTY prompt.
 
@@ -90,51 +91,68 @@ Navigate to **Activate a connection**, select your network, enter the passphrase
 
 > Note: `iwctl` is only available on the Arch ISO. The installed system uses `nmtui` / `nmcli` instead.
 
-### Run the bootstrap
-
-
+### Install packages
 
 ```bash
-curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/start_here.sh
-chmod +x start_here.sh
-./start_here.sh
+curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/02-install-packages.sh
+chmod +x 02-install-packages.sh
+./02-install-packages.sh
 ```
 
-### What the bootstrap does
+The script will prompt for optional extras:
+
+| Prompt | Notes |
+|---|---|
+| AMD gaming | Mesa, Vulkan, Steam, Lutris, 32-bit libs (enables multilib) |
+| Security tools | CrowdStrike Falcon, Cisco Secure Client |
+| Cloudflare WARP | DNS/VPN client |
+
+### What 02-install-packages.sh does
 
 1. **Installs yay** — AUR helper (can't build packages as root in chroot, so this runs post-boot)
-2. **Work security tools** — CrowdStrike Falcon and Cisco Secure Client via yay
-3. **AUR utilities** — kmonad-bin and other tools
-4. **Cloudflare WARP** — optional, prompts to install via yay. Recommended before Nix to avoid DNS/path conflicts
-5. **Installs Nix** — via the Determinate Systems installer
-6. **Clones nyx repo** — tries SSH first, falls back to HTTPS if keys aren't set up
-7. **Clears bash skeleton files** — removes `~/.bashrc`, `~/.bash_profile`, etc. before home-manager switch to avoid collisions
-8. **Runs home-manager switch** — applies the `arch-work` flake configuration
+2. **Core desktop packages** — Hyprland, PipeWire, Bluetooth, fonts, terminals, file manager, Wayland utilities, etc.
+3. **AMD gaming** (optional) — enables multilib, installs Mesa/Vulkan/Steam/Lutris
+4. **AUR packages** — kmonad-bin, swww, nwg-displays
+5. **Security tools** (optional) — CrowdStrike Falcon, Cisco Secure Client
+6. **Cloudflare WARP** (optional) — DNS/VPN via AUR
+7. **Enables** bluetooth service
+
+This script is idempotent — safe to re-run at any time. It uses `--needed` to skip already-installed packages. It also runs automatically (in `--sync` mode, core packages only) via `./switch.sh`.
+
+## Phase 3 — Nix & Home-Manager Bootstrap
+
+```bash
+curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/03-setup-nix.sh
+chmod +x 03-setup-nix.sh
+./03-setup-nix.sh
+```
+
+### What 03-setup-nix.sh does
+
+1. **Installs Nix** — via the Determinate Systems installer
+2. **Clones nyx repo** — tries SSH first, falls back to HTTPS if keys aren't set up
+3. **Clears bash skeleton files** — removes `~/.bashrc`, `~/.bash_profile`, etc. before home-manager switch to avoid collisions
+4. **Runs home-manager switch** — applies the flake configuration for your hostname
 
 ### After bootstrap completes
 
 - Reboot: `sudo reboot`
 - On every subsequent boot: LUKS passphrase → TTY login prompt → enter credentials → Hyprland launches automatically
-- If PipeWire audio isn't working: `systemctl --user start pipewire pipewire-pulse wireplumber`
-- If you skipped WARP, install it later:
-  ```bash
-  yay -S cloudflare-warp-bin
-  sudo systemctl enable --now warp-svc
-  warp-cli registration new
-  warp-cli connect
-  ```
 
 ## Ongoing Use
 
 ```bash
 cd ~/code/nyx
-home-manager switch --flake .#arch-work
+./switch.sh
 ```
 
-Or from the repo root:
+`switch.sh` automatically runs `02-install-packages.sh --sync` (core packages, no prompts) before `home-manager switch` on Arch, so new system packages are picked up on every switch.
+
+To add optional packages interactively (AMD gaming, security tools, WARP):
 
 ```bash
-./switch.sh
+cd ~/code/nyx
+setup/arch/02-install-packages.sh
 ```
 
 ## Disk Layout Reference

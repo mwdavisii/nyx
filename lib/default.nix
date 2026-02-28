@@ -14,61 +14,72 @@ let
     then builtins.toPath ("${toString path}/${x}.nix")
     else x;
 
+  # Shared home-manager config used by both mkUserHome (system-level) and mkArchConfiguration (standalone).
+  mkCommonHomeConfig = {
+    home.stateVersion = "26.05";
+
+    # For compatibility with nix-shell, nix-build, etc.
+    home.file.".nixpkgs".source = inputs.nixpkgs;
+    home.sessionVariables = {
+      NIX_PATH = "nixpkgs=$HOME/.nixpkgs\${NIX_PATH:+:}$NIX_PATH";
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+      COLORTERM = "truecolor";
+    };
+
+    # Use the same Nix configuration for the user
+    xdg.configFile."nixpkgs/config.nix".source = ../nix/config.nix;
+
+    # Re-expose self and nixpkgs as flakes.
+    xdg.configFile."nix/registry.json".text = builtins.toJSON {
+      version = 2;
+      flakes =
+        let
+          toInput = input:
+            {
+              type = "path";
+              path = input.outPath;
+            } // (
+              filterAttrs
+                (n: _: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
+                input
+            );
+        in
+        [
+          {
+            from = { id = "nyx"; type = "indirect"; };
+            to = toInput inputs.self;
+          }
+          {
+            from = { id = "nixpkgs"; type = "indirect"; };
+            to = toInput inputs.nixpkgs;
+          }
+        ];
+    };
+  };
+
+  # Extra config only for standalone homeConfigurations (not used inside system-level home-manager
+  # where useGlobalPkgs=true disables nixpkgs options and nix.package is set by common.nix).
+  mkStandaloneHomeConfig = { system }: {
+    xdg.configFile."nix/nix.conf".text = ''
+      experimental-features = nix-command flakes
+    '';
+
+    nix = {
+      package = inputs.self.legacyPackages."${system}".nixVersions.stable;
+      extraOptions = "experimental-features = nix-command flakes";
+    };
+
+    nixpkgs = {
+      config = import ../nix/config.nix;
+      overlays = inputs.self.overlays."${system}";
+    };
+  };
+
 in
 rec {
   firstOrDefault = first: default: if !isNull first then first else default;
   existsOrDefault = x: set: default: if hasAttr x set then getAttr x set else default;
-  mkHome = name: { config ? name, user, system ? "aarch64-darwin" }:
-    let
-      pkgs = inputs.self.legacyPackages."${system}";
-      #pkgs = inputs.self.legacyPackages.aarch64-darwin;
-      userConf = import (strToFile user ../users);
-      userOptions = strToPath config ../home/hosts;
-      homeDirectory = if hasSuffix "darwin" system
-        then "/Users/${userConf.userName}"
-        else "/home/${userConf.userName}";
-    in
-    nameValuePair name (
-      inputs.home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          {
-            home = { inherit homeDirectory; };
-            home.username = userConf.userName;
-            imports =
-              let
-                home = mkUserHome { inherit system userConf; config = userOptions; };
-              in
-              [ home ];
-
-            xdg.configFile."nix/nix.conf".text =
-              let
-                nixConf = import ../nix/conf.nix;
-              in
-              ''
-                experimental-features = nix-command flakes
-              '';
-
-            nix = {
-              package = pkgs.nixVersions.stable;
-              extraOptions = "experimental-features = nix-command flakes";
-            };
-
-            nixpkgs = {
-              config = import ../nix/config.nix;
-              overlays = inputs.self.overlays."${system}";
-            };
-          }
-        ];
-        extraSpecialArgs =
-          let
-            self = inputs.self;
-            user = userConf;
-          in
-          { inherit inputs name self system user; };
-      }
-    );
-
   mkUserHome = { config, userConf, system ? "aarch64-darwin" }:
     { ... }: {
       imports = [
@@ -77,47 +88,8 @@ rec {
         (import ../home/darwin/modules)
         (import ../home/nixos/modules)
         (import config)
+        mkCommonHomeConfig
       ];
-
-      # For compatibility with nix-shell, nix-build, etc.
-      home.file.".nixpkgs".source = inputs.nixpkgs;
-      home.sessionVariables = {
-        NIX_PATH = "nixpkgs=$HOME/.nixpkgs\${NIX_PATH:+:}$NIX_PATH";
-        EDITOR = "nvim";
-        VISUAL = "nvim";
-        COLORTERM = "truecolor";
-      };
-
-      # Use the same Nix configuration for the user
-      xdg.configFile."nixpkgs/config.nix".source = ../nix/config.nix;
-
-      # Re-expose self and nixpkgs as flakes.
-      xdg.configFile."nix/registry.json".text = builtins.toJSON {
-        version = 2;
-        flakes =
-          let
-            toInput = input:
-              {
-                type = "path";
-                path = input.outPath;
-              } // (
-                filterAttrs
-                  (n: _: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
-                  input
-              );
-          in
-          [
-            {
-              from = { id = "nyx"; type = "indirect"; };
-              to = toInput inputs.self;
-            }
-            {
-              from = { id = "nixpkgs"; type = "indirect"; };
-              to = toInput inputs.nixpkgs;
-            }
-          ];
-      };
-      home.stateVersion = "26.05";
     };
 
   ################################## ARCH ##################################
@@ -137,60 +109,11 @@ rec {
           (agenix.homeManagerModules.default)
           (import ../home/arch/modules)
           (import userOptions)
+          mkCommonHomeConfig
+          (mkStandaloneHomeConfig { inherit system; })
           {
             home.homeDirectory = homeDirectory;
             home.username = userConf.userName;
-            home.stateVersion = "26.05";
-
-            # For compatibility with nix-shell, nix-build, etc.
-            home.file.".nixpkgs".source = inputs.nixpkgs;
-            home.sessionVariables = {
-              NIX_PATH = "nixpkgs=$HOME/.nixpkgs\${NIX_PATH:+:}$NIX_PATH";
-              EDITOR = "nvim";
-              VISUAL = "nvim";
-              COLORTERM = "truecolor";
-            };
-
-            xdg.configFile."nixpkgs/config.nix".source = ../nix/config.nix;
-            xdg.configFile."nix/registry.json".text = builtins.toJSON {
-              version = 2;
-              flakes =
-                let
-                  toInput = input:
-                    {
-                      type = "path";
-                      path = input.outPath;
-                    } // (
-                      filterAttrs
-                        (n: _: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
-                        input
-                    );
-                in
-                [
-                  {
-                    from = { id = "nyx"; type = "indirect"; };
-                    to = toInput inputs.self;
-                  }
-                  {
-                    from = { id = "nixpkgs"; type = "indirect"; };
-                    to = toInput inputs.nixpkgs;
-                  }
-                ];
-            };
-
-            xdg.configFile."nix/nix.conf".text = ''
-              experimental-features = nix-command flakes
-            '';
-
-            nix = {
-              package = pkgs.nixVersions.stable;
-              extraOptions = "experimental-features = nix-command flakes";
-            };
-
-            nixpkgs = {
-              config = import ../nix/config.nix;
-              overlays = inputs.self.overlays."${system}";
-            };
           }
         ];
         extraSpecialArgs =
@@ -207,7 +130,7 @@ rec {
       let
         pkgs = inputs.self.legacyPackages."${system}";
         userConf = import (strToFile user ../users);
-        unstable = import nixpkgs-unstable {inherit system;};
+        unstable = import inputs.nixpkgs {inherit system;};
         #nixos = Dedicated Build on Metal
         nixosModules = [
           (hyprland.nixosModules.default)
