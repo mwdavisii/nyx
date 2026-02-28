@@ -38,11 +38,17 @@
         enable = true;
         package = null;
       };
+      chromium.enable = true;
+      chrome = {
+        enable = true;
+        makeDefaultBrowser = true;
+      };
       kitty = {
         enable = true;
         package = null;
       };
       discord.enable = true;
+      firefox.enable = true;
       obs.enable = false;
       scrcpy = {
         enable = true;
