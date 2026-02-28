@@ -96,9 +96,12 @@ sudo pacman -S --needed --noconfirm \
   polkit \
   rtkit \
   ntfs-3g \
+  ghostscript \
   system-config-printer \
   cups \
-  \
+  bc \
+  foomatic-db-engine \
+  foomatic-db-engine \
   pipewire \
   wireplumber \
   pipewire-alsa \
