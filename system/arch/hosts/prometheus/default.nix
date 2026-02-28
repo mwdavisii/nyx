@@ -28,14 +28,9 @@
     desktop = {
       hypr.enable = true;
     };
-    gaming = {
-      bsdgames.enable = true;
-      lutris.enable = true;
-      mahjong.enable = true;
-      minesweeper.enable = true;
-    };
+    # Note gaming stuff is installed via arch packages because of NixGL
     ai = {
-      chatgpt.enable = true;
+      chatgpt.enable = false;
       gemini.enable = true;
       claude.enable = true;
     };

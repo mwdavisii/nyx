@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(git push:*)",
+      "Bash(git -C /home/mwdavisii/code/nyx status)",
+      "Bash(git -C /home/mwdavisii/code/nyx log --oneline -3)",
+      "Bash(git -C /home/mwdavisii/code/nyx checkout HEAD -- setup/arch/install.sh setup/arch/start_here.sh)",
+      "Bash(git -C /home/mwdavisii/code/nyx diff setup/arch/install.sh --stat)",
+      "Bash(git -C /home/mwdavisii/code/nyx diff --stat -- setup/arch/install.sh)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git -C /home/mwdavisii/code/nyx push)",
+      "Bash(lsblk:*)",
+      "Bash(mount:*)",
+      "Bash(git -C /home/mwdavisii/code/nyx status:*)",
+      "Bash(git -C /home/mwdavisii/code/nyx diff --stat LICENSE)",
+      "Bash(git -C /home/mwdavisii/code/nyx diff LICENSE)",
+      "Bash(git -C /home/mwdavisii/code/nyx checkout HEAD -- .)",
+      "Bash(git -C /home/mwdavisii/code/nyx log --oneline -5)",
+      "Bash(git -C /home/mwdavisii/code/nyx diff HEAD -- setup/arch/install.sh setup/arch/start_here.sh)",
+      "Bash(git -C /home/mwdavisii/code/nyx diff HEAD -- setup/arch/install.sh)",
+      "Bash(git -C /home/mwdavisii/code/nyx add setup/arch/README.md)",
+      "Bash(git -C /home/mwdavisii/code/nyx commit -m \"$\\(cat <<''EOF''\nAdd Arch install instructions README\n\nTwo-phase guide: archiso install \\(LUKS + Btrfs + systemd-boot\\) and\npost-boot bootstrap \\(yay, WARP, Nix, home-manager\\).\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /home/mwdavisii/code/nyx add setup/arch/install.sh)",
+      "Bash(git -C /home/mwdavisii/code/nyx commit -m \"$\\(cat <<''EOF''\nFix LUKS passphrase handling in install.sh\n\nRedirect cosmetic echo calls in prompt_password to stderr so they don''t\nget captured into the password variable by $\\(\\). Also use explicit\n--key-file - for cryptsetup open.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(nix flake show:*)",
+      "Bash(hostnamectl hostname:*)",
+      "Bash(efibootmgr:*)",
+      "Bash(sudo efibootmgr:*)",
+      "Bash(sudo ls:*)",
+      "Bash(sudo blkid:*)",
+      "Bash(parted:*)",
+      "Bash(sudo parted:*)"
+    ]
+  }
+}
