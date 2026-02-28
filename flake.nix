@@ -2,7 +2,6 @@
   inputs = {
     # Core
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,7 +36,6 @@
       flake = false;
     };
     # MacOS
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -81,24 +79,6 @@
           inherit system;
           config = import ./nix/config.nix;
           overlays = self.overlays."${system}";
-          /*overlays = [
-            #  self.overlays."${system}"
-            inputs.nix-on-droid.overlays.default
-            (final: prev: {
-              python311Full = prev.python311Full.override {
-                packageOverrides = finalPkgs: prevPkgs: {
-                  # Disable failing tests https://github.com/NixOS/nixpkgs/issues/272430
-                  eventlet = prevPkgs.eventlet.overridePythonAttrs (prevAttrs: {
-                    disabledTests = prevAttrs.disabledTests ++ [
-                      "test_full_duplex"
-                      "uncertainties"
-                    ];
-                  });
-                };
-              };
-            })
-          ];
-          */
         }
       );
     in
@@ -128,6 +108,10 @@
       homeConfigurations = mapAttrs' lib.mkArchConfiguration {
         L242731 = {
           user = "mdavis67";
+          system = "x86_64-linux";
+        };
+        prometheus = {
+          user = "mwdavisii";
           system = "x86_64-linux";
         };
       };

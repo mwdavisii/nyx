@@ -7,12 +7,16 @@ in
 {
   options.nyx.modules.app.scrcpy = {
     enable = mkEnableOption "Screen Copy for Android";
+    package = mkOption {
+      description = "Package for scrcpy";
+      type = with types; nullOr package;
+      default = pkgs.scrcpy;
+    };
   };
 
   config = mkIf cfg.enable {
-    # go ahead and install adb here since it's required
-    home.packages = with pkgs; [
-        scrcpy
+    home.packages = lib.optionals (cfg.package != null) [
+      cfg.package
     ];
   };
 }

@@ -5,11 +5,12 @@
 # Full disk install with LUKS2 encryption, Btrfs, and systemd-boot.
 #
 # Usage (from archiso):
-#   curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/install.sh
-#   chmod +x install.sh
-#   ./install.sh
+#   curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/01-install.sh
+#   chmod +x 01-install.sh
+#   ./01-install.sh
 #
-# After reboot, login as mdavis67 and run start_here.sh to finish setup.
+# After reboot, login as mdavis67 and run 02-install-packages.sh to install
+# desktop packages, then 03-setup-nix.sh to finish Nix/home-manager setup.
 # =============================================================================
 
 set -euo pipefail
@@ -17,7 +18,7 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-HOSTNAME="arch-work"
+HOSTNAME="L242731"
 USERNAME=""
 TIMEZONE="America/Chicago"
 LOCALE="en_US.UTF-8"
@@ -75,6 +76,11 @@ while true; do
   echo "  Invalid selection. Enter a number between 1 and ${#DISKS[@]}."
 done
 [[ -b "$TARGET_DISK" ]] || die "Not a valid block device: $TARGET_DISK"
+
+# Hostname
+echo ""
+read -rp "Hostname [$HOSTNAME]: " hostname_input
+HOSTNAME="${hostname_input:-$HOSTNAME}"
 
 # Username
 echo ""
@@ -158,62 +164,12 @@ info "Initializing pacman keyring..."
 pacman-key --init
 pacman-key --populate archlinux
 
-info "Installing base system and packages via pacstrap..."
+info "Installing minimal base system via pacstrap..."
 
 pacstrap /mnt \
   base linux linux-firmware btrfs-progs \
-  sudo vim git curl foot zsh \
-  \
-  base-devel \
-  \
-  hyprland \
-  hyprlock \
-  xdg-desktop-portal-hyprland \
-  xdg-desktop-portal-gtk \
-  xorg-xwayland \
-  wayland-utils \
-  \
-  polkit \
-  rtkit \
-  \
-  pipewire \
-  wireplumber \
-  pipewire-alsa \
-  pipewire-pulse \
-  pipewire-jack \
-  pavucontrol \
-  pamixer \
-  playerctl \
-  \
-  networkmanager \
-  wpa_supplicant \
-  iw \
-  wireless_tools \
-  network-manager-applet \
-  nm-connection-editor \
-  \
-  bluez \
-  bluez-utils \
-  blueman \
-  \
-  wlr-randr \
-  grim \
-  slurp \
-  wl-clipboard \
-  kanshi \
-  \
-  thunar \
-  gvfs \
-  tumbler \
-  \
-  libinput \
-  \
-  acpi \
-  \
-  noto-fonts \
-  noto-fonts-cjk \
-  noto-fonts-emoji \
-  ttf-firacode-nerd
+  sudo vim git curl zsh base-devel \
+  networkmanager
 
 # ===========================================================================
 # Phase 3 — Generate fstab
@@ -281,7 +237,7 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # --- kmonad prerequisites ---
 # Create uinput group (for /dev/uinput access)
-groupadd -f uinput
+groupadd -rf uinput
 # Add user to input and uinput groups
 usermod -aG input,uinput ${USERNAME}
 # udev rule so GROUP="uinput" owns /dev/uinput at boot
@@ -293,7 +249,6 @@ echo "uinput" > /etc/modules-load.d/uinput.conf
 
 # --- Enable services (no --now, system isn't booted yet) ---
 systemctl enable NetworkManager
-systemctl enable bluetooth
 
 CHROOT_EOF
 
@@ -320,10 +275,16 @@ echo "  1. Remove the installation media"
 echo "  2. Reboot:  reboot"
 echo "  3. Unlock the disk with your LUKS passphrase"
 echo "  4. Login as: $USERNAME"
-echo "  5. Run the bootstrap script:"
+echo "  5. Install desktop packages:"
 echo ""
-echo "     curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/start_here.sh"
-echo "     chmod +x start_here.sh"
-echo "     ./start_here.sh"
+echo "     curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/02-install-packages.sh"
+echo "     chmod +x 02-install-packages.sh"
+echo "     ./02-install-packages.sh"
+echo ""
+echo "  6. Then bootstrap Nix and home-manager:"
+echo ""
+echo "     curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/03-setup-nix.sh"
+echo "     chmod +x 03-setup-nix.sh"
+echo "     ./03-setup-nix.sh"
 echo ""
 echo "============================================================"

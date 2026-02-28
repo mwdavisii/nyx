@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repository Is
 
-**Nyx** is a personal multi-platform Nix Flakes configuration repository managing system and user configurations across NixOS (bare-metal, WSL2), macOS (Darwin), and Android (Nix-on-Droid). It is declarative infrastructure-as-code — there are no traditional tests, build artifacts, or application code.
+**Nyx** is a personal multi-platform Nix Flakes configuration repository managing system and user configurations across NixOS (bare-metal, WSL2), macOS (Darwin), Arch Linux (standalone home-manager), and Android (Nix-on-Droid). It is declarative infrastructure-as-code — there are no traditional tests, build artifacts, or application code.
 
 ## Key Commands
 
@@ -19,6 +19,10 @@ sudo nixos-rebuild switch --show-trace --flake .#<hostname>
 
 # macOS (manual)
 sudo darwin-rebuild switch --flake .
+
+# Arch Linux (manual) — switch.sh runs 02-install-packages.sh --sync automatically
+setup/arch/02-install-packages.sh --sync
+home-manager switch --show-trace --flake .#<hostname>
 
 # Android
 nix-on-droid switch --show-trace --flake .
@@ -72,8 +76,9 @@ flake.nix  →  lib/default.nix  →  system/<platform>/  +  home/
 
 **`flake.nix`** is the entry point. It defines all inputs (nixpkgs, home-manager, hyprland, agenix, nix-darwin, nixos-wsl, nix-on-droid, etc.) and maps hostnames to their configurations via `lib/default.nix` helper functions.
 
-**`lib/default.nix`** provides three builder functions:
+**`lib/default.nix`** provides four builder functions:
 - `mkNixSystemConfiguration` — builds NixOS and Darwin configurations, handles specialization by platform type (`nixos`, `darwin`, `iso`, `vm`, `wsl`)
+- `mkArchConfiguration` — builds standalone home-manager configurations for Arch Linux hosts
 - `mkHome` — builds standalone home-manager configurations
 - `mkNixOnDroidConfiguration` — builds Android configurations
 
@@ -83,16 +88,23 @@ flake.nix  →  lib/default.nix  →  system/<platform>/  +  home/
   - `shared/` — cross-platform: profiles (`desktop.nix`, `macbook.nix`, `work.nix`), secrets, common modules
   - `nixos/` — NixOS kernel/boot/hardware; hosts under `nixos/hosts/<hostname>/`
   - `darwin/` — macOS-specific (yabai, dock, brews, casks); hosts under `darwin/hosts/<hostname>/`
+  - `arch/` — Arch Linux host home-manager configs; hosts under `arch/hosts/<hostname>/`
   - `droid/` — Android Nix-on-Droid system config
 
 - **`home/`** — user-level home-manager modules
   - `shared/modules/` — cross-platform modules by category: `app/`, `dev/`, `shell/`, `theme/`, `ai/`, `gaming/`
-  - `nixos/`, `darwin/`, `droid/` — platform-specific home modules
+  - `nixos/`, `darwin/`, `arch/`, `droid/` — platform-specific home modules
   - `config/` — raw dotfiles symlinked into `$HOME` (`.config/`, `.ssh/`, `.gnupg/`, shell profiles)
 
 - **`nix/`** — nixpkgs config (`config.nix`), daemon config (`nix.conf`), overlays, custom packages
 
 - **`users/`** — user profile definitions (`mwdavisii.nix`, `mdavis67.nix`, `nixos.nix`, `droid.nix`)
+
+- **`setup/`** — platform-specific install/bootstrap scripts
+  - `arch/` — 3-phase Arch Linux setup: `01-install.sh` (archiso), `02-install-packages.sh` (desktop packages), `03-setup-nix.sh` (Nix + home-manager). See [`setup/arch/README.md`](setup/arch/README.md)
+  - `wsl/` — WSL2 setup scripts
+  - `macos/` — macOS setup scripts
+  - `virtual/` — Virtual machine setup
 
 - **`secrets/`** — age-encrypted secrets; `secrets/secrets.nix` defines key recipients
 
@@ -126,12 +138,12 @@ Secrets are encrypted with `age` and stored in `secrets/encrypted/`. The `secret
 | `hephaestus` | NixOS | Home desktop (i9 / AMD 7900xt) |
 | `ares` | NixOS (WSL) | Personal WSL2 instance |
 | `nixos` | NixOS (WSL) | Generic WSL2 |
-| `work` | NixOS (WSL) | Work WSL2 |
 | `olenos` | NixOS | ThinkPad X13 laptop |
-| `L242731` | NixOS | Work Dell |
 | `hydra` | NixOS | Home lab k3s VM on Proxmox |
 | `livecd` | NixOS | Bootable installer ISO |
 | `virtualbox` | NixOS | VirtualBox VM image |
+| `L242731` | Arch Linux | Work Dell |
+| `prometheus` | Arch Linux | Home desktop |
 | `mwdavis-workm1` | Darwin | Work MacBook M1 16" |
 | `L241729` | Darwin | Additional Darwin host |
 | `default` | Nix-on-Droid | Google Pixel Fold |

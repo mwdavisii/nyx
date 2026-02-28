@@ -2,7 +2,7 @@
   "archinstall-language": "English",
   "bootloader": "Systemd-boot",
   "config_version": "2.8.3",
-  "hostname": "arch-work",
+  "hostname": "L242731",
   "kernels": ["linux"],
   "locale_config": {
     "kb_layout": "us",

@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
-  plugins = inputs.hyprland-plugins.packages.${pkgs.system};
+  plugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
   km_ka_restart = pkgs.writeShellScriptBin "km_ka_restart" ''
     killall -q -9 -r kmonad
     killall -q -9 -r kanshi
@@ -32,6 +32,19 @@ let
   rofiWindow = pkgs.writeShellScriptBin "rofiWindow" ''
     #!/usr/bin/env bash
     rofi -show drun q
+  '';
+  rofiPowerMenu = pkgs.writeShellScriptBin "rofiPowerMenu" ''
+    #!/usr/bin/env bash
+    options="󰌾 Lock\n󰗼 Logout\n󰤄 Suspend\n󰋊 Hibernate\n󰜉 Reboot\n󰐥 Shutdown"
+    chosen=$(echo -e "$options" | rofi -dmenu -i -p "Power" -theme-str 'window {width: 250px;} listview {lines: 6;}')
+    case "$chosen" in
+      "󰌾 Lock")       hyprlock ;;
+      "󰗼 Logout")     loginctl terminate-user "$USER" ;;
+      "󰤄 Suspend")    systemctl suspend ;;
+      "󰋊 Hibernate")  systemctl hibernate ;;
+      "󰜉 Reboot")     systemctl reboot ;;
+      "󰐥 Shutdown")   systemctl poweroff ;;
+    esac
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
@@ -131,6 +144,7 @@ in
       wallpaper_default
       init_colors
       rofiWindow
+      rofiPowerMenu
       cava_start
     ];
 

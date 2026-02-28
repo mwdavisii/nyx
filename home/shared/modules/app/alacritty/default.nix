@@ -7,11 +7,16 @@ in
 {
   options.nyx.modules.app.alacritty = {
     enable = mkEnableOption "alacritty configuration";
+    package = mkOption {
+      description = "Package for alacritty";
+      type = with types; nullOr package;
+      default = pkgs.alacritty;
+    };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      alacritty
+    home.packages = lib.optionals (cfg.package != null) [
+      cfg.package
     ];
     xdg.configFile."alacritty".source = ../../../../config/.config/alacritty;
   };
