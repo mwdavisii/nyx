@@ -96,6 +96,8 @@ sudo pacman -S --needed --noconfirm \
   polkit \
   rtkit \
   ntfs-3g \
+  system-config-printer \
+  cups \
   \
   pipewire \
   wireplumber \
