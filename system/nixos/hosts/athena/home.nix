@@ -50,7 +50,7 @@
         hypr.enable = true;
         rofi.enable = true;
         gtk.enable = true;
-        wlogout.enable = true;
+
       };
       app = {
         alacritty = {

@@ -32,6 +32,19 @@ let
     #!/usr/bin/env bash
     rofi -show drun q
   '';
+  rofiPowerMenu = pkgs.writeShellScriptBin "rofiPowerMenu" ''
+    #!/usr/bin/env bash
+    options="󰌾 Lock\n󰗼 Logout\n󰤄 Suspend\n󰋊 Hibernate\n󰜉 Reboot\n󰐥 Shutdown"
+    chosen=$(echo -e "$options" | rofi -dmenu -i -p "Power" -theme-str 'window {width: 250px;} listview {lines: 6;}')
+    case "$chosen" in
+      "󰌾 Lock")       hyprlock ;;
+      "󰗼 Logout")     loginctl terminate-user "$USER" ;;
+      "󰤄 Suspend")    systemctl suspend ;;
+      "󰋊 Hibernate")  systemctl hibernate ;;
+      "󰜉 Reboot")     systemctl reboot ;;
+      "󰐥 Shutdown")   systemctl poweroff ;;
+    esac
+  '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
     if command -v swww >/dev/null 2>&1; then
@@ -102,14 +115,11 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      nwg-displays
-      wayland-protocols
-      waybar
-      swww
-      mesa
-      xwayland
-      hyprpicker
+      # GPU-dependent packages (waybar, swww, rofi, hyprpicker, nwg-displays,
+      # mesa, xwayland) are installed via pacman/AUR — Nix-built versions
+      # can't access the system GPU drivers on non-NixOS.
       hypridle
+      inputs.kmonad.packages.${pkgs.stdenv.hostPlatform.system}.default
 
       gnome-keyring
       acpi
@@ -130,6 +140,7 @@ in
       wallpaper_default
       init_colors
       rofiWindow
+      rofiPowerMenu
       cava_start
     ];
 
@@ -141,14 +152,18 @@ in
       size = 24;
     };
 
-    #wal template for hyprland
+    #wal templates
     home.file.".config/wal/templates/btop".source = ../../../../config/.config/wal/templates/btop;
     home.file.".config/wal/templates/colors-hyprland".source = ../../../../config/.config/wal/templates/colors-hyprland;
+    home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
+    home.file.".config/wal/templates/colors-waybar".source = ../../../../config/.config/wal/templates/colors-waybar;
+    home.file.".config/wal/templates/dunstrc".source = ../../../../config/.config/wal/templates/dunstrc;
     #wallpapers directory
     xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
     xdg.configFile."waybar".source = ../../../../config/.config/waybar;
     xdg.configFile."kmonad".source = ../../../../config/.config/kmonad;
+
 
     # Seed the wal color cache from the template so Hyprland's
     # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
@@ -172,9 +187,14 @@ in
       };
     };
     # Launch Hyprland automatically after login on tty1 (no display manager)
-    programs.zsh.loginExtra = ''
+    # Use the custom zsh module's profileExtra hook instead of programs.zsh.loginExtra
+    nyx.modules.shell.zsh.profileExtra = ''
       if [ -z "$DISPLAY" ] && [ "''${XDG_VTNR}" -eq 1 ]; then
-        exec Hyprland
+        # Ensure Nix profile is sourced before launching Hyprland
+        if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        fi
+        exec start-hyprland
       fi
     '';
 

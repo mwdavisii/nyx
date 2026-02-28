@@ -23,6 +23,7 @@ in
 
     nyx.modules.shell.zsh.initExtra =
       mkIf config.nyx.modules.shell.zsh.enable ''
+        [[ -n "$HISTFILE" ]] && mkdir -p "$(dirname "$HISTFILE")" && touch "$HISTFILE"
         eval "$(mcfly init zsh)"
       '';
   };

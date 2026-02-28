@@ -28,6 +28,12 @@
     desktop = {
       hypr.enable = true;
     };
+    gaming = {
+      bsdgames.enable = true;
+      lutris.enable = true;
+      mahjong.enable = true;
+      minesweeper.enable = true;
+    };
     ai = {
       chatgpt.enable = true;
       gemini.enable = true;
