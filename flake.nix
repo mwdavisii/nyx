@@ -110,6 +110,10 @@
           user = "mdavis67";
           system = "x86_64-linux";
         };
+        prometheus = {
+          user = "mwdavisii";
+          system = "x86_64-linux";
+        };
       };
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook

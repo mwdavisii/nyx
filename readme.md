@@ -1,6 +1,6 @@
 # Nixos + DotFiles
 
-This is my personal configuration that I use for Nixos, WSL on Windows, MacOS, and my PixelFold.
+This is my personal configuration that I use for Nixos, Arch Linux, WSL on Windows, MacOS, and my PixelFold.
 
 ## Hyprland
 
@@ -32,12 +32,19 @@ The exceptions to this are:
 
 ```Markdown
 .
-├─ home    # Home-manager and user configrations
+├─ home    # Home-manager and user configurations
 ├─ lib     # Shared functions that generate attribute sets
 ├─ nix     # Default Nix Configurations and Overlays
-├─ setup   # Intitial Install/Configure Scripts
+├─ setup   # Initial Install/Configure Scripts (see platform READMEs below)
 ├─ system  # System / Host / Global configurations
 ```
+
+### Setup Guides
+
+| Platform | Guide |
+|---|---|
+| Arch Linux | [`setup/arch/README.md`](setup/arch/README.md) — 3-phase install (`01-install.sh`, `02-install-packages.sh`, `03-setup-nix.sh`) |
+| Virtual Machines | [`setup/virtual/readme.md`](setup/virtual/readme.md) — VirtualBox image build |
 
 ## Influences, Inspirations & Credits
 
@@ -70,9 +77,14 @@ Below are descriptions of the hosts configurations. If you have access to window
 
 ```Markdown
 ├─ system
+├─── arch
+├───── hosts
+├─────── L242731        # => Work Dell — Arch Linux + Hyprland
+├─────── prometheus     # => Home desktop — Arch Linux + Hyprland
 ├─── darwin
 ├───── hosts
 ├─────── mwdavis-workm1 # => Work Macbook / 2022 16" Pro M1
+├─────── L241729        # => Work MacBook
 ├─── droid
 ├───── hosts
 ├─────── default        # => Google Pixel Fold
@@ -206,6 +218,30 @@ Now close the current shell and open a new one. After the initial install, you c
 ``` shell
 ./switch.sh #Rebuilds and switches to the home environment.
 ```
+
+### Arch Linux Installation
+
+Arch Linux hosts use a 3-phase setup: minimal OS install from archiso, desktop package installation, then Nix + home-manager bootstrap. System packages are managed by pacman/AUR, and user-level configuration is managed by home-manager via a standalone flake.
+
+See [`setup/arch/README.md`](setup/arch/README.md) for the full step-by-step guide.
+
+Quick overview:
+
+```bash
+# Phase 1 — from archiso (partitions, base system, reboot)
+curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/01-install.sh
+chmod +x 01-install.sh && ./01-install.sh
+
+# Phase 2 — after first login (desktop packages, idempotent)
+curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/02-install-packages.sh
+chmod +x 02-install-packages.sh && ./02-install-packages.sh
+
+# Phase 3 — Nix + home-manager bootstrap
+curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/03-setup-nix.sh
+chmod +x 03-setup-nix.sh && ./03-setup-nix.sh
+```
+
+After initial setup, `./switch.sh` automatically syncs system packages and applies home-manager configuration.
 
 ### MacOS Installation
 
