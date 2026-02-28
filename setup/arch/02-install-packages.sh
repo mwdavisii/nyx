@@ -94,6 +94,7 @@ sudo pacman -S --needed --noconfirm \
   \
   polkit \
   rtkit \
+  ntfs-3g \
   \
   pipewire \
   wireplumber \
