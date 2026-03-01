@@ -39,6 +39,9 @@ fi
 # ---------------------------------------------------------------------------
 INSTALL_AMD_GAMING="n"
 INSTALL_OLLAMA="n"
+INSTALL_NORDVPN="n"
+INSTALL_PROTONVPN="n"
+INSTALL_TAILSCALE="n"
 INSTALL_SECURITY="n"
 INSTALL_WARP="n"
 
@@ -54,6 +57,15 @@ if [[ "$SYNC_MODE" == false ]]; then
 
   read -rp "Install Ollama with ROCm (local LLM inference on AMD GPU)? [y/N] " ollama_input
   INSTALL_OLLAMA="${ollama_input,,}"
+
+  read -rp "Install NordVPN? [y/N] " nordvpn_input
+  INSTALL_NORDVPN="${nordvpn_input,,}"
+
+  read -rp "Install ProtonVPN? [y/N] " protonvpn_input
+  INSTALL_PROTONVPN="${protonvpn_input,,}"
+
+  read -rp "Install Tailscale? [y/N] " tailscale_input
+  INSTALL_TAILSCALE="${tailscale_input,,}"
 
   read -rp "Install work security tools (CrowdStrike, Cisco VPN)? [y/N] " sec_input
   INSTALL_SECURITY="${sec_input,,}"
@@ -196,7 +208,53 @@ if [[ "$INSTALL_OLLAMA" == "y" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 5 — AUR packages (always)
+# Step 5 — NordVPN (interactive only)
+# ---------------------------------------------------------------------------
+
+if [[ "$INSTALL_NORDVPN" == "y" ]]; then
+  if ! command -v nordvpn &>/dev/null; then
+    info "Installing NordVPN..."
+    yay -S --needed --noconfirm nordvpn-bin
+    sudo systemctl enable --now nordvpnd
+    echo ""
+    echo "  NordVPN installed. Log in after this script finishes:"
+    echo "    nordvpn login"
+    echo "    nordvpn connect"
+  else
+    info "NordVPN already installed."
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Step 6 — ProtonVPN (interactive only)
+# ---------------------------------------------------------------------------
+
+if [[ "$INSTALL_PROTONVPN" == "y" ]]; then
+  if ! command -v protonvpn-app &>/dev/null; then
+    info "Installing ProtonVPN..."
+    yay -S --needed --noconfirm protonvpn-app
+    echo ""
+    echo "  ProtonVPN installed. Launch and log in after this script finishes."
+  else
+    info "ProtonVPN already installed."
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Step 7 — Tailscale (interactive only)
+# ---------------------------------------------------------------------------
+
+if [[ "$INSTALL_TAILSCALE" == "y" ]]; then
+  info "Installing Tailscale..."
+  sudo pacman -S --needed --noconfirm tailscale
+  sudo systemctl enable --now tailscaled
+  echo ""
+  echo "  Tailscale installed. Authenticate after this script finishes:"
+  echo "    sudo tailscale up"
+fi
+
+# ---------------------------------------------------------------------------
+# Step 8 — AUR packages (always)
 # ---------------------------------------------------------------------------
 
 info "Installing AUR packages..."
@@ -207,7 +265,7 @@ yay -S --needed --noconfirm \
   obsidian
 
 # ---------------------------------------------------------------------------
-# Step 6 — Work security tools (interactive only)
+# Step 9 — Work security tools (interactive only)
 # ---------------------------------------------------------------------------
 
 if [[ "$INSTALL_SECURITY" == "y" ]]; then
@@ -232,7 +290,7 @@ if [[ "$INSTALL_SECURITY" == "y" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 7 — Cloudflare WARP (interactive only)
+# Step 10 — Cloudflare WARP (interactive only)
 # ---------------------------------------------------------------------------
 
 if [[ "$INSTALL_WARP" == "y" ]]; then
@@ -250,7 +308,7 @@ if [[ "$INSTALL_WARP" == "y" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 8 — Enable services
+# Step 11 — Enable services
 # ---------------------------------------------------------------------------
 
 info "Enabling services..."
