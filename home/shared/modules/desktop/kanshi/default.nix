@@ -1,4 +1,4 @@
-{ config, lib, pkgs, agenix, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
@@ -7,17 +7,20 @@ in
 {
   options.nyx.modules.desktop.kanshi = {
     enable = mkEnableOption "kanshi";
+    package = mkOption {
+      description = "Package for kanshi";
+      type = with types; nullOr package;
+      default = pkgs.kanshi;
+    };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs;
-      [
-        kanshi
-      ];
+    home.packages = lib.optionals (cfg.package != null) [
+      cfg.package
+    ];
     xdg.configFile."kanshi".source = ../../../../config/.config/kanshi;
     services.kanshi = {
       enable = true;
-      #systemdTarget = "graphical-session.target";
       systemdTarget = "hyprland-session.target";
     };
   };

@@ -2,15 +2,15 @@
 
 with lib;
 let
-  cfg = config.nyx.modules.app.obsidian;
+  cfg = config.nyx.modules.desktop.vial;
 in
 {
-  options.nyx.modules.app.obsidian = {
-    enable = mkEnableOption "obsidian";
+  options.nyx.modules.desktop.vial = {
+    enable = mkEnableOption "vial configuration";
     package = mkOption {
-      description = "Package for obsidian";
+      description = "Package for vial";
       type = with types; nullOr package;
-      default = pkgs.obsidian;
+      default = pkgs.vial;
     };
   };
 
@@ -20,6 +20,3 @@ in
     ];
   };
 }
-
-
-
