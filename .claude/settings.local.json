@@ -34,7 +34,21 @@
       "Bash(sudo parted:*)",
       "Bash(find:*)",
       "Bash(xargs:*)",
-      "Bash(git -C /home/mwdavisii/code/nyx add home/shared/modules/desktop/ system/arch/hosts/prometheus/default.nix)"
+      "Bash(git -C /home/mwdavisii/code/nyx add home/shared/modules/desktop/ system/arch/hosts/prometheus/default.nix)",
+      "Bash(pacman -Qs:*)",
+      "Bash(lsmod:*)",
+      "Bash(snap list:*)",
+      "Bash(done)",
+      "Bash(pacman -Ss:*)",
+      "Bash(pacman:*)",
+      "Bash(bluetoothctl:*)",
+      "Bash(bluetoothctl info:*)",
+      "Bash(dkms status:*)",
+      "Bash(modprobe:*)",
+      "Bash(echo:*)",
+      "Bash(dmesg:*)",
+      "Bash(journalctl:*)",
+      "Bash(ls:*)"
     ]
   }
 }

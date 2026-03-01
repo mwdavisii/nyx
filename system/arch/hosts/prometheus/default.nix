@@ -42,6 +42,7 @@
       chatgpt.enable = false;
       gemini.enable = true;
       claude.enable = true;
+      ollama.enable = true;
     };
     app = {
       alacritty = {
