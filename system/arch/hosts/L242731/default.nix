@@ -29,11 +29,11 @@
       hypr.enable = true;
     };
     ai = {
-      chatgpt.enable = true;
+      chatgpt.enable = false;
       gemini.enable = true;
       claude.enable = true;
     };
-    app = {
+    app = {      
       alacritty = {
         enable = true;
         package = null;
@@ -49,7 +49,11 @@
       };
       discord.enable = true;
       firefox.enable = true;
-      obs.enable = false;
+      obs.enable = true;
+      obsidian = {
+        enable = true;
+        package = null;
+      };
       scrcpy = {
         enable = true;
         package = null;

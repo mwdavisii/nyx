@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
-  plugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
+  hyprPlugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
   km_ka_restart = pkgs.writeShellScriptBin "km_ka_restart" ''
     killall -q -9 -r kmonad
     killall -q -9 -r kanshi
@@ -20,12 +20,12 @@ let
     sleep 1 && cava
   '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
-    if command -v waybar >/dev/null 2>&1; then 
+    if command -v waybar >/dev/null 2>&1; then
       waybar -c ~/.config/waybar/top.jsonc -s ~/.config/waybar/style.css
     fi
   '';
   waybar_start_bottom = pkgs.writeShellScriptBin "waybar_start_bottom" ''
-    if command -v waybar >/dev/null 2>&1; then 
+    if command -v waybar >/dev/null 2>&1; then
       waybar -c ~/.config/waybar/bottom.jsonc -s ~/.config/waybar/style.css
     fi
   '';
@@ -48,7 +48,7 @@ let
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
-    if command -v swww >/dev/null 2>&1; then 
+    if command -v swww >/dev/null 2>&1; then
       if ! swww query >/dev/null 2>&1; then
         swww-daemon > /dev/null 2>&1 &
         sleep 1
@@ -57,12 +57,10 @@ let
       swww img "$paper" --transition-type simple
       rm -f ~/active_paper
       cp "$paper" ~/active_paper
-      if command -v wal >/dev/null 2>&1; then 
+      if command -v wal >/dev/null 2>&1; then
         wal -i "$paper"
         mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
-        rm -f ~/.config/kitty/colors-kitty.conf
-        cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/colors-kitty.conf
         wbar_restart &
       fi
     fi
@@ -77,12 +75,10 @@ let
       swww img ~/.config/wallpapers/wall0.png  --transition-type simple
       rm -f ~/active_paper
       cp ~/.config/wallpapers/wall0.png ~/active_paper
-      if command -v wal >/dev/null 2>&1; then 
+      if command -v wal >/dev/null 2>&1; then
         wal -i ~/.config/wallpapers/wall0.png
         mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
-        rm -f ~/.config/kitty/colors-kitty.conf
-        cp ~/.cache/wal/colors-kitty.conf ~/.config/kitty/colors-kitty.conf
         wbar_restart &
       fi
     fi
@@ -112,19 +108,27 @@ in
 
   options.nyx.modules.desktop.hypr = {
     enable = mkEnableOption "hypr configuration";
+    gpuPackages = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Install GPU-dependent packages (waybar, swww, etc.) via Nix. Set false on non-NixOS where system GPU drivers are used.";
+    };
+    plugins = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Install Hyprland plugins from hyprland-plugins input. Set false on Arch where plugins come from AUR.";
+    };
+    ttyLaunch = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Auto-launch Hyprland from zsh on TTY1 (for systems without a display manager).";
+    };
   };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      nwg-displays
-      wayland-protocols
-      waybar
-      swww
-      mesa  
-      xwayland
-      hyprpicker
       hypridle
-      
+
       gnome-keyring
       acpi
       mpd
@@ -146,6 +150,14 @@ in
       rofiWindow
       rofiPowerMenu
       cava_start
+    ] ++ lib.optionals cfg.gpuPackages [
+      nwg-displays
+      wayland-protocols
+      waybar
+      swww
+      mesa
+      xwayland
+      hyprpicker
     ];
 
     home.pointerCursor = {
@@ -156,33 +168,57 @@ in
       size = 24;
     };
 
-    #wal template for hyprland
-    # we call at each specific file so the directory is still writeable.
+    #wal templates (superset — all 5)
     home.file.".config/wal/templates/btop".source = ../../../../config/.config/wal/templates/btop;
     home.file.".config/wal/templates/colors-hyprland".source = ../../../../config/.config/wal/templates/colors-hyprland;
-    #walpapers directory
+    home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
+    home.file.".config/wal/templates/colors-waybar".source = ../../../../config/.config/wal/templates/colors-waybar;
+    home.file.".config/wal/templates/dunstrc".source = ../../../../config/.config/wal/templates/dunstrc;
+    #wallpapers directory
     xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
     xdg.configFile."hypr".source = ../../../../config/.config/hypr;
     xdg.configFile."waybar".source = ../../../../config/.config/waybar;
-    
+
+    # Seed the wal color cache from the template so Hyprland's
+    # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
+    # (init_colors runs exec-once which is too late — source= is parsed at startup).
+    home.activation.seedWalColors = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      if [ ! -f "$HOME/.cache/wal/colors-hyprland" ]; then
+        $DRY_RUN_CMD mkdir -p "$HOME/.cache/wal"
+        $DRY_RUN_CMD cp "$HOME/.config/wal/templates/colors-hyprland" "$HOME/.cache/wal/colors-hyprland"
+        $DRY_RUN_CMD chmod 644 "$HOME/.cache/wal/colors-hyprland"
+      fi
+    '';
+
     xdg.portal = {
       enable = true;
       extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       config = {
         common = {
-          # explicit > wildcard
           default = [
             "hyprland"
           ];
         };
       };
     };
+
+    # Launch Hyprland automatically after login on tty1 (no display manager)
+    nyx.modules.shell.zsh.profileExtra = mkIf cfg.ttyLaunch ''
+      if [ -z "$DISPLAY" ] && [ "''${XDG_VTNR}" -eq 1 ]; then
+        # Ensure Nix profile is sourced before launching Hyprland
+        if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        fi
+        exec start-hyprland
+      fi
+    '';
+
     wayland.windowManager.hyprland = {
-      plugins = [
-        plugins.hyprexpo
-        plugins.hyprbars
-        plugins.hyprwinwrap
-      ];
+      plugins = if cfg.plugins then [
+        hyprPlugins.hyprexpo
+        hyprPlugins.hyprbars
+        hyprPlugins.hyprwinwrap
+      ] else [];
       package = null;
       enable = true;
       systemd = {
@@ -190,7 +226,6 @@ in
         variables = ["--all"];
       };
       xwayland.enable = true;
-
     };
 
     services.swaync = {
@@ -344,5 +379,3 @@ in
     };
   };
 }
-  
-  
