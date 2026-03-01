@@ -7,11 +7,16 @@ in
 {
   options.nyx.modules.desktop.cava = {
     enable = mkEnableOption "cava Config";
+    package = mkOption {
+      description = "Package for cava";
+      type = with types; nullOr package;
+      default = pkgs.cava;
+    };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      cava
+    home.packages = lib.optionals (cfg.package != null) [
+      cfg.package
     ];
     xdg.configFile."cava" = {
       source = ../../../../config/.config/cava;
@@ -21,9 +26,5 @@ in
       source = ../../../../config/.config/cava/shaders;
       recursive = true;
     };
-    #home.file."${config.xdg.configHome}".cava = {
-    #  source = ../../../../config/.config/cava;
-    #  recursive = true;
-    #};
   };
 }

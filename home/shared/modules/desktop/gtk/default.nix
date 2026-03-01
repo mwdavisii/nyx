@@ -9,8 +9,6 @@ in
     gtk = {
       enable = true;
       iconTheme = {
-        #name = "Yaru-magenta-dark";
-        #package = pkgs.yaru-theme;
         package = pkgs.adwaita-icon-theme;
         name = "Adwaita";
       };
@@ -18,8 +16,6 @@ in
       theme = {
         package = pkgs.flat-remix-gtk;
         name = "Flat-Remix-GTK-Grey-Darkest";
-        #name = "Tokyonight-Dark-B-LB";
-        #package = pkgs.tokyo-night-gtk;
       };
     };
   };

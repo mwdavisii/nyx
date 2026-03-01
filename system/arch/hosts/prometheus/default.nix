@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   programs.home-manager.enable = true;
@@ -26,18 +26,23 @@
 
   nyx.modules = {
     desktop = {
-      hypr.enable = true;
+      hypr = {
+        enable = true;
+        gpuPackages = false;
+        plugins = false;
+        ttyLaunch = true;
+      };
+      kmonad = {
+        enable = true;
+        package = inputs.kmonad.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      };
     };
-    gaming = {
-      bsdgames.enable = true;
-      lutris.enable = true;
-      mahjong.enable = true;
-      minesweeper.enable = true;
-    };
+    # Note gaming stuff is installed via arch packages because of NixGL
     ai = {
-      chatgpt.enable = true;
+      chatgpt.enable = false;
       gemini.enable = true;
       claude.enable = true;
+      ollama.enable = true;
     };
     app = {
       alacritty = {
@@ -55,7 +60,11 @@
       };
       discord.enable = true;
       firefox.enable = true;
-      obs.enable = false;
+      obs.enable = true;
+      obsidian = {
+        enable = true;
+        package = null;
+      };
       scrcpy = {
         enable = true;
         package = null;
