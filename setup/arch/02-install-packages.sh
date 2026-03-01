@@ -203,7 +203,8 @@ info "Installing AUR packages..."
 
 yay -S --needed --noconfirm \
   swww \
-  nwg-displays
+  nwg-displays \
+  obsidian
 
 # ---------------------------------------------------------------------------
 # Step 6 — Work security tools (interactive only)

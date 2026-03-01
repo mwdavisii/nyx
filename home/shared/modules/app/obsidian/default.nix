@@ -7,12 +7,16 @@ in
 {
   options.nyx.modules.app.obsidian = {
     enable = mkEnableOption "obsidian";
+    package = mkOption {
+      description = "Package for obsidian";
+      type = with types; nullOr package;
+      default = pkgs.obsidian;
+    };
   };
 
   config = mkIf cfg.enable {
-    # go ahead and install adb here since it's required
-    home.packages = with pkgs; [
-        obsidian
+    home.packages = lib.optionals (cfg.package != null) [
+      cfg.package
     ];
   };
 }

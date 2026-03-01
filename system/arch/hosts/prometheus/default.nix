@@ -60,7 +60,11 @@
       };
       discord.enable = true;
       firefox.enable = true;
-      obs.enable = false;
+      obs.enable = true;
+      obsidian = {
+        enable = true;
+        package = null;
+      };
       scrcpy = {
         enable = true;
         package = null;
