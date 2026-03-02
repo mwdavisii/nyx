@@ -16,14 +16,12 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      (azure-cli.withExtensions [ 
-        azure-cli.extensions.aks-preview 
-        azure-cli-extensions.k8s-extension
-        azure-cli.extensions.dns-resolver
-        azure-cli.extensions.ssh
-        #azure-cli-extensions.k8s-configuration
-        #azure-cli.extensions.k8s-configuration 
-      ])
+      # Extensions disabled: oras version pinning conflicts after nixpkgs update
+      # Reinstall manually with: az extension add --name <ext>
+      # - k8s-extension: requires kubernetes==24.2.0, oras==0.2.25
+      # - ssh: requires oras==0.1.30
+      # - aks-preview, dns-resolver: untested, may also be broken
+      azure-cli
     ];
   };
 }

@@ -118,6 +118,7 @@ sudo pacman -S --needed --noconfirm \
   bc \
   foomatic-db-engine \
   foomatic-db-engine \
+  obs-studio \
   pipewire \
   wireplumber \
   pipewire-alsa \
