@@ -15,9 +15,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.obs-studio = {
+    programs.obs-studio = mkIf (cfg.package != null) {
       enable = true;
-    } // lib.optionalAttrs (cfg.package != null) {
       package = cfg.package;
     };
   };

@@ -48,7 +48,9 @@
       "Bash(echo:*)",
       "Bash(dmesg:*)",
       "Bash(journalctl:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(./switch.sh:*)",
+      "Bash(obs:*)"
     ]
   }
 }
