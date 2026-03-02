@@ -40,4 +40,6 @@ _:
   # AIhic
   "diffusionbee"
   
+  #Local AI"
+  "ollama" 
 ]
