@@ -49,7 +49,10 @@
       };
       discord.enable = true;
       firefox.enable = true;
-      obs.enable = true;
+      obs = {
+        enable = true;
+        package = null;
+      };
       obsidian = {
         enable = true;
         package = null;
