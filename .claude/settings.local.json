@@ -50,7 +50,9 @@
       "Bash(journalctl:*)",
       "Bash(ls:*)",
       "Bash(./switch.sh:*)",
-      "Bash(obs:*)"
+      "Bash(obs:*)",
+      "WebFetch(domain:wiki.hypr.land)",
+      "WebSearch"
     ]
   }
 }
