@@ -5,3 +5,5 @@ result
 *.swp
 .DS_Store
 .claude/*
+!.claude/skills
+!.claude/skills/**
