@@ -231,9 +231,9 @@ fi
 # ---------------------------------------------------------------------------
 
 if [[ "$INSTALL_PROTONVPN" == "y" ]]; then
-  if ! command -v protonvpn-app &>/dev/null; then
+  if ! command -v protonvpn &>/dev/null; then
     info "Installing ProtonVPN..."
-    yay -S --needed --noconfirm protonvpn-app
+    sudo pacman -S --needed --noconfirm proton-vpn-gtk-app
     echo ""
     echo "  ProtonVPN installed. Launch and log in after this script finishes."
   else
