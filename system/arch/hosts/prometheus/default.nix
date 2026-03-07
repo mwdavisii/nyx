@@ -7,6 +7,7 @@
 
   home = {
     stateVersion = "26.05";
+
     packages = with pkgs; [
       rustup
       vhs
@@ -26,6 +27,7 @@
 
   nyx.modules = {
     desktop = {
+      gtk.enable = true;
       hypr = {
         enable = true;
         gpuPackages = false;
@@ -115,7 +117,7 @@
       lf.enable = true;
       lorri.enable = false;
       mcfly.enable = true;
-      neofetch.enable = true;
+      fastfetch.enable = true;
       nixvim.enable = true;
       networking.enable = true;
       openssl.enable = true;
