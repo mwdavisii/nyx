@@ -89,7 +89,7 @@
         lf.enable = true;
         lorri.enable = true;
         mcfly.enable = true;
-        neofetch.enable = true;
+        fastfetch.enable = true;
         neovim.enable = true;
         networking.enable = true;
         openssl.enable = true;
