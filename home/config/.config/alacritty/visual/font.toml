@@ -1,20 +1,18 @@
-draw_bold_text_with_bright_colors = true
-
 [font]
 size = 12
 
   [font.normal]
-  family = "Hack Nerd Font"
+  family = "FiraCode Nerd Font Mono"
   style = "Regular"
 
   [font.bold]
-  family = "Hack Nerd Font"
+  family = "FiraCode Nerd Font Mono"
   style = "Bold"
 
   [font.italic]
-  family = "Hack Nerd Font"
-  style = "Italic"
+  family = "FiraCode Nerd Font Mono"
+  style = "Regular"
 
   [font.bold_italic]
-  family = "Hack Nerd Font"
-  style = "Bold Italic"
+  family = "FiraCode Nerd Font Mono"
+  style = "Bold"
