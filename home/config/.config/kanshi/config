@@ -1,61 +1,69 @@
 profile undocked {
-  output "BOE 0x0BAA Unknown" enable mode 1920x1080@60.0
+  output "BOE*" enable mode 1920x1080@60.0
   exec hyprctl dispatch moveworkspacetomonitor 1 BOE 0x0BAA Unknown
   exec hyprctl dispatch moveworkspacetomonitor 2 BOE 0x0BAA Unknown
   exec hyprctl dispatch moveworkspacetomonitor 3 BOE 0x0BAA Unknown
 }
 
 profile work {
-  output "Dell Inc. DELL P3424WE BFY96T3" enable
-  output "BOE 0x0BAA Unknown" disable
+  output "Dell Inc. DELL P3424WE*" enable
+  output "BOE*" disable
   exec hyprctl dispatch moveworkspacetomonitor 1 BOE 0x0BAA Unknown
   exec hyprctl dispatch moveworkspacetomonitor 2 BOE 0x0BAA Unknown
   exec hyprctl dispatch moveworkspacetomonitor 3 BOE 0x0BAA Unknown
 }
 
 profile home {
-  output "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ" enable
-  output "BOE 0x0BAA Unknown" disable
+  output "Dell Inc. Dell AW3821DW*" enable
+  output "VIZIO*" disable
+  exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
+  exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
+  exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
+}
+
+profile home-tv {
+  output "Dell Inc. DELL P3424WE*" enable
+  output "VIZIO*" disable
   exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
   exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
   exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. Dell AW3821DW #GjMYMxgwABUZ"
 }
 
 profile wall-off-closed {
-  output "Dell Inc. DELL P3424WE BFY96T3" enable
-  output "Samsung Electric Company SAMSUNG 0x01000E00" disable
-  output "BOE 0x0BAA Unknown" disable
+  output "Dell Inc. DELL P3424WE*" enable
+  output "Samsung*" disable
+  output "BOE*" disable
   exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
   exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. DELL P3424WE BFY96T3"
 }
 
 profile wall-on-closed {
-  output "Dell Inc. DELL P3424WE BFY96T3" enable
-  output "Samsung Electric Company SAMSUNG 0x01000E00" enable mode 4096x2160@30.00Hz
-  output "BOE 0x0BAA Unknown" disable
+  output "Dell Inc. DELL P3424WE*" enable
+  output "Samsung*" enable mode 4096x2160@30.00Hz
+  output "BOE*" disable
   exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
   exec hyprctl dispatch moveworkspacetomonitor 2 "Samsung Electric Company SAMSUNG 0x01000E00"
 }
 
 profile wall-on-open {
-  output "Dell Inc. DELL P3424WE BFY96T3" enable
-  output "Samsung Electric Company SAMSUNG 0x01000E00" enable mode 4096x2160@30.00Hz
-  output "BOE 0x0BAA Unknown" enable
+  output "Dell Inc. DELL P3424WE*" enable
+  output "Samsung*" enable mode 4096x2160@30.00Hz
+  output "BOE*" enable
   exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
   exec hyprctl dispatch moveworkspacetomonitor 2 "Samsung Electric Company SAMSUNG 0x01000E00"
   exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. DELL P3424WE BFY96T3"
 }
 
 profile wall-off-open {
-  output "Dell Inc. DELL P3424WE BFY96T3" enable
-  output "Samsung Electric Company SAMSUNG 0x01000E00" disable
-  output "BOE 0x0BAA Unknown" enable
+  output "Dell Inc. DELL P3424WE*" enable
+  output "Samsung*" disable
+  output "BOE*" enable
   exec hyprctl dispatch moveworkspacetomonitor 1 "Dell Inc. DELL P3424WE BFY96T3"
   exec hyprctl dispatch moveworkspacetomonitor 2 "Dell Inc. DELL P3424WE BFY96T3"
   exec hyprctl dispatch moveworkspacetomonitor 3 "Dell Inc. DELL P3424WE BFY96T3"
 }
 
 profile room {
-  output "BOE 0x0BAA Unknown" enable
+  output "BOE*" enable
   output "*" enable
 }
