@@ -1,33 +1,30 @@
 #!/bin/zsh
 
-# Path to your kanshi config
 CONFIG="$HOME/.config/kanshi/config"
+STATE_FILE="/tmp/kanshi_profile_index"
 
-# 1. Get all profile names from the config
-# This looks for lines starting with 'profile' and grabs the name
+# 1. Get all profile names
 PROFILES=$(grep -oP '^profile \K[^ {]+' "$CONFIG")
-
-# 2. Get the current profile name from kanshictl
-CURRENT=$(kanshictl status | jq -r '.current_profile')
-
-# 3. Convert the newline-separated PROFILES string into a Zsh array
-# (f) splits by newlines
 profile_array=("${(f)PROFILES}")
-
-# 4. Find the index and pick the next profile
-# Note: Zsh arrays are 1-indexed!
 count=${#profile_array}
-next_profile="${profile_array[1]}" # Default fallback
 
-for i in {1..$count}; do
-    if [[ "${profile_array[$i]}" == "$CURRENT" ]]; then
-        # Calculate next index with wrap-around
-        next_index=$(( (i % count) + 1 ))
-        next_profile="${profile_array[$next_index]}"
-        break
-    fi
-done
+# 2. Read the last index (default to 0 if file doesn't exist)
+if [[ -f "$STATE_FILE" ]]; then
+    last_index=$(cat "$STATE_FILE")
+else
+    last_index=0
+fi
 
-# 5. Apply the profile
+# 3. Increment and wrap around
+# (Zsh arrays are 1-indexed, so we go from 1 to count)
+next_index=$(( (last_index % count) + 1 ))
+
+# 4. Get the profile name and attempt switch
+next_profile="${profile_array[$next_index]}"
 kanshictl switch "$next_profile"
-notify-send "Kanshi" "Switched to profile: $next_profile"
+
+# 5. Save the new index for next time
+echo "$next_index" > "$STATE_FILE"
+
+# 6. Notify user (optional but helpful for debugging)
+notify-send "Kanshi Cycle" "Attempting: $next_profile ($next_index/$count)"

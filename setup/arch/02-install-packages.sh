@@ -155,6 +155,7 @@ sudo pacman -S --needed --noconfirm \
   thunar \
   gvfs \
   tumbler \
+  gnome-calculator \
   \
   libinput \
   \
@@ -268,7 +269,9 @@ info "Installing AUR packages..."
 yay -S --needed --noconfirm \
   swww \
   nwg-displays \
-  obsidian
+  obsidian \
+  claude-desktop-bin \
+  sublime-text-4
 
 info "Installing Hyprland plugins via hyprpm..."
 # Use system cmake/pkg-config, not Nix's, which can't find system packages
