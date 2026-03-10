@@ -2,10 +2,7 @@ _:
 
 [
   #desktop toools
-  "whichspace"
-  #"dozer"
-  #"amethyst"
-  "nikitabobko/tap/aerospace"
+  #"nikitabobko/tap/aerospace"
   "hammerspoon"
   "sublime-text"
 
@@ -38,6 +35,5 @@ _:
   "firefox"
 
   # AIhic
-  "diffusionbee"
-  
+  "diffusionbee" 
 ]
