@@ -3,6 +3,7 @@ hs.loadSpoon("SpoonInstall")
 spoon.SpoonInstall.use_syncinstall = true
 spoon.SpoonInstall:andUse("AClock")
 spoon.SpoonInstall:andUse("ReloadConfiguration")
+sppon.SpoonInstall:andUse("PaperWM")
 hs.loadSpoon("ReloadConfiguration")
 spoon.ReloadConfiguration:start()
 
@@ -16,3 +17,4 @@ return {
 }
 
 
+    

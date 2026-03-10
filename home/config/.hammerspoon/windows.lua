@@ -1,59 +1,31 @@
 local super = {"ctrl", "alt", "cmd"}
 local superShift = {"ctrl", "alt", "cmd", "lshift"}
-local yabai = require("yabai")
+hs.loadSpoon("PaperWM")
 
-function toggle_fullscreen()
-    return function()
-        local win = hs.window.focusedWindow()
-        if win ~= nil then
-            win:setFullScreen(not win:isFullScreen())
-        end
-    end
-  end
-  
-  -- Window Behavior Functions
-  local function moveToLeftHalf()
-    return function()
-      local win = hs.window.focusedWindow()
-      local f = win:frame()
-      local screen = win:screen()
-      local max = screen:frame()
-  
-      f.x = max.x
-      f.y = max.y
-      f.w = max.w / 2
-      f.h = max.h
-      win:setFrame(f)
-    end
-  end
-    
-  local function moveToRightHalf()
-    return function()
-      local win = hs.window.focusedWindow()
-      local f = win:frame()
-      local screen = win:screen()
-      local max = screen:frame()
-  
-      f.x = max.x + (max.w / 2)
-      f.y = max.y
-      f.w = max.w / 2
-      f.h = max.h
-      win:setFrame(f)
-    end
-  end
-  
-  local super = {"ctrl", "alt", "cmd"}
-  local superShift = {"ctrl", "alt", "cmd", "lshift"}
-  
-hs.hotkey.bind(superShift, "right", moveToRightHalf())
-hs.hotkey.bind(superShift, "left", moveToLeftHalf())
---  hs.hotkey.bind(super, "G", toggle_fullscreen())
-hs.hotkey.bind(super, "g", function() yabai({"-m", "window", "--toggle", "zoom-fullscreen"}) end)  --["m"]
+-- Configure PaperWM
+spoon.PaperWM.window_gap = 12
+spoon.PaperWM.screen_margin = 16
 
-hs.hotkey.bind(superShift, "up", function() yabai({"-m", "window", "--toggle", "float"}) end)  --["/"]
-hs.hotkey.bind(superShift, "down", function() yabai({"-m", "window", "--toggle", "split"}) end) 
--- doesn't apply to bsp
--- hs.hotkey.bind(super, "=", function() yabai({"-m", "window", "--ratio", "abs:0.38"}) end)  --["7"]
--- hs.hotkey.bind(super, "-", function() yabai({"-m", "window", "--ratio", "abs:0.5"}) end)  --["8"]
--- hs.hotkey.bind(super, "/", function() yabai({"-m", "window", "--ratio", "abs:0.62"}) end)  --["9"]
--- hs.hotkey.bind(super, "=", function() yabai({"-m", "space", "--balance"}) end)  --["-"]
+-- Bind PaperWM using your existing 'super' and 'superShift' tables
+spoon.PaperWM:bindHotkeys({
+    -- Focus movement (using arrows to avoid your h/l conflicts)
+    focus_left  = {super, "left"},
+    focus_right = {super, "right"},
+    focus_up    = {super, "up"},
+    focus_down  = {super, "down"},
+
+    -- Window placement
+    swap_left   = {ctrl, "left"},
+    swap_right  = {ctrl, "right"},
+    swap_up     = {ctrl, "up"},
+    swap_down   = {ctrl, "down"},
+
+    -- Layout management
+    center_window = {super, "c"},
+    new_row       = {super, "n"},
+    toggle_zoom   = {super, "f"},
+    slurp_in      = {super, "i"},
+    barf_out      = {super, "o"}
+})
+
+spoon.PaperWM:start()

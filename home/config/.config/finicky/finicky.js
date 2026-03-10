@@ -1,30 +1,32 @@
-module.exports = {
+export default {
   defaultBrowser: "Safari",
   rewrite: [
     {
       // Redirect all urls to use https
       match: ({ url }) => url.protocol === "http",
       url: { protocol: "https" }
+    },
+    {
+      match: () => true,
+      url: ({url}) => {
+          const removeKeysStartingWith = ["utm_", "uta_"];
+          const removeKeys = ["fbclid", "gclid"];
+
+          const search = url.search
+              .split("&")
+              .map((parameter) => parameter.split("="))
+              .filter(([key]) => !removeKeysStartingWith.some((startingWith) => key.startsWith(startingWith)))
+              .filter(([key]) => !removeKeys.some((removeKey) => key === removeKey));
+
+          return {
+              protocol: url.protocol,
+              host: url.host,
+              pathname: url.pathname,
+              search: search.map((parameter) => parameter.join("=")).join("&"),
+          };
+      },
     }
   ],
-  rewrite: [{
-    match: () => true, // Execute rewrite on all incoming urls to make this example easier to understand
-    url: ({url}) => {
-        const removeKeysStartingWith = ["utm_", "uta_"]; // Remove all query parameters beginning with these strings
-        const removeKeys = ["fbclid", "gclid"]; // Remove all query parameters matching these keys
-
-        const search = url.search
-            .split("&")
-            .map((parameter) => parameter.split("="))
-            .filter(([key]) => !removeKeysStartingWith.some((startingWith) => key.startsWith(startingWith)))
-            .filter(([key]) => !removeKeys.some((removeKey) => key === removeKey));
-
-        return {
-            ...url,
-            search: search.map((parameter) => parameter.join("=")).join("&"),
-        };
-    },
-}],
   handlers: [
     {
       // Open google.com and *.google.com urls in Google Chrome
@@ -48,12 +50,12 @@ module.exports = {
       match: [
         finicky.matchHostnames(
           [
-            "sjcrh.sharepoint.com", 
-            "sjch.atlassian.net", 
-            "stjude.org", 
-            "login.microsoft.com", 
-            "office.com", 
-            "protection.outlook.com*atlassian.com", 
+            "sjcrh.sharepoint.com",
+            "sjch.atlassian.net",
+            "stjude.org",
+            "login.microsoft.com",
+            "office.com",
+            "protection.outlook.com*atlassian.com",
             "github.com",
             "google.com",
             "*.google.com",
@@ -71,4 +73,4 @@ module.exports = {
       browser: "Firefox"
     },
   ]
-};
+}
