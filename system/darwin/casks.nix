@@ -16,7 +16,6 @@ _:
   # Communication Tools
   "telegram"
   "whatsapp"
-  "signal"
 
   # Entertainment Tools
   #"steam"
@@ -37,6 +36,7 @@ _:
   # AIhic
   "diffusionbee"
   
-  #Local AI"
+  #AI"
   "ollama" 
+  "codex"
 ]

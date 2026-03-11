@@ -43,6 +43,8 @@ with lib;
                     LSQuarantine = false;
                 };
                 NSGlobalDomain = {
+                    # Hide the default menu bar so SketchyBar replaces it
+                    _HIHideMenuBar = true;
                     AppleShowAllExtensions = true;
                     ApplePressAndHoldEnabled = false;
 

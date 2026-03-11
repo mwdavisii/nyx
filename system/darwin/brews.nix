@@ -1,5 +1,6 @@
 _:
 [
+    "FelixKratz/formulae/sketchybar"
     "jmeter"
     "pam-reattach"
     "nvm"
