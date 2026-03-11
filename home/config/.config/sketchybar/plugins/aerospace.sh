@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Highlight the focused workspace, dim the rest
-FOCUSED=$(aerospace list-workspaces --focused)
+FOCUSED=$(/opt/homebrew/bin/aerospace list-workspaces --focused 2>/dev/null)
 
-for sid in $(aerospace list-workspaces --all); do
+for sid in $(/opt/homebrew/bin/aerospace list-workspaces --all 2>/dev/null); do
   if [ "$sid" = "$FOCUSED" ]; then
     sketchybar --set space.$sid icon.highlight=on
   else

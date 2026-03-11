@@ -1,8 +1,12 @@
 #!/bin/bash
-SSID=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | awk '/ SSID/ {print $2}')
 
-if [ -z "$SSID" ]; then
+SSID=$(ipconfig getsummary en0 2>/dev/null | awk -F: '/SSID :/{gsub(/^ +/, "", $2); print $2}')
+IP=$(ipconfig getifaddr en0 2>/dev/null)
+
+if [ -z "$IP" ]; then
   sketchybar --set "$NAME" icon="󰤭" label="off"
-else
+elif [ -n "$SSID" ]; then
   sketchybar --set "$NAME" icon="󰤨" label="$SSID"
+else
+  sketchybar --set "$NAME" icon="󰈀" label="$IP"
 fi
