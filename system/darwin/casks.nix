@@ -35,5 +35,8 @@ _:
   "firefox"
 
   # AIhic
-  "diffusionbee" 
+  "diffusionbee"
+  
+  #Local AI"
+  "ollama" 
 ]
