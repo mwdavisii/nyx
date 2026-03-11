@@ -3,73 +3,74 @@ export default {
   rewrite: [
     {
       // Redirect all urls to use https
-      match: ({ url }) => url.protocol === "http",
-      url: { protocol: "https" }
+      match: (url) => url.protocol === "http:",
+      url: (url) => {
+        url.protocol = "https:";
+        return url;
+      }
     },
     {
+      // Unwrap Microsoft Safe Links (Teams/Outlook ATP wrapper)
+      match: (url) => url.hostname.includes("safelinks.protection.outlook.com") ||
+                       url.hostname.includes("teams.cdn.office.net"),
+      url: (url) => {
+        const wrapped = url.searchParams.get("url");
+        if (wrapped) return new URL(wrapped);
+        return url;
+      }
+    },
+    {
+      // Strip tracking parameters
       match: () => true,
-      url: ({url}) => {
+      url: (url) => {
           const removeKeysStartingWith = ["utm_", "uta_"];
           const removeKeys = ["fbclid", "gclid"];
 
-          const search = url.search
-              .split("&")
-              .map((parameter) => parameter.split("="))
-              .filter(([key]) => !removeKeysStartingWith.some((startingWith) => key.startsWith(startingWith)))
-              .filter(([key]) => !removeKeys.some((removeKey) => key === removeKey));
-
-          return {
-              protocol: url.protocol,
-              host: url.host,
-              pathname: url.pathname,
-              search: search.map((parameter) => parameter.join("=")).join("&"),
-          };
+          const params = new URLSearchParams(url.search);
+          for (const key of [...params.keys()]) {
+              if (removeKeys.includes(key) ||
+                  removeKeysStartingWith.some((prefix) => key.startsWith(prefix))) {
+                  params.delete(key);
+              }
+          }
+          url.search = params.toString();
+          return url;
       },
     }
   ],
   handlers: [
     {
-      // Open google.com and *.google.com urls in Google Chrome
-      match: [
-        finicky.matchHostnames(["awsapps.com", "amazonaws.com", "aws.amazon.com", "portal.azure.com"]),
-      ],
-      browser: "Firefox"
-    },
-    // catch azure login
-    //https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize
-    {
-      match: [
-        ({
-          url
-        }) => url.host.includes("login.microsoftonline.com") && url.pathname.includes("/organizations/") && url.pathname.includes("/oauth2/"),
-      ],
+      // AWS and Azure console in Firefox
+      match: finicky.matchHostnames(["awsapps.com", "amazonaws.com", "aws.amazon.com", "portal.azure.com"]),
       browser: "Firefox"
     },
     {
-      //sjch links
-      match: [
-        finicky.matchHostnames(
-          [
-            "sjcrh.sharepoint.com",
-            "sjch.atlassian.net",
-            "stjude.org",
-            "login.microsoft.com",
-            "office.com",
-            "protection.outlook.com*atlassian.com",
-            "github.com",
-            "google.com",
-            "*.google.com",
-            "*.youtube.com",
-          ]
-        ),
-      ],
+      // Azure login flow in Firefox
+      match: (url) => url.hostname.includes("login.microsoftonline.com") &&
+                       url.pathname.includes("/organizations/") &&
+                       url.pathname.includes("/oauth2/"),
+      browser: "Firefox"
+    },
+    {
+      // Work and productivity links in Chrome
+      match: finicky.matchHostnames([
+        "sjcrh.sharepoint.com",
+        "sjcrh.atlassian.net",
+        "stjude.org",
+        "login.microsoft.com",
+        "office.com",
+        /protection\.outlook\.com/,
+        /.*\.atlassian\.com/,
+        "github.com",
+        "google.com",
+        /.*\.google\.com/,
+        /.*\.youtube\.com/,
+      ]),
       browser: "Google Chrome"
     },
     {
-      // Open links in Safari when the option key is pressed
-      // Valid keys are: shift, option, command, control, capsLock, and function.
-      // Please note that control usually opens a tooltip menu instead of visiting a link
-      match: () => finicky.getKeys().option,
+      // Option key held: open in Firefox
+      match: () => finicky.getModifierKeys().option,
       browser: "Firefox"
     },
   ]
