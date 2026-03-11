@@ -27,6 +27,19 @@ function main() {
     done
   }
 
+  prepend_path "$HOME/.local/bin"
+
+  # Homebrew (macOS)
+  if [[ "$OSTYPE" == darwin* ]]; then
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+      prepend_path "/opt/homebrew/bin"
+      prepend_path "/opt/homebrew/sbin"
+    elif [[ -x /usr/local/bin/brew ]]; then
+      prepend_path "/usr/local/bin"
+      prepend_path "/usr/local/sbin"
+    fi
+  fi
+
   append_path "$HOME/.config/git/bin"
   append_path "$HOME/.local/share/cargo/bin"
   append_path "$HOME/.cargo/bin"

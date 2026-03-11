@@ -2,10 +2,7 @@ _:
 
 [
   #desktop toools
-  "whichspace"
-  #"dozer"
-  #"amethyst"
-  "nikitabobko/tap/aerospace"
+  #"nikitabobko/tap/aerospace"
   "hammerspoon"
   "sublime-text"
 
@@ -40,4 +37,6 @@ _:
   # AIhic
   "diffusionbee"
   
+  #Local AI"
+  "ollama" 
 ]
