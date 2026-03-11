@@ -28,6 +28,7 @@
   nyx.modules = {
     desktop = {
       gtk.enable = true;
+      kanshi.enable = true;
       hypr = {
         enable = true;
         gpuPackages = false;
