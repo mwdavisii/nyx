@@ -1,4 +1,5 @@
-module.exports = {
+export default {
+export default {
   defaultBrowser: "Safari",
   rewrite: [
     {
@@ -64,10 +65,8 @@ module.exports = {
       browser: "Google Chrome"
     },
     {
-      // Open links in Safari when the option key is pressed
-      // Valid keys are: shift, option, command, control, capsLock, and function.
-      // Please note that control usually opens a tooltip menu instead of visiting a link
-      match: () => finicky.getKeys().option,
+      // Option key held: open in Firefox
+      match: () => finicky.getModifierKeys().option,
       browser: "Firefox"
     },
   ]
