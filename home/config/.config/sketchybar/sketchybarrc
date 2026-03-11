@@ -23,9 +23,9 @@ sketchybar --bar \
   padding_left=12 \
   padding_right=12 \
   color=$BAR_COLOR \
-  corner_radius=10 \
-  y_offset=5 \
-  margin=8 \
+  corner_radius=0 \
+  y_offset=0 \
+  margin=0 \
   shadow=on
 
 # ──────────────────────────────────────────────
