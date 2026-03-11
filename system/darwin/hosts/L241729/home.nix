@@ -26,6 +26,11 @@
   };
   
   nyx.modules = {
+    ai ={
+	chatgpt.enable = true;
+	gemini.enable = true;
+	claude.enable = true;
+    };
     desktop = {
       wallpaper.enable = true;
       hammerspoon.enable = true;

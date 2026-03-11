@@ -2,7 +2,7 @@ _:
 
 [
   #desktop toools
-  #"nikitabobko/tap/aerospace"
+  "nikitabobko/tap/aerospace"
   "hammerspoon"
   "sublime-text"
 

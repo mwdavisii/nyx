@@ -23,6 +23,10 @@ cmd-ctrl-alt-right = 'focus right'
 cmd-ctrl-alt-up    = 'focus up'
 cmd-ctrl-alt-down  = 'focus down'
 
+# Focus prev/next window
+cmd-ctrl-alt-shift-left  = 'focus left'
+cmd-ctrl-alt-shift-right = 'focus right'
+
 # Move/Swap window
 cmd-ctrl-alt-shift-h = 'move left'
 cmd-ctrl-alt-shift-j = 'move down'
