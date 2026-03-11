@@ -17,6 +17,7 @@ with lib;
         # Auto upgrade nix package and the daemon service.
         homebrew = {
             enable = true;
+            taps = [ "FelixKratz/formulae" ];
             casks = pkgs.callPackage ../../casks.nix {};
             brews = pkgs.callPackage ../../brews.nix {};
 
