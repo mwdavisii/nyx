@@ -20,7 +20,7 @@ in
     home.file.".hammerspoon/commands.lua".source = ../../../../config/.hammerspoon/commands.lua;
     home.file.".hammerspoon/windows.lua".source = ../../../../config/.hammerspoon/windows.lua;
     home.file.".hammerspoon/init.lua".source = ../../../../config/.hammerspoon/init.lua;
-    home.file.".hammerspoon/yabai.lua".source = ../../../../config/.hammerspoon/yabai.lua;
+    #home.file.".hammerspoon/yabai.lua".source = ../../../../config/.hammerspoon/yabai.lua;
     home.file.".hammerspoon/Spoons/SpoonInstall.spoon".source = ../../../../config/.hammerspoon/Spoons/SpoonInstall.spoon;
   };
 }
