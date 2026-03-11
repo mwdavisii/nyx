@@ -92,87 +92,82 @@ sketchybar --add item media center \
     scroll_texts=on \
     updates=on \
     script="$PLUGIN_DIR/media.sh" \
+    click_script="$PLUGIN_DIR/media_click.sh" \
   --subscribe media media_change
 
 # ══════════════════════════════════════════════
 # RIGHT: system tray icons, system stats, clock
 # ══════════════════════════════════════════════
 
-# --- System tray (menu bar app icons: Teams, Cloudflare, Jamf, etc.) ---
-sketchybar --add alias "Control Center,WiFi" right \
-  --set "Control Center,WiFi" \
-    alias.color=$FOREGROUND \
-    icon.drawing=off \
-    label.drawing=off
-
-sketchybar --add alias "Control Center,BatteryWidget" right \
-  --set "Control Center,BatteryWidget" \
-    alias.color=$FOREGROUND \
-    icon.drawing=off \
-    label.drawing=off
-
-sketchybar --add alias "Control Center,Sound" right \
-  --set "Control Center,Sound" \
-    alias.color=$FOREGROUND \
-    icon.drawing=off \
-    label.drawing=off
-
-# Catch-all: show all remaining menu bar extras (Cloudflare, Jamf, etc.)
-sketchybar --add bracket status_tray \
-  --set status_tray background.drawing=off
-
-# Alias all menu extras (third-party menu bar items)
-sketchybar --add item menu_extras right \
-  --set menu_extras \
-    icon.drawing=off \
-    label.drawing=off
-
 # --- Clock (rightmost) ---
+# Click: toggle date format | Right-click: open Calendar
 sketchybar --add item clock right \
   --set clock \
     icon="󰥔" \
     update_freq=30 \
-    script="$PLUGIN_DIR/clock.sh"
+    script="$PLUGIN_DIR/clock.sh" \
+    click_script="$PLUGIN_DIR/clock_click.sh"
 
 # --- Battery ---
+# Click: open Energy settings
 sketchybar --add item battery right \
   --set battery \
     update_freq=30 \
-    script="$PLUGIN_DIR/battery.sh"
+    script="$PLUGIN_DIR/battery.sh" \
+    click_script="open 'x-apple.systempreferences:com.apple.preference.battery'"
+
+# --- Bluetooth ---
+# Click: toggle | Right-click: open Bluetooth settings
+sketchybar --add item bluetooth right \
+  --set bluetooth \
+    icon="󰂯" \
+    update_freq=10 \
+    script="$PLUGIN_DIR/bluetooth.sh" \
+    click_script="$PLUGIN_DIR/bluetooth_click.sh"
 
 # --- Network ---
+# Click: copy IP | Right-click: open Network settings
 sketchybar --add item network right \
   --set network \
     icon="󰤨" \
     update_freq=10 \
-    script="$PLUGIN_DIR/network.sh"
+    script="$PLUGIN_DIR/network.sh" \
+    click_script="$PLUGIN_DIR/network_click.sh"
 
 # --- Volume ---
+# Scroll: adjust volume | Click: toggle mute | Right-click: open Sound settings
 sketchybar --add item volume right \
   --set volume \
     script="$PLUGIN_DIR/volume.sh" \
+    click_script="$PLUGIN_DIR/volume_click.sh" \
   --subscribe volume volume_change
 
 # --- CPU ---
+# Click: open Activity Monitor
 sketchybar --add item cpu right \
   --set cpu \
     icon="󰻠" \
     update_freq=5 \
-    script="$PLUGIN_DIR/cpu.sh"
+    script="$PLUGIN_DIR/cpu.sh" \
+    click_script="open -a 'Activity Monitor'"
 
 # --- Memory ---
+# Click: open Activity Monitor
 sketchybar --add item memory right \
   --set memory \
     icon="󰍛" \
     update_freq=5 \
-    script="$PLUGIN_DIR/memory.sh"
+    script="$PLUGIN_DIR/memory.sh" \
+    click_script="open -a 'Activity Monitor'"
 
 # --- Disk ---
+# Click: open Disk Utility
 sketchybar --add item disk right \
   --set disk \
     icon="󰋊" \
     update_freq=60 \
-    script="$PLUGIN_DIR/disk.sh"
+    script="$PLUGIN_DIR/disk.sh" \
+    click_script="open -a 'Disk Utility'"
 
 # ──────────────────────────────────────────────
 # Finalize

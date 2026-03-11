@@ -1,5 +1,6 @@
 _:
 [
+    "blueutil"
     "sketchybar"
     "jmeter"
     "pam-reattach"

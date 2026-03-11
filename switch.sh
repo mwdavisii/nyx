@@ -8,7 +8,7 @@ if [[ $osName == "Darwin" ]]; then
     warp-cli disconnect
   fi
   sudo --preserve-env=SSH_AUTH_SOCK darwin-rebuild switch --flake .
-  if command -v sketchybar &>/dev/null; then
+  if [ $? -eq 0 ] && command -v sketchybar &>/dev/null; then
     brew services restart sketchybar
   fi
 elif [[ $userName == "nix-on-droid" ]]; then

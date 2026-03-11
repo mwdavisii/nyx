@@ -44,7 +44,7 @@ with lib;
                     LSQuarantine = false;
                 };
                 NSGlobalDomain = {
-                    # Hide the default menu bar so SketchyBar replaces it
+                    # Auto-hide menu bar — mouse to top edge to reveal app menus
                     _HIHideMenuBar = true;
                     AppleShowAllExtensions = true;
                     ApplePressAndHoldEnabled = false;
