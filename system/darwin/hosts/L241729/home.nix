@@ -36,7 +36,7 @@
       hammerspoon.enable = true;
       karabiner.enable = true;
       amethyst.enable = false; #amethyst is installed by brew cask, this copies config files
-      aerospace.enable = true; #aerospace is installed by brew cask, this copies config files
+      aerospace.enable = false; #aerospace is installed by brew cask, this copies config files
       sketchybar.enable = true; #sketchybar is installed by brew, this copies config files
     };
     app = {

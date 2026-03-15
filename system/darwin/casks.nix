@@ -1,8 +1,7 @@
 _:
 
 [
-  #desktop toools
-  "nikitabobko/tap/aerospace"
+  #desktop tools
   "hammerspoon"
   "sublime-text"
 
