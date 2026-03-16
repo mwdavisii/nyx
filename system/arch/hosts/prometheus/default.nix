@@ -106,6 +106,7 @@
         enable = true;
         signing.signByDefault = false;
       };
+      glow.enable = true;
       gnupg = {
         enable = true;
         enableService = pkgs.stdenv.hostPlatform.isLinux;
