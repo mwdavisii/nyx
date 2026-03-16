@@ -4,7 +4,7 @@ with lib;
 let cfg = config.nyx.modules.shell.glow;
 in
 {
-  options.nyx.modules.shell.eza = {
+  options.nyx.modules.shell.glow = {
     enable = mkEnableOption "glow configuration";
   };
 
