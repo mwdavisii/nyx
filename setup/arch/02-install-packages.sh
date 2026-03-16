@@ -196,7 +196,8 @@ if [[ "$INSTALL_AMD_GAMING" == "y" ]]; then
   info "Installing AUR gaming packages..."
   yay -S --needed --noconfirm \
     xpadneo-dkms \
-    heroic-games-launcher-bin
+    heroic-games-launcher-bin \
+    openai-codex-bin
 fi
 
 # ---------------------------------------------------------------------------
