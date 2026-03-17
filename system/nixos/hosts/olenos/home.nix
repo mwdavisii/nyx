@@ -91,7 +91,7 @@
         lf.enable = true;
         lorri.enable = false;
         mcfly.enable = true;
-        neofetch.enable = true;
+        fastfetch.enable = true;
         nixvim.enable = true;
         networking.enable = true;
         ranger.enable = false;

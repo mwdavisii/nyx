@@ -10,7 +10,7 @@
     "margin-right": 0,
     "modules-left": ["idle_inhibitor", "hyprland/workspaces"],
     "modules-middle": ["custom/playerctl", "custom/playerlabel"],
-    "modules-right": ["group/system", "tray", "custom/randwall", "tray", "battery", "bluetooth", "backlight", "network", "pulseaudio", "custom/swaync", "clock", "custom/logout_menu", "tray"],
+    "modules-right": ["group/system", "custom/randwall", "battery", "bluetooth", "backlight", "network", "pulseaudio", "custom/swaync", "clock", "custom/logout_menu", "tray"],
     // Modules configuration
     "clock": {
       "format-alt": "{:%I:%M %p GMT:%Ez | %m/%d/%Y}",

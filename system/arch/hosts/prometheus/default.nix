@@ -7,6 +7,7 @@
 
   home = {
     stateVersion = "26.05";
+
     packages = with pkgs; [
       rustup
       vhs
@@ -26,6 +27,8 @@
 
   nyx.modules = {
     desktop = {
+      gtk.enable = true;
+      kanshi.enable = true;
       hypr = {
         enable = true;
         gpuPackages = false;
@@ -103,6 +106,7 @@
         enable = true;
         signing.signByDefault = false;
       };
+      glow.enable = true;
       gnupg = {
         enable = true;
         enableService = pkgs.stdenv.hostPlatform.isLinux;
@@ -115,7 +119,7 @@
       lf.enable = true;
       lorri.enable = false;
       mcfly.enable = true;
-      neofetch.enable = true;
+      fastfetch.enable = true;
       nixvim.enable = true;
       networking.enable = true;
       openssl.enable = true;

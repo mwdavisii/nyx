@@ -127,6 +127,10 @@ sudo pacman -S --needed --noconfirm \
   pavucontrol \
   pamixer \
   playerctl \
+  base-devel \
+  cmake \
+  cpio \
+  meson \
   \
   networkmanager \
   wpa_supplicant \
@@ -151,6 +155,7 @@ sudo pacman -S --needed --noconfirm \
   thunar \
   gvfs \
   tumbler \
+  gnome-calculator \
   \
   libinput \
   \
@@ -190,7 +195,9 @@ if [[ "$INSTALL_AMD_GAMING" == "y" ]]; then
 
   info "Installing AUR gaming packages..."
   yay -S --needed --noconfirm \
-    xpadneo-dkms
+    xpadneo-dkms \
+    heroic-games-launcher-bin \
+    openai-codex-bin
 fi
 
 # ---------------------------------------------------------------------------
@@ -231,9 +238,9 @@ fi
 # ---------------------------------------------------------------------------
 
 if [[ "$INSTALL_PROTONVPN" == "y" ]]; then
-  if ! command -v protonvpn-app &>/dev/null; then
+  if ! command -v protonvpn &>/dev/null; then
     info "Installing ProtonVPN..."
-    yay -S --needed --noconfirm protonvpn-app
+    sudo pacman -S --needed --noconfirm proton-vpn-gtk-app
     echo ""
     echo "  ProtonVPN installed. Launch and log in after this script finishes."
   else
@@ -263,7 +270,22 @@ info "Installing AUR packages..."
 yay -S --needed --noconfirm \
   swww \
   nwg-displays \
-  obsidian
+  obsidian \
+  claude-desktop-bin \
+  sublime-text-4
+
+info "Installing Hyprland plugins via hyprpm..."
+# Use system cmake/pkg-config, not Nix's, which can't find system packages
+_SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+_PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
+PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm update
+PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm add https://github.com/hyprwm/hyprland-plugins
+hyprpm enable hyprexpo
+hyprpm enable hyprbars
+hyprpm enable hyprwinwrap
+hyprpm enable hyprtrails
+
+
 
 # ---------------------------------------------------------------------------
 # Step 9 — Work security tools (interactive only)
