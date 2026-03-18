@@ -1,8 +1,7 @@
 _:
 
 [
-  #desktop toools
-  #"nikitabobko/tap/aerospace"
+  #desktop tools
   "hammerspoon"
   "sublime-text"
 
@@ -16,7 +15,6 @@ _:
   # Communication Tools
   "telegram"
   "whatsapp"
-  "signal"
 
   # Entertainment Tools
   #"steam"
@@ -37,6 +35,7 @@ _:
   # AIhic
   "diffusionbee"
   
-  #Local AI"
+  #AI"
   "ollama" 
+  "codex"
 ]
