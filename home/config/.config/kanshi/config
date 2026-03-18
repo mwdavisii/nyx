@@ -13,6 +13,14 @@ profile work {
   exec hyprctl dispatch moveworkspacetomonitor 3 DP-5
 }
 
+profile work-dual {
+  output "BOE*" enable position 0,0
+  output "Dell Inc. DELL P3424WE*" enable position 1920,0
+  exec hyprctl dispatch moveworkspacetomonitor 1 DP-5
+  exec hyprctl dispatch moveworkspacetomonitor 2 DP-5
+  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+}
+
 profile home {
   output "Dell Inc. Dell AW3821DW*" enable
   output "VIZIO*" disable

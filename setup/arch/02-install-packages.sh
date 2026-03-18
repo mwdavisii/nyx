@@ -100,6 +100,7 @@ info "Installing core desktop packages..."
 sudo pacman -S --needed --noconfirm \
   \
   foot kitty alacritty \
+  v4l2loopback-dkms \
   \
   hyprland \
   hyprlock \

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   programs.home-manager.enable = true;
@@ -28,7 +28,16 @@
     desktop = {
       gtk.enable = true;
       kanshi.enable = true;
-      hypr.enable = true;
+      hypr = {
+        enable = true;
+        gpuPackages = false;
+        plugins = false;
+        ttyLaunch = true;
+      };
+      kmonad = {
+        enable = true;
+        package = inputs.kmonad.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      };
     };
     ai = {
       chatgpt.enable = false;
@@ -90,6 +99,7 @@
       eza.enable = true;
       fzf.enable = true;
       gcp.enable = true;
+      glow.enable = true; 
       git = {
         enable = true;
         signing.signByDefault = false;
