@@ -69,6 +69,22 @@ with lib;
                     Clicking = true;
                     TrackpadThreeFingerDrag = true;
                 };
+
+                # Disable Mission Control shortcuts that conflict with Hammerspoon/PaperWM
+                # 32 = Mission Control (Ctrl+Up), 33 = App Windows (Ctrl+Down)
+                # 79/80 = Move left a space (Ctrl+Left), 81/82 = Move right a space (Ctrl+Right)
+                CustomUserPreferences = {
+                    "com.apple.symbolichotkeys" = {
+                        AppleSymbolicHotKeys = {
+                            "32" = { enabled = 0; };
+                            "33" = { enabled = 0; };
+                            "79" = { enabled = 0; };
+                            "80" = { enabled = 0; };
+                            "81" = { enabled = 0; };
+                            "82" = { enabled = 0; };
+                        };
+                    };
+                };
             };
         };
     };

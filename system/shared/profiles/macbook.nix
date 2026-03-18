@@ -20,6 +20,8 @@ in
         twemoji-color-font
         fira-code
         fira-code-symbols
+        roboto
+        nerd-fonts.hack
       ];
     };
   };

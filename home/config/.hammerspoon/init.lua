@@ -25,5 +25,3 @@ require("windows")
 return {
     init = module_init
 }
-
-
