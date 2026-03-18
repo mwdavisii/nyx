@@ -1,0 +1,175 @@
+#!/bin/bash
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+FONT_FACE="SF Pro"
+NERD_FONT="Hack Nerd Font:Regular:14.0"
+AEROSPACE="/opt/homebrew/bin/aerospace"
+
+# --- Colors (matching waybar pywal-style palette) ---
+BAR_COLOR=0x80000000
+FOREGROUND=0xffffffff
+INACTIVE=0xff928374
+ACCENT=0xfff4d9e1
+ALERT=0xffcc6666
+
+# ──────────────────────────────────────────────
+# Bar appearance — mirrors waybar top bar style
+# ──────────────────────────────────────────────
+sketchybar --bar \
+  height=36 \
+  blur_radius=30 \
+  position=top \
+  sticky=off \
+  padding_left=12 \
+  padding_right=12 \
+  color=$BAR_COLOR \
+  corner_radius=0 \
+  y_offset=0 \
+  margin=0 \
+  shadow=on
+
+# ──────────────────────────────────────────────
+# Defaults
+# ──────────────────────────────────────────────
+sketchybar --default \
+  icon.font="$NERD_FONT" \
+  label.font="$FONT_FACE:Regular:13.0" \
+  icon.color=$FOREGROUND \
+  label.color=$FOREGROUND \
+  icon.padding_left=6 \
+  icon.padding_right=4 \
+  label.padding_left=4 \
+  label.padding_right=6 \
+  background.padding_left=2 \
+  background.padding_right=2
+
+# ══════════════════════════════════════════════
+# LEFT: AeroSpace workspaces
+# ══════════════════════════════════════════════
+for sid in $($AEROSPACE list-workspaces --all 2>/dev/null); do
+  sketchybar --add space space.$sid left \
+    --set space.$sid \
+      space=$sid \
+      icon=$sid \
+      icon.font="$FONT_FACE:Bold:13.0" \
+      icon.color=$INACTIVE \
+      icon.highlight_color=$ACCENT \
+      icon.padding_left=8 \
+      icon.padding_right=8 \
+      label.drawing=off \
+      background.drawing=off \
+      click_script="$AEROSPACE workspace $sid" \
+      script="$PLUGIN_DIR/aerospace.sh"
+done
+
+sketchybar --add event aerospace_workspace_change
+
+# Catch workspace changes from AeroSpace
+sketchybar --add item aerospace_listener left \
+  --set aerospace_listener \
+    drawing=off \
+    script="$PLUGIN_DIR/aerospace.sh" \
+  --subscribe aerospace_listener aerospace_workspace_change
+
+# ══════════════════════════════════════════════
+# LEFT: Front app name (shows focused window's app)
+# ══════════════════════════════════════════════
+sketchybar --add item front_app left \
+  --set front_app \
+    icon.drawing=off \
+    label.font="$FONT_FACE:Semibold:13.0" \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+# ══════════════════════════════════════════════
+# CENTER: Now-playing media
+# ══════════════════════════════════════════════
+sketchybar --add item media center \
+  --set media \
+    icon="󰎆" \
+    icon.color=$ACCENT \
+    label.max_chars=40 \
+    scroll_texts=on \
+    updates=on \
+    script="$PLUGIN_DIR/media.sh" \
+    click_script="$PLUGIN_DIR/media_click.sh" \
+  --subscribe media media_change
+
+# ══════════════════════════════════════════════
+# RIGHT: system tray icons, system stats, clock
+# ══════════════════════════════════════════════
+
+# --- Clock (rightmost) ---
+# Click: toggle date format | Right-click: open Calendar
+sketchybar --add item clock right \
+  --set clock \
+    icon="󰥔" \
+    update_freq=30 \
+    script="$PLUGIN_DIR/clock.sh" \
+    click_script="$PLUGIN_DIR/clock_click.sh"
+
+# --- Battery ---
+# Click: open Energy settings
+sketchybar --add item battery right \
+  --set battery \
+    update_freq=30 \
+    script="$PLUGIN_DIR/battery.sh" \
+    click_script="open 'x-apple.systempreferences:com.apple.preference.battery'"
+
+# --- Bluetooth ---
+# Click: toggle | Right-click: open Bluetooth settings
+sketchybar --add item bluetooth right \
+  --set bluetooth \
+    icon="󰂯" \
+    update_freq=10 \
+    script="$PLUGIN_DIR/bluetooth.sh" \
+    click_script="$PLUGIN_DIR/bluetooth_click.sh"
+
+# --- Network ---
+# Click: copy IP | Right-click: open Network settings
+sketchybar --add item network right \
+  --set network \
+    icon="󰤨" \
+    update_freq=10 \
+    script="$PLUGIN_DIR/network.sh" \
+    click_script="$PLUGIN_DIR/network_click.sh"
+
+# --- Volume ---
+# Scroll: adjust volume | Click: toggle mute | Right-click: open Sound settings
+sketchybar --add item volume right \
+  --set volume \
+    script="$PLUGIN_DIR/volume.sh" \
+    click_script="$PLUGIN_DIR/volume_click.sh" \
+  --subscribe volume volume_change
+
+# --- CPU ---
+# Click: open Activity Monitor
+sketchybar --add item cpu right \
+  --set cpu \
+    icon="󰻠" \
+    update_freq=5 \
+    script="$PLUGIN_DIR/cpu.sh" \
+    click_script="open -a 'Activity Monitor'"
+
+# --- Memory ---
+# Click: open Activity Monitor
+sketchybar --add item memory right \
+  --set memory \
+    icon="󰍛" \
+    update_freq=5 \
+    script="$PLUGIN_DIR/memory.sh" \
+    click_script="open -a 'Activity Monitor'"
+
+# --- Disk ---
+# Click: open Disk Utility
+sketchybar --add item disk right \
+  --set disk \
+    icon="󰋊" \
+    update_freq=60 \
+    script="$PLUGIN_DIR/disk.sh" \
+    click_script="open -a 'Disk Utility'"
+
+# ──────────────────────────────────────────────
+# Finalize
+# ──────────────────────────────────────────────
+sketchybar --update

@@ -1,3 +1,5 @@
+start-at-login = false
+
 # ---------- Core layout: BSP-ish feel ----------
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
@@ -9,7 +11,7 @@ enable-normalization-flatten-containers = false
 [gaps]
 outer.left = 8
 outer.right = 8
-outer.top = 8
+outer.top = 44
 outer.bottom = 8
 inner.horizontal = 0
 inner.vertical = 0
@@ -22,6 +24,10 @@ cmd-ctrl-alt-left  = 'focus left'
 cmd-ctrl-alt-right = 'focus right'
 cmd-ctrl-alt-up    = 'focus up'
 cmd-ctrl-alt-down  = 'focus down'
+
+# Focus prev/next window
+cmd-ctrl-alt-shift-left  = 'focus left'
+cmd-ctrl-alt-shift-right = 'focus right'
 
 # Move/Swap window
 cmd-ctrl-alt-shift-h = 'move left'
@@ -90,6 +96,20 @@ cmd-ctrl-alt-n      = 'exec-and-forget open -a "Obsidian"'
 cmd-ctrl-alt-t = 'exec-and-forget "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --profile-directory=Default --app-id=cifhbcnohmdccbgoicgdjpfamggdegmo'
 cmd-ctrl-alt-shift-o = 'exec-and-forget "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --profile-directory=Default --app-id=faolnafnngnfdaknnbpnkhgohbobgegn'
 cmd-ctrl-alt-m = 'exec-and-forget "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph'
+
+# ---------- Monitor assignment ----------
+# Workspace 1 on laptop, everything else on the widescreen
+[workspace-to-monitor-force-assignment]
+1 = 'secondary'
+2 = 'main'
+3 = 'main'
+4 = 'main'
+5 = 'main'
+6 = 'main'
+7 = 'main'
+8 = 'main'
+9 = 'main'
+10 = 'main'
 
 # ---------- Per-app rules ----------
 [[on-window-detected]]

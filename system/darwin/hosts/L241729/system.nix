@@ -17,6 +17,7 @@ with lib;
         # Auto upgrade nix package and the daemon service.
         homebrew = {
             enable = true;
+            taps = [ "FelixKratz/formulae" ];
             casks = pkgs.callPackage ../../casks.nix {};
             brews = pkgs.callPackage ../../brews.nix {};
 
@@ -43,6 +44,8 @@ with lib;
                     LSQuarantine = false;
                 };
                 NSGlobalDomain = {
+                    # Auto-hide menu bar — mouse to top edge to reveal app menus
+                    _HIHideMenuBar = true;
                     AppleShowAllExtensions = true;
                     ApplePressAndHoldEnabled = false;
 
@@ -65,6 +68,22 @@ with lib;
                 trackpad = {
                     Clicking = true;
                     TrackpadThreeFingerDrag = true;
+                };
+
+                # Disable Mission Control shortcuts that conflict with AeroSpace
+                # 32 = Mission Control (Ctrl+Up), 33 = App Windows (Ctrl+Down)
+                # 79/80 = Move left a space (Ctrl+Left), 81/82 = Move right a space (Ctrl+Right)
+                CustomUserPreferences = {
+                    "com.apple.symbolichotkeys" = {
+                        AppleSymbolicHotKeys = {
+                            "32" = { enabled = 0; };
+                            "33" = { enabled = 0; };
+                            "79" = { enabled = 0; };
+                            "80" = { enabled = 0; };
+                            "81" = { enabled = 0; };
+                            "82" = { enabled = 0; };
+                        };
+                    };
                 };
             };
         };
