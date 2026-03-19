@@ -26,6 +26,7 @@
 
   nyx.modules = {
     desktop = {
+      cava.enable = true;
       gtk.enable = true;
       kanshi.enable = true;
       hypr = {
