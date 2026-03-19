@@ -78,6 +78,7 @@
         package = null;
       };
       vscode.enable = true;
+      youtubeMusic.enable = true;
     };
     dev = {
       androidSDK.enable = true;
