@@ -23,7 +23,7 @@ let
     if pkill -f "kitty.*kitty-bg"; then
       exit 0
     else
-      kitty --class="kitty-bg" cava_start
+      kitty --class="kitty-bg" --override background_opacity=0.0 cava_start
     fi
   '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
