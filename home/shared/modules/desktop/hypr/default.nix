@@ -16,8 +16,35 @@ let
     waybar_start_top &
     waybar_start_bottom &
   '';
+  show_desktop = pkgs.writeShellScriptBin "show_desktop" ''
+    STATE_FILE="/tmp/hypr_show_desktop_$(hyprctl activeworkspace -j | ${pkgs.jq}/bin/jq -r '.id')"
+    if [ -f "$STATE_FILE" ]; then
+      # Restore: move windows back from special workspace
+      while hyprctl clients -j | ${pkgs.jq}/bin/jq -e '.[] | select(.workspace.name == "special:desktop_stash")' > /dev/null 2>&1; do
+        hyprctl dispatch togglespecialworkspace desktop_stash
+        hyprctl dispatch movetoworkspacesilent "$(cat "$STATE_FILE")"
+        hyprctl dispatch togglespecialworkspace desktop_stash
+      done
+      rm "$STATE_FILE"
+    else
+      # Stash: move all windows to special workspace
+      WS_ID=$(hyprctl activeworkspace -j | ${pkgs.jq}/bin/jq -r '.id')
+      echo "$WS_ID" > "$STATE_FILE"
+      WIN_COUNT=$(hyprctl clients -j | ${pkgs.jq}/bin/jq "[.[] | select(.workspace.id == $WS_ID and .class != \"kitty-bg\")] | length")
+      for i in $(seq 1 "$WIN_COUNT"); do
+        hyprctl dispatch movetoworkspacesilent special:desktop_stash
+      done
+    fi
+  '';
   cava_start = pkgs.writeShellScriptBin "cava_start" ''
     sleep 1 && cava
+  '';
+  cava_toggle = pkgs.writeShellScriptBin "cava_toggle" ''
+    if pkill -f "kitty.*kitty-bg"; then
+      exit 0
+    else
+      kitty --class="kitty-bg" --override background_opacity=0.0 cava_start
+    fi
   '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
     if command -v waybar >/dev/null 2>&1; then
@@ -150,6 +177,8 @@ in
       rofiWindow
       rofiPowerMenu
       cava_start
+      cava_toggle
+      show_desktop
     ] ++ lib.optionals cfg.gpuPackages [
       nwg-displays
       wayland-protocols
