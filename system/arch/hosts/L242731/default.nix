@@ -26,6 +26,7 @@
 
   nyx.modules = {
     desktop = {
+      cava.enable = true;
       gtk.enable = true;
       kanshi.enable = true;
       hypr = {
@@ -77,6 +78,7 @@
         package = null;
       };
       vscode.enable = true;
+      pearDesktop.enable = false; # installed via AUR (OpenGL incompatibility with NixGL)
     };
     dev = {
       androidSDK.enable = true;
