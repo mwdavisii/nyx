@@ -161,6 +161,7 @@ sudo pacman -S --needed --noconfirm \
   libinput \
   \
   acpi \
+  cava \
   waybar \
   rofi \
   kmonad \

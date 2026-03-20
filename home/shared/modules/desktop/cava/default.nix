@@ -22,9 +22,5 @@ in
       source = ../../../../config/.config/cava;
       recursive = true;
     };
-    xdg.configFile."cava/shaders" = {
-      source = ../../../../config/.config/cava/shaders;
-      recursive = true;
-    };
   };
 }

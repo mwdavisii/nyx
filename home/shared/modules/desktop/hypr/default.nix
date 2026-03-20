@@ -19,6 +19,13 @@ let
   cava_start = pkgs.writeShellScriptBin "cava_start" ''
     sleep 1 && cava
   '';
+  cava_toggle = pkgs.writeShellScriptBin "cava_toggle" ''
+    if pkill -f "kitty.*kitty-bg"; then
+      exit 0
+    else
+      kitty --class="kitty-bg" cava_start
+    fi
+  '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
     if command -v waybar >/dev/null 2>&1; then
       waybar -c ~/.config/waybar/top.jsonc -s ~/.config/waybar/style.css >/dev/null 2>&1
@@ -150,6 +157,7 @@ in
       rofiWindow
       rofiPowerMenu
       cava_start
+      cava_toggle
     ] ++ lib.optionals cfg.gpuPackages [
       nwg-displays
       wayland-protocols
