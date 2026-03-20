@@ -161,6 +161,7 @@ sudo pacman -S --needed --noconfirm \
   libinput \
   \
   acpi \
+  cava \
   waybar \
   rofi \
   kmonad \
@@ -274,7 +275,8 @@ yay -S --needed --noconfirm \
   obsidian \
   claude-desktop-bin \
   sublime-text-4 \
-  pear-desktop
+  pear-desktop \
+  jellyfin-desktop
 
 info "Installing Hyprland plugins via hyprpm..."
 # Use system cmake/pkg-config, not Nix's, which can't find system packages
