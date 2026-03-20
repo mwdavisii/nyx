@@ -21,12 +21,12 @@ let
   '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
     if command -v waybar >/dev/null 2>&1; then
-      waybar -c ~/.config/waybar/top.jsonc -s ~/.config/waybar/style.css
+      waybar -c ~/.config/waybar/top.jsonc -s ~/.config/waybar/style.css >/dev/null 2>&1
     fi
   '';
   waybar_start_bottom = pkgs.writeShellScriptBin "waybar_start_bottom" ''
     if command -v waybar >/dev/null 2>&1; then
-      waybar -c ~/.config/waybar/bottom.jsonc -s ~/.config/waybar/style.css
+      waybar -c ~/.config/waybar/bottom.jsonc -s ~/.config/waybar/style.css >/dev/null 2>&1
     fi
   '';
   rofiWindow = pkgs.writeShellScriptBin "rofiWindow" ''

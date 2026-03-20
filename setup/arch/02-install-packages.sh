@@ -273,7 +273,8 @@ yay -S --needed --noconfirm \
   nwg-displays \
   obsidian \
   claude-desktop-bin \
-  sublime-text-4
+  sublime-text-4 \
+  pear-desktop
 
 info "Installing Hyprland plugins via hyprpm..."
 # Use system cmake/pkg-config, not Nix's, which can't find system packages
