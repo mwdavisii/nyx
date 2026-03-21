@@ -18,6 +18,11 @@ setopt autocd extendedglob
 unsetopt beep
 bindkey -v
 
+# Fix Delete key in vi mode: terminal sends ^[[3~ which otherwise gets
+# parsed as ESC + [ + 3 + ~ where ~ triggers vi-swap-case (capitalizes)
+bindkey -M vicmd '^[[3~' delete-char
+bindkey -M viins '^[[3~' delete-char
+
 
 if [[ $function_profile == true ]]; then
     zmodload zsh/zprof

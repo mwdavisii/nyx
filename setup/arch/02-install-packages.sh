@@ -269,7 +269,10 @@ fi
 
 info "Installing AUR packages..."
 
-yay -S --needed --noconfirm \
+# Use system PATH to prevent Nix toolchain from contaminating AUR builds
+_SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+_PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
+PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   swww \
   nwg-displays \
   obsidian \
