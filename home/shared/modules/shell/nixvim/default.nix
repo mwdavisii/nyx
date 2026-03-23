@@ -37,7 +37,6 @@ in
   config = mkIf cfg.enable {
     programs.nixvim = {
       enable = true;
-      extraPackages = with pkgs; [ wl-clipboard ];
 
       # basic editor feel
       opts = {
@@ -111,9 +110,10 @@ in
 
       # ===== Tools Telescope uses under the hood (+ TS toolchain/parsers)
       extraPackages = with pkgs; [
-        ripgrep  # live_grep
-        fd       # file finder
+        ripgrep      # live_grep
+        fd           # file finder
         tree-sitter
+        wl-clipboard # system clipboard on Wayland
       ] ++ treeSitterGrammars;
 
       # ===== Keymaps: tree + telescope
