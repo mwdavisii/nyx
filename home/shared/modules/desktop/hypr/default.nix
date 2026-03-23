@@ -40,10 +40,10 @@ let
     sleep 1 && cava
   '';
   cava_toggle = pkgs.writeShellScriptBin "cava_toggle" ''
-    if pkill -f "foot.*kitty-bg"; then
+    if pkill -f "kitty.*kitty-bg"; then
       exit 0
     else
-      foot --app-id="kitty-bg" -o main.opacity=0.0 cava_start
+      kitty --class="kitty-bg" --override background_opacity=0.0 cava_start
     fi
   '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
