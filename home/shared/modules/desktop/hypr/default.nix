@@ -210,9 +210,8 @@ in
       (lib.mkIf cfg.gpuPackages {
         "waybar".source = ../../../../config/.config/waybar;
       })
-      (lib.mkIf (!cfg.gpuPackages) {
-        "quickshell".source = ../../../../config/.config/quickshell;
-      })
+      # caelestia-shell installs its own config to ~/.config/quickshell/caelestia/
+      # via the AUR package — do not manage this path with Nix on Arch hosts
     ];
 
     # Seed the wal color cache from the template so Hyprland's

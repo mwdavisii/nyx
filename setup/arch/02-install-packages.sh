@@ -163,9 +163,20 @@ sudo pacman -S --needed --noconfirm \
   \
   acpi \
   cava \
+  libcava \
   waybar \
   rofi \
   kmonad \
+  \
+  fish \
+  aubio \
+  ddcutil \
+  lm_sensors \
+  brightnessctl \
+  swappy \
+  libqalculate \
+  power-profiles-daemon \
+  ttf-cascadia-code-nerd \
   \
   noto-fonts \
   noto-fonts-cjk \
@@ -275,6 +286,11 @@ _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
 _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   quickshell-git \
+  caelestia-shell \
+  caelestia-cli \
+  app2unit \
+  ttf-material-symbols-variable \
+  ttf-rubik-vf \
   swww \
   nwg-displays \
   obsidian \
