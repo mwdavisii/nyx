@@ -7,3 +7,4 @@ result
 .claude/*
 !.claude/skills
 !.claude/skills/**
+docs/*
