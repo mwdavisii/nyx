@@ -37,6 +37,7 @@ in
   config = mkIf cfg.enable {
     programs.nixvim = {
       enable = true;
+      extraPackages = with pkgs; [ wl-clipboard ];
 
       # basic editor feel
       opts = {

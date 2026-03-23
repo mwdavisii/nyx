@@ -105,7 +105,7 @@ let
       rm -f ~/active_paper
       cp ~/.config/wallpapers/liquid1.jpg ~/active_paper
       if command -v wal >/dev/null 2>&1; then
-        wal -i ~/.config/wallpapers/wall0.png
+        wal -i ~/.config/wallpapers/liquid1.jpg
         mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
         cp ~/.cache/wal/cava ~/.config/cava/config
@@ -221,9 +221,9 @@ in
     # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
     # (init_colors runs exec-once which is too late — source= is parsed at startup).
     home.activation.seedWalColors = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      if [ ! -f "$HOME/.cache/wal/colors-hyprland" ]; then
+      if [ ! -f "$HOME/.cache/wal/colors-hyprland" ] || [ ! -w "$HOME/.cache/wal/colors-hyprland" ]; then
         $DRY_RUN_CMD mkdir -p "$HOME/.cache/wal"
-        $DRY_RUN_CMD cp "$HOME/.config/wal/templates/colors-hyprland" "$HOME/.cache/wal/colors-hyprland"
+        $DRY_RUN_CMD cp --remove-destination "$HOME/.config/wal/templates/colors-hyprland" "$HOME/.cache/wal/colors-hyprland"
         $DRY_RUN_CMD chmod 644 "$HOME/.cache/wal/colors-hyprland"
       fi
     '';
