@@ -18,9 +18,13 @@ in
     home.packages = lib.optionals (cfg.package != null) [
       cfg.package
     ];
-    xdg.configFile."cava" = {
-      source = ../../../../config/.config/cava;
+    # Manage shaders and helper script, but NOT config — pywal owns that file
+    xdg.configFile."cava/shaders" = {
+      source = ../../../../config/.config/cava/shaders;
       recursive = true;
+    };
+    xdg.configFile."cava/start.sh" = {
+      source = ../../../../config/.config/cava/start.sh;
     };
   };
 }

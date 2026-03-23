@@ -88,6 +88,8 @@ let
         wal -i "$paper"
         mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
+        cp ~/.cache/wal/cava ~/.config/cava/config
+        pkill -USR2 cava 2>/dev/null || true
         wbar_restart &
       fi
     fi
@@ -99,13 +101,15 @@ let
         swww-daemon > /dev/null 2>&1 &
         sleep 1
       fi
-      swww img ~/.config/wallpapers/wall0.png  --transition-type simple
+      swww img ~/.config/wallpapers/liquid1.png  --transition-type simple
       rm -f ~/active_paper
       cp ~/.config/wallpapers/wall0.png ~/active_paper
       if command -v wal >/dev/null 2>&1; then
         wal -i ~/.config/wallpapers/wall0.png
         mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
+        cp ~/.cache/wal/cava ~/.config/cava/config
+        pkill -USR2 cava 2>/dev/null || true
         wbar_restart &
       fi
     fi
@@ -123,6 +127,10 @@ let
           swww img ~/.config/wallpapers/wall0.png  --transition-type simple
         fi
         wal -i ~/.config/wallpapers/wall0.png
+        mkdir -p ~/.config/btop/themes
+        cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
+        cp ~/.cache/wal/cava ~/.config/cava/config
+        pkill -USR2 cava 2>/dev/null || true
         wbar_restart &
       fi
     fi
@@ -199,6 +207,7 @@ in
 
     #wal templates (superset — all 5)
     home.file.".config/wal/templates/btop".source = ../../../../config/.config/wal/templates/btop;
+    home.file.".config/wal/templates/cava".source = ../../../../config/.config/wal/templates/cava;
     home.file.".config/wal/templates/colors-hyprland".source = ../../../../config/.config/wal/templates/colors-hyprland;
     home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
     home.file.".config/wal/templates/colors-waybar".source = ../../../../config/.config/wal/templates/colors-waybar;
