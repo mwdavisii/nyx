@@ -27,9 +27,9 @@ QtObject {
     property color color15: "#ebdbb2"
 
     property FileView _watcher: FileView {
+        id: walFileView
         path: StandardPaths.writableLocation(StandardPaths.HomeLocation) + "/.cache/wal/colors.json"
-        watchChanges: true
-        onTextChanged: root._parseColors(text)
+        onTextChanged: root._parseColors(walFileView.text())
     }
 
     function _parseColors(json) {

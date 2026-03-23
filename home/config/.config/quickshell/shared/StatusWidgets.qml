@@ -135,7 +135,7 @@ RowLayout {
             watchChanges: true
             onTextChanged: {
                 batteryItem.visible = true
-                batText.text = batteryView.text.trim() + "%"
+                batText.text = batteryView.text().trim() + "%"
             }
         }
     }
