@@ -1,4 +1,6 @@
+import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
 import "bar"
 import "dock"
@@ -29,7 +31,7 @@ ShellRoot {
     Variants {
         model: Quickshell.screens
 
-        delegate: QtObject {
+        delegate: Item {
             required property var modelData  // QuickshellScreen
 
             readonly property bool isEDP: modelData.name.startsWith("eDP")

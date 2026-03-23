@@ -6,10 +6,10 @@ import "../../shared" as Shared
 RowLayout {
     id: root
     spacing: 8
-    visible: MprisController.players.length > 0
+    visible: Mpris.players.length > 0
 
-    property var player: MprisController.players.length > 0
-        ? MprisController.players[0]
+    property var player: Mpris.players.length > 0
+        ? Mpris.players[0]
         : null
 
     // Prev button

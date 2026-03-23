@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Wayland._ToplevelManagement
 import Quickshell.Io
 import "../shared" as Shared
 
@@ -16,15 +17,12 @@ PanelWindow {
     WlrLayershell.namespace: "shell-dock"
     WlrLayershell.exclusiveZone: height + 8
 
-    height: 60
+    implicitHeight: 60
     // Width is sized to content; centering achieved via left margin
     implicitWidth: dockPill.implicitWidth
 
     color: Qt.rgba(0, 0, 0, 0)
 
-    ToplevelManager {
-        id: toplevels
-    }
 
     // Floating pill — centered horizontally on the screen
     Rectangle {
@@ -73,18 +71,15 @@ PanelWindow {
                 }
             }
 
-            // Running windows — exclude Alacritty (matches current wlr/taskbar ignore-list)
+            // Running windows — exclude Alacritty
             Repeater {
-                model: {
-                    const all = toplevels.toplevels
-                    return all ? all.filter(t => t.appId !== "Alacritty" && t.appId !== "alacritty") : []
-                }
+                model: ToplevelManager.toplevels
 
                 delegate: Item {
                     id: winItem
                     required property var modelData  // ToplevelHandle
-
-                    width: 44
+                    visible: modelData.appId !== "Alacritty" && modelData.appId !== "alacritty"
+                    width: visible ? 44 : 0
                     height: 44
 
                     Rectangle {

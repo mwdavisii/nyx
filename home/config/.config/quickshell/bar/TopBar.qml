@@ -11,7 +11,7 @@ PanelWindow {
     screen: screen_
 
     anchors { top: true; left: true; right: true }
-    height: 48
+    implicitHeight: 48
 
     WlrLayershell.layer: WlrLayer.Top
     WlrLayershell.namespace: "shell-top"

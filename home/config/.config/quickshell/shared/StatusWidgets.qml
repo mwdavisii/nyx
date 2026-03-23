@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Io
-import Shell.Shared
 
 RowLayout {
     spacing: 8
@@ -131,11 +130,12 @@ RowLayout {
         }
 
         FileView {
+            id: batteryView
             path: "/sys/class/power_supply/BAT0/capacity"
             watchChanges: true
             onTextChanged: {
                 batteryItem.visible = true
-                batText.text = text.trim() + "%"
+                batText.text = batteryView.text.trim() + "%"
             }
         }
     }
