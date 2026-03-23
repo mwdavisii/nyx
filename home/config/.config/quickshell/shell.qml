@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Wayland
 import "bar"
+import "dock"
 import "shared" as Shared
 
 ShellRoot {
@@ -58,11 +59,10 @@ ShellRoot {
             }
 
             // Dock — only on the "full" bar screen
-            // TODO Task 9: uncomment when Dock.qml exists
-            // Loader {
-            //     active: barVariant === "full"
-            //     sourceComponent: Dock { screen_: modelData }
-            // }
+            Loader {
+                active: barVariant === "full"
+                sourceComponent: Dock { screen_: modelData }
+            }
         }
     }
 }
