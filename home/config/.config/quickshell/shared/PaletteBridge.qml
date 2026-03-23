@@ -1,5 +1,6 @@
 pragma Singleton
 import QtQuick
+import QtCore
 import Quickshell.Io
 
 QtObject {
@@ -35,24 +36,24 @@ QtObject {
         try {
             const data = JSON.parse(json)
             const c = data.colors
-            root.background = data.special.background
-            root.foreground = data.special.foreground
-            root.color0  = c.color0
-            root.color1  = c.color1
-            root.color2  = c.color2
-            root.color3  = c.color3
-            root.color4  = c.color4
-            root.color5  = c.color5
-            root.color6  = c.color6
-            root.color7  = c.color7
-            root.color8  = c.color8
-            root.color9  = c.color9
-            root.color10 = c.color10
-            root.color11 = c.color11
-            root.color12 = c.color12
-            root.color13 = c.color13
-            root.color14 = c.color14
-            root.color15 = c.color15
+            root.background = data.special?.background ?? root.background
+            root.foreground = data.special?.foreground ?? root.foreground
+            root.color0  = c?.color0  ?? root.color0
+            root.color1  = c?.color1  ?? root.color1
+            root.color2  = c?.color2  ?? root.color2
+            root.color3  = c?.color3  ?? root.color3
+            root.color4  = c?.color4  ?? root.color4
+            root.color5  = c?.color5  ?? root.color5
+            root.color6  = c?.color6  ?? root.color6
+            root.color7  = c?.color7  ?? root.color7
+            root.color8  = c?.color8  ?? root.color8
+            root.color9  = c?.color9  ?? root.color9
+            root.color10 = c?.color10 ?? root.color10
+            root.color11 = c?.color11 ?? root.color11
+            root.color12 = c?.color12 ?? root.color12
+            root.color13 = c?.color13 ?? root.color13
+            root.color14 = c?.color14 ?? root.color14
+            root.color15 = c?.color15 ?? root.color15
         } catch (e) {
             console.warn("PaletteBridge: failed to parse colors.json:", e)
         }
