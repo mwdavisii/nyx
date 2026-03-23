@@ -163,7 +163,6 @@ sudo pacman -S --needed --noconfirm \
   \
   acpi \
   cava \
-  libcava \
   waybar \
   rofi \
   kmonad \
