@@ -2,6 +2,7 @@ import QtQuick
 import "../../shared" as Shared
 
 Item {
+    id: root
     width: clockText.width + 16
     height: parent.height
 
@@ -25,9 +26,11 @@ Item {
                 const m = String(now.getMinutes()).padStart(2, '0')
                 const ampm = h >= 12 ? "PM" : "AM"
                 const h12 = h % 12 || 12
-                if (parent.parent.longFormat) {
-                    const d = now.toLocaleDateString('en-US', {month:'2-digit', day:'2-digit', year:'numeric'})
-                    parent.text = `${h12}:${m} ${ampm} | ${d}`
+                if (root.longFormat) {
+                    const mo = String(now.getMonth() + 1).padStart(2, '0')
+                    const dy = String(now.getDate()).padStart(2, '0')
+                    const yr = now.getFullYear()
+                    parent.text = `${h12}:${m} ${ampm} | ${mo}/${dy}/${yr}`
                 } else {
                     parent.text = `${h12}:${m} ${ampm}`
                 }
@@ -37,7 +40,7 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: parent.longFormat = !parent.longFormat
+        onClicked: root.longFormat = !root.longFormat
         cursorShape: Qt.PointingHandCursor
     }
 }
