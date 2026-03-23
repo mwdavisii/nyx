@@ -168,6 +168,7 @@ sudo pacman -S --needed --noconfirm \
   kmonad \
   \
   fish \
+  pybind11 \
   aubio \
   ddcutil \
   lm_sensors \
