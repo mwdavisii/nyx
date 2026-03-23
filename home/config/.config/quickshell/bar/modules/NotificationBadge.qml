@@ -4,7 +4,7 @@ import "../../shared" as Shared
 
 Item {
     id: root
-    width: badgeText.width + 16
+    width: badgeText.width + 4
     height: parent.height
 
     property int unreadCount: 0

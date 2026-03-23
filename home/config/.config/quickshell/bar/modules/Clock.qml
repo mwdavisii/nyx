@@ -3,7 +3,7 @@ import "../../shared" as Shared
 
 Item {
     id: root
-    width: clockText.width + 16
+    width: clockText.width + 4
     height: parent.height
 
     property bool longFormat: false

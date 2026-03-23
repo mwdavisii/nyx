@@ -41,7 +41,7 @@ PanelWindow {
         RowLayout {
             anchors { right: parent.right; verticalCenter: parent.verticalCenter }
             anchors.rightMargin: 12
-            spacing: 6
+            spacing: 12
             SystemStats {}
             Shared.StatusWidgets {}
             RandWall {}

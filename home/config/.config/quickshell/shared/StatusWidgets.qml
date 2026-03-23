@@ -8,7 +8,7 @@ RowLayout {
     // --- Volume ---
     Item {
         id: volItem
-        width: volRow.implicitWidth + 8
+        width: volRow.implicitWidth + 4
         height: parent.height
 
         RowLayout {
@@ -52,7 +52,7 @@ RowLayout {
 
     // --- Bluetooth ---
     Item {
-        width: btText.implicitWidth + 8
+        width: btText.implicitWidth + 4
         height: parent.height
 
         Text {
@@ -78,7 +78,7 @@ RowLayout {
 
     // --- WiFi ---
     Item {
-        width: wifiText.implicitWidth + 8
+        width: wifiText.implicitWidth + 4
         height: parent.height
 
         Text {
@@ -107,7 +107,7 @@ RowLayout {
     Item {
         id: batteryItem
         visible: false
-        width: visible ? (batRow.implicitWidth + 8) : 0
+        width: visible ? (batRow.implicitWidth + 4) : 0
         height: parent.height
 
         RowLayout {
@@ -144,7 +144,7 @@ RowLayout {
     Item {
         id: backlightItem
         visible: false
-        width: visible ? (blRow.implicitWidth + 8) : 0
+        width: visible ? (blRow.implicitWidth + 4) : 0
         height: parent.height
 
         RowLayout {
