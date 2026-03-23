@@ -65,7 +65,10 @@
         enable = true;
         package = null;
       };
-      discord.enable = true;
+      discord = {
+        enable = true;
+        package = null; # installed via pacman (discord_arch_electron)
+      };
       firefox.enable = true;
       obs = {
         enable = true;
