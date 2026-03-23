@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Wayland
 import "bar"
 import "dock"
+import "launcher"
 import "shared" as Shared
 
 ShellRoot {
@@ -17,11 +18,12 @@ ShellRoot {
     }
 
     // Launcher overlay (loaded on demand)
-    // TODO Task 10: replace sourceComponent with actual Launcher
     Loader {
         id: launcherLoader
         active: false
-        // sourceComponent: Launcher { onDismissed: launcherLoader.active = false }
+        sourceComponent: Launcher {
+            onDismissed: launcherLoader.active = false
+        }
     }
 
     Variants {
