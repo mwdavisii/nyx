@@ -104,6 +104,7 @@ sudo pacman -S --needed --noconfirm \
   \
   hyprland \
   hyprlock \
+  \
   xdg-desktop-portal-hyprland \
   xdg-desktop-portal-gtk \
   xorg-xwayland \
@@ -279,7 +280,15 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   claude-desktop-bin \
   sublime-text-4 \
   pear-desktop \
-  jellyfin-desktop
+  jellyfin-desktop \
+  discord_arch_electron
+
+info "Installing bun (JavaScript runtime)..."
+if ! command -v bun &>/dev/null; then
+  curl -fsSL https://bun.sh/install | bash
+else
+  info "bun already installed: $(bun --version)"
+fi
 
 info "Installing Hyprland plugins via hyprpm..."
 # Use system cmake/pkg-config, not Nix's, which can't find system packages
