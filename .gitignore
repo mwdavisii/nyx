@@ -8,3 +8,4 @@ result
 !.claude/skills
 !.claude/skills/**
 docs/*
+.worktrees/
