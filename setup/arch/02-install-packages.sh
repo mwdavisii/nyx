@@ -347,7 +347,21 @@ if [[ "$INSTALL_WARP" == "y" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 11 — Enable services
+# Step 11 — Disable ethernet autoconnect (shared dock, WiFi-only machine)
+# ---------------------------------------------------------------------------
+
+if [[ "$(hostname)" == "L242731" ]]; then
+  info "Disabling autoconnect on all ethernet connections (work dock machine)..."
+  while IFS= read -r conn; do
+    sudo nmcli connection modify "$conn" connection.autoconnect no
+    info "  autoconnect disabled: $conn"
+  done < <(nmcli -t -f NAME,TYPE connection show | awk -F: '$2=="ethernet"{print $1}')
+else
+  info "Skipping ethernet autoconnect config (not L242731)."
+fi
+
+# ---------------------------------------------------------------------------
+# Step 12 — Enable services
 # ---------------------------------------------------------------------------
 
 info "Enabling services..."

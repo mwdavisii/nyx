@@ -40,10 +40,10 @@ let
     sleep 1 && cava
   '';
   cava_toggle = pkgs.writeShellScriptBin "cava_toggle" ''
-    if pkill -f "kitty.*kitty-bg"; then
+    if pkill -f "foot.*kitty-bg"; then
       exit 0
     else
-      kitty --class="kitty-bg" --override background_opacity=0.0 cava_start
+      foot --app-id="kitty-bg" -o main.opacity=0.0 cava_start
     fi
   '';
   waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
@@ -101,9 +101,9 @@ let
         swww-daemon > /dev/null 2>&1 &
         sleep 1
       fi
-      swww img ~/.config/wallpapers/liquid1.png  --transition-type simple
+      swww img ~/.config/wallpapers/liquid1.jpg  --transition-type simple
       rm -f ~/active_paper
-      cp ~/.config/wallpapers/wall0.png ~/active_paper
+      cp ~/.config/wallpapers/liquid1.jpg ~/active_paper
       if command -v wal >/dev/null 2>&1; then
         wal -i ~/.config/wallpapers/wall0.png
         mkdir -p ~/.config/btop/themes
