@@ -47,7 +47,7 @@ RowLayout {
             interval: 3000
             repeat: true
             running: true
-            onTriggered: volPoll.running = true
+            onTriggered: if (!volPoll.running) volPoll.running = true
         }
     }
 
@@ -182,7 +182,7 @@ RowLayout {
             interval: 5000
             repeat: true
             running: true
-            onTriggered: blPoll.running = true
+            onTriggered: if (!blPoll.running) blPoll.running = true
         }
     }
 }
