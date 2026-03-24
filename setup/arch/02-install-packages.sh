@@ -151,7 +151,6 @@ sudo pacman -S --needed --noconfirm \
   wl-clipboard \
   kanshi \
   scrcpy \
-  hypridle \
   hyprpicker \
   \
   thunar \
@@ -165,8 +164,6 @@ sudo pacman -S --needed --noconfirm \
   \
   acpi \
   cava \
-  waybar \
-  rofi \
   kmonad \
   \
   fish \
@@ -300,8 +297,6 @@ _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
 _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   quickshell-git \
-  caelestia-shell \
-  caelestia-cli \
   app2unit \
   ttf-material-symbols-variable \
   ttf-rubik-vf \
@@ -333,6 +328,18 @@ hyprpm enable hyprexpo
 hyprpm enable hyprbars
 hyprpm enable hyprwinwrap
 hyprpm enable hyprtrails
+
+# ---------------------------------------------------------------------------
+# Step 8b — Ambxst shell
+# ---------------------------------------------------------------------------
+
+info "Installing Ambxst shell..."
+if [ ! -d "$HOME/.local/src/ambxst" ]; then
+  curl -L get.axeni.de/ambxst | sh
+else
+  info "Ambxst already installed. Updating..."
+  git -C "$HOME/.local/src/ambxst" pull
+fi
 
 
 
