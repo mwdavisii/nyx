@@ -10,12 +10,12 @@ PanelWindow {
     required property var screen_
     screen: screen_
 
-    anchors { top: true; left: true; right: true }
-    implicitHeight: 40
+    anchors { right: true; top: true; bottom: true }
+    implicitWidth: 40
 
     WlrLayershell.layer: WlrLayer.Top
-    WlrLayershell.namespace: "shell-laptop"
-    WlrLayershell.exclusiveZone: height
+    WlrLayershell.namespace: "shell-laptop-right"
+    WlrLayershell.exclusiveZone: width
 
     color: Qt.rgba(0, 0, 0, 0)
 
@@ -23,15 +23,15 @@ PanelWindow {
         anchors.fill: parent
         color: Qt.rgba(Shared.PaletteBridge.background.r, Shared.PaletteBridge.background.g, Shared.PaletteBridge.background.b, 0.85)
 
-        RowLayout {
-            anchors { left: parent.left; verticalCenter: parent.verticalCenter }
-            anchors.leftMargin: 8
+        ColumnLayout {
+            anchors { top: parent.top; horizontalCenter: parent.horizontalCenter }
+            anchors.topMargin: 8
             Workspaces {}
         }
 
-        RowLayout {
-            anchors { right: parent.right; verticalCenter: parent.verticalCenter }
-            anchors.rightMargin: 12
+        ColumnLayout {
+            anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter }
+            anchors.bottomMargin: 12
             spacing: 8
             Shared.StatusWidgets {}
             Clock {}
