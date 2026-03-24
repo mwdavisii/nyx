@@ -59,7 +59,7 @@
         enable = true;
         package = null;
       };
-      discord.enable = true;
+      discord.enable = false;
       firefox.enable = true;
       obs = {
         enable = true;
