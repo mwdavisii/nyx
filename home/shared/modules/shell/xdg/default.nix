@@ -7,6 +7,8 @@ in
   options.nyx.modules.shell.xdg.enable = mkEnableOption "xdg configuration";
 
   config = mkIf cfg.enable {
+    home.packages = with pkgs; [ zip unzip ];
+
     xdg = {
       enable = true;
       mime.enable = pkgs.stdenv.isLinux;
