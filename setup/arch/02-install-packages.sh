@@ -167,6 +167,17 @@ sudo pacman -S --needed --noconfirm \
   rofi \
   kmonad \
   \
+  fish \
+  pybind11 \
+  aubio \
+  ddcutil \
+  lm_sensors \
+  brightnessctl \
+  swappy \
+  libqalculate \
+  power-profiles-daemon \
+  ttf-cascadia-code-nerd \
+  \
   noto-fonts \
   noto-fonts-cjk \
   noto-fonts-emoji \
@@ -274,6 +285,12 @@ info "Installing AUR packages..."
 _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
 _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
+  quickshell-git \
+  caelestia-shell \
+  caelestia-cli \
+  app2unit \
+  ttf-material-symbols-variable \
+  ttf-rubik-vf \
   swww \
   nwg-displays \
   obsidian \
@@ -347,7 +364,21 @@ if [[ "$INSTALL_WARP" == "y" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 11 — Enable services
+# Step 11 — Disable ethernet autoconnect (shared dock, WiFi-only machine)
+# ---------------------------------------------------------------------------
+
+if [[ "$(hostname)" == "L242731" ]]; then
+  info "Disabling autoconnect on all ethernet connections (work dock machine)..."
+  while IFS= read -r conn; do
+    sudo nmcli connection modify "$conn" connection.autoconnect no
+    info "  autoconnect disabled: $conn"
+  done < <(nmcli -t -f NAME,TYPE connection show | awk -F: '$2=="ethernet"{print $1}')
+else
+  info "Skipping ethernet autoconnect config (not L242731)."
+fi
+
+# ---------------------------------------------------------------------------
+# Step 12 — Enable services
 # ---------------------------------------------------------------------------
 
 info "Enabling services..."
