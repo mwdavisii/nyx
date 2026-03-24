@@ -2,9 +2,11 @@
 
 This is my personal configuration that I use for Nixos, Arch Linux, WSL on Windows, MacOS, and my PixelFold.
 
-## Hyprland
+## Desktop — Hyprland + Quickshell
 
 ![Screen Shots](assets/hyprland.png)
+
+The desktop stack is **Hyprland** (compositor) with **Quickshell** (caelestia theme) as the bar, replacing the previous Waybar setup. Colors are dynamically generated from wallpapers via **pywal**, which feeds into the quickshell bar and cava visualizer.
 
 ## Multi-platform Shells
 
@@ -221,7 +223,7 @@ Now close the current shell and open a new one. After the initial install, you c
 
 ### Arch Linux Installation
 
-Arch Linux hosts use a 3-phase setup: minimal OS install from archiso, desktop package installation, then Nix + home-manager bootstrap. System packages are managed by pacman/AUR, and user-level configuration is managed by home-manager via a standalone flake.
+Arch Linux hosts use a 3-phase setup: minimal OS install from archiso, desktop package installation, then Nix + home-manager bootstrap. System packages are managed by pacman/AUR (some packages like discord and bun are AUR-only), and user-level configuration is managed by home-manager via a standalone flake.
 
 See [`setup/arch/README.md`](setup/arch/README.md) for the full step-by-step guide.
 
@@ -340,6 +342,10 @@ Here are some things that would have shortned my learning curve:
       - App Modules (`config.nyx.modules.app`) are applied from `home/shared/modules/app`
       - Dev Modules (`config.nyx.modules.dev`) are applied from `home/shared/modules/dev`
       - Shell Modules (`config.nyx.modules.shell`) are applied from `home/shared/modules/shell`
+      - Desktop Modules (`config.nyx.modules.desktop`) are applied from `home/shared/modules/desktop` (hypr, kanshi, rofi, quickshell, cava, etc.)
+      - Theme Modules (`config.nyx.modules.theme`) are applied from `home/shared/modules/theme` (gtk, pywal)
+      - AI Modules (`config.nyx.modules.ai`) are applied from `home/shared/modules/ai` (claude, chatgpt, gemini, ollama)
+      - Gaming Modules (`config.nyx.modules.gaming`) are applied from `home/shared/modules/gaming` (steam, retroarch)
 
 Example from `lib/default.nix`:
 
