@@ -83,8 +83,9 @@ let
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
         cp ~/.cache/wal/cava ~/.config/cava/config
         pkill -USR2 cava 2>/dev/null || true
-        qs_restart &
       fi
+      command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f "$paper" &
+      qs_restart &
     fi
   '';
   wallpaper_default = pkgs.writeShellScriptBin "wallpaper_default" ''
@@ -103,8 +104,9 @@ let
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
         cp ~/.cache/wal/cava ~/.config/cava/config
         pkill -USR2 cava 2>/dev/null || true
-        qs_restart &
       fi
+      command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f ~/.config/wallpapers/liquid1.jpg &
+      qs_restart &
     fi
   '';
 
@@ -124,6 +126,7 @@ let
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
         cp ~/.cache/wal/cava ~/.config/cava/config
         pkill -USR2 cava 2>/dev/null || true
+        command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f ~/.config/wallpapers/wall0.png &
         qs_restart &
       fi
     fi
