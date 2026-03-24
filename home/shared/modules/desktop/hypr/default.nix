@@ -45,7 +45,7 @@ let
     options="󰌾 Lock\n󰗼 Logout\n󰤄 Suspend\n󰋊 Hibernate\n󰜉 Reboot\n󰐥 Shutdown"
     chosen=$(echo -e "$options" | rofi -dmenu -i -p "Power" -theme-str 'window {width: 250px;} listview {lines: 6;}')
     case "$chosen" in
-      "󰌾 Lock")       hyprlock ;;
+      "󰌾 Lock")       caelestia shell lock lock ;;
       "󰗼 Logout")     loginctl terminate-user "$USER" ;;
       "󰤄 Suspend")    systemctl suspend ;;
       "󰋊 Hibernate")  systemctl hibernate ;;
