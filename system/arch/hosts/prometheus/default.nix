@@ -142,4 +142,6 @@
       zsh.enable = true;
     };
   };
+
+  services.swaync.enable = lib.mkForce false;
 }
