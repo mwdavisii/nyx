@@ -27,11 +27,11 @@ in
     xdg.mimeApps = {
       enable = cfg.makeDefaultBrowser;
       defaultApplications = {
-        "text/html" = "${pkgs.google-chrome}/bin/google-chrome-stable";
-        "x-scheme-handler/http" = "${pkgs.google-chrome}/bin/google-chrome-stable";
-        "x-scheme-handler/https" = "${pkgs.google-chrome}/bin/google-chrome-stable";
-        "x-scheme-handler/about" = "${pkgs.google-chrome}/bin/google-chrome-stable";
-        "x-scheme-handler/unknown" = "${pkgs.google-chrome}/bin/google-chrome-stable";
+        "text/html" = "google-chrome.desktop";
+        "x-scheme-handler/http" = "google-chrome.desktop";
+        "x-scheme-handler/https" = "google-chrome.desktop";
+        "x-scheme-handler/about" = "google-chrome.desktop";
+        "x-scheme-handler/unknown" = "google-chrome.desktop";
       };
     };
   };

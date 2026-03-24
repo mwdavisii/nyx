@@ -10,12 +10,6 @@ let
     nohup kanshi &
     nohup ~/.config/kmonad/selectKBD.sh &
   '';
-  wbar_restart = pkgs.writeShellScriptBin "wbar_restart" ''
-    killall -q -9 -r waybar
-    sleep .1
-    waybar_start_top &
-    waybar_start_bottom &
-  '';
   show_desktop = pkgs.writeShellScriptBin "show_desktop" ''
     STATE_FILE="/tmp/hypr_show_desktop_$(hyprctl activeworkspace -j | ${pkgs.jq}/bin/jq -r '.id')"
     if [ -f "$STATE_FILE" ]; then
@@ -46,20 +40,6 @@ let
       kitty --class="kitty-bg" --override background_opacity=0.0 cava_start
     fi
   '';
-  waybar_start_top = pkgs.writeShellScriptBin "waybar_start_top" ''
-    if command -v waybar >/dev/null 2>&1; then
-      waybar -c ~/.config/waybar/top.jsonc -s ~/.config/waybar/style.css >/dev/null 2>&1
-    fi
-  '';
-  waybar_start_bottom = pkgs.writeShellScriptBin "waybar_start_bottom" ''
-    if command -v waybar >/dev/null 2>&1; then
-      waybar -c ~/.config/waybar/bottom.jsonc -s ~/.config/waybar/style.css >/dev/null 2>&1
-    fi
-  '';
-  rofiWindow = pkgs.writeShellScriptBin "rofiWindow" ''
-    #!/usr/bin/env bash
-    rofi -show drun q
-  '';
   rofiPowerMenu = pkgs.writeShellScriptBin "rofiPowerMenu" ''
     #!/usr/bin/env bash
     options="󰌾 Lock\n󰗼 Logout\n󰤄 Suspend\n󰋊 Hibernate\n󰜉 Reboot\n󰐥 Shutdown"
@@ -72,6 +52,19 @@ let
       "󰜉 Reboot")     systemctl reboot ;;
       "󰐥 Shutdown")   systemctl poweroff ;;
     esac
+  '';
+  bluetooth_toggle = pkgs.writeShellScriptBin "bluetooth_toggle" ''
+    #!/usr/bin/env bash
+    if bluetoothctl show | grep -q "Powered: yes"; then
+      bluetoothctl power off
+    else
+      bluetoothctl power on
+    fi
+  '';
+  qs_restart = pkgs.writeShellScriptBin "qs_restart" ''
+    killall -q quickshell
+    sleep 0.2
+    quickshell --path /etc/xdg/quickshell/caelestia &
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
@@ -88,8 +81,11 @@ let
         wal -i "$paper"
         mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
-        wbar_restart &
+        cp ~/.cache/wal/cava ~/.config/cava/config
+        pkill -USR2 cava 2>/dev/null || true
       fi
+      command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f "$paper" &
+      qs_restart &
     fi
   '';
   wallpaper_default = pkgs.writeShellScriptBin "wallpaper_default" ''
@@ -99,15 +95,18 @@ let
         swww-daemon > /dev/null 2>&1 &
         sleep 1
       fi
-      swww img ~/.config/wallpapers/wall0.png  --transition-type simple
+      swww img ~/.config/wallpapers/liquid1.jpg  --transition-type simple
       rm -f ~/active_paper
-      cp ~/.config/wallpapers/wall0.png ~/active_paper
+      cp ~/.config/wallpapers/liquid1.jpg ~/active_paper
       if command -v wal >/dev/null 2>&1; then
-        wal -i ~/.config/wallpapers/wall0.png
+        wal -i ~/.config/wallpapers/liquid1.jpg
         mkdir -p ~/.config/btop/themes
         cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
-        wbar_restart &
+        cp ~/.cache/wal/cava ~/.config/cava/config
+        pkill -USR2 cava 2>/dev/null || true
       fi
+      command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f ~/.config/wallpapers/liquid1.jpg &
+      qs_restart &
     fi
   '';
 
@@ -123,7 +122,12 @@ let
           swww img ~/.config/wallpapers/wall0.png  --transition-type simple
         fi
         wal -i ~/.config/wallpapers/wall0.png
-        wbar_restart &
+        mkdir -p ~/.config/btop/themes
+        cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
+        cp ~/.cache/wal/cava ~/.config/cava/config
+        pkill -USR2 cava 2>/dev/null || true
+        command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f ~/.config/wallpapers/wall0.png &
+        qs_restart &
       fi
     fi
   '';
@@ -167,14 +171,12 @@ in
       pywal
 
       # --- Custom Scripts ---
-      wbar_restart
-      waybar_start_top
-      waybar_start_bottom
+      qs_restart
+      bluetooth_toggle
       km_ka_restart
       wallpaper_random
       wallpaper_default
       init_colors
-      rofiWindow
       rofiPowerMenu
       cava_start
       cava_toggle
@@ -182,7 +184,6 @@ in
     ] ++ lib.optionals cfg.gpuPackages [
       nwg-displays
       wayland-protocols
-      waybar
       swww
       mesa
       xwayland
@@ -199,22 +200,30 @@ in
 
     #wal templates (superset — all 5)
     home.file.".config/wal/templates/btop".source = ../../../../config/.config/wal/templates/btop;
+    home.file.".config/wal/templates/cava".source = ../../../../config/.config/wal/templates/cava;
     home.file.".config/wal/templates/colors-hyprland".source = ../../../../config/.config/wal/templates/colors-hyprland;
     home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
-    home.file.".config/wal/templates/colors-waybar".source = ../../../../config/.config/wal/templates/colors-waybar;
     home.file.".config/wal/templates/dunstrc".source = ../../../../config/.config/wal/templates/dunstrc;
     #wallpapers directory
-    xdg.configFile."wallpapers".source = ../../../../config/.config/wallpapers;
-    xdg.configFile."hypr".source = ../../../../config/.config/hypr;
-    xdg.configFile."waybar".source = ../../../../config/.config/waybar;
+    xdg.configFile = lib.mkMerge [
+      {
+        "wallpapers".source = ../../../../config/.config/wallpapers;
+        "hypr".source = ../../../../config/.config/hypr;
+      }
+      (lib.mkIf cfg.gpuPackages {
+        "waybar".source = ../../../../config/.config/waybar;
+      })
+      # caelestia-shell installs its own config to ~/.config/quickshell/caelestia/
+      # via the AUR package — do not manage this path with Nix on Arch hosts
+    ];
 
     # Seed the wal color cache from the template so Hyprland's
     # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
     # (init_colors runs exec-once which is too late — source= is parsed at startup).
     home.activation.seedWalColors = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      if [ ! -f "$HOME/.cache/wal/colors-hyprland" ]; then
+      if [ ! -f "$HOME/.cache/wal/colors-hyprland" ] || [ ! -w "$HOME/.cache/wal/colors-hyprland" ]; then
         $DRY_RUN_CMD mkdir -p "$HOME/.cache/wal"
-        $DRY_RUN_CMD cp "$HOME/.config/wal/templates/colors-hyprland" "$HOME/.cache/wal/colors-hyprland"
+        $DRY_RUN_CMD cp --remove-destination "$HOME/.config/wal/templates/colors-hyprland" "$HOME/.cache/wal/colors-hyprland"
         $DRY_RUN_CMD chmod 644 "$HOME/.cache/wal/colors-hyprland"
       fi
     '';
