@@ -296,7 +296,7 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   obsidian \
   claude-desktop-bin \
   sublime-text-4 \
-  pear-desktop-bin \
+  pear-desktop \
   jellyfin-desktop \
   discord_arch_electron
 
