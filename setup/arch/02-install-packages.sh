@@ -322,12 +322,12 @@ info "Installing Hyprland plugins via hyprpm..."
 # Use system cmake/pkg-config, not Nix's, which can't find system packages
 _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
 _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
-PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm update
-PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm add https://github.com/hyprwm/hyprland-plugins
-hyprpm enable hyprexpo
-hyprpm enable hyprbars
-hyprpm enable hyprwinwrap
-hyprpm enable hyprtrails
+PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm update || warn "hyprpm update failed, skipping plugins"
+PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm add https://github.com/hyprwm/hyprland-plugins || true
+hyprpm enable hyprexpo || true
+hyprpm enable hyprbars || true
+hyprpm enable hyprwinwrap || true
+hyprpm enable hyprtrails || true
 
 # ---------------------------------------------------------------------------
 # Step 8b — Ambxst shell
