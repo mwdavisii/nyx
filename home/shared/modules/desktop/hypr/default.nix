@@ -40,19 +40,6 @@ let
       kitty --class="kitty-bg" --override background_opacity=0.0 cava_start
     fi
   '';
-  rofiPowerMenu = pkgs.writeShellScriptBin "rofiPowerMenu" ''
-    #!/usr/bin/env bash
-    options="󰌾 Lock\n󰗼 Logout\n󰤄 Suspend\n󰋊 Hibernate\n󰜉 Reboot\n󰐥 Shutdown"
-    chosen=$(echo -e "$options" | rofi -dmenu -i -p "Power" -theme-str 'window {width: 250px;} listview {lines: 6;}')
-    case "$chosen" in
-      "󰌾 Lock")       caelestia shell lock lock ;;
-      "󰗼 Logout")     loginctl terminate-user "$USER" ;;
-      "󰤄 Suspend")    systemctl suspend ;;
-      "󰋊 Hibernate")  systemctl hibernate ;;
-      "󰜉 Reboot")     systemctl reboot ;;
-      "󰐥 Shutdown")   systemctl poweroff ;;
-    esac
-  '';
   bluetooth_toggle = pkgs.writeShellScriptBin "bluetooth_toggle" ''
     #!/usr/bin/env bash
     if bluetoothctl show | grep -q "Powered: yes"; then
@@ -93,28 +80,21 @@ let
   qs_restart = pkgs.writeShellScriptBin "qs_restart" ''
     killall -q quickshell
     sleep 0.2
-    quickshell --path /etc/xdg/quickshell/caelestia >/dev/null 2>&1 &
+    ambxst &
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
-    if command -v swww >/dev/null 2>&1; then
-      if ! swww query >/dev/null 2>&1; then
-        swww-daemon > /dev/null 2>&1 &
-        sleep 1
+    paper=$(find ~/.config/wallpapers/ -name "*" -type f | shuf -n1)
+    if [ -n "$paper" ]; then
+      if command -v swww >/dev/null 2>&1; then
+        if ! swww query >/dev/null 2>&1; then
+          swww-daemon > /dev/null 2>&1 &
+          sleep 1
+        fi
+        swww img "$paper" --transition-type simple
       fi
-      paper=$(find ~/.config/wallpapers/ -name "*" | shuf -n1)
-      swww img "$paper" --transition-type simple
       rm -f ~/active_paper
       cp "$paper" ~/active_paper
-      if command -v wal >/dev/null 2>&1; then
-        wal -i "$paper"
-        mkdir -p ~/.config/btop/themes
-        cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
-        cp ~/.cache/wal/cava ~/.config/cava/config
-        pkill -USR2 cava 2>/dev/null || true
-      fi
-      command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f "$paper" &
-      qs_restart &
     fi
   '';
   wallpaper_default = pkgs.writeShellScriptBin "wallpaper_default" ''
@@ -124,40 +104,9 @@ let
         swww-daemon > /dev/null 2>&1 &
         sleep 1
       fi
-      swww img ~/.config/wallpapers/liquid1.jpg  --transition-type simple
+      swww img ~/.config/wallpapers/liquid1.jpg --transition-type simple
       rm -f ~/active_paper
       cp ~/.config/wallpapers/liquid1.jpg ~/active_paper
-      if command -v wal >/dev/null 2>&1; then
-        wal -i ~/.config/wallpapers/liquid1.jpg
-        mkdir -p ~/.config/btop/themes
-        cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
-        cp ~/.cache/wal/cava ~/.config/cava/config
-        pkill -USR2 cava 2>/dev/null || true
-      fi
-      command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f ~/.config/wallpapers/liquid1.jpg &
-      qs_restart &
-    fi
-  '';
-
-  init_colors = pkgs.writeShellScriptBin "init_colors" ''
-    #!/usr/bin/env bash
-    if command -v wal >/dev/null 2>&1; then
-      if ! test -f ~/.cache/wal/colors-hyprland; then
-        if command -v swww >/dev/null 2>&1; then
-          if ! swww query >/dev/null 2>&1; then
-            swww-daemon > /dev/null 2>&1 &
-            sleep 1
-          fi
-          swww img ~/.config/wallpapers/wall0.png  --transition-type simple
-        fi
-        wal -i ~/.config/wallpapers/wall0.png
-        mkdir -p ~/.config/btop/themes
-        cp ~/.cache/wal/btop ~/.config/btop/themes/btop.theme
-        cp ~/.cache/wal/cava ~/.config/cava/config
-        pkill -USR2 cava 2>/dev/null || true
-        command -v caelestia >/dev/null 2>&1 && caelestia wallpaper -f ~/.config/wallpapers/wall0.png &
-        qs_restart &
-      fi
     fi
   '';
 in
@@ -206,8 +155,6 @@ in
       km_ka_restart
       wallpaper_random
       wallpaper_default
-      init_colors
-      rofiPowerMenu
       cava_start
       cava_toggle
       show_desktop
@@ -238,10 +185,10 @@ in
     xdg.configFile = lib.mkMerge [
       {
         "wallpapers".source = ../../../../config/.config/wallpapers;
+        "ambxst/config".source = ../../../../config/.config/ambxst/config;
         # Symlink individual hypr files rather than the whole directory so that
-        # ~/.config/hypr/ is a real writable directory (caelestia writes scheme there)
+        # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
         "hypr/hyprland.conf".source = ../../../../config/.config/hypr/hyprland.conf;
-        "hypr/hypridle.conf".source = ../../../../config/.config/hypr/hypridle.conf;
         "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
         "hypr/monitors.conf".source = ../../../../config/.config/hypr/monitors.conf;
         "hypr/startup.conf".source = ../../../../config/.config/hypr/startup.conf;
@@ -249,8 +196,7 @@ in
       (lib.mkIf cfg.gpuPackages {
         "waybar".source = ../../../../config/.config/waybar;
       })
-      # caelestia-shell installs its own config to ~/.config/quickshell/caelestia/
-      # via the AUR package — do not manage this path with Nix on Arch hosts
+      # Ambxst shell config is deployed via the "ambxst/config" entry above
     ];
 
     # Seed the wal color cache from the template so Hyprland's
