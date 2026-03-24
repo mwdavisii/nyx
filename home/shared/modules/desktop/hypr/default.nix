@@ -64,7 +64,7 @@ let
   qs_restart = pkgs.writeShellScriptBin "qs_restart" ''
     killall -q quickshell
     sleep 0.2
-    quickshell &
+    quickshell --path /etc/xdg/quickshell/caelestia &
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
