@@ -1,3 +1,0 @@
-module Shell.Shared
-singleton PaletteBridge 1.0 PaletteBridge.qml
-StatusWidgets 1.0 StatusWidgets.qml
