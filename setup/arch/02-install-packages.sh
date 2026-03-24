@@ -158,6 +158,8 @@ sudo pacman -S --needed --noconfirm \
   gvfs \
   tumbler \
   gnome-calculator \
+  gtksourceview4 \
+  pychess \
   \
   libinput \
   \
@@ -309,7 +311,10 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   claude-code \
   sublime-text-4 \
   jellyfin-desktop \
-  discord_arch_electron
+  discord_arch_electron \
+  stockfish \
+  lc0 \
+
 
 info "Installing bun (JavaScript runtime)..."
 if ! command -v bun &>/dev/null; then
