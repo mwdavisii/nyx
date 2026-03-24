@@ -48,7 +48,7 @@
     ai = {
       chatgpt.enable = false;
       gemini.enable = true;
-      claude.enable = true;
+      claude = { enable = true; package = null; };
       ollama.enable = true;
     };
     app = {

@@ -38,12 +38,12 @@ fi
 # Interactive prompts (collected upfront, skipped in --sync mode)
 # ---------------------------------------------------------------------------
 INSTALL_AMD_GAMING="n"
+INSTALL_GAMES="n"
 INSTALL_OLLAMA="n"
 INSTALL_NORDVPN="n"
 INSTALL_PROTONVPN="n"
 INSTALL_TAILSCALE="n"
-INSTALL_SECURITY="n"
-INSTALL_WARP="n"
+INSTALL_WORK_AGENTS="n"
 
 if [[ "$SYNC_MODE" == false ]]; then
   echo ""
@@ -52,7 +52,10 @@ if [[ "$SYNC_MODE" == false ]]; then
   echo "============================================================"
   echo ""
 
-  read -rp "Install AMD graphics drivers and gaming packages (Steam, Vulkan, etc.)? [y/N] " amd_input
+  read -rp "Install gaming packages (Steam, Lutris, etc.)? [y/N] " games_input
+  INSTALL_GAMES="${games_input,,}"
+
+  read -rp "Install AMD graphics driverspackages (Vulkan, etc.)? [y/N] " amd_input
   INSTALL_AMD_GAMING="${amd_input,,}"
 
   read -rp "Install Ollama with ROCm (local LLM inference on AMD GPU)? [y/N] " ollama_input
@@ -67,11 +70,8 @@ if [[ "$SYNC_MODE" == false ]]; then
   read -rp "Install Tailscale? [y/N] " tailscale_input
   INSTALL_TAILSCALE="${tailscale_input,,}"
 
-  read -rp "Install work security tools (CrowdStrike, Cisco VPN)? [y/N] " sec_input
-  INSTALL_SECURITY="${sec_input,,}"
-
-  read -rp "Install Cloudflare WARP? [y/N] " warp_input
-  INSTALL_WARP="${warp_input,,}"
+  read -rp "Install work security tools (CrowdStrike, Cisco VPN)? [y/N] " work_input
+  INSTALL_WORK_AGENTS="${work_input,,}"
 
   echo ""
 fi
@@ -205,16 +205,25 @@ if [[ "$INSTALL_AMD_GAMING" == "y" ]]; then
     libva-mesa-driver \
     xf86-video-amdgpu \
     vulkan-tools \
-    steam \
-    lutris \
     lib32-mesa \
     lib32-vulkan-radeon
+fi
+
+if [[ "$INSTALL_GAMES" == "y" ]]; then
+  info "Enabling multilib repository..."
+  # Uncomment [multilib] and its Include line
+  sudo sed -i '/^#\[multilib\]/{s/^#//;n;s/^#//}' /etc/pacman.conf
+  sudo pacman -Sy --noconfirm
+
+  info "Installing gaming packages..."
+  sudo pacman -S --needed --noconfirm \
+    steam \
+    lutris
 
   info "Installing AUR gaming packages..."
   yay -S --needed --noconfirm \
     xpadneo-dkms \
-    heroic-games-launcher-bin \
-    openai-codex-bin
+    heroic-games-launcher-bin
 fi
 
 # ---------------------------------------------------------------------------
@@ -297,7 +306,7 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   swww \
   nwg-displays \
   obsidian \
-  claude-desktop-bin \
+  claude-code \
   sublime-text-4 \
   jellyfin-desktop \
   discord_arch_electron
@@ -326,7 +335,7 @@ hyprpm enable hyprtrails
 # Step 9 — Work security tools (interactive only)
 # ---------------------------------------------------------------------------
 
-if [[ "$INSTALL_SECURITY" == "y" ]]; then
+if [[ "$INSTALL_WORK_AGENTS" == "y" ]]; then
   info "Installing work security tools..."
 
   # CrowdStrike Falcon (EDR agent)
@@ -345,13 +354,8 @@ if [[ "$INSTALL_SECURITY" == "y" ]]; then
   else
     info "Cisco Secure Client already installed."
   fi
-fi
 
-# ---------------------------------------------------------------------------
-# Step 10 — Cloudflare WARP (interactive only)
-# ---------------------------------------------------------------------------
-
-if [[ "$INSTALL_WARP" == "y" ]]; then
+  #CLoudflare Warp
   if ! command -v warp-cli &>/dev/null; then
     info "Installing Cloudflare WARP..."
     yay -S --noconfirm cloudflare-warp-bin
