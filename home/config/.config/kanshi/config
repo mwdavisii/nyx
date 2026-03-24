@@ -31,6 +31,7 @@ profile home-tv {
 
 profile home {
   output "Dell Inc. Dell AW3821DW*" enable
+  output "VIZIO*" disable
   exec hyprctl dispatch moveworkspacetomonitor 1 DP-1
   exec hyprctl dispatch moveworkspacetomonitor 2 DP-1
   exec hyprctl dispatch moveworkspacetomonitor 3 DP-1
