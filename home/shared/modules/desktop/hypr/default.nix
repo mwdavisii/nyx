@@ -64,7 +64,7 @@ let
   qs_restart = pkgs.writeShellScriptBin "qs_restart" ''
     killall -q quickshell
     sleep 0.2
-    quickshell --path /etc/xdg/quickshell/caelestia &
+    quickshell --path /etc/xdg/quickshell/caelestia >/dev/null 2>&1 &
   '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
@@ -208,7 +208,13 @@ in
     xdg.configFile = lib.mkMerge [
       {
         "wallpapers".source = ../../../../config/.config/wallpapers;
-        "hypr".source = ../../../../config/.config/hypr;
+        # Symlink individual hypr files rather than the whole directory so that
+        # ~/.config/hypr/ is a real writable directory (caelestia writes scheme there)
+        "hypr/hyprland.conf".source = ../../../../config/.config/hypr/hyprland.conf;
+        "hypr/hypridle.conf".source = ../../../../config/.config/hypr/hypridle.conf;
+        "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
+        "hypr/monitors.conf".source = ../../../../config/.config/hypr/monitors.conf;
+        "hypr/startup.conf".source = ../../../../config/.config/hypr/startup.conf;
       }
       (lib.mkIf cfg.gpuPackages {
         "waybar".source = ../../../../config/.config/waybar;
