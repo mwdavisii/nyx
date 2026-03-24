@@ -61,6 +61,35 @@ let
       bluetoothctl power on
     fi
   '';
+  gamepad_idle_inhibit = pkgs.writeShellScriptBin "gamepad_idle_inhibit" ''
+    # Holds a systemd idle inhibitor while any gamepad/controller is connected.
+    # hypridle respects systemd --what=idle inhibitors, preventing lock + sleep.
+    INHIBIT_PID=""
+
+    acquire() {
+      [ -n "$INHIBIT_PID" ] && return
+      systemd-inhibit --what=idle --who="gamepad-idle-inhibit" \
+        --why="Controller connected" --mode=block sleep infinity &
+      INHIBIT_PID=$!
+    }
+
+    release() {
+      [ -z "$INHIBIT_PID" ] && return
+      kill "$INHIBIT_PID" 2>/dev/null
+      INHIBIT_PID=""
+    }
+
+    trap release EXIT INT TERM
+
+    while true; do
+      if compgen -G "/dev/input/js*" > /dev/null 2>&1; then
+        acquire
+      else
+        release
+      fi
+      sleep 5
+    done
+  '';
   qs_restart = pkgs.writeShellScriptBin "qs_restart" ''
     killall -q quickshell
     sleep 0.2
@@ -172,6 +201,7 @@ in
 
       # --- Custom Scripts ---
       qs_restart
+      gamepad_idle_inhibit
       bluetooth_toggle
       km_ka_restart
       wallpaper_random
