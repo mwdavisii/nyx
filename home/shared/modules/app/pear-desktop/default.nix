@@ -7,6 +7,6 @@ in
   options.nyx.modules.app.pearDesktop = { enable = mkEnableOption "Pear Desktop (YouTube Music) app"; };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs."pear-desktop" ];
+    home.packages = [ pkgs.youtube-music ];
   };
 }

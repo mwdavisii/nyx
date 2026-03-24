@@ -181,7 +181,10 @@ sudo pacman -S --needed --noconfirm \
   noto-fonts \
   noto-fonts-cjk \
   noto-fonts-emoji \
-  ttf-firacode-nerd
+  ttf-firacode-nerd \
+  \
+  zip \
+  unzip
 
 # ---------------------------------------------------------------------------
 # Step 3 — AMD gaming (interactive only)
