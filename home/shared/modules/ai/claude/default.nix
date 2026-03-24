@@ -7,12 +7,15 @@ in
 {
   options.nyx.modules.ai.claude = {
     enable = mkEnableOption "Claude Code";
+    package = mkOption {
+      type = types.nullOr types.package;
+      default = pkgs.claude-code;
+      description = "The claude-code package to install. Set to null to manage via AUR or system package manager.";
+    };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-        claude-code
-    ];
+    home.packages = mkIf (cfg.package != null) [ cfg.package ];
   };
 }
 
