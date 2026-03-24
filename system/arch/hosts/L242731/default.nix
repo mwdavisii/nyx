@@ -78,7 +78,7 @@
         package = null;
       };
       vscode.enable = true;
-      pearDesktop.enable = false; # installed via AUR (OpenGL incompatibility with NixGL)
+      pearDesktop.enable = true;
     };
     dev = {
       androidSDK.enable = true;

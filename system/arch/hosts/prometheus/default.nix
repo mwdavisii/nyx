@@ -87,6 +87,7 @@
         package = null;
       };
       vscode.enable = true;
+      pearDesktop.enable = true;
     };
     dev = {
       androidSDK.enable = true;
