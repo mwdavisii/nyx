@@ -182,22 +182,16 @@ in
     home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
     home.file.".config/wal/templates/dunstrc".source = ../../../../config/.config/wal/templates/dunstrc;
     #wallpapers directory
-    xdg.configFile = lib.mkMerge [
-      {
-        "wallpapers".source = ../../../../config/.config/wallpapers;
-        "ambxst/config".source = ../../../../config/.config/ambxst/config;
-        # Symlink individual hypr files rather than the whole directory so that
-        # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
-        "hypr/hyprland.conf".source = ../../../../config/.config/hypr/hyprland.conf;
-        "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
-        "hypr/monitors.conf".source = ../../../../config/.config/hypr/monitors.conf;
-        "hypr/startup.conf".source = ../../../../config/.config/hypr/startup.conf;
-      }
-      (lib.mkIf cfg.gpuPackages {
-        "waybar".source = ../../../../config/.config/waybar;
-      })
-      # Ambxst shell config is deployed via the "ambxst/config" entry above
-    ];
+    xdg.configFile = {
+      "wallpapers".source = ../../../../config/.config/wallpapers;
+      "ambxst/config".source = ../../../../config/.config/ambxst/config;
+      # Symlink individual hypr files rather than the whole directory so that
+      # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
+      "hypr/hyprland.conf".source = ../../../../config/.config/hypr/hyprland.conf;
+      "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
+      "hypr/monitors.conf".source = ../../../../config/.config/hypr/monitors.conf;
+      "hypr/startup.conf".source = ../../../../config/.config/hypr/startup.conf;
+    };
 
     # Seed the wal color cache from the template so Hyprland's
     # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
