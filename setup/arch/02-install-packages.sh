@@ -151,20 +151,19 @@ sudo pacman -S --needed --noconfirm \
   wl-clipboard \
   kanshi \
   scrcpy \
-  hypridle \
   hyprpicker \
   \
   thunar \
   gvfs \
   tumbler \
   gnome-calculator \
+  gtksourceview4 \
+  pychess \
   \
   libinput \
   \
   acpi \
   cava \
-  waybar \
-  rofi \
   kmonad \
   \
   fish \
@@ -176,6 +175,8 @@ sudo pacman -S --needed --noconfirm \
   swappy \
   libqalculate \
   power-profiles-daemon \
+  mpdecimal \
+  glib2 \
   ttf-cascadia-code-nerd \
   \
   noto-fonts \
@@ -298,8 +299,6 @@ _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
 _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   quickshell-git \
-  caelestia-shell \
-  caelestia-cli \
   app2unit \
   ttf-material-symbols-variable \
   ttf-rubik-vf \
@@ -309,7 +308,10 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   claude-code \
   sublime-text-4 \
   jellyfin-desktop \
-  discord_arch_electron
+  discord_arch_electron \
+  stockfish \
+  lc0 \
+
 
 info "Installing bun (JavaScript runtime)..."
 if ! command -v bun &>/dev/null; then
@@ -322,12 +324,28 @@ info "Installing Hyprland plugins via hyprpm..."
 # Use system cmake/pkg-config, not Nix's, which can't find system packages
 _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
 _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
-PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm update
-PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm add https://github.com/hyprwm/hyprland-plugins
-hyprpm enable hyprexpo
-hyprpm enable hyprbars
-hyprpm enable hyprwinwrap
-hyprpm enable hyprtrails
+PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm update || warn "hyprpm update failed, skipping plugins"
+PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm add https://github.com/hyprwm/hyprland-plugins || true
+hyprpm enable hyprexpo || true
+hyprpm enable hyprbars || true
+hyprpm enable hyprwinwrap || true
+hyprpm enable hyprtrails || true
+
+# ---------------------------------------------------------------------------
+# Step 8b — Ambxst shell
+# ---------------------------------------------------------------------------
+
+info "Installing Ambxst shell..."
+# Use system PATH so Ambxst's internal yay/makepkg builds don't pick up
+# Nix's pkg-config/cmake (which can't find system libs like glib-2.0, mpdecimal)
+_SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+_PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
+if [ ! -d "$HOME/.local/src/ambxst" ]; then
+  PATH="$_SYSPATH" PKG_CONFIG_PATH="$_PKGCFG" bash <(curl -sL get.axeni.de/ambxst)
+else
+  info "Ambxst already installed. Updating..."
+  git -C "$HOME/.local/src/ambxst" pull
+fi
 
 
 
