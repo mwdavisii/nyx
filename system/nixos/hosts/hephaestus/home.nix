@@ -106,8 +106,7 @@
         navi.enable = true;
         ncdu.enable = true;
         nvtop.enable = true;
-        ytermusic.enable = true;
-        nixvim.enable = true;
+          nixvim.enable = true;
         networking.enable = true;
         openssl.enable = true;
         ranger.enable = false;
