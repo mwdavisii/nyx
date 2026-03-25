@@ -27,6 +27,17 @@ die()   { echo "FATAL: $*" >&2; exit 1; }
 ping -c 1 -W 3 archlinux.org &>/dev/null || die "No network connectivity. Connect first (nmtui)."
 
 # ---------------------------------------------------------------------------
+# Sudo — prompt once, grant NOPASSWD for the duration of the script
+# ---------------------------------------------------------------------------
+# sudo's credential cache doesn't survive long AUR builds or polkit calls,
+# so we create a temporary NOPASSWD sudoers rule immediately after the single
+# password prompt and remove it on exit.
+_NYX_SUDOERS="/etc/sudoers.d/nyx-install-tmp"
+sudo -v
+sudo sh -c "echo '${USER} ALL=(ALL) NOPASSWD: ALL' > '${_NYX_SUDOERS}' && chmod 440 '${_NYX_SUDOERS}'"
+trap 'sudo rm -f "${_NYX_SUDOERS}"' EXIT
+
+# ---------------------------------------------------------------------------
 # Parse arguments
 # ---------------------------------------------------------------------------
 SYNC_MODE=false
@@ -411,6 +422,9 @@ sudo systemctl enable --now bluetooth 2>/dev/null || true
 # ---------------------------------------------------------------------------
 # Done
 # ---------------------------------------------------------------------------
+
+sudo rm -f "${_NYX_SUDOERS}"
+trap - EXIT
 
 if [[ "$SYNC_MODE" == false ]]; then
   echo ""
