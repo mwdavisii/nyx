@@ -8,6 +8,6 @@ function cleanup {
 
 mkfifo "$FIFO_UEBERZUG"
 trap cleanup EXIT
-tail --follow "$FIFO_UEBERZUG" | ueberzug layer --silent --parser bash &
+ueberzugpp layer --silent --parser json < "$FIFO_UEBERZUG" &
 
 lf $@
