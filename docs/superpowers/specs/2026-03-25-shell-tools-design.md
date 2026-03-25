@@ -113,9 +113,38 @@ Extend module to write two managed files:
     "skill-creator@claude-plugins-official": true,
     "discord@claude-plugins-official": true
   },
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/protect-settings.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
+
+**`home.file.".claude/hooks/protect-settings.sh"`** — stored at `home/config/.claude/hooks/protect-settings.sh`, symlinked with `executable = true`:
+
+```bash
+#!/bin/bash
+# Block writes to Nix-managed settings.json
+input=$(cat)
+file=$(echo "$input" | jq -r '.file_path // .old_file_path // ""' 2>/dev/null)
+if [[ "$file" == *"/.claude/settings.json" ]]; then
+  echo "settings.json is managed by Nix." >&2
+  echo "Propose a change to home/shared/modules/ai/claude/default.nix instead." >&2
+  exit 2
+fi
+```
+
+Exit code 2 blocks the tool call and shows the message. Requires `jq` (already in your git module's packages).
 
 **`home.file.".claude/statusline.sh"`** — the full cc-statusline v1.4.0 script stored at `home/config/.claude/statusline.sh`, symlinked with `executable = true`. Shows: directory, git branch, model, context remaining %, cost, tokens.
 
@@ -123,8 +152,9 @@ Module options exposed for per-machine overrides:
 - `enabledPlugins` — attrset, baseline above, override per host to add/remove
 - `skipDangerousModePermissionPrompt` — bool, default `true`
 - `statusLine` — attrset, override if a host needs a different script
+- `hooks` — the protect-settings hook is included by default; extend per host if needed
 
-**Caveat:** `home.file` creates a read-only Nix store symlink. In-app changes to settings (e.g. toggling theme in UI) won't persist across `home-manager switch`. Nix config is source of truth.
+**Caveat:** `home.file` creates a read-only Nix store symlink. In-app changes to settings (e.g. toggling theme in UI) won't persist across `home-manager switch`. Nix config is the source of truth. The `protect-settings.sh` hook enforces this by blocking any Claude tool call that tries to write to `settings.json` and redirecting to the Nix module instead.
 
 ---
 
