@@ -8,8 +8,8 @@ in
     enable = mkEnableOption "ytm-player YouTube Music TUI (OAuth, playlist support)";
     package = mkOption {
       type = types.nullOr types.package;
-      default = null;
-      description = "ytm-player package. Defaults to null — install via AUR (Arch) or pip.";
+      default = pkgs.ytm-player-full;
+      description = "ytm-player package. Defaults to ytm-player-full (includes mpris, discord, lastfm, spotify). Set null to manage externally.";
     };
   };
 

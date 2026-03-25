@@ -322,7 +322,6 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   discord_arch_electron \
   stockfish \
   lc0 \
-  ytm-player \
 
 
 info "Installing bun (JavaScript runtime)..."
