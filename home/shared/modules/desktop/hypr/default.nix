@@ -182,17 +182,23 @@ in
     home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
     home.file.".config/wal/templates/dunstrc".source = ../../../../config/.config/wal/templates/dunstrc;
     #wallpapers directory
-    xdg.configFile = {
-      "wallpapers".source = ../../../../config/.config/wallpapers;
-      # ambxst/config is NOT symlinked here — it must be writable so ambxst
-      # can persist preset selections. Seeded via home.activation.seedAmbxstConfig below.
-      # Symlink individual hypr files rather than the whole directory so that
-      # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
-      "hypr/hyprland.conf".source = ../../../../config/.config/hypr/hyprland.conf;
-      "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
-      "hypr/monitors.conf".source = ../../../../config/.config/hypr/monitors.conf;
-      "hypr/startup.conf".source = ../../../../config/.config/hypr/startup.conf;
-    };
+    xdg.configFile = lib.mkMerge [
+      {
+        "wallpapers".source = ../../../../config/.config/wallpapers;
+        # ambxst/config is NOT symlinked here — it must be writable so ambxst
+        # can persist preset selections. Seeded via home.activation.seedAmbxstConfig below.
+        # Symlink individual hypr files rather than the whole directory so that
+        # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
+        "hypr/hyprland.conf".source = ../../../../config/.config/hypr/hyprland.conf;
+        "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
+        "hypr/monitors.conf".source = ../../../../config/.config/hypr/monitors.conf;
+        "hypr/startup.conf".source = ../../../../config/.config/hypr/startup.conf;
+      }
+      (lib.mkIf cfg.gpuPackages {
+        "waybar".source = ../../../../config/.config/waybar;
+      })
+      # Ambxst shell config is seeded via home.activation.seedAmbxstConfig (writable copy, not symlink)
+    ];
 
     # Seed wallpapers into ~/Pictures/wallpapers/ as real files so ambxst's
     # `find` scan works (it doesn't follow Nix store directory symlinks).
