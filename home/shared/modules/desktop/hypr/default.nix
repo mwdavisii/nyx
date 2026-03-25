@@ -184,7 +184,8 @@ in
     #wallpapers directory
     xdg.configFile = {
       "wallpapers".source = ../../../../config/.config/wallpapers;
-      "ambxst/config".source = ../../../../config/.config/ambxst/config;
+      # ambxst/config is NOT symlinked here — it must be writable so ambxst
+      # can persist preset selections. Seeded via home.activation.seedAmbxstConfig below.
       # Symlink individual hypr files rather than the whole directory so that
       # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
       "hypr/hyprland.conf".source = ../../../../config/.config/hypr/hyprland.conf;
@@ -192,6 +193,21 @@ in
       "hypr/monitors.conf".source = ../../../../config/.config/hypr/monitors.conf;
       "hypr/startup.conf".source = ../../../../config/.config/hypr/startup.conf;
     };
+
+    # Seed ambxst config files as real writable copies (not symlinks) so ambxst
+    # can write preset changes. Uses --no-clobber so rebuilds don't overwrite
+    # whatever the user last selected.
+    home.activation.seedAmbxstConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      $DRY_RUN_CMD mkdir -p "$HOME/.config/ambxst/config"
+      for f in ai.json bar.json compositor.json dock.json system.json theme.json workspaces.json; do
+        src="${../../../../config/.config/ambxst/config}/$f"
+        dst="$HOME/.config/ambxst/config/$f"
+        if [ ! -f "$dst" ] || [ ! -w "$dst" ]; then
+          $DRY_RUN_CMD cp --remove-destination "$src" "$dst"
+          $DRY_RUN_CMD chmod 644 "$dst"
+        fi
+      done
+    '';
 
     # Seed the wal color cache from the template so Hyprland's
     # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
