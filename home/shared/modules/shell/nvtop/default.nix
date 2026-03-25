@@ -9,6 +9,6 @@ in
   };
 
   config = mkIf (cfg.enable && pkgs.stdenv.isLinux) {
-    home.packages = [ pkgs.nvtop ];
+    home.packages = [ pkgs.nvtopPackages.full ];
   };
 }
