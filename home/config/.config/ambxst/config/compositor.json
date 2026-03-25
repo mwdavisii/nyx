@@ -1,0 +1,8 @@
+{
+  "syncRoundness": true,
+  "syncBorderColor": true,
+  "gapsIn": 5,
+  "gapsOut": 20,
+  "rounding": 10,
+  "borderSize": 1
+}

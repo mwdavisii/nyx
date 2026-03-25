@@ -1,0 +1,6 @@
+{
+  "tool": "none",
+  "defaultModel": "gemini-2.0-flash",
+  "sidebarPosition": "right",
+  "sidebarPinnedOnStartup": false
+}

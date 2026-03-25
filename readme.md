@@ -6,7 +6,7 @@ This is my personal configuration that I use for Nixos, Arch Linux, WSL on Windo
 
 ![Screen Shots](assets/hyprland.png)
 
-The desktop stack is **Hyprland** (compositor) with **Quickshell** (caelestia theme) as the bar, replacing the previous Waybar setup. Colors are dynamically generated from wallpapers via **pywal**, which feeds into the quickshell bar and cava visualizer.
+The desktop stack is **Hyprland** (compositor) with **Ambxst** (Quickshell-based desktop environment) providing bar, dock, launcher, notifications, lockscreen, AI assistant, and more. Colors are dynamically generated from wallpapers via **matugen** (Material Design extraction) and exported to pywal format for downstream tools (cava, btop, kitty).
 
 ## Multi-platform Shells
 
