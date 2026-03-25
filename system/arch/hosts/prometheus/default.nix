@@ -129,7 +129,7 @@
         ueberzugppPackage = null;
       };
       lorri.enable = false;
-      mcfly.enable = false;
+      mcfly.enable = false;        # replaced by atuin
       fastfetch.enable = true;
       # New shell tools
       astroterm.enable = true;
