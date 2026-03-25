@@ -8,8 +8,8 @@ in
     enable = mkEnableOption "ytm-player YouTube Music TUI (OAuth, playlist support)";
     package = mkOption {
       type = types.nullOr types.package;
-      default = pkgs.ytm-player-full;
-      description = "ytm-player package. Defaults to ytm-player-full (includes mpris, discord, lastfm, spotify). Set null to manage externally.";
+      default = pkgs.ytm-player;
+      description = "ytm-player package. Defaults to ytm-player (base). Use pkgs.ytm-player-full for mpris/discord/lastfm/spotify extras once upstream fixes spotifyscraper build.";
     };
   };
 
