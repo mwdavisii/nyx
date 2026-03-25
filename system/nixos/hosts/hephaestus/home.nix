@@ -93,8 +93,19 @@
         k8sTooling.enable = true;
         lf.enable = true;
         lorri.enable = false;
-        mcfly.enable = true;
+        mcfly.enable = false;
         fastfetch.enable = true;
+        # New shell tools
+        astroterm.enable = true;
+        atuin.enable = true;
+        bandwhich.enable = true;
+        bottom.enable = true;
+        dysk.enable = true;
+        lazygit.enable = true;
+        lmSensors.enable = true;
+        navi.enable = true;
+        ncdu.enable = true;
+        nvtop.enable = true;
         nixvim.enable = true;
         networking.enable = true;
         openssl.enable = true;

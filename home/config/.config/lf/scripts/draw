@@ -1,4 +1,3 @@
 #!/bin/sh
-declare -p -A cmd=([action]=add [identifier]="preview" \
-    [x]="$2" [y]="$3" [max_width]="$4" [max_height]="$5" \
-    [path]="$1") > "$FIFO_UEBERZUG"
+printf '{"action":"add","identifier":"preview","path":"%s","x":%s,"y":%s,"max_width":%s,"max_height":%s}\n' \
+    "$1" "$2" "$3" "$4" "$5" > "$FIFO_UEBERZUG"

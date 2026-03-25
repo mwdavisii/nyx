@@ -200,6 +200,18 @@ in
       # Ambxst shell config is seeded via home.activation.seedAmbxstConfig (writable copy, not symlink)
     ];
 
+    # Seed wallpapers into ~/Pictures/wallpapers/ as real files so ambxst's
+    # `find` scan works (it doesn't follow Nix store directory symlinks).
+    # Uses -n so user-added wallpapers are preserved and existing files aren't overwritten.
+    home.activation.seedWallpapers = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      $DRY_RUN_CMD mkdir -p "$HOME/Pictures/wallpapers"
+      for f in "${../../../../config/.config/wallpapers}"/*; do
+        [ -f "$f" ] || continue
+        dst="$HOME/Pictures/wallpapers/$(basename "$f")"
+        [ -e "$dst" ] || $DRY_RUN_CMD cp "$f" "$dst"
+      done
+    '';
+
     # Seed ambxst config files as real writable copies (not symlinks) so ambxst
     # can write preset changes. Uses --no-clobber so rebuilds don't overwrite
     # whatever the user last selected.
