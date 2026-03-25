@@ -66,6 +66,7 @@
       inputs.home-manager.follows = "home-manager";
     };
     # Other
+    ytm-player.url = "github:peternaame-boop/ytm-player";
   };
 
   outputs = { self, ... }@inputs:

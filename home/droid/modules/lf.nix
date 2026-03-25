@@ -5,7 +5,6 @@ let
   additionalPkgs = with pkgs;
     [
       vimv # Batch rename files with vim
-      ueberzug
     ];
 in
 {
