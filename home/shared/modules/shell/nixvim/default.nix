@@ -106,6 +106,7 @@ in
         plenary-nvim
         nvim-web-devicons
         telescope-fzf-native-nvim
+        image-nvim
       ];
 
       # ===== Tools Telescope uses under the hood (+ TS toolchain/parsers)
@@ -114,6 +115,7 @@ in
         fd           # file finder
         tree-sitter
         wl-clipboard # system clipboard on Wayland
+        imagemagick
       ] ++ treeSitterGrammars;
 
       # ===== Keymaps: tree + telescope
@@ -160,6 +162,23 @@ in
               expander_expanded  = "",
             },
           },
+        })
+      '' + lib.optionalString pkgs.stdenv.isLinux ''
+        -- image.nvim: inline image rendering via ueberzugpp (Linux only)
+        require("image").setup({
+          backend = "ueberzug",
+          integrations = {
+            markdown = {
+              enabled = true,
+              clear_in_insert_mode = false,
+              download_remote_images = true,
+            },
+          },
+          max_width = 100,
+          max_height = 12,
+          max_height_window_percentage = math.huge,
+          max_width_window_percentage = math.huge,
+          window_overlap_clear_enabled = false,
         })
       '';
     };
