@@ -84,6 +84,14 @@ in
         gpgSign = true''}
       [gpg]
         program = ${cfg.signing.gpgPath}
+      [core]
+        pager = delta
+      [interactive]
+        diffFilter = delta --color-only
+      [delta]
+        navigate = true
+        side-by-side = true
+        line-numbers = true
       '';
   };
 }
