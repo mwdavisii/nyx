@@ -595,35 +595,28 @@ git commit -m "feat: wire delta as git pager with side-by-side diffs"
 
 ## Task 8: Update claude module — centralize settings
 
-Extend `home/shared/modules/ai/claude/default.nix` to write three managed files. First, store two scripts that will be referenced.
+Extend `home/shared/modules/ai/claude/default.nix` to manage `~/.claude/settings.json` and the protect-settings hook. The statusline now runs via `bunx -y ccstatusline@latest` (no script to copy — bun fetches it on demand). The module also adds `pkgs.bun` so `bunx` is available on all machines.
+
+**Baseline captured from prometheus on 2026-03-25** (current `~/.claude/settings.json`):
+- statusLine command: `bunx -y ccstatusline@latest`
+- ccstatusline-managed hooks on PreToolUse (Skill matcher) and UserPromptSubmit
+- protect-settings hook merged into PreToolUse alongside ccstatusline
 
 **Files to create:**
-- `home/config/.claude/statusline.sh` (copy from `~/.claude/statusline.sh`)
 - `home/config/.claude/hooks/protect-settings.sh` (new)
 
 **Files to modify:**
 - `home/shared/modules/ai/claude/default.nix`
 
-- [ ] **Step 1: Copy current statusline.sh into repo**
-
-First verify the file exists (this plan was written on prometheus — run from prometheus or adjust the source path):
-
-```bash
-ls ~/.claude/statusline.sh && echo "OK"
-```
-
-Expected: `OK`. If missing, find it with `find ~ -maxdepth 3 -name statusline.sh 2>/dev/null`.
+- [ ] **Step 1: Create protect-settings.sh hook**
 
 ```bash
 mkdir -p home/config/.claude/hooks
-cp ~/.claude/statusline.sh home/config/.claude/statusline.sh
-chmod +x home/config/.claude/statusline.sh
 ```
 
-- [ ] **Step 2: Create protect-settings.sh hook**
+Write `home/config/.claude/hooks/protect-settings.sh`:
 
 ```bash
-# home/config/.claude/hooks/protect-settings.sh
 #!/bin/bash
 # Block writes to Nix-managed settings.json and redirect to source of truth
 input=$(cat)
@@ -637,7 +630,7 @@ fi
 
 Make it executable: `chmod +x home/config/.claude/hooks/protect-settings.sh`
 
-- [ ] **Step 3: Update claude module**
+- [ ] **Step 2: Update claude module**
 
 Replace the contents of `home/shared/modules/ai/claude/default.nix`:
 
@@ -651,7 +644,7 @@ let
   defaultSettings = {
     statusLine = {
       type = "command";
-      command = "~/.claude/statusline.sh";
+      command = "bunx -y ccstatusline@latest";
       padding = 0;
     };
     enabledPlugins = {
@@ -670,11 +663,32 @@ let
     hooks = {
       PreToolUse = [
         {
+          "_tag" = "ccstatusline-managed";
+          matcher = "Skill";
+          hooks = [
+            {
+              type = "command";
+              command = "bunx -y ccstatusline@latest --hook";
+            }
+          ];
+        }
+        {
           matcher = "Write|Edit";
           hooks = [
             {
               type = "command";
               command = "~/.claude/hooks/protect-settings.sh";
+            }
+          ];
+        }
+      ];
+      UserPromptSubmit = [
+        {
+          "_tag" = "ccstatusline-managed";
+          hooks = [
+            {
+              type = "command";
+              command = "bunx -y ccstatusline@latest --hook";
             }
           ];
         }
@@ -692,23 +706,26 @@ in
       description = "The claude-code package. Set to null to manage via AUR or system package manager.";
     };
 
+    bunPackage = mkOption {
+      type = types.nullOr types.package;
+      default = pkgs.bun;
+      description = "Bun runtime for ccstatusline. Set to null if managing bun via system package manager.";
+    };
+
     settings = mkOption {
       type = types.attrs;
       default = defaultSettings;
-      description = "Contents of ~/.claude/settings.json. Merged with defaults.";
+      description = "Contents of ~/.claude/settings.json. Shallow-merged with defaults on top-level keys.";
     };
   };
 
   config = mkIf cfg.enable {
-    home.packages = mkIf (cfg.package != null) [ cfg.package ];
+    home.packages =
+      optional (cfg.package != null) cfg.package
+      ++ optional (cfg.bunPackage != null) cfg.bunPackage;
 
     home.file.".claude/settings.json".text =
       builtins.toJSON (defaultSettings // cfg.settings);
-
-    home.file.".claude/statusline.sh" = {
-      source = ../../../../config/.claude/statusline.sh;
-      executable = true;
-    };
 
     home.file.".claude/hooks/protect-settings.sh" = {
       source = ../../../../config/.claude/hooks/protect-settings.sh;
@@ -718,17 +735,17 @@ in
 }
 ```
 
-- [ ] **Step 4: Validate**
+- [ ] **Step 3: Validate**
 
 ```bash
 nix build .#homeConfigurations.prometheus.activationPackage --dry-run 2>&1 | tail -5
 ```
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
 git add home/config/.claude/ home/shared/modules/ai/claude/default.nix
-git commit -m "feat: centralize Claude Code settings and statusline via Nix module"
+git commit -m "feat: centralize Claude Code settings (ccstatusline + protect-settings hook)"
 ```
 
 ---
@@ -885,4 +902,4 @@ security.wrappers.bandwhich = {
 
 **image.nvim:** Verify with `:lua require("image").setup_config()` in neovim after rebuild. Images render in markdown previews and neo-tree.
 
-**Claude settings.json:** After first `home-manager switch`, `~/.claude/settings.json` becomes a read-only symlink. The protect-settings hook activates automatically. To change settings, edit `home/shared/modules/ai/claude/default.nix` and rebuild.
+**Claude settings.json:** After first `home-manager switch`, `~/.claude/settings.json` becomes a read-only Nix store symlink. The protect-settings hook activates automatically. To change settings (plugins, hooks, statusline), edit `home/shared/modules/ai/claude/default.nix` and rebuild. The ccstatusline is fetched on demand by `bunx` — no local script needed. On Arch hosts where bun is already installed via pacman, set `bunPackage = null` in the host config to avoid a duplicate install.
