@@ -14,7 +14,8 @@ in
         # linters and static analysis
         go-tools
         delve
-        ginkgo
+        # ginkgo 2.28.1 has an upstream test failure in testingtproxy — skip checks until fixed
+        (ginkgo.overrideAttrs (_: { doCheck = false; }))
       ];
     
       sessionVariables = {
