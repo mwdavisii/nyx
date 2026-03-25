@@ -9,3 +9,4 @@ result
 !.claude/skills/**
 docs/*
 .worktrees/
+browser.json
