@@ -175,6 +175,8 @@ sudo pacman -S --needed --noconfirm \
   swappy \
   libqalculate \
   power-profiles-daemon \
+  mpdecimal \
+  glib2 \
   ttf-cascadia-code-nerd \
   \
   noto-fonts \
@@ -334,8 +336,12 @@ hyprpm enable hyprtrails || true
 # ---------------------------------------------------------------------------
 
 info "Installing Ambxst shell..."
+# Use system PATH so Ambxst's internal yay/makepkg builds don't pick up
+# Nix's pkg-config/cmake (which can't find system libs like glib-2.0, mpdecimal)
+_SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+_PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 if [ ! -d "$HOME/.local/src/ambxst" ]; then
-  curl -L get.axeni.de/ambxst | sh
+  PATH="$_SYSPATH" PKG_CONFIG_PATH="$_PKGCFG" bash <(curl -sL get.axeni.de/ambxst)
 else
   info "Ambxst already installed. Updating..."
   git -C "$HOME/.local/src/ambxst" pull
