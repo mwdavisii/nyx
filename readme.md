@@ -4,9 +4,21 @@ This is my personal configuration that I use for Nixos, Arch Linux, WSL on Windo
 
 ## Desktop — Hyprland + Quickshell
 
-![Screen Shots](assets/hyprland.png)
+![Blue Theme](assets/hyprland-1.png)
 
-The desktop stack is **Hyprland** (compositor) with **Ambxst** (Quickshell-based desktop environment) providing bar, dock, launcher, notifications, lockscreen, AI assistant, and more. Colors are dynamically generated from wallpapers via **matugen** (Material Design extraction) and exported to pywal format for downstream tools (cava, btop, kitty).
+The desktop stack is **Hyprland** (compositor) with **Ambxst** (Quickshell-based desktop environment) providing bar, dock, launcher, notifications, lockscreen, AI assistant, and more. Colors are dynamically generated from wallpapers via **matugen** (Material Design extraction) and exported to pywal format for downstream tools (cava, btop, kitty, neovim).
+
+### Dynamic Color Scheme
+
+Every UI element — bar, terminals, file manager, system monitor, audio visualizer, and IDE — pulls its palette from the active wallpaper. Switching wallpapers re-themes the entire environment instantly.
+
+| Vibrant | Forest |
+|---|---|
+| ![Vibrant theme](assets/colors.png) | ![Forest theme](assets/forrest.png) |
+
+| Minimal | Warm / IDE |
+|---|---|
+| ![Minimal theme](assets/minimal.png) | ![Warm theme with IntelliJ](assets/idea.png) |
 
 ## Multi-platform Shells
 
