@@ -24,6 +24,7 @@
       vim
       wl-clip-persist
       yubikey-manager
+      yubikey-manager
     ];
   };
 
@@ -150,9 +151,8 @@
       lmSensors.enable = true;
       navi.enable = true;
       ncdu.enable = true;
-      nvtop = { enable = true; package = pkgs.nvtopPackages.amd; };
-      ambxstColorBridge.enable = true;
-      ytmPlayer = { enable = true; package = null; }; # installed via pacman (has python-dbus-next MPRIS support)
+      nvtop.enable = true;
+      ytmPlayer.enable = true;
       nixvim.enable = true;
       networking.enable = true;
       openssl.enable = true;
