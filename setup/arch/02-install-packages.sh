@@ -189,6 +189,7 @@ sudo pacman -S --needed --noconfirm \
   mpdecimal \
   glib2 \
   ttf-cascadia-code-nerd \
+  ttf-jetbrains-mono-nerd \
   \
   noto-fonts \
   noto-fonts-cjk \
@@ -322,6 +323,9 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   discord_arch_electron \
   stockfish \
   lc0 \
+  wezterm \
+  ytm-player \
+  python-dbus-next \
 
 
 info "Installing bun (JavaScript runtime)..."
@@ -354,8 +358,14 @@ _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 if [ ! -d "$HOME/.local/src/ambxst" ]; then
   PATH="$_SYSPATH" PKG_CONFIG_PATH="$_PKGCFG" bash <(curl -sL get.axeni.de/ambxst)
 else
-  info "Ambxst already installed. Updating..."
+  info "Ambxst already installed. Updating source..."
   git -C "$HOME/.local/src/ambxst" pull
+  # axctl is a separate binary that must stay in sync with ambxst.
+  # ambxst >= v1.1.3 requires axctl to support the -c <config> flag (added in
+  # axctl v0.0.9+). Without it the axctl daemon never starts, AxctlService
+  # has no focusedMonitor, and all bar button clicks silently do nothing.
+  info "Updating axctl (required for bar button IPC)..."
+  PATH="$_SYSPATH" bash <(curl -sL get.axeni.de/axctl)
 fi
 
 
