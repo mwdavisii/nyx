@@ -121,21 +121,40 @@ return {
 			key = "Tab",
 			mods = "CTRL|SHIFT",
 			action = wezterm.action({ ActivateTabRelative = -1 }),
-		}, -- standard copy/paste bindings
+		}, -- copy/paste bindings
 		{
 			key = "x",
 			mods = "CTRL",
 			action = "ActivateCopyMode",
+		},
+		-- Ctrl+Shift+C / Ctrl+Shift+V (classic terminal style)
+		{
+			key = "c",
+			mods = "CTRL|SHIFT",
+			action = wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }),
 		},
 		{
 			key = "v",
 			mods = "CTRL|SHIFT",
 			action = wezterm.action({ PasteFrom = "Clipboard" }),
 		},
+		-- Ctrl+C copies only if text is selected, otherwise sends interrupt
 		{
 			key = "c",
-			mods = "CTRL|SHIFT",
-			action = wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }),
+			mods = "CTRL",
+			action = wezterm.action_callback(function(window, pane)
+				if window:get_selection_text_for_pane(pane) ~= "" then
+					window:perform_action(wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }), pane)
+				else
+					window:perform_action(wezterm.action({ SendKey = { key = "c", mods = "CTRL" } }), pane)
+				end
+			end),
+		},
+		-- Ctrl+V paste
+		{
+			key = "v",
+			mods = "CTRL",
+			action = wezterm.action({ PasteFrom = "Clipboard" }),
 		},
 	},
 
