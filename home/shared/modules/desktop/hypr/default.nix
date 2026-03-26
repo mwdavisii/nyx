@@ -95,18 +95,21 @@ let
       fi
       rm -f ~/active_paper
       cp "$paper" ~/active_paper
+      wal -i "$paper" -q -n
     fi
   '';
   wallpaper_default = pkgs.writeShellScriptBin "wallpaper_default" ''
     #!/usr/bin/env bash
+    paper=~/.config/wallpapers/liquid1.jpg
     if command -v swww >/dev/null 2>&1; then
       if ! swww query >/dev/null 2>&1; then
         swww-daemon > /dev/null 2>&1 &
         sleep 1
       fi
-      swww img ~/.config/wallpapers/liquid1.jpg --transition-type simple
+      swww img "$paper" --transition-type simple
       rm -f ~/active_paper
-      cp ~/.config/wallpapers/liquid1.jpg ~/active_paper
+      cp "$paper" ~/active_paper
+      wal -i "$paper" -q -n
     fi
   '';
 in
@@ -180,6 +183,7 @@ in
     home.file.".config/wal/templates/cava".source = ../../../../config/.config/wal/templates/cava;
     home.file.".config/wal/templates/colors-hyprland".source = ../../../../config/.config/wal/templates/colors-hyprland;
     home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
+    home.file.".config/wal/templates/colors-wezterm.lua".source = ../../../../config/.config/wal/templates/colors-wezterm.lua;
     home.file.".config/wal/templates/dunstrc".source = ../../../../config/.config/wal/templates/dunstrc;
     #wallpapers directory
     xdg.configFile = lib.mkMerge [
