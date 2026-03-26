@@ -95,5 +95,10 @@ in
       source = ../../../../config/.claude/hooks/protect-settings.sh;
       executable = true;
     };
+
+    home.file.".config/ccstatusline/settings.json" = {
+      source = ../../../../config/.config/ccstatusline/settings.json;
+      force = true;
+    };
   };
 }

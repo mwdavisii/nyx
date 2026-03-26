@@ -142,7 +142,12 @@ return {
 		{
 			key = "v",
 			mods = "CTRL|SHIFT",
-			action = wezterm.action({ PasteFrom = "Clipboard" }),
+			action = wezterm.action_callback(function(_, pane)
+				local success, stdout = wezterm.run_child_process({ "/usr/bin/wl-paste", "--no-newline" })
+				if success and stdout and #stdout > 0 then
+					pane:paste(stdout)
+				end
+			end),
 		},
 		-- Ctrl+C copies only if text is selected, otherwise sends interrupt
 		{
@@ -156,11 +161,16 @@ return {
 				end
 			end),
 		},
-		-- Ctrl+V paste
+		-- Ctrl+V paste (uses wl-paste for reliable Wayland clipboard reads)
 		{
 			key = "v",
 			mods = "CTRL",
-			action = wezterm.action({ PasteFrom = "Clipboard" }),
+			action = wezterm.action_callback(function(_, pane)
+				local success, stdout = wezterm.run_child_process({ "/usr/bin/wl-paste", "--no-newline" })
+				if success and stdout and #stdout > 0 then
+					pane:paste(stdout)
+				end
+			end),
 		},
 	},
 
