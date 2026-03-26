@@ -389,26 +389,3 @@ Example from `system/$system/hosts/$hostname/default.nix`:
     };
   };
 ```
-
-## Software Stack
-
-| Category | Tool | Purpose |
-|---|---|---|
-| Compositor | [Hyprland](https://hyprland.org) | Wayland dynamic tiling compositor |
-| Desktop Shell | [Ambxst](https://github.com/Axenide/Ambxst) | QuickShell-based bar, dock, launcher, lockscreen, AI widget |
-| Shell Framework | [QuickShell](https://quickshell.outfoxxed.me) | QML-based Wayland shell toolkit (powers Ambxst) |
-| Wallpaper | [swww](https://github.com/LGFae/swww) | Animated Wayland wallpaper daemon |
-| Color Scheme | [matugen](https://github.com/InioX/matugen) | Material You color extraction from wallpapers |
-| Color Scheme | [pywal](https://github.com/dylanaraps/pywal) | Exports palette to terminal/app themes |
-| Audio Viz | [cava](https://github.com/karlstav/cava) | Terminal audio spectrum visualizer |
-| Terminal | [WezTerm](https://wezfurlong.org/wezterm/) | GPU-accelerated terminal with Lua config |
-| Shell | [Zsh](https://zsh.sourceforge.io) + [Starship](https://starship.rs) | Shell and cross-shell prompt |
-| Shell History | [Atuin](https://atuin.sh) | SQLite-backed searchable shell history |
-| Multiplexer | [tmux](https://github.com/tmux/tmux) | Terminal multiplexer |
-| Editor | [Neovim](https://neovim.io) via [nixvim](https://nix-community.github.io/nixvim/) | Editor configured declaratively in Nix |
-| System Monitor | [bottom](https://github.com/ClementTsang/bottom) | Rust-based process/resource monitor |
-| File Manager | [lf](https://github.com/gokcehan/lf) | Terminal file manager |
-| Notifications | [swaync](https://github.com/ErikReider/SwayNotificationCenter) | Wayland notification center |
-| GTK Theme | [Flat-Remix-GTK](https://github.com/daniruiz/flat-remix-gtk) | GTK3/4 dark theme |
-| Cursor | [Bibata](https://github.com/ful1e5/Bibata_Cursor) | Modern cursor theme |
-| Secrets | [agenix](https://github.com/ryantm/agenix) | Age-encrypted secrets for NixOS |
