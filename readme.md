@@ -70,8 +70,9 @@ These public repositories heavily influenced my configuration. The project archi
 - [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
 - [LGUG2Z/nixos-wsl-starter](https://github.com/LGUG2Z/nixos-wsl-starter)
 
-### Hyprland / Waybar / dotFiles
+### Hyprland / Quickshell / dotFiles
 
+- [Axenide/Ambxst](https://github.com/Axenide/Ambxst) — Quickshell-based desktop environment (bar, dock, launcher, notifications, lockscreen, AI assistant)
 - [HeinzDev/Hyperland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles)
 - [linuxmobile/hyperland-dots](https://github.com/linuxmobile/hyprland-dots)
 - [xsghetti/HyprCrux](https://github.com/xsghetti/HyprCrux)
