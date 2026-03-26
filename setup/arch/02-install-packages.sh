@@ -55,6 +55,7 @@ INSTALL_NORDVPN="n"
 INSTALL_PROTONVPN="n"
 INSTALL_TAILSCALE="n"
 INSTALL_WORK_AGENTS="n"
+INSTALL_SDR="n"
 
 if [[ "$SYNC_MODE" == false ]]; then
   echo ""
@@ -83,6 +84,9 @@ if [[ "$SYNC_MODE" == false ]]; then
 
   read -rp "Install work security tools (CrowdStrike, Cisco VPN)? [y/N] " work_input
   INSTALL_WORK_AGENTS="${work_input,,}"
+
+  read -rp "Install SDR packages (SDR++, GQRX, rtl-sdr driver)? [y/N] " sdr_input
+  INSTALL_SDR="${sdr_input,,}"
 
   echo ""
 fi
@@ -428,6 +432,31 @@ fi
 
 info "Enabling services..."
 sudo systemctl enable --now bluetooth 2>/dev/null || true
+
+# ---------------------------------------------------------------------------
+# Step 13 — SDR
+# ---------------------------------------------------------------------------
+
+if [[ "$INSTALL_SDR" == "y" ]]; then
+  info "Installing SDR packages..."
+  sudo pacman -S --needed --noconfirm rtl-sdr gqrx inspectrum
+  info "Installing SDR AUR packages..."
+  _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+  _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
+  PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm sdrpp hamradio-menus
+  # rtl-sdr udev rules grant access via the plugdev group — create and add user if needed
+  if ! getent group plugdev &>/dev/null; then
+    info "Creating plugdev group..."
+    sudo groupadd plugdev
+  fi
+  if groups "$USER" | grep -q plugdev; then
+    info "User '$USER' already in plugdev group."
+  else
+    info "Adding '$USER' to plugdev group for RTL-SDR hardware access..."
+    sudo usermod -aG plugdev "$USER"
+    warn "Group change takes effect after logout/login."
+  fi
+fi
 
 # ---------------------------------------------------------------------------
 # Done
