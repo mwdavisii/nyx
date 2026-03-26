@@ -96,6 +96,7 @@ let
       rm -f ~/active_paper
       cp "$paper" ~/active_paper
       wal -i "$paper" -q -n
+      touch ~/.config/wezterm/wezterm.lua
     fi
   '';
   wallpaper_default = pkgs.writeShellScriptBin "wallpaper_default" ''
@@ -110,6 +111,7 @@ let
       rm -f ~/active_paper
       cp "$paper" ~/active_paper
       wal -i "$paper" -q -n
+      touch ~/.config/wezterm/wezterm.lua
     fi
   '';
 in
