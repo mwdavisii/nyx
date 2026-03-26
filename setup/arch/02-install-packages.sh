@@ -444,6 +444,14 @@ if [[ "$INSTALL_SDR" == "y" ]]; then
   _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
   _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
   PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm hamradio-menus
+  # rtl-sdr udev rules grant access via the plugdev group — add user if needed
+  if groups "$USER" | grep -q plugdev; then
+    info "User '$USER' already in plugdev group."
+  else
+    info "Adding '$USER' to plugdev group for RTL-SDR hardware access..."
+    sudo usermod -aG plugdev "$USER"
+    warn "Group change takes effect after logout/login."
+  fi
 fi
 
 # ---------------------------------------------------------------------------
