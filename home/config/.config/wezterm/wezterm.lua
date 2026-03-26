@@ -7,11 +7,17 @@ end
 
 local font_name = "JetBrainsMonoNL NF"
 
+-- Load pywal colors if available; falls back to WezTerm defaults if not
+local wal_colors = nil
+local wal_path = os.getenv("HOME") .. "/.cache/wal/colors-wezterm.lua"
+local ok, result = pcall(dofile, wal_path)
+if ok then wal_colors = result end
+
 return {
 	-- OpenGL for GPU acceleration, Software for CPU
 	front_end = "OpenGL",
 
-	color_scheme = 'Catppuccin Mocha',
+	colors = wal_colors,
 
 	-- Font config
 	font = font_with_fallback(font_name),
