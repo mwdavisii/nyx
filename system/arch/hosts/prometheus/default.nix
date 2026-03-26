@@ -100,6 +100,13 @@
       node.enable = false;
       python.enable = true;
     };
+    sdr = {
+      sdrpp   = { enable = true; package = null; };
+      gqrx    = { enable = true; package = null; };
+      rtl433.enable  = true;
+      readsb.enable  = true;
+      analysis.enable = true;
+    };
     shell = {
       awscliv2.enable = false;
       azurecli.enable = true;
