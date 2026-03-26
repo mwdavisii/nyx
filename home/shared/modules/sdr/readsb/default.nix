@@ -10,6 +10,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    # CLI-only install — no systemd service wiring. Run manually or add a
+    # system-level service module if continuous ADS-B decoding is needed later.
     home.packages = with pkgs; [ readsb ];
   };
 }
