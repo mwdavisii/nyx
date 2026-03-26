@@ -439,11 +439,11 @@ sudo systemctl enable --now bluetooth 2>/dev/null || true
 
 if [[ "$INSTALL_SDR" == "y" ]]; then
   info "Installing SDR packages..."
-  sudo pacman -S --needed --noconfirm rtl-sdr sdrpp gqrx inspectrum
+  sudo pacman -S --needed --noconfirm rtl-sdr gqrx inspectrum
   info "Installing SDR AUR packages..."
   _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
   _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
-  PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm hamradio-menus
+  PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm sdrpp hamradio-menus
   # rtl-sdr udev rules grant access via the plugdev group — add user if needed
   if groups "$USER" | grep -q plugdev; then
     info "User '$USER' already in plugdev group."
