@@ -90,7 +90,7 @@
       dhall.enable = true;
       lua.enable = true;
       nix.enable = true;
-      node.enable = false;
+      node.enable = true;
       python.enable = true;
     };
     shell = {
@@ -135,6 +135,7 @@
       navi.enable = true;
       ncdu.enable = true;
       nvtop.enable = true;
+      ambxstColorBridge.enable = true;
       ytmPlayer = { enable = true; package = null; }; # installed via pacman (has python-dbus-next MPRIS support)
       nixvim.enable = true;
       networking.enable = true;
