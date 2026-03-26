@@ -22,6 +22,7 @@
       tuxmux
       wget
       vim
+      wl-clip-persist
     ];
   };
 
