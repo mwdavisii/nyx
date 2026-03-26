@@ -45,6 +45,10 @@
         "type": "session-cost"
       },
       {
+        "id": "7722e0ff-7c11-476e-a42c-ca6905cff1d0",
+        "type": "separator"
+      },
+      {
         "id": "f743c020-912f-4e9b-a33a-2cd90220f27a",
         "type": "session-usage"
       },
@@ -55,6 +59,10 @@
       {
         "id": "fab3ada5-3487-41e9-8b15-be158e4642bc",
         "type": "block-timer"
+      },
+      {
+        "id": "7722e0ff-7c11-476e-a42c-ca6905cff1d0",
+        "type": "separator"
       },
       {
         "id": "81720b51-49f0-4de1-8960-6f4a20b7a604",
@@ -69,8 +77,16 @@
         "type": "weekly-usage"
       },
       {
+        "id": "7722e0ff-7c11-476e-a42c-ca6905cff1d0",
+        "type": "separator"
+      },
+      {
         "id": "7ee5f973-dcd6-4147-a33c-a85cdaccb9dd",
         "type": "weekly-reset-timer"
+      },
+      {
+        "id": "7722e0ff-7c11-476e-a42c-ca6905cff1d0",
+        "type": "separator"
       },
       {
         "id": "9409349d-821e-405d-818c-21e178795982",
@@ -91,12 +107,24 @@
         "type": "git-branch"
       },
       {
+        "id": "7722e0ff-7c11-476e-a42c-ca6905cff1d0",
+        "type": "separator"
+      },
+      {
         "id": "4da3e8c6-253a-4a89-816a-b0176f614138",
         "type": "git-changes"
       },
       {
+        "id": "7722e0ff-7c11-476e-a42c-ca6905cff1d0",
+        "type": "separator"
+      },
+      {
         "id": "6eb565b0-a750-4301-b351-9d9132b950a7",
         "type": "git-insertions"
+      },
+      {
+        "id": "7722e0ff-7c11-476e-a42c-ca6905cff1d0",
+        "type": "separator"
       },
       {
         "id": "cc130641-608c-4299-a570-07b643f23548",

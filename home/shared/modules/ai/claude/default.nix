@@ -96,7 +96,9 @@ in
       executable = true;
     };
 
-    home.file.".config/ccstatusline/settings.json".source =
-      ../../../../config/.config/ccstatusline/settings.json;
+    home.file.".config/ccstatusline/settings.json" = {
+      source = ../../../../config/.config/ccstatusline/settings.json;
+      force = true;
+    };
   };
 }
