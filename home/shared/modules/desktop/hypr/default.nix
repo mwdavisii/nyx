@@ -233,6 +233,20 @@ in
       done
     '';
 
+    # Seed ~/.cache/ambxst/wallpapers.json with the correct wallPath on first run.
+    # Only creates the file if it doesn't exist, so user changes are preserved.
+    # The path must be absolute (QML doesn't expand ~ or $HOME when passed to find).
+    home.activation.seedAmbxstWallpapersJson = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      _ambxstCache="$HOME/.cache/ambxst"
+      _wallpapersJson="$_ambxstCache/wallpapers.json"
+      if [ ! -f "$_wallpapersJson" ]; then
+        $DRY_RUN_CMD mkdir -p "$_ambxstCache"
+        if [ -z "$DRY_RUN_CMD" ]; then
+          printf '{\n    "activeColorPreset": "",\n    "currentWall": "",\n    "matugenScheme": "scheme-tonal-spot",\n    "perScreenWallpapers": {},\n    "tintEnabled": false,\n    "wallPath": "%s/Pictures/wallpapers"\n}\n' "$HOME" > "$_wallpapersJson"
+        fi
+      fi
+    '';
+
     # Seed the wal color cache from the template so Hyprland's
     # `source=~/.cache/wal/colors-hyprland` doesn't fail on first boot
     # (init_colors runs exec-once which is too late — source= is parsed at startup).
