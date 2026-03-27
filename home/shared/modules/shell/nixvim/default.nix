@@ -116,6 +116,8 @@ in
         tree-sitter
         wl-clipboard # system clipboard on Wayland
         imagemagick
+      ] ++ lib.optionals pkgs.stdenv.isLinux [
+        ueberzugpp   # image.nvim ueberzug backend
       ] ++ treeSitterGrammars;
 
       # ===== Keymaps: tree + telescope
@@ -136,7 +138,16 @@ in
 
       # ===== Minimal, stable neo-tree setup
       extraConfigLua = ''
+        -- Register missing #is-not? predicate so newer treesitter grammars
+        -- don't error on neovim 0.11.x (which lacks a built-in handler).
+        vim.treesitter.query.add_predicate("is-not?", function() return true end, { force = true })
+
         vim.g.neo_tree_remove_legacy_commands = 1
+
+        -- Transparent background for neo-tree (inherits terminal opacity)
+        vim.api.nvim_set_hl(0, "NeoTreeNormal",     { bg = "NONE" })
+        vim.api.nvim_set_hl(0, "NeoTreeNormalNC",    { bg = "NONE" })
+        vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "NONE" })
 
         require("neo-tree").setup({
           filesystem = {
@@ -165,21 +176,24 @@ in
         })
       '' + lib.optionalString pkgs.stdenv.isLinux ''
         -- image.nvim: inline image rendering via ueberzugpp (Linux only)
-        require("image").setup({
-          backend = "ueberzug",
-          integrations = {
-            markdown = {
-              enabled = true,
-              clear_in_insert_mode = false,
-              download_remote_images = true,
+        local _ok, image = pcall(require, "image")
+        if _ok then
+          image.setup({
+            backend = "kitty",
+            integrations = {
+              markdown = {
+                enabled = true,
+                clear_in_insert_mode = false,
+                download_remote_images = true,
+              },
             },
-          },
-          max_width = 100,
-          max_height = 12,
-          max_height_window_percentage = math.huge,
-          max_width_window_percentage = math.huge,
-          window_overlap_clear_enabled = false,
-        })
+            max_width = 100,
+            max_height = 12,
+            max_height_window_percentage = math.huge,
+            max_width_window_percentage = math.huge,
+            window_overlap_clear_enabled = false,
+          })
+        end
       '';
     };
   };

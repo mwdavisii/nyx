@@ -288,7 +288,6 @@ in
     wayland.windowManager.hyprland = {
       plugins = if cfg.plugins then [
         hyprPlugins.hyprexpo
-        hyprPlugins.hyprbars
         hyprPlugins.hyprwinwrap
       ] else [];
       package = null;

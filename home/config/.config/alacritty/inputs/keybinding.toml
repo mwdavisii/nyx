@@ -5,7 +5,6 @@ bindings = [
   { key = "Paste", action = "Paste" },
   { key = "Copy", action = "Copy" },
   { key = "C", mods = "Control|Shift", action = "Copy" },
-  { key = "V", mods = "Control", action = "Paste" },
   { key = "V", mods = "Control|Shift", action = "Paste" },
   { key = "PageUp", mods = "Shift", mode = "~Alt", action = "ScrollPageUp" },
   { key = "PageDown", mods = "Shift", mode = "~Alt", action = "ScrollPageDown" },
