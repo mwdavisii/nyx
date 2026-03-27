@@ -327,10 +327,21 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   discord_arch_electron \
   stockfish \
   lc0 \
-  wezterm \
+  wezterm-git \
   ytm-player \
   python-dbus-next \
 
+
+# Rebuild quickshell-git if the system Qt was updated since the last build.
+# --needed skips reinstall even when Qt changes, causing ABI crashes at runtime.
+_SYS_QT=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d- -f1)
+_QS_BUILT_QT=$(strings /usr/bin/qs 2>/dev/null | grep -oP 'qt6/\w+/\K\d+\.\d+\.\d+' | sort -u | head -1)
+if [[ -n "$_QS_BUILT_QT" && -n "$_SYS_QT" && "$_QS_BUILT_QT" != "$_SYS_QT" ]]; then
+  warn "quickshell built against Qt $_QS_BUILT_QT but system is Qt $_SYS_QT — rebuilding..."
+  PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --rebuild --noconfirm quickshell-git
+else
+  info "quickshell Qt version OK (${_QS_BUILT_QT:-unknown})"
+fi
 
 info "Installing bun (JavaScript runtime)..."
 if ! command -v bun &>/dev/null; then
@@ -346,7 +357,6 @@ _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm update || warn "hyprpm update failed, skipping plugins"
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm add https://github.com/hyprwm/hyprland-plugins || true
 hyprpm enable hyprexpo || true
-hyprpm enable hyprbars || true
 hyprpm enable hyprwinwrap || true
 hyprpm enable hyprtrails || true
 
