@@ -356,10 +356,7 @@ _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
 _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm update || warn "hyprpm update failed, skipping plugins"
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm add https://github.com/hyprwm/hyprland-plugins || true
-hyprpm enable hyprexpo || true
 hyprpm enable hyprwinwrap || true
-hyprpm enable hyprtrails || true
-
 # ---------------------------------------------------------------------------
 # Step 8b — Ambxst shell
 # ---------------------------------------------------------------------------
