@@ -142,12 +142,29 @@ in
         -- don't error on neovim 0.11.x (which lacks a built-in handler).
         vim.treesitter.query.add_predicate("is-not?", function() return true end, { force = true })
 
-        vim.g.neo_tree_remove_legacy_commands = 1
+        -- Force transparent backgrounds so the terminal opacity shows through.
+        local function make_transparent()
+          local groups = {
+            "Normal", "NormalNC", "NormalFloat",
+            "SignColumn", "EndOfBuffer",
+            "NeoTreeNormal", "NeoTreeNormalNC", "NeoTreeEndOfBuffer",
+            "NeoTreeWinSeparator",
+          }
+          for _, g in ipairs(groups) do
+            local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = g })
+            if ok then
+              hl.bg = nil
+              hl.ctermbg = nil
+              vim.api.nvim_set_hl(0, g, hl)
+            else
+              vim.api.nvim_set_hl(0, g, { bg = "NONE" })
+            end
+          end
+        end
+        make_transparent()
+        vim.api.nvim_create_autocmd("ColorScheme", { callback = make_transparent })
 
-        -- Transparent background for neo-tree (inherits terminal opacity)
-        vim.api.nvim_set_hl(0, "NeoTreeNormal",     { bg = "NONE" })
-        vim.api.nvim_set_hl(0, "NeoTreeNormalNC",    { bg = "NONE" })
-        vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "NONE" })
+        vim.g.neo_tree_remove_legacy_commands = 1
 
         require("neo-tree").setup({
           filesystem = {
@@ -175,7 +192,7 @@ in
           },
         })
       '' + lib.optionalString pkgs.stdenv.isLinux ''
-        -- image.nvim: inline image rendering via ueberzugpp (Linux only)
+        -- image.nvim: inline image rendering via kitty protocol (Linux only)
         local _ok, image = pcall(require, "image")
         if _ok then
           image.setup({
@@ -187,10 +204,10 @@ in
                 download_remote_images = true,
               },
             },
-            max_width = 100,
-            max_height = 12,
-            max_height_window_percentage = math.huge,
-            max_width_window_percentage = math.huge,
+            max_width = nil,
+            max_height = nil,
+            max_height_window_percentage = 80,
+            max_width_window_percentage = 80,
             window_overlap_clear_enabled = false,
           })
         end
