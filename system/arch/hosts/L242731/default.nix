@@ -28,7 +28,10 @@
 
   nyx.modules = {
     desktop = {
-      cava.enable = true;
+      cava = {
+        enable = true;
+        package = null; # installed via pacman
+      };
       gtk.enable = true;
       kanshi.enable = true;
       hypr = {
@@ -43,9 +46,10 @@
       };
     };
     ai = {
-      chatgpt.enable = false;
+      chatgpt.enable = true;
       gemini.enable = true;
       claude = { enable = true; package = null; };
+      ollama.enable = false
     };
     app = {      
       alacritty = {
@@ -61,7 +65,10 @@
         enable = true;
         package = null;
       };
-      discord.enable = false;
+      discord = {
+        enable = true;
+        package = null; # installed via pacman (discord_arch_electron)
+      };
       firefox.enable = true;
       obs = {
         enable = true;
@@ -92,6 +99,13 @@
       nix.enable = true;
       node.enable = true;
       python.enable = true;
+    };
+    sdr = {
+      sdrpp   = { enable = true; package = null; };
+      gqrx    = { enable = true; package = null; };
+      rtl433.enable  = true;
+      readsb.enable  = true;
+      analysis.enable = true;
     };
     shell = {
       awscliv2.enable = false;
@@ -124,6 +138,24 @@
       lorri.enable = false;
       mcfly.enable = false;        # replaced by atuin
       fastfetch.enable = true;
+      nvtop.enable = true;
+      ambxstColorBridge.enable = true;
+      ytmPlayer = { enable = true; package = null; }; # installed via pacman (has python-dbus-next MPRIS support)
+      nixvim.enable = true;
+      networking.enable = true;
+      openssl.enable = true;
+      ranger.enable = true;
+      starship.enable = true;
+      terraform.enable = true;
+      tmux.enable = true;
+      wal.enable = true;
+      usbutils.enable = true;
+      xdg.enable = true;
+      yq.enable = true;
+      zellij.enable = true;
+      zoxide.enable = true;
+      zsh.enable = true;
+
       # New shell tools
       astroterm.enable = true;
       atuin.enable = true;
@@ -134,21 +166,6 @@
       lmSensors.enable = true;
       navi.enable = true;
       ncdu.enable = true;
-      nvtop.enable = true;
-      ambxstColorBridge.enable = true;
-      ytmPlayer = { enable = true; package = null; }; # installed via pacman (has python-dbus-next MPRIS support)
-      nixvim.enable = true;
-      networking.enable = true;
-      openssl.enable = true;
-      starship.enable = true;
-      terraform.enable = true;
-      tmux.enable = true;
-      wal.enable = true;
-      usbutils.enable = true;
-      xdg.enable = true;
-      yq.enable = true;
-      zellij.enable = true;
-      zsh.enable = true;
     };
   };
 
