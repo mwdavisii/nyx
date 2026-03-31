@@ -34,6 +34,7 @@
         enable = true;
         package = null; # installed via pacman
       };
+      gtk.enable = true;
       kanshi.enable = true;
       hypr = {
         enable = true;
@@ -46,9 +47,8 @@
         package = inputs.kmonad.packages.${pkgs.stdenv.hostPlatform.system}.default;
       };
     };
-    # Note gaming stuff is installed via arch packages because of NixGL
     ai = {
-      chatgpt.enable = false;
+      chatgpt.enable = true;
       gemini.enable = true;
       claude = { enable = true; package = null; };
       ollama.enable = true;
@@ -99,7 +99,7 @@
       dhall.enable = true;
       lua.enable = true;
       nix.enable = true;
-      node.enable = false;
+      node.enable = true;
       python.enable = true;
     };
     sdr = {
@@ -140,6 +140,23 @@
       lorri.enable = false;
       mcfly.enable = false;        # replaced by atuin
       fastfetch.enable = true;
+      nvtop = { enable = true; package = pkgs.nvtopPackages.amd; };
+      ambxstColorBridge.enable = true;
+      ytmPlayer = { enable = true; package = null; }; # installed via pacman (has python-dbus-next MPRIS support)
+      nixvim.enable = true;
+      networking.enable = true;
+      openssl.enable = true;
+      ranger.enable = true;
+      starship.enable = true;
+      terraform.enable = true;
+      tmux.enable = true;
+      wal.enable = true;
+      usbutils.enable = true;
+      xdg.enable = true;
+      yq.enable = true;
+      zellij.enable = true;
+      zoxide.enable = true;
+      zsh.enable = true;
       # New shell tools
       astroterm.enable = true;
       atuin.enable = true;
@@ -150,21 +167,6 @@
       lmSensors.enable = true;
       navi.enable = true;
       ncdu.enable = true;
-      nvtop = { enable = true; package = pkgs.nvtopPackages.amd; };
-      ambxstColorBridge.enable = true;
-      ytmPlayer = { enable = true; package = null; }; # installed via pacman (has python-dbus-next MPRIS support)
-      nixvim.enable = true;
-      networking.enable = true;
-      openssl.enable = true;
-      starship.enable = true;
-      terraform.enable = true;
-      tmux.enable = true;
-      wal.enable = true;
-      usbutils.enable = true;
-      xdg.enable = true;
-      yq.enable = true;
-      zellij.enable = true;
-      zsh.enable = true;
     };
   };
 
