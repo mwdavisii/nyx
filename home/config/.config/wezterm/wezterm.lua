@@ -7,6 +7,12 @@ end
 
 local font_name = "JetBrainsMonoNL NF"
 
+-- Load pywal colors if available; falls back to WezTerm defaults if not
+local wal_colors = nil
+local wal_path = os.getenv("HOME") .. "/.cache/wal/colors-wezterm.lua"
+local ok, result = pcall(dofile, wal_path)
+if ok then wal_colors = result end
+
 return {
 	-- OpenGL for GPU acceleration, Software for CPU
 	front_end = "OpenGL",
@@ -153,17 +159,6 @@ return {
 				end
 			end),
 		},
-		-- Ctrl+V paste (uses wl-paste for reliable Wayland clipboard reads)
-		{
-			key = "v",
-			mods = "CTRL",
-			action = wezterm.action_callback(function(_, pane)
-				local success, stdout = wezterm.run_child_process({ "/usr/bin/wl-paste", "--no-newline" })
-				if success and stdout and #stdout > 0 then
-					pane:paste(stdout)
-				end
-			end),
-		},
 	},
 
 	-- Aesthetic Night Colorscheme
@@ -178,20 +173,14 @@ return {
 
 	-- Tab Bar
 	enable_tab_bar = true,
-	hide_tab_bar_if_only_one_tab = false,
+	hide_tab_bar_if_only_one_tab = true,
 	show_tab_index_in_tab_bar = false,
 	tab_bar_at_bottom = true,
-
-	-- Keys
-	keys = {
-		{ key = "V", mods = "CTRL|SHIFT", action = wezterm.action.PasteFrom("Clipboard") },
-		{ key = "C", mods = "CTRL|SHIFT", action = wezterm.action.CopyTo("Clipboard") },
-	},
 
 	-- General
 	automatically_reload_config = true,
 	inactive_pane_hsb = { saturation = 1.0, brightness = 1.0 },
 	window_background_opacity = 0.5,
 	window_close_confirmation = "NeverPrompt",
-  window_frame = { active_titlebar_bg = "#45475a", font = font_with_fallback(font_name, { bold = true }) },
+        window_frame = { active_titlebar_bg = "#45475a", font = font_with_fallback(font_name, { bold = true }) },
 }

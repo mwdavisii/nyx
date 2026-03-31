@@ -321,7 +321,6 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   swww \
   nwg-displays \
   obsidian \
-  claude-code \
   sublime-text-4 \
   jellyfin-desktop \
   discord_arch_electron \
@@ -331,14 +330,20 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   ytm-player \
   python-dbus-next \
 
-
 # Rebuild quickshell-git if the system Qt was updated since the last build.
 # --needed skips reinstall even when Qt changes, causing ABI crashes at runtime.
+# Track success — ambxst depends on a working quickshell.
+_QS_OK=true
 _SYS_QT=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d- -f1)
 _QS_BUILT_QT=$(strings /usr/bin/qs 2>/dev/null | grep -oP 'qt6/\w+/\K\d+\.\d+\.\d+' | sort -u | head -1)
 if [[ -n "$_QS_BUILT_QT" && -n "$_SYS_QT" && "$_QS_BUILT_QT" != "$_SYS_QT" ]]; then
   warn "quickshell built against Qt $_QS_BUILT_QT but system is Qt $_SYS_QT — rebuilding..."
-  PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --rebuild --noconfirm quickshell-git
+  if PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --rebuild --noconfirm quickshell-git; then
+    info "quickshell rebuilt successfully against Qt $_SYS_QT"
+  else
+    warn "quickshell rebuild FAILED — Qt-dependent packages (ambxst) will be skipped"
+    _QS_OK=false
+  fi
 else
   info "quickshell Qt version OK (${_QS_BUILT_QT:-unknown})"
 fi
@@ -361,22 +366,26 @@ hyprpm enable hyprwinwrap || true
 # Step 8b — Ambxst shell
 # ---------------------------------------------------------------------------
 
-info "Installing Ambxst shell..."
-# Use system PATH so Ambxst's internal yay/makepkg builds don't pick up
-# Nix's pkg-config/cmake (which can't find system libs like glib-2.0, mpdecimal)
-_SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
-_PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
-if [ ! -d "$HOME/.local/src/ambxst" ]; then
-  PATH="$_SYSPATH" PKG_CONFIG_PATH="$_PKGCFG" bash <(curl -sL get.axeni.de/ambxst)
+if [[ "$_QS_OK" == false ]]; then
+  warn "Skipping ambxst — quickshell Qt rebuild failed (Qt $_QS_BUILT_QT != $_SYS_QT)"
 else
-  info "Ambxst already installed. Updating source..."
-  git -C "$HOME/.local/src/ambxst" pull
-  # axctl is a separate binary that must stay in sync with ambxst.
-  # ambxst >= v1.1.3 requires axctl to support the -c <config> flag (added in
-  # axctl v0.0.9+). Without it the axctl daemon never starts, AxctlService
-  # has no focusedMonitor, and all bar button clicks silently do nothing.
-  info "Updating axctl (required for bar button IPC)..."
-  PATH="$_SYSPATH" bash <(curl -sL get.axeni.de/axctl)
+  info "Installing Ambxst shell..."
+  # Use system PATH so Ambxst's internal yay/makepkg builds don't pick up
+  # Nix's pkg-config/cmake (which can't find system libs like glib-2.0, mpdecimal)
+  _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+  _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
+  if [ ! -d "$HOME/.local/src/ambxst" ]; then
+    PATH="$_SYSPATH" PKG_CONFIG_PATH="$_PKGCFG" bash <(curl -sL get.axeni.de/ambxst) || warn "Ambxst install failed — continuing"
+  else
+    info "Ambxst already installed. Updating source..."
+    git -C "$HOME/.local/src/ambxst" pull || warn "Ambxst git pull failed — continuing"
+    # axctl is a separate binary that must stay in sync with ambxst.
+    # ambxst >= v1.1.3 requires axctl to support the -c <config> flag (added in
+    # axctl v0.0.9+). Without it the axctl daemon never starts, AxctlService
+    # has no focusedMonitor, and all bar button clicks silently do nothing.
+    info "Updating axctl (required for bar button IPC)..."
+    PATH="$_SYSPATH" bash <(curl -sL get.axeni.de/axctl) || warn "axctl update failed — continuing"
+  fi
 fi
 
 
