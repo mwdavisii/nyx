@@ -24,7 +24,6 @@
       vim
       wl-clip-persist
       yubikey-manager
-      yubikey-manager
     ];
   };
 
