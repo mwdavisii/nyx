@@ -49,7 +49,7 @@
       chatgpt.enable = true;
       gemini.enable = true;
       claude = { enable = true; package = null; };
-      ollama.enable = false
+      ollama.enable = false;
     };
     app = {      
       alacritty = {
