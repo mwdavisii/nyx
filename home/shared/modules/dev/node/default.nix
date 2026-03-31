@@ -45,7 +45,6 @@ in
     home.packages = with pkgs; [ 
       nodejs 
       yarn 
-      nodePackages.live-server
       nodePackages.nodemon
       nodePackages.prettier
       nodePackages.npm
