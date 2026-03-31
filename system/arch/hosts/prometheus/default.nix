@@ -152,6 +152,7 @@
       navi.enable = true;
       ncdu.enable = true;
       nvtop.enable = true;
+      ambxstColorBridge.enable = true;
       ytmPlayer.enable = true;
       nixvim.enable = true;
       networking.enable = true;
