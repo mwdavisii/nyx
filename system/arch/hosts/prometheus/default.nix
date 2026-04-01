@@ -29,7 +29,6 @@
 
   nyx.modules = {
     desktop = {
-      gtk.enable = true;
       cava = {
         enable = true;
         package = null; # installed via pacman
