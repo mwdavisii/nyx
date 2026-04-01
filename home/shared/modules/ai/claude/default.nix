@@ -96,6 +96,11 @@ in
       executable = true;
     };
 
+    home.file.".local/bin/ai" = {
+      source = ./scripts/ai;
+      executable = true;
+    };
+
     home.file.".config/ccstatusline/settings.json" = {
       source = ../../../../config/.config/ccstatusline/settings.json;
       force = true;

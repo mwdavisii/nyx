@@ -338,6 +338,24 @@ _SYS_QT=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d- -f1)
 _QS_BUILT_QT=$(strings /usr/bin/qs 2>/dev/null | grep -oP 'qt6/\w+/\K\d+\.\d+\.\d+' | sort -u | head -1)
 if [[ -n "$_QS_BUILT_QT" && -n "$_SYS_QT" && "$_QS_BUILT_QT" != "$_SYS_QT" ]]; then
   warn "quickshell built against Qt $_QS_BUILT_QT but system is Qt $_SYS_QT — rebuilding..."
+  # cpptrace must be rebuilt first: its installed cmake config bakes in C++20
+  # module sources and build-tree paths from the previous Qt version. Without a
+  # clean rebuild, quickshell's cmake configure fails on the stale cpptrace
+  # module targets.
+  info "Rebuilding cpptrace against Qt $_SYS_QT first..."
+  if ! PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --rebuild --noconfirm cpptrace; then
+    warn "cpptrace rebuild FAILED — quickshell rebuild will likely fail too"
+  fi
+  # Remove stale cpptrace cmake target configs left over from previous builds.
+  # The AUR cpptrace package ships both static (.a) and shared (.so) libraries.
+  # A previous RelWithDebInfo build leaves a cpptrace-targets-relwithdebinfo.cmake
+  # that points at the static archive; when quickshell (also RelWithDebInfo) picks
+  # it up, linking fails because the .a's transitive deps (libunwind, libdwarf)
+  # aren't declared. Keeping only the noconfig target ensures the shared .so is used.
+  if ls /usr/lib/cmake/cpptrace/cpptrace-targets-relwithdebinfo.cmake &>/dev/null; then
+    info "Removing stale cpptrace static-library cmake config..."
+    sudo rm -f /usr/lib/cmake/cpptrace/cpptrace-targets-relwithdebinfo.cmake
+  fi
   if PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --rebuild --noconfirm quickshell-git; then
     info "quickshell rebuilt successfully against Qt $_SYS_QT"
   else
