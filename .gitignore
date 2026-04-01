@@ -1,3 +1,4 @@
+quickshell-git/*
 results/*
 result/*
 result
@@ -10,3 +11,4 @@ result
 docs*
 .worktrees/
 browser.json
+*.log
