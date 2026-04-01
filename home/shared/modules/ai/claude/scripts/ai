@@ -1,0 +1,94 @@
+#!/usr/bin/env zsh
+
+# Claude Code wrapper — interactive launcher with environment and permission selection
+# Env File Locations: ~/.claude_<mode>_env
+# Env file format:
+# # export ANTHROPIC_BASE_URL=<api endpoint>
+# # export ANTHROPIC_API_KEY=<redacted>
+# # ANTHROPIC_DEFAULT_<OPUS | SONNET | HAIKU>_MODEL=<model-name><model-name>
+
+set -euo pipefail
+
+# Colors
+bold='\033[1m'
+cyan='\033[36m'
+yellow='\033[33m'
+green='\033[32m'
+reset='\033[0m'
+
+REPLY_IDX=0
+prompt_choice() {
+  local prompt="$1"
+  shift
+  local -a options=("$@")
+
+  echo ""
+  echo "${bold}${cyan}${prompt}${reset}"
+  for i in {1..${#options[@]}}; do
+    echo "  ${yellow}${i})${reset} ${options[$i]}"
+  done
+
+  local choice
+  while true; do
+    printf "${green}> ${reset}"
+    read -r choice
+    if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= ${#options[@]} )); then
+      REPLY_IDX=$(( choice - 1 ))
+      return 0
+    fi
+    echo "  Invalid choice. Enter 1-${#options[@]}."
+  done
+}
+
+# --- Step 1: Work or Personal ---
+prompt_choice "What kind of session?" "Work" "Personal"
+session_type=$REPLY_IDX
+
+claude_args=()
+
+# --- Step 2 (Work only): Pick model from env files ---
+if (( session_type == 0 )); then
+  env_files=( ~/.claude_*_env(N) )
+
+  if (( ${#env_files[@]} == 0 )); then
+    echo "\n${yellow}No env files found matching ~/.claude_*_env${reset}"
+    exit 1
+  fi
+
+  # Build display names from filenames: ~/.claude_opus_env → opus
+  local -a model_names=()
+  for f in "${env_files[@]}"; do
+    name="${f:t}"                        # basename
+    name="${name#.claude_}"              # strip prefix
+    name="${name%_env}"                  # strip suffix
+    model_names+=("$name")
+  done
+
+  prompt_choice "Which model?" "${model_names[@]}"
+  model_idx=$REPLY_IDX
+
+  chosen_file="${env_files[$(( model_idx + 1 ))]}"
+  echo "\n  Loading ${bold}${chosen_file:t}${reset}"
+  source "$chosen_file"
+
+  claude_args+=(--model "${model_names[$(( model_idx + 1 ))]}")
+fi
+
+# --- Step 3: Permission level ---
+prompt_choice "Permission level?" \
+  "Normal (default)" \
+  "Auto-accept edits" \
+  "Auto mode" \
+  "YOLO (bypass all permissions)"
+perm_choice=$REPLY_IDX
+
+case $perm_choice in
+  0) claude_args+=(--permission-mode default) ;;
+  1) claude_args+=(--permission-mode acceptEdits) ;;
+  2) claude_args+=(--permission-mode auto) ;;
+  3) claude_args+=(--dangerously-skip-permissions) ;;
+esac
+
+# --- Launch ---
+echo "\n${bold}${green}Launching claude${reset} ${claude_args[*]}"
+exec claude "${claude_args[@]}"
