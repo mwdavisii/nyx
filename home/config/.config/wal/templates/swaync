@@ -1,0 +1,112 @@
+* {{
+  all: unset;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 13px;
+}}
+
+.control-center {{
+  background: {background};
+  border-radius: 10px;
+  border: 1px solid {color8};
+  color: {foreground};
+  padding: 10px;
+}}
+
+.notification-row {{
+  outline: none;
+}}
+
+.notification-row:focus,
+.notification-row:hover {{
+  opacity: 0.9;
+}}
+
+.notification {{
+  border-radius: 10px;
+  border: 1px solid {color8};
+  margin: 6px;
+  padding: 0;
+}}
+
+.notification-content {{
+  background: {background};
+  border-radius: 10px;
+  padding: 10px;
+  color: {foreground};
+}}
+
+.low .notification-content {{
+  background: {color0};
+  color: {foreground};
+}}
+
+.critical .notification-content {{
+  background: {color0};
+  border-left: 3px solid {color1};
+  color: {color1};
+}}
+
+.notification-default-action {{
+  border-radius: 10px;
+}}
+
+.notification-action {{
+  border: 1px solid {color8};
+  border-radius: 5px;
+}}
+
+.close-button {{
+  background: {color8};
+  border-radius: 100%;
+  color: {foreground};
+  min-width: 24px;
+  min-height: 24px;
+}}
+
+.close-button:hover {{
+  background: {color1};
+  color: {background};
+}}
+
+.blank-window {{
+  background: alpha(black, 0.0);
+}}
+
+.widget-title {{
+  color: {foreground};
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 8px;
+}}
+
+.widget-title > button {{
+  background: {color0};
+  border: 1px solid {color4};
+  border-radius: 5px;
+  color: {color4};
+  font-size: 0.9rem;
+}}
+
+.widget-title > button:hover {{
+  background: {color4};
+  color: {background};
+}}
+
+.widget-dnd {{
+  margin: 8px;
+}}
+
+.widget-dnd > switch {{
+  border-radius: 5px;
+  border: 1px solid {color8};
+  background: {color0};
+}}
+
+.widget-dnd > switch:checked {{
+  background: {color1};
+}}
+
+.widget-dnd > switch slider {{
+  background: {color4};
+  border-radius: 5px;
+}}
