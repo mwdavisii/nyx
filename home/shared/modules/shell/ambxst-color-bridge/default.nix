@@ -11,6 +11,7 @@ let
     import ctypes
     import json
     import os
+    import shutil
     import struct
     import subprocess
     from pathlib import Path
@@ -18,6 +19,8 @@ let
     WAL_FILE   = Path.home() / ".cache/wal/wal"
     THEME_FILE = Path.home() / ".config/ytm-player/theme.toml"
     AMBXST_COLORS = Path.home() / ".cache/ambxst/colors.json"
+    SWAYNC_WAL_SRC  = Path.home() / ".cache/wal/swaync"
+    SWAYNC_STYLE_DST = Path.home() / ".config/swaync/style.css"
 
     YTM_TEMPLATE = """\
     background      = "rgba(0,0,0,0)"
@@ -87,6 +90,17 @@ let
         except Exception as e:
             print(f"[ambxst-color-bridge] ytm theme error: {e}")
 
+    def reload_swaync():
+        if not SWAYNC_WAL_SRC.exists():
+            return
+        try:
+            SWAYNC_STYLE_DST.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(str(SWAYNC_WAL_SRC), str(SWAYNC_STYLE_DST))
+            subprocess.run(["swaync-client", "--reload-css"], check=False)
+            print(f"[ambxst-color-bridge] reloaded swaync style")
+        except Exception as e:
+            print(f"[ambxst-color-bridge] swaync reload error: {e}")
+
     def apply():
         try:
             wallpaper = WAL_FILE.read_text().strip()
@@ -95,6 +109,7 @@ let
             return
         run_wal(wallpaper)
         write_ytm_theme()
+        reload_swaync()
 
     def main():
         print(f"[ambxst-color-bridge] watching {WAL_FILE}")

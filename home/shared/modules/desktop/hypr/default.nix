@@ -187,6 +187,7 @@ in
     home.file.".config/wal/templates/colors-kitty".source = ../../../../config/.config/wal/templates/colors-kitty;
     home.file.".config/wal/templates/colors-wezterm.lua".source = ../../../../config/.config/wal/templates/colors-wezterm.lua;
     home.file.".config/wal/templates/dunstrc".source = ../../../../config/.config/wal/templates/dunstrc;
+    home.file.".config/wal/templates/swaync".source = ../../../../config/.config/wal/templates/swaync;
     #wallpapers directory
     xdg.configFile = lib.mkMerge [
       {
@@ -310,6 +311,8 @@ in
         control-center-margin-right = 10;
         control-center-margin-left = 0;
         notification-icon-size = 64;
+        notification-window-width = 500;
+        control-center-width = 500;
         timeout = 10;
         timeout-low = 5;
         timeout-critical = 0;
@@ -334,119 +337,9 @@ in
           };
         };
       };
-      style = ''
-        * {
-          all: unset;
-          font-family: "Source Sans Pro", sans-serif;
-          font-size: 13px;
-        }
-
-        .control-center {
-          background: #1e1e2a;
-          border-radius: 10px;
-          border: 1px solid #232323;
-          color: #2596be;
-          padding: 10px;
-        }
-
-        .notification-row {
-          outline: none;
-        }
-
-        .notification-row:focus,
-        .notification-row:hover {
-          opacity: 0.9;
-        }
-
-        .notification {
-          border-radius: 10px;
-          border: 1px solid #232323;
-          margin: 6px;
-          padding: 0;
-        }
-
-        .notification-content {
-          background: #1e1e2a;
-          border-radius: 10px;
-          padding: 10px;
-          color: #2596be;
-        }
-
-        .low .notification-content {
-          background: #232323;
-          color: #2596be;
-        }
-
-        .critical .notification-content {
-          background: #d64e4e;
-          color: #f0e0e0;
-        }
-
-        .notification-default-action {
-          border-radius: 10px;
-        }
-
-        .notification-action {
-          border: 1px solid #232323;
-          border-radius: 5px;
-        }
-
-        .close-button {
-          background: #232323;
-          border-radius: 100%;
-          color: #2596be;
-          min-width: 24px;
-          min-height: 24px;
-        }
-
-        .close-button:hover {
-          background: #d64e4e;
-          color: #f0e0e0;
-        }
-
-        .blank-window {
-          background: alpha(black, 0.0);
-        }
-
-        .widget-title {
-          color: #2596be;
-          font-size: 1.5rem;
-          font-weight: bold;
-          margin: 8px;
-        }
-
-        .widget-title > button {
-          background: #232323;
-          border: 1px solid #2596be;
-          border-radius: 5px;
-          color: #2596be;
-          font-size: 0.9rem;
-        }
-
-        .widget-title > button:hover {
-          background: #2596be;
-          color: #1e1e2a;
-        }
-
-        .widget-dnd {
-          margin: 8px;
-        }
-
-        .widget-dnd > switch {
-          border-radius: 5px;
-          border: 1px solid #232323;
-          background: #232323;
-        }
-
-        .widget-dnd > switch:checked {
-          background: #d64e4e;
-        }
-
-        .widget-dnd > switch slider {
-          background: #2596be;
-          border-radius: 5px;
-        }
-      '';
+      # Style is generated dynamically by pywal via the swaync wal template.
+      # ambxst-color-bridge copies ~/.cache/wal/swaync → ~/.config/swaync/style.css
+      # and reloads swaync on each wallpaper change.
     };
   };
 }
