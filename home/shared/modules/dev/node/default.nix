@@ -42,12 +42,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ 
-      nodejs 
-      yarn 
-      nodePackages.nodemon
-      nodePackages.prettier
-      nodePackages.npm
+    home.packages = with pkgs; [
+      nodejs
+      yarn
+      nodemon
+      prettier
     ];
 
     home.sessionVariables = {

@@ -3,11 +3,11 @@ with pkgs;
 let 
     lspServers = [
         marksman
-        nodePackages.bash-language-server
-        #nodePackages.pyright
-        nodePackages.typescript-language-server
-        nodePackages.vim-language-server
-        nodePackages.write-good
+        bash-language-server
+        #pyright
+        typescript-language-server
+        vim-language-server
+        write-good
     ];
     
     debugAdaptors = [
@@ -20,8 +20,8 @@ let
       nixpkgs-fmt
       prettierd
       proselint
-      nodePackages.eslint_d
-      nodePackages.yaml-language-server
+      eslint_d
+      yaml-language-server
     ];
 in
 {
