@@ -33,7 +33,7 @@
         enable = true;
         package = null; # installed via pacman
       };
-      gtk.enable = true;
+      gtk = { enable = true; dconf.enable = false; };
       kanshi.enable = true;
       hypr = {
         enable = true;

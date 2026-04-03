@@ -201,7 +201,8 @@ sudo pacman -S --needed --noconfirm \
   ttf-firacode-nerd \
   \
   zip \
-  unzip
+  unzip \
+  flatpak
 
 # ---------------------------------------------------------------------------
 # Step 3 — AMD gaming (interactive only)
@@ -322,7 +323,6 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   nwg-displays \
   obsidian \
   sublime-text-4 \
-  jellyfin-desktop \
   discord_arch_electron \
   stockfish \
   lc0 \
@@ -407,6 +407,14 @@ else
 fi
 
 
+
+# ---------------------------------------------------------------------------
+# Step 8c — Flatpak apps
+# ---------------------------------------------------------------------------
+
+info "Configuring Flatpak and installing apps..."
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install --user -y flathub com.github.iwalton3.jellyfin-media-player || warn "jellyfin-media-player Flatpak install failed — skipping"
 
 # ---------------------------------------------------------------------------
 # Step 9 — Work security tools (interactive only)

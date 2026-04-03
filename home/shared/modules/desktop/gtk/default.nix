@@ -4,7 +4,14 @@ let
   cfg = config.nyx.modules.desktop.gtk;
 in
 {
-  options.nyx.modules.desktop.gtk = { enable = mkEnableOption "GTK Configuration"; };
+  options.nyx.modules.desktop.gtk = {
+    enable = mkEnableOption "GTK Configuration";
+    dconf.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to write dark-mode preference via dconf (disable on Arch where dconf daemon is unavailable)";
+    };
+  };
   config = mkIf cfg.enable {
     gtk = {
       enable = true;
@@ -26,7 +33,7 @@ in
       };
     };
 
-    dconf.settings = {
+    dconf.settings = mkIf cfg.dconf.enable {
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";
       };
