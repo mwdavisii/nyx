@@ -7,6 +7,9 @@
 # ╚═╝╚══════╝╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝
 #
 
+# Flatpak user-installed app binaries
+[[ -d "$HOME/.local/share/flatpak/exports/bin" ]] && export PATH="$HOME/.local/share/flatpak/exports/bin:$PATH"
+
 # if nix is installed then source profile
 [[ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]] && . $HOME/.nix-profile/etc/profile.d/nix.sh
 [[ -f $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]] && . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh

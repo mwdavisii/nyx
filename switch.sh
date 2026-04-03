@@ -15,7 +15,12 @@ elif [[ $userName == "nix-on-droid" ]]; then
   nix-on-droid switch --show-trace --flake .
 elif [ -f /etc/arch-release ]; then
   setup/arch/02-install-packages.sh --sync
-  home-manager switch --show-trace --flake .#$hostName
+  _HM_CMD="home-manager switch --show-trace --flake .#$hostName"
+  if [[ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ]]; then
+    dbus-run-session bash -c "$_HM_CMD"
+  else
+    eval "$_HM_CMD"
+  fi
 else
   sudo nixos-rebuild switch --show-trace --flake .#$hostName
 fi
