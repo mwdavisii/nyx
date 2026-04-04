@@ -26,13 +26,17 @@ alias ga="git add"
 alias gc="git commit --verbose"
 alias gs="git status -s"
 alias ls="eza -alG"
-alias clr="clear"s
-alias ip="curl -4 icanhazip.com #public IP address"
+alias clr="clear"
+alias myip="curl -4 icanhazip.com"
 alias ll="ls -alG"
 alias ldir="ls -al | grep ^d"
-alias o=o"pen ."
+alias o="open ."
 alias ut="uptime"
-alias lip="ifconfig | grep \inet \ | grep -Fv 127.0.0.1 | awk '{print $2}'"
+if command -v ip &>/dev/null; then
+  alias lip="ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v 127.0.0.1"
+else
+  alias lip="ifconfig | grep 'inet ' | grep -Fv 127.0.0.1 | awk '{print \$2}'"
+fi
 alias k="kubectl"
 alias kap="kubectl apply -f"
 alias kad="kubectl delete -f" 
