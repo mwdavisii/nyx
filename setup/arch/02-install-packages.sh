@@ -56,6 +56,7 @@ INSTALL_PROTONVPN="n"
 INSTALL_TAILSCALE="n"
 INSTALL_WORK_AGENTS="n"
 INSTALL_SDR="n"
+INSTALL_DOCKER="n"
 
 if [[ "$SYNC_MODE" == false ]]; then
   echo ""
@@ -87,6 +88,9 @@ if [[ "$SYNC_MODE" == false ]]; then
 
   read -rp "Install SDR packages (SDR++, GQRX, rtl-sdr driver)? [y/N] " sdr_input
   INSTALL_SDR="${sdr_input,,}"
+
+  read -rp "Install Docker & Docker Compose? [y/N] " docker_input
+  INSTALL_DOCKER="${docker_input,,}"
 
   echo ""
 fi
@@ -496,6 +500,25 @@ if [[ "$INSTALL_SDR" == "y" ]]; then
   else
     info "Adding '$USER' to plugdev group for RTL-SDR hardware access..."
     sudo usermod -aG plugdev "$USER"
+    warn "Group change takes effect after logout/login."
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Step 14 — Docker (interactive only)
+# ---------------------------------------------------------------------------
+
+if [[ "$INSTALL_DOCKER" == "y" ]]; then
+  info "Installing Docker and Docker Compose..."
+  sudo pacman -S --needed --noconfirm docker docker-compose
+
+  sudo systemctl enable --now docker
+
+  if groups "$USER" | grep -q docker; then
+    info "User '$USER' already in docker group."
+  else
+    info "Adding '$USER' to docker group..."
+    sudo usermod -aG docker "$USER"
     warn "Group change takes effect after logout/login."
   fi
 fi
