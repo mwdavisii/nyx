@@ -9,6 +9,11 @@
     stateVersion = "26.05";
 
     packages = with pkgs; [
+      # Wrapper to launch calibre with system Python (Nix python shadows /usr/bin/python3
+      # and lacks python-msgpack which calibre needs)
+      (writeShellScriptBin "calibre" ''exec /usr/bin/python3 /usr/bin/calibre "$@"'')
+      (writeShellScriptBin "calibredb" ''exec /usr/bin/python3 /usr/bin/calibredb "$@"'')
+      (writeShellScriptBin "calibre-server" ''exec /usr/bin/python3 /usr/bin/calibre-server "$@"'')
       rustup
       vhs
       gnupg
@@ -166,6 +171,7 @@
       lmSensors.enable = true;
       navi.enable = true;
       ncdu.enable = true;
+      homelabTools.enable = true;
     };
   };
 
