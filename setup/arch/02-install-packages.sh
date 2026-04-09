@@ -206,7 +206,10 @@ sudo pacman -S --needed --noconfirm \
   \
   zip \
   unzip \
-  flatpak
+  flatpak \
+  \
+  calibre \
+  python-msgpack
 
 # ---------------------------------------------------------------------------
 # Step 3 — AMD gaming (interactive only)
