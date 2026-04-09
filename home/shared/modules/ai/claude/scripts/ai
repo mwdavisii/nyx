@@ -28,26 +28,30 @@ prompt_choice() {
     echo "  ${yellow}${i})${reset} ${options[$i]}"
   done
 
-  local choice
+  local key
   while true; do
     printf "${green}> ${reset}"
-    read -r choice
-    if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= ${#options[@]} )); then
-      REPLY_IDX=$(( choice - 1 ))
+    read -rk1 key
+    echo ""
+    if [[ "$key" == "0" ]]; then
+      return 1
+    fi
+    if [[ "$key" =~ ^[0-9]$ ]] && (( key >= 1 && key <= ${#options[@]} )); then
+      REPLY_IDX=$(( key - 1 ))
       return 0
     fi
-    echo "  Invalid choice. Enter 1-${#options[@]}."
+    echo "  Invalid choice. Press 1-${#options[@]}."
   done
 }
 
-# --- Step 1: Work or Personal ---
-prompt_choice "What kind of session?" "Work" "Personal"
+# --- Step 1: Session type ---
+prompt_choice "What kind of session?" "Work" "Productivity (work)" "Personal"
 session_type=$REPLY_IDX
 
 claude_args=()
 
-# --- Step 2 (Work only): Pick model from env files ---
-if (( session_type == 0 )); then
+# --- Helper: load work env file ---
+load_work_env() {
   env_files=( ~/.claude_*_env(N) )
 
   if (( ${#env_files[@]} == 0 )); then
@@ -55,12 +59,11 @@ if (( session_type == 0 )); then
     exit 1
   fi
 
-  # Build display names from filenames: ~/.claude_opus_env → opus
   local -a model_names=()
   for f in "${env_files[@]}"; do
-    name="${f:t}"                        # basename
-    name="${name#.claude_}"              # strip prefix
-    name="${name%_env}"                  # strip suffix
+    name="${f:t}"
+    name="${name#.claude_}"
+    name="${name%_env}"
     model_names+=("$name")
   done
 
@@ -68,13 +71,54 @@ if (( session_type == 0 )); then
   model_idx=$REPLY_IDX
 
   chosen_file="${env_files[$(( model_idx + 1 ))]}"
-  echo "\n  Loading ${bold}${chosen_file:t}${reset}"
+  echo "  Loading ${bold}${chosen_file:t}${reset}"
   source "$chosen_file"
 
   claude_args+=(--model "${model_names[$(( model_idx + 1 ))]}")
+}
+
+# --- Step 2 (Work): Pick model from env files ---
+if (( session_type == 0 )); then
+  load_work_env
 fi
 
-# --- Step 3: Permission level ---
+# --- Step 2b (Productivity): auto-load opus, pick skill, launch ---
+if (( session_type == 1 )); then
+  opus_env="$HOME/.claude_opus_env"
+  if [[ ! -f "$opus_env" ]]; then
+    echo "\n${yellow}Opus env not found: ${opus_env}${reset}"
+    exit 1
+  fi
+  echo "\n  Loading ${bold}.claude_opus_env${reset}"
+  source "$opus_env"
+  local -a base_args=(--model opus --dangerously-skip-permissions)
+  local -a skill_names=("inbox" "daily-sync" "prep-1on1" "prep-meetings" "teams-catchup" "week")
+  cd "$HOME/vault/04_AI_Projects/productivity"
+
+  while prompt_choice "Which workflow? (0 to quit)" \
+      "inbox" \
+      "daily-sync" \
+      "prep-1on1" \
+      "prep-meetings" \
+      "teams-catchup" \
+      "week"; do
+    chosen_skill="${skill_names[$(( REPLY_IDX + 1 ))]}"
+
+    echo "\n${bold}${green}Running:${reset} run ${chosen_skill}"
+    claude "${base_args[@]}" "Read and follow the instructions in skills/${chosen_skill}.md"
+    echo "\n${bold}${cyan}Workflow complete.${reset}"
+  done
+fi
+
+# --- Step 2c (Personal): Discord channel ---
+if (( session_type == 2 )); then
+  prompt_choice "Connect to Discord?" "No" "Yes"
+  if (( REPLY_IDX == 1 )); then
+    claude_args+=(--channels plugin:discord@claude-plugins-official)
+  fi
+fi
+
+# --- Step 3: Permission level (Work / Personal only) ---
 prompt_choice "Permission level?" \
   "Normal (default)" \
   "Auto-accept edits" \
