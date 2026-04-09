@@ -7,12 +7,12 @@
       ".." = "cd ..";
       "ls"="eza -alG";
       "clr"="clear";
-      "ip"="curl -4 icanhazip.com"; #public IP address
+      "myip"="curl -4 icanhazip.com";
       "ll"="ls -alG";
       "ldir"="ls -al | grep ^d";
       "o"="open .";
       "ut"="uptime";
-      "lip"="ifconfig | grep \"inet \" | grep -Fv 127.0.0.1 | awk '{print $2}'";
+      "lip"="ifconfig | grep 'inet ' | grep -Fv 127.0.0.1 | awk '{print $2}'";
       "k"="kubectl";
       "kap"="kubectl apply -f ";
       "kad"="kubectl delete -f ";
