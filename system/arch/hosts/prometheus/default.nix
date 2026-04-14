@@ -172,6 +172,7 @@
       navi.enable = true;
       ncdu.enable = true;
       homelabTools.enable = true;
+      weechat.enable = true;
     };
   };
 
