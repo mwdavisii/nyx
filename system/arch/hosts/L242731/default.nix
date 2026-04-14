@@ -166,6 +166,7 @@
       lmSensors.enable = true;
       navi.enable = true;
       ncdu.enable = true;
+      weechat.enable = true;
     };
   };
 
