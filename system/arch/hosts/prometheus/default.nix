@@ -80,6 +80,18 @@
         enable = true;
         package = null;
       };
+      streaming = {
+        enable = true;
+        package = null; # installed via pacman
+        primaryMic = "alsa_input.usb-Blue_Microphones_Yeti_Stereo_Microphone_797_2021_02_02_48276-00.analog-stereo";
+        deprioritizeMic = "alsa_input.usb-046d_Logitech_StreamCam_2F9E86A5-02.analog-stereo";
+        outputDevice = "alsa_output.pci-0000_0a_00.0.iec958-ac3-surround-51";
+        litra = {
+          enable = true;
+          brightness = 70;
+          temperature = 4500;
+        };
+      };
       obsidian = {
         enable = true;
         package = null;
