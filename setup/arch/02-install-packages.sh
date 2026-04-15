@@ -140,6 +140,7 @@ sudo pacman -S --needed --noconfirm \
   foomatic-db-engine \
   foomatic-db-engine \
   obs-studio \
+  easyeffects \
   pipewire \
   wireplumber \
   pipewire-alsa \
@@ -149,6 +150,7 @@ sudo pacman -S --needed --noconfirm \
   pamixer \
   playerctl \
   base-devel \
+  git-lfs \
   cmake \
   cpio \
   meson \
@@ -204,6 +206,7 @@ sudo pacman -S --needed --noconfirm \
   noto-fonts-emoji \
   ttf-firacode-nerd \
   \
+  asciinema \
   zip \
   unzip \
   flatpak \
@@ -336,6 +339,7 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   wezterm-git \
   ytm-player \
   python-dbus-next \
+  asciinema-agg-bin \
 
 # Rebuild quickshell-git if the system Qt was updated since the last build.
 # --needed skips reinstall even when Qt changes, causing ABI crashes at runtime.

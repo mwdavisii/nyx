@@ -52,6 +52,7 @@ in
       gh
       glab
       git-filter-repo
+      git-lfs
       git-open
     ];
     
