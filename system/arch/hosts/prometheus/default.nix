@@ -88,8 +88,8 @@
         outputDevice = "alsa_output.pci-0000_0a_00.0.iec958-ac3-surround-51";
         litra = {
           enable = true;
-          brightness = 70;
-          temperature = 4500;
+          brightness = 30;
+          temperature = 4000;
         };
       };
       obsidian = {
