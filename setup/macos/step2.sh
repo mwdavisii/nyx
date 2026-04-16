@@ -1,1 +1,1 @@
-sudo nix run nix-darwin -- switch --flake ".#$(hostname)"
+sudo SSH_AUTH_SOCK="$SSH_AUTH_SOCK" nix run nix-darwin -- switch --flake ".#$(hostname)"
