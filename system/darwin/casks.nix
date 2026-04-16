@@ -7,7 +7,7 @@ _:
 
   # Development Tools
   "homebrew/cask/docker"
-  "powershell"
+  "powershell@preview"
   "iterm2"
 
 
