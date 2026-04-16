@@ -20,7 +20,7 @@ with lib;
         # Auto upgrade nix package and the daemon service.
         homebrew = {
             enable = true;
-            brewPrefix = "/opt/homebrew/bin";
+            prefix = "/opt/homebrew";
             onActivation = {
               autoUpdate = true;
               upgrade = true;
