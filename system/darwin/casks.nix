@@ -7,13 +7,11 @@ _:
 
   # Development Tools
   "homebrew/cask/docker"
-  "ngrok"
   "powershell"
   "iterm2"
 
 
   # Communication Tools
-  "telegram"
   "whatsapp"
 
   # Entertainment Tools
