@@ -3,7 +3,7 @@
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 FONT_FACE="SF Pro"
 NERD_FONT="Hack Nerd Font:Regular:14.0"
-YABAI="/opt/homebrew/bin/yabai"
+AEROSPACE="/opt/homebrew/bin/aerospace"
 
 # --- Colors: source pywal if available, else use defaults ---
 BAR_COLOR=0x80000000
@@ -49,9 +49,9 @@ sketchybar --default \
   background.padding_right=2
 
 # ══════════════════════════════════════════════
-# LEFT: Yabai workspaces with app icons
+# LEFT: AeroSpace workspaces with app icons
 # ══════════════════════════════════════════════
-for sid in $($YABAI -m query --spaces | jq -r '.[].index' 2>/dev/null); do
+for sid in $($AEROSPACE list-workspaces --all 2>/dev/null); do
   sketchybar --add space space.$sid left \
     --set space.$sid \
       space=$sid \
@@ -67,30 +67,19 @@ for sid in $($YABAI -m query --spaces | jq -r '.[].index' 2>/dev/null); do
       label.padding_left=0 \
       label.padding_right=8 \
       background.drawing=off \
-      click_script="$YABAI -m space --focus $sid" \
+      click_script="$AEROSPACE workspace $sid" \
       script="$PLUGIN_DIR/spaces.sh"
 done
 
-# Subscribe to yabai events for workspace updates
-sketchybar --add event yabai_space_changed
-sketchybar --add event yabai_window_created
-sketchybar --add event yabai_window_destroyed
-sketchybar --add event yabai_window_moved
-sketchybar --add event yabai_application_launched
-sketchybar --add event yabai_application_terminated
+sketchybar --add event aerospace_workspace_change
 
 sketchybar --add item spaces_listener left \
   --set spaces_listener \
     drawing=off \
     script="$PLUGIN_DIR/spaces.sh" \
   --subscribe spaces_listener \
-    space_change \
-    yabai_space_changed \
-    yabai_window_created \
-    yabai_window_destroyed \
-    yabai_window_moved \
-    yabai_application_launched \
-    yabai_application_terminated
+    aerospace_workspace_change \
+    front_app_switched
 
 # ══════════════════════════════════════════════
 # LEFT: Front app name (shows focused window's app)

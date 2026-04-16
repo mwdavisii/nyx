@@ -9,12 +9,16 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 enable-normalization-flatten-containers = false
 
 [gaps]
-outer.left = 8
-outer.right = 8
+outer.left = 20
+outer.right = 20
 outer.top = 44
-outer.bottom = 8
-inner.horizontal = 0
-inner.vertical = 0
+outer.bottom = 20
+inner.horizontal = 5
+inner.vertical = 5
+
+# Notify sketchybar on workspace changes
+exec-on-workspace-change = ['/bin/bash', '-c',
+  'sketchybar --trigger aerospace_workspace_change']
 
 # ---------- Main keybinds (Hyper = cmd+ctrl+alt) ----------
 [mode.main.binding]

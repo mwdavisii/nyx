@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Yabai workspace indicator for sketchybar
+# AeroSpace workspace indicator for sketchybar
 # Highlights focused space, shows app icons per space
 
-YABAI="/opt/homebrew/bin/yabai"
+AEROSPACE="/opt/homebrew/bin/aerospace"
 
 # Map app names to nerd font icons
 app_icon() {
@@ -24,23 +24,21 @@ app_icon() {
   esac
 }
 
-FOCUSED=$($YABAI -m query --spaces --space | jq -r '.index' 2>/dev/null)
+FOCUSED=$($AEROSPACE list-workspaces --focused 2>/dev/null)
 
-for space_json in $($YABAI -m query --spaces | jq -c '.[]' 2>/dev/null); do
-  SID=$(echo "$space_json" | jq -r '.index')
-
+for sid in $($AEROSPACE list-workspaces --all 2>/dev/null); do
   # Get app icons for this space
   ICONS=""
   while IFS= read -r app; do
     [ -z "$app" ] && continue
     ICONS+=" $(app_icon "$app")"
-  done < <($YABAI -m query --windows --space "$SID" | jq -r '.[].app' 2>/dev/null)
+  done < <($AEROSPACE list-windows --workspace "$sid" --format '%{app-name}' 2>/dev/null)
 
   LABEL="${ICONS# }"
 
-  if [ "$SID" = "$FOCUSED" ]; then
-    sketchybar --set space."$SID" icon.highlight=on label="$LABEL"
+  if [ "$sid" = "$FOCUSED" ]; then
+    sketchybar --set space."$sid" icon.highlight=on label="$LABEL"
   else
-    sketchybar --set space."$SID" icon.highlight=off label="$LABEL"
+    sketchybar --set space."$sid" icon.highlight=off label="$LABEL"
   fi
 done
