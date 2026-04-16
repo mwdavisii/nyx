@@ -20,6 +20,11 @@ with lib;
         # Auto upgrade nix package and the daemon service.
         homebrew = {
             enable = true;
+            brewPrefix = "/opt/homebrew/bin";
+            onActivation = {
+              autoUpdate = true;
+              upgrade = true;
+            };
             taps = [ "FelixKratz/formulae" ];
             casks = pkgs.callPackage ../../casks.nix {};
             brews = pkgs.callPackage ../../brews.nix {};
