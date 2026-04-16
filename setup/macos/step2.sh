@@ -1,1 +1,1 @@
-nix run nix-darwin -- switch --flake ".#$(hostname)"
+sudo nix run nix-darwin -- switch --flake ".#$(hostname)"
