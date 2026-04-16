@@ -12,6 +12,14 @@ in
       extraConfig = ''
         yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
         sudo yabai --load-sa
+
+        # Notify sketchybar of space/window changes
+        yabai -m signal --add event=space_changed action="sketchybar --trigger yabai_space_changed"
+        yabai -m signal --add event=window_created action="sketchybar --trigger yabai_window_created"
+        yabai -m signal --add event=window_destroyed action="sketchybar --trigger yabai_window_destroyed"
+        yabai -m signal --add event=window_moved action="sketchybar --trigger yabai_window_moved"
+        yabai -m signal --add event=application_launched action="sketchybar --trigger yabai_application_launched"
+        yabai -m signal --add event=application_terminated action="sketchybar --trigger yabai_application_terminated"
         yabai -m config debug_output on
 
       # ====== Variables =============================
@@ -20,11 +28,11 @@ in
         declare -A color
         
         #GAPS
-        gaps["top"]="4"
-        gaps["bottom"]="24"
-        gaps["left"]="4"
-        gaps["right"]="4"
-        gaps["inner"]="4"
+        gaps["top"]="20"
+        gaps["bottom"]="20"
+        gaps["left"]="20"
+        gaps["right"]="20"
+        gaps["inner"]="5"
 
         color["focused"]="0xE0808080"
         color["normal"]="0x00010101"

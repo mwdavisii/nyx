@@ -3,17 +3,22 @@
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 FONT_FACE="SF Pro"
 NERD_FONT="Hack Nerd Font:Regular:14.0"
-AEROSPACE="/opt/homebrew/bin/aerospace"
+YABAI="/opt/homebrew/bin/yabai"
 
-# --- Colors (matching waybar pywal-style palette) ---
+# --- Colors: source pywal if available, else use defaults ---
 BAR_COLOR=0x80000000
 FOREGROUND=0xffffffff
 INACTIVE=0xff928374
 ACCENT=0xfff4d9e1
 ALERT=0xffcc6666
+HIGHLIGHT=0xfff4d9e1
+SUBTLE=0x40ffffff
+
+PYWAL_COLORS="$HOME/.cache/wal/colors-sketchybar.sh"
+[ -f "$PYWAL_COLORS" ] && source "$PYWAL_COLORS"
 
 # ──────────────────────────────────────────────
-# Bar appearance — mirrors waybar top bar style
+# Bar appearance — semi-transparent top bar
 # ──────────────────────────────────────────────
 sketchybar --bar \
   height=36 \
@@ -44,9 +49,9 @@ sketchybar --default \
   background.padding_right=2
 
 # ══════════════════════════════════════════════
-# LEFT: AeroSpace workspaces
+# LEFT: Yabai workspaces with app icons
 # ══════════════════════════════════════════════
-for sid in $($AEROSPACE list-workspaces --all 2>/dev/null); do
+for sid in $($YABAI -m query --spaces | jq -r '.[].index' 2>/dev/null); do
   sketchybar --add space space.$sid left \
     --set space.$sid \
       space=$sid \
@@ -55,21 +60,37 @@ for sid in $($AEROSPACE list-workspaces --all 2>/dev/null); do
       icon.color=$INACTIVE \
       icon.highlight_color=$ACCENT \
       icon.padding_left=8 \
-      icon.padding_right=8 \
-      label.drawing=off \
+      icon.padding_right=4 \
+      label.font="$NERD_FONT" \
+      label.font.size=12.0 \
+      label.color=$INACTIVE \
+      label.padding_left=0 \
+      label.padding_right=8 \
       background.drawing=off \
-      click_script="$AEROSPACE workspace $sid" \
-      script="$PLUGIN_DIR/aerospace.sh"
+      click_script="$YABAI -m space --focus $sid" \
+      script="$PLUGIN_DIR/spaces.sh"
 done
 
-sketchybar --add event aerospace_workspace_change
+# Subscribe to yabai events for workspace updates
+sketchybar --add event yabai_space_changed
+sketchybar --add event yabai_window_created
+sketchybar --add event yabai_window_destroyed
+sketchybar --add event yabai_window_moved
+sketchybar --add event yabai_application_launched
+sketchybar --add event yabai_application_terminated
 
-# Catch workspace changes from AeroSpace
-sketchybar --add item aerospace_listener left \
-  --set aerospace_listener \
+sketchybar --add item spaces_listener left \
+  --set spaces_listener \
     drawing=off \
-    script="$PLUGIN_DIR/aerospace.sh" \
-  --subscribe aerospace_listener aerospace_workspace_change
+    script="$PLUGIN_DIR/spaces.sh" \
+  --subscribe spaces_listener \
+    space_change \
+    yabai_space_changed \
+    yabai_window_created \
+    yabai_window_destroyed \
+    yabai_window_moved \
+    yabai_application_launched \
+    yabai_application_terminated
 
 # ══════════════════════════════════════════════
 # LEFT: Front app name (shows focused window's app)
@@ -100,16 +121,15 @@ sketchybar --add item media center \
 # ══════════════════════════════════════════════
 
 # --- Clock (rightmost) ---
-# Click: toggle date format | Right-click: open Calendar
 sketchybar --add item clock right \
   --set clock \
     icon="󰥔" \
+    icon.color=$ACCENT \
     update_freq=30 \
     script="$PLUGIN_DIR/clock.sh" \
     click_script="$PLUGIN_DIR/clock_click.sh"
 
 # --- Battery ---
-# Click: open Energy settings
 sketchybar --add item battery right \
   --set battery \
     update_freq=30 \
@@ -117,7 +137,6 @@ sketchybar --add item battery right \
     click_script="open 'x-apple.systempreferences:com.apple.preference.battery'"
 
 # --- Bluetooth ---
-# Click: toggle | Right-click: open Bluetooth settings
 sketchybar --add item bluetooth right \
   --set bluetooth \
     icon="󰂯" \
@@ -126,7 +145,6 @@ sketchybar --add item bluetooth right \
     click_script="$PLUGIN_DIR/bluetooth_click.sh"
 
 # --- Network ---
-# Click: copy IP | Right-click: open Network settings
 sketchybar --add item network right \
   --set network \
     icon="󰤨" \
@@ -135,7 +153,6 @@ sketchybar --add item network right \
     click_script="$PLUGIN_DIR/network_click.sh"
 
 # --- Volume ---
-# Scroll: adjust volume | Click: toggle mute | Right-click: open Sound settings
 sketchybar --add item volume right \
   --set volume \
     script="$PLUGIN_DIR/volume.sh" \
@@ -143,7 +160,6 @@ sketchybar --add item volume right \
   --subscribe volume volume_change
 
 # --- CPU ---
-# Click: open Activity Monitor
 sketchybar --add item cpu right \
   --set cpu \
     icon="󰻠" \
@@ -152,7 +168,6 @@ sketchybar --add item cpu right \
     click_script="open -a 'Activity Monitor'"
 
 # --- Memory ---
-# Click: open Activity Monitor
 sketchybar --add item memory right \
   --set memory \
     icon="󰍛" \
@@ -161,7 +176,6 @@ sketchybar --add item memory right \
     click_script="open -a 'Activity Monitor'"
 
 # --- Disk ---
-# Click: open Disk Utility
 sketchybar --add item disk right \
   --set disk \
     icon="󰋊" \

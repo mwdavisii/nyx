@@ -119,6 +119,7 @@
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
         L241729 = { hostname = "L241729"; system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
+        EU-L260076 = { hostname = "EU-L260076"; system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };
       };
 
       nixosConfigurations = mapAttrs' mkNixSystemConfiguration {
