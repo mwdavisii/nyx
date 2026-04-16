@@ -10,6 +10,9 @@ with lib;
     ];
 
     config = {
+        # Determinate Systems installer manages the Nix daemon;
+        # disable nix-darwin's native Nix management to avoid conflicts.
+        nix.enable = false;
         programs.zsh.enable = true;
         # Fully declarative dock using the latest from Nix Store
             ## Dock Configuration
