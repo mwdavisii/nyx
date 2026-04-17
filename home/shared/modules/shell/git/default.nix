@@ -85,6 +85,11 @@ in
         gpgSign = true''}
       [gpg]
         program = ${cfg.signing.gpgPath}
+      [filter "lfs"]
+        clean = git-lfs clean -- %f
+        smudge = git-lfs smudge -- %f
+        process = git-lfs filter-process
+        required = true
       [core]
         pager = delta
       [interactive]

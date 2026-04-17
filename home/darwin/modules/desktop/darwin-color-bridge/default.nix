@@ -31,8 +31,8 @@ let
       echo "[darwin-apply-colors] sketchybar updated"
     fi
 
-    # --- Wezterm (touch config to trigger reload) ---
-    [ -f "$HOME/.config/wezterm/wezterm.lua" ] && touch "$HOME/.config/wezterm/wezterm.lua"
+    # --- Wezterm (signal reload — config is a read-only Nix store symlink) ---
+    pkill -USR1 wezterm-gui 2>/dev/null
 
     echo "[darwin-apply-colors] done"
   '';
