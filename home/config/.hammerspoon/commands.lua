@@ -58,3 +58,15 @@ end
 
 appWatcher = hs.application.watcher.new(applicationWatcher)
 appWatcher:start()
+
+-- Cloudflare WARP toggle (Caps+W)
+hs.hotkey.bind(super, "W", function()
+    local output, status = hs.execute("/usr/local/bin/warp-cli status 2>/dev/null")
+    if output and output:find("Connected") then
+        hs.execute("/usr/local/bin/warp-cli disconnect")
+        hs.alert.show("WARP Disconnected")
+    else
+        hs.execute("/usr/local/bin/warp-cli connect")
+        hs.alert.show("WARP Connected")
+    end
+end)

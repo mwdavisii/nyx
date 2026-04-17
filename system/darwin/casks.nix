@@ -2,18 +2,22 @@ _:
 
 [
   #desktop tools
+  "nikitabobko/tap/aerospace"
   "hammerspoon"
+  "karabiner-elements"
   "sublime-text"
 
+  # Fonts
+  "font-jetbrains-mono-nerd-font"
+  "font-hack-nerd-font"
+  "font-caskaydia-cove-nerd-font"
+
   # Development Tools
-  "homebrew/cask/docker"
-  "ngrok"
-  "powershell"
   "iterm2"
+  "wezterm"
 
 
   # Communication Tools
-  "telegram"
   "whatsapp"
 
   # Entertainment Tools
@@ -36,6 +40,6 @@ _:
   "diffusionbee"
   
   #AI"
-  "ollama" 
+  "ollama-app"
   "codex"
 ]

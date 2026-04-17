@@ -34,9 +34,8 @@ return {
 		},
 	},
 	warn_about_missing_glyphs = false,
-	font_size = 10,
+	font_size = 14,
 	line_height = 1.0,
-	dpi = 96.0,
 
 	-- Cursor style
 	default_cursor_style = "BlinkingUnderline",

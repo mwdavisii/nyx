@@ -1,4 +1,4 @@
-start-at-login = false
+start-at-login = true
 
 # ---------- Core layout: BSP-ish feel ----------
 default-root-container-layout = 'tiles'
@@ -8,13 +8,17 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # Keep intentional splits so your tree shape persists
 enable-normalization-flatten-containers = false
 
+# Notify sketchybar on workspace changes
+exec-on-workspace-change = ['/bin/bash', '-c',
+  'sketchybar --trigger aerospace_workspace_change']
+
 [gaps]
-outer.left = 8
-outer.right = 8
+outer.left = 10
+outer.right = 10
 outer.top = 44
-outer.bottom = 8
-inner.horizontal = 0
-inner.vertical = 0
+outer.bottom = 10
+inner.horizontal = 5
+inner.vertical = 5
 
 # ---------- Main keybinds (Hyper = cmd+ctrl+alt) ----------
 [mode.main.binding]

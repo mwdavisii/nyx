@@ -7,14 +7,16 @@ let
       #!/usr/bin/env bash
       file=~/.config/wallpapers/wall0.png
       osascript -e "tell application \"System Events\" to tell every desktop to set picture to \""''${file}\"" as POSIX file"
-      wal -i "''${rand_file}" 2> /dev/null
+      wal -i "''${file}" 2> /dev/null
+      command -v darwin-apply-colors >/dev/null 2>&1 && darwin-apply-colors
       '';
     wallpaper_sj = pkgs.writeShellScriptBin "wallpaper_sj" ''
       #!/usr/bin/env bash
       file=~/.config/wallpapers/230599177-180001_PRIDE_VirtualBackground_v2-02.png
       osascript -e "tell application \"System Events\" to tell every desktop to set picture to \""''${file}\"" as POSIX file"
-      wal -i "''${rand_file}" 2> /dev/null
-      '';  
+      wal -i "''${file}" 2> /dev/null
+      command -v darwin-apply-colors >/dev/null 2>&1 && darwin-apply-colors
+      '';
 
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
@@ -24,6 +26,7 @@ let
     rand_file="''${files[rand_idx]}"
     osascript -e "tell application \"System Events\" to tell every desktop to set picture to \""''${rand_file}\"" as POSIX file"
     wal -i "''${rand_file}" 2> /dev/null
+    command -v darwin-apply-colors >/dev/null 2>&1 && darwin-apply-colors
   '';
 
 
