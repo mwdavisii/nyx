@@ -1,16 +1,14 @@
-# Nixos + DotFiles
+# Nyx
 
-This is my personal configuration that I use for Nixos, Arch Linux, WSL on Windows, MacOS, and my PixelFold.
+Personal multi-platform [Nix Flakes](https://nixos.wiki/wiki/Flakes) configuration managing system and user environments across NixOS, macOS (Darwin), Arch Linux, WSL2, and Android.
 
 ## Desktop — Hyprland + Quickshell
 
 ![Blue Theme](assets/hyprland-1.png)
 
-The desktop stack is **Hyprland** (compositor) with **Ambxst** (Quickshell-based desktop environment) providing bar, dock, launcher, notifications, lockscreen, AI assistant, and more. Colors are dynamically generated from wallpapers via **matugen** (Material Design extraction) and exported to pywal format for downstream tools (cava, btop, kitty, neovim).
+The Linux desktop stack is **Hyprland** (compositor) with **[Ambxst](https://github.com/Axenide/Ambxst)** (Quickshell-based desktop environment) providing bar, dock, launcher, notifications, lockscreen, AI assistant, and more. Colors are dynamically generated from wallpapers via **matugen** (Material Design extraction) and exported to pywal format for downstream tools (cava, btop, kitty, neovim).
 
-### Dynamic Color Scheme
-
-Every UI element — bar, terminals, file manager, system monitor, audio visualizer, and IDE — pulls its palette from the active wallpaper. Switching wallpapers re-themes the entire environment instantly.
+Switching wallpapers re-themes the entire environment instantly — every UI element pulls its palette from the active wallpaper.
 
 | Vibrant | Forest |
 |---|---|
@@ -20,227 +18,213 @@ Every UI element — bar, terminals, file manager, system monitor, audio visuali
 |---|---|
 | ![Minimal theme](assets/minimal.png) | ![Warm theme with IntelliJ](assets/idea.png) |
 
+macOS hosts use **Aerospace** (tiling window manager), **Sketchybar** (status bar), **Karabiner** (key remapping), and **Hammerspoon** (automation). Yabai is also available as an alternative tiling WM.
+
 ## Multi-platform Shells
 
-![Screen Shots](assets/shell-shots.jpeg)
+![Shell Shots](assets/shell-shots.jpeg)
 
-## Overview
+## Architecture
 
-The general approach here is to isolate my user configuration into `home` folder and system configurations in the `system` folder. There are some deviations from this. For instance, all of the secrets are user based, but they are decrypted from the system configuration because we get more control from agenix (owner and group permissions) and I have found this approach does not require any custom activations or a restart of wsl.
+### Configuration Layers
 
-I have used this repo for shell environments over the last couple of years or so but I've gotten carried away with hyprland and desktop tiling over the last few months. I've tried to put everything desktop related in the `nyx.modules.desktop` configuration space under home-manager. Most of the options are specified in in the `/systems/<platform>/hosts/<hostname>/home.nix` file. You can delete the entire desktop section if you don't want any your desktop to be modified.
-The exceptions to this are:
+```
+flake.nix  →  lib/default.nix  →  system/<platform>/  +  home/
+                (mkNixSystemConfiguration, mkArchConfiguration, mkHome, mkNixOnDroidConfiguration)
+```
 
-- Nixos
-  - Hyprland => `system/nixos/modules/hyprland`
-  - Hyprlogin => `system/nixos/modules/hyprlogin`
-  - Yubilogin => `system/nixos/modules/yubilogin`
+**`flake.nix`** is the entry point. It defines all inputs (nixpkgs, home-manager, hyprland, agenix, nix-darwin, nixos-wsl, nix-on-droid, etc.) and maps hostnames to configurations via helper functions in `lib/default.nix`.
 
-- Darwin
-  - Yarbai => `system/darwin/modules/system/yabai`
-  - Dock => `system/darwin/modules/dock`
-  - Brews => `system/darwin/brews.nix`
-  - Casks => `system/darwin/casks.nix`
+**`lib/default.nix`** provides four builder functions:
+- `mkNixSystemConfiguration` — NixOS and Darwin (handles `nixos`, `darwin`, `iso`, `vm`, `wsl` build targets)
+- `mkArchConfiguration` — standalone home-manager for Arch Linux hosts
+- `mkHome` — standalone home-manager configurations
+- `mkNixOnDroidConfiguration` — Android configurations
 
-## General Project Structure
+### Directory Structure
 
-```Markdown
+```
 .
-├─ home    # Home-manager and user configurations
-├─ lib     # Shared functions that generate attribute sets
-├─ nix     # Default Nix Configurations and Overlays
-├─ setup   # Initial Install/Configure Scripts (see platform READMEs below)
-├─ system  # System / Host / Global configurations
+├── home/                    # User-level (home-manager) configuration
+│   ├── shared/modules/      # Cross-platform modules
+│   │   ├── ai/              # claude, chatgpt, gemini, ollama
+│   │   ├── app/             # browsers, terminals, editors, streaming, obs, discord
+│   │   ├── desktop/         # hypr, kanshi, rofi, cava, kmonad, vial, gtk
+│   │   ├── dev/             # go, rust, python, node, lua, nix, cpp, android
+│   │   ├── gaming/          # steam, retroarch
+│   │   ├── sdr/             # software-defined radio (readsb, gqrx, sdr++, rtl_433)
+│   │   ├── shell/           # zsh, tmux, git, starship, weechat (IRC), nixvim, 60+ tools
+│   │   └── theme/           # gtk theming, pywal
+│   ├── darwin/modules/      # macOS-specific (aerospace, sketchybar, karabiner, hammerspoon)
+│   ├── nixos/               # NixOS-specific home modules
+│   ├── arch/                # Arch-specific home modules
+│   ├── droid/               # Android-specific home modules
+│   └── config/              # Raw dotfiles symlinked into $HOME
+├── system/                  # System-level configuration
+│   ├── shared/              # Cross-platform profiles, secrets, common modules
+│   ├── nixos/               # NixOS (kernel, boot, hardware, hyprland, hyprlogin)
+│   │   └── hosts/           # Per-host NixOS configs
+│   ├── darwin/              # macOS (yabai, dock, brews, casks)
+│   │   └── hosts/           # Per-host Darwin configs
+│   ├── arch/                # Arch Linux host configs
+│   │   └── hosts/           # Per-host Arch configs
+│   └── droid/               # Android system config
+├── lib/                     # Builder functions and shared helpers
+├── nix/                     # nixpkgs config, overlays, custom packages
+├── secrets/                 # age-encrypted secrets (agenix)
+├── setup/                   # Platform install/bootstrap scripts
+│   ├── arch/                # 3-phase Arch setup + optional streaming setup
+│   ├── macos/               # macOS bootstrap
+│   ├── wsl/                 # WSL2 bootstrap
+│   └── virtual/             # VirtualBox image build
+├── users/                   # User profile definitions
+└── switch.sh                # Universal rebuild script (auto-detects platform)
 ```
 
-### Setup Guides
+### Module Toggle Pattern
 
-| Platform | Guide |
-|---|---|
-| Arch Linux | [`setup/arch/README.md`](setup/arch/README.md) — 3-phase install (`01-install.sh`, `02-install-packages.sh`, `03-setup-nix.sh`) |
-| Virtual Machines | [`setup/virtual/readme.md`](setup/virtual/readme.md) — VirtualBox image build |
-
-## Influences, Inspirations & Credits
-
-These public repositories heavily influenced my configuration. The project architecture and most of the dot files in this project started directly from EdenEast's public nix configuration. I am sure I missed someone's repo in the list, but I'm trying to give credit where credit is due. 
-
-### Nix
-
-- [EdenEast/nyx](https://github.com/EdenEast/nyx)
-- [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
-- [LGUG2Z/nixos-wsl-starter](https://github.com/LGUG2Z/nixos-wsl-starter)
-
-### Hyprland / Quickshell / dotFiles
-
-- [Axenide/Ambxst](https://github.com/Axenide/Ambxst) — Quickshell-based desktop environment (bar, dock, launcher, notifications, lockscreen, AI assistant)
-- [HeinzDev/Hyperland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles)
-- [linuxmobile/hyperland-dots](https://github.com/linuxmobile/hyprland-dots)
-- [xsghetti/HyprCrux](https://github.com/xsghetti/HyprCrux)
-- [justinmdickey/publicdots](https://github.com/justinmdickey/publicdots/tree/main)
-
-### Amethyst / Yabai / Hammerspoon
-
-- [ianyh/Amethyst](https://github.com/ianyh/Amethyst)
-- [julian-heng/yabai-config](https://github.com/julian-heng/yabai-config)
-- [breuerfelix/dotfiles](https://github.com/breuerfelix/dotfiles)
-
-## Installation & Configuration
-
-### My Configured Hosts
-
-Below are descriptions of the hosts configurations. If you have access to windows / wsl, I recommend wsl/hosts/nixos.
-
-```Markdown
-├─ system
-├─── arch
-├───── hosts
-├─────── L242731        # => Work Dell — Arch Linux + Hyprland
-├─────── prometheus     # => Home desktop — Arch Linux + Hyprland
-├─── darwin
-├───── hosts
-├─────── mwdavis-workm1 # => Work Macbook / 2022 16" Pro M1
-├─────── L241729        # => Work MacBook
-├─── droid
-├───── hosts
-├─────── default        # => Google Pixel Fold
-├─── nixos
-├───── hosts
-├─────── ares           # => Personal WSL w/ personal credential decryption
-├─────── hephaestus     # => Home machine - Custom Build / i9 / AMD 7900xt / dual boot nixos+win
-├─────── hydra          # => Home lab k3s VM on proxmox w/ cilium
-├─────── livecd         # => Bootable installer ISO w/ custom shell
-├─────── olenos         # => Work laptop - Thinkpad x13 / i7 / integrated graphics / nixos only
-├─────── virtualbox     # => Oracle Virtualbox Image (Gnome + Shell)
-├─────── nixos          # => Generic WSL2
-```
-
-### Secrets Configuration
-
-This repository uses [ryantm/agenix](https://github.com/ryantm/agenix) to manage secrets. The secrets are stored as encrypted age files in a private repository. To run this as is, you will need to either remove all references to secrets or create your own secrets repository.
-
-The easiest way to run this is to update 'flake.nix` to use my [nix-secrets-example](https://github.com/mwdavisii/nix-secrets-example) repository.
-Replace this:
+Hosts configure themselves through the `nyx` option namespace. Each host has a directory under `system/<platform>/hosts/<hostname>/` containing `default.nix` (toggles), `home.nix` (user config), and optionally `system.nix` (hardware).
 
 ```nix
-secrets = {
-      url = "git+ssh://git@github.com/mwdavisii/nix-secrets.git";
-      flake = false;
-    };
-```
-
-with this:
-
-```nix
-secrets = {
-      url = "git+https://git@github.com/mwdavisii/nix-secrets-example.git";
-      flake = false;
-    };
-```
-
-Then make sure the options in '/system/$darwin or $wsl2>/hosts/$hostname/default.nix are all marked false as shown below. This will maintain the secrets skeleton, but should not error since no decryption configuration is provided.
-
-```nix
-  nyx = {
-    modules = {
-      user.home = ../../shared/home.nix;
-    };
-
-    secrets = {
-      awsSSHKeys.enable = false;
-      awsConfig.enable = false;
-      userSSHKeys.enable = false;
-      userPGPKeys.enable = false;
-    };
-
-    profiles = {
-      desktop = {
-        enable = true;
-      };
-    };
+nyx = {
+  modules = {
+    user.home = ./home.nix;
+    # Desktop
+    desktop.hyprland.enable = true;
+    desktop.kanshi.enable = true;
+    # AI
+    ai.claude.enable = true;
+    # Gaming
+    gaming.steam.enable = true;
   };
+  secrets = {
+    userSSHKeys.enable = true;
+    userPGPKeys.enable = true;
+  };
+  profiles = {
+    desktop.enable = true;
+  };
+};
 ```
 
-If you want to actually build and decrypt secrets, here is what my secrets repository looks like:
+Module options are defined in `home/shared/modules/` and applied by home-manager. Profiles live in `system/shared/profiles/` and secrets in `system/shared/secrets/`.
 
-```Markdown
-.
-├─ secrets.nix    # The secrets file you're instructed to create in this tutorial => https://github.com/ryantm/agenix?tab=readme-ov-file#tutorial
-├─ encrypted      # Subdirectory to hold encrypted files
-├─── id_ed25519.age files  # Example encrypted file
+## Hosts
+
+```
+system/
+├── nixos/hosts/
+│   ├── hephaestus/     # Home desktop — i9 / AMD 7900XT / dual-boot NixOS+Win
+│   ├── olenos/         # ThinkPad X13 laptop
+│   ├── hydra/          # Home lab k3s VM on Proxmox
+│   ├── ares/           # Personal WSL2 instance
+│   ├── nixos/          # Generic WSL2
+│   ├── livecd/         # Bootable installer ISO
+│   └── virtualbox/     # VirtualBox OVA image
+├── arch/hosts/
+│   ├── prometheus/     # Home desktop — Arch + Hyprland
+│   └── L242731/        # Work Dell — Arch + Hyprland
+├── darwin/hosts/
+│   ├── mwdavis-workm1/ # Work MacBook 2022 16" Pro M1
+│   └── L241729/        # Work MacBook
+└── droid/hosts/
+    └── default/        # Google Pixel Fold (Nix-on-Droid)
 ```
 
-** Note that if the repository is private and you're using sudo, it will be looking for the github ssh key in the `/root/.ssh` directory and not your user directory.
+## Getting Started
 
-### WSL2 Installation
+### Prerequisites
 
-1. Make sure you have WSL enabled and installed. [Click here if you need help setting up basic WSL2.](https://learn.microsoft.com/en-us/windows/wsl/install)
-2. Make sure you have git installed in windows. You can download it [here.](https://git-scm.com/downloads)
-3. Open up a PowerShell window
-4. Clone this repo and start the windows side of the installation by executing [start_here.ps1](https://github.com/mwdavisii/nyx/blob/main/setup/wsl/start_here.ps1).
+- [Nix](https://nixos.org/download.html) with flakes enabled
+- Git
+
+### Quick Start (Existing Host)
+
+```bash
+git clone https://github.com/mwdavisii/nyx.git
+cd nyx
+
+# Enter dev shell
+nix develop
+
+# Apply configuration (auto-detects platform)
+./switch.sh
+```
+
+### Rebuild Commands
+
+```bash
+# Universal (recommended) — detects OS and runs the right thing
+./switch.sh
+
+# Manual per-platform
+sudo nixos-rebuild switch --show-trace --flake .#<hostname>     # NixOS
+sudo darwin-rebuild switch --flake .                             # macOS
+setup/arch/02-install-packages.sh --sync                        # Arch (system pkgs)
+home-manager switch --show-trace --flake .#<hostname>            # Arch (home-manager)
+nix-on-droid switch --show-trace --flake .                       # Android
+```
+
+### Validate Without Applying
+
+```bash
+nix flake show                                                          # Check outputs
+sudo nixos-rebuild dry-build --flake .#<hostname>                       # NixOS dry run
+nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel  # Build only
+```
+
+### Build Images
+
+```bash
+nix build .#nixosConfigurations.livecd.config.system.build.isoImage     # Bootable ISO
+nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage # VirtualBox OVA
+```
+
+### Update Flake Inputs
+
+```bash
+nix flake update            # Update all inputs
+nix flake update <input>    # Update a single input (e.g., nixpkgs)
+```
+
+## Platform Installation Guides
+
+### NixOS (WSL2)
+
+1. Enable WSL2 — [Microsoft docs](https://learn.microsoft.com/en-us/windows/wsl/install)
+2. Install [Git for Windows](https://git-scm.com/downloads)
+3. From PowerShell:
 
 ```powershell
 git clone https://github.com/mwdavisii/nyx.git
-set-location ./nyx/setup/wsl
+Set-Location ./nyx/setup/wsl
 ./start_here.ps1
 ```
 
-5. You should now be in your windows user directory, but in the NixOS shell. Move back into the startup directory and launch [step2.sh](https://github.com/mwdavisii/nyx/blob/main/setup/wsl/step2.sh).
+4. You're now in the NixOS shell. Continue setup:
 
-```shell
+```bash
 cd ./nyx/setup/wsl
 ./step2.sh
 ```
 
-**Note**
-Some users have reported a shell error when running step 2. If you see an error message that contains `\r`, it's likely git converted line breaks to windows format. I think it's caused b having `git config --global core.autocrlf` set to `true` on windows. If this happens, the easiest thing to do is go to your home directory `cd ~` and clone another copy of the repo through nix (commands below). If you do this this, don't forget to update your secrets.
+5. Edit `flake.nix` and update user details in the appropriate `users/*.nix` file:
+   - `displayName`, `email`, `signingKey` (for git config)
+   - `windowsUserDirName` (your Windows profile folder name, used for VS Code symlink)
 
-```shell
-sudo nix-channel --add https://nixos.org/channels/nixos-25.05 nixos
-sudo nix-channel --update
-nix-shell -p git vim 
-git clone https://github.com/mwdavisii/nyx
-```
+6. Apply final configuration:
 
-After this, you shou be able to continue to step 6.
-
-6. Before running the last step, open ./flake.nix in your favorite text editor and look for the lines below and change the following values:
-
-- **displayName** => Display Name used in GitHub config
-- **email** => Display Name used in GitHub config`
-- **signingKey** => The key used to sign git commits. (you can leave blank)`
-- **windowsUserDirName** => This is the folder name of your windows profile. It is used to create the symlink from WSL to VS Code and add it to your path.
-
-****Note:*** Leave the userName as nixos for wsl unless you know how to configure non-default users in nixos for WSL. As of now, it requires building from [nix-community/NixOS-WSL](https://github.com/nix-community/NixOS-WSL) which is more than I care to tackle at the moment.
-
-```nix
-{
-  userName = "nixos";
-  email = "mwdavisii@gmail.com";
-  displayName = "Mike D.";
-  signingKey = "5A60221930345909";
-  windowsUserDirName = "mwdav";
-}
-```
-
-7. Finally, run the last script, [step3.sh](https://github.com/mwdavisii/nyx/blob/main/setup/wsl/step3.sh).
-
-```shell
+```bash
 ./step3.sh
 ```
 
-Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script.
+7. Open a new shell. From now on, rebuild with `./switch.sh`.
 
-``` shell
-./switch.sh #Rebuilds and switches to the home environment.
-```
+> **Note:** If you see `\r` errors in step 2, Git may have converted line endings. Re-clone from inside the NixOS shell with `nix-shell -p git && git clone https://github.com/mwdavisii/nyx`.
 
-### Arch Linux Installation
+### Arch Linux
 
-Arch Linux hosts use a 3-phase setup: minimal OS install from archiso, desktop package installation, then Nix + home-manager bootstrap. System packages are managed by pacman/AUR (some packages like discord and bun are AUR-only), and user-level configuration is managed by home-manager via a standalone flake.
-
-See [`setup/arch/README.md`](setup/arch/README.md) for the full step-by-step guide.
-
-Quick overview:
+3-phase setup: minimal OS install from archiso, desktop packages, then Nix + home-manager. See [`setup/arch/README.md`](setup/arch/README.md) for the full guide.
 
 ```bash
 # Phase 1 — from archiso (partitions, base system, reboot)
@@ -256,136 +240,114 @@ curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/arch/03-setu
 chmod +x 03-setup-nix.sh && ./03-setup-nix.sh
 ```
 
-After initial setup, `./switch.sh` automatically syncs system packages and applies home-manager configuration.
+Optional streaming setup (OBS, audio routing):
 
-### MacOS Installation
-
-1. Make sure you have git installed. You can download it [here.](https://git-scm.com/downloads)
-2. Clone this repository.
-
-```shell
-git clone https://github.com/mwdavisii/nyx.git
-cd ./nyx/macos
+```bash
+setup/arch/optional-streaming-setup.sh
 ```
 
-3. Launch the installation script
+After initial setup, `./switch.sh` syncs system packages and applies home-manager.
 
-```shell
+### macOS
+
+1. Install [Git](https://git-scm.com/downloads)
+2. Clone and bootstrap:
+
+```bash
+git clone https://github.com/mwdavisii/nyx.git
+cd nyx/setup/macos
 ./start_here.sh
 ```
 
-4. Copy the `./users/mwdavisii.nix` file into a new file with your username. Then use your favorite text editor and update the information in the file. You can safely ignore the windowsUserDirName value, that is exclusively for WSL2 and VS Code.
+3. Copy `users/mwdavisii.nix` to a file with your username and update `displayName`, `email`, and `signingKey`.
 
-- **displayName** => Display Name used in GitHub config
-- **email** => Display Name used in GitHub config`
-- **signingKey** => The key used to sign git commits. (you can leave blank)`
+4. Edit `flake.nix` to point your hostname at your user. Change `aarch64-darwin` to `x86_64-darwin` for Intel Macs.
 
-```nix
-{
-  userName = "mwdavisii";
-  email = "mwdavisii@gmail.com";
-  displayName = "Mike D.";
-  signingKey = "5A60221930345909";
-  windowsUserDirName = "";
-}
+5. Apply:
 
-```
-
-5. Edit the `./flake.nix` file and look for the following lines. Change the user to the user you created above and if you are running an intel mac, change `aarch64-darwin` to `x86_64-darwin`.
-
-```nix
-darwinConfigurations = mapAttrs' mkDarwinConfiguration{
-        mwdavis-workm1 = {system = "aarch64-darwin"; user = "mwdavisii";};
-      };
-```
-
-6. Apply the changes
-
-```shell
+```bash
 ./step2.sh
 ```
 
-7. Now close the current shell and open a new one. After the initial install, you can apply updates by executing the refresh script.
+6. Open a new shell. Rebuild with `./switch.sh`.
 
-```shell
-./switch.sh #Rebuilds and switches to the home environment.
+### Android (Nix-on-Droid)
+
+1. Install [Nix-on-Droid from F-Droid](https://f-droid.org/en/packages/com.termux.nix/)
+2. Add git to `~/.config/nixpkgs/nix-on-droid.nix`
+3. Clone and apply:
+
+```bash
+git clone https://github.com/mwdavisii/nyx.git
+cd nyx
+nix-on-droid switch --flake .
 ```
+
+> **Note:** Nix-on-Droid has limited support for some Nix features. The droid modules in `home/droid/` are simplified compared to other platforms.
 
 ### Virtual Machines
 
-I've created a virtualbox host and am using [nix-community](https://github.com/nix-community/nixos-generators) to build. It supports all kinds of outputs. My plan was to create a host for each platform I care about and continue to use `nixosModules ++ commonModules` in `lib/default.nix` and `flakes.nix` to define the configurations.
+See [`setup/virtual/readme.md`](setup/virtual/readme.md) for VirtualBox image builds using [nixos-generators](https://github.com/nix-community/nixos-generators).
 
-### Android Installation
+## Secrets
 
-1. You will need to install [Nix-on-Droid from f-droid](https://f-droid.org/en/packages/com.termux.nix/)
-2. Go into the root of the initial installation and edit `~/.config/nixpkgs/nix-on-droid.nix` to add 'git' to the packages
-3. run `nix-on-droid switch --flake .` from the directory with `flake.nix` in it.
-4. Once complete, run `git clone https://github.com/mwdavisii/nyx.git`
-5. Run `cd nyx` and the run `nix-on-droid switch --flake .`
+This repository uses [agenix](https://github.com/ryantm/agenix) for secret management. Secrets are age-encrypted and stored in a private repository referenced by `flake.nix`.
 
-**Notes On NixOnDroid** NixOnDroid is still rudimentary and doesn't have full support for attrs and other functions yet. Because of that, it doens't follow the same `mkAttrs` into `options` for build. It just looks at the files in `home/droid/modules` and runs the configuration there. You can see many of the modules are simplified for this environment.
+To run without secrets, replace the secrets input in `flake.nix` with the public example:
 
-## Tips
+```nix
+secrets = {
+  url = "git+https://git@github.com/mwdavisii/nix-secrets-example.git";
+  flake = false;
+};
+```
 
-I have over 150+ commits in the last week. I am not new to declarative systems and have been using git ops strategies since they had a name. Nix was brand new to me and trying to pick up Nix + Flakes + Attributes at the same time was difficult. I can't tell you how many times I've typed `git reset --hard` or `nix-on-droid rollback`.
+Then disable all secret options in your host's `default.nix`:
 
-Here are some things that would have shortned my learning curve:
+```nix
+nyx.secrets = {
+  awsSSHKeys.enable = false;
+  awsConfig.enable = false;
+  userSSHKeys.enable = false;
+  userPGPKeys.enable = false;
+};
+```
 
-### Recommended Reading
+If building your own secrets repo, structure it as:
 
-- [EdenEast's Nyx Readme](https://github.com/EdenEast/nyx/blob/main/readme.md) 
+```
+.
+├── secrets.nix         # Key recipients (see agenix tutorial)
+└── encrypted/          # *.age files
+```
+
+> **Note:** If using `sudo` with a private repo, SSH keys are read from `/root/.ssh`, not your user directory.
+
+## Credits & Inspiration
+
+### Nix
+
+- [EdenEast/nyx](https://github.com/EdenEast/nyx) — project architecture foundation
+- [dustinlyons/nixos-config](https://github.com/dustinlyons/nixos-config)
+- [LGUG2Z/nixos-wsl-starter](https://github.com/LGUG2Z/nixos-wsl-starter)
+
+### Hyprland / Quickshell
+
+- [Axenide/Ambxst](https://github.com/Axenide/Ambxst) — Quickshell desktop environment
+- [HeinzDev/Hyprland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles)
+- [linuxmobile/hyprland-dots](https://github.com/linuxmobile/hyprland-dots)
+- [xsghetti/HyprCrux](https://github.com/xsghetti/HyprCrux)
+- [justinmdickey/publicdots](https://github.com/justinmdickey/publicdots)
+
+### macOS Tiling
+
+- [ianyh/Amethyst](https://github.com/ianyh/Amethyst)
+- [julian-heng/yabai-config](https://github.com/julian-heng/yabai-config)
+- [breuerfelix/dotfiles](https://github.com/breuerfelix/dotfiles)
+
+## Recommended Reading
+
+- [EdenEast's Nyx Readme](https://github.com/EdenEast/nyx/blob/main/readme.md)
 - [Introduction to Nix & NixOS](https://nixos-and-flakes.thiscute.world/introduction/)
 - [An Introduction to Nix Flakes](https://www.tweag.io/blog/2020-05-25-flakes/)
-- [Flakes aren't real and cannot hurt you: a guide to using Nix flakes the non-flake way](https://jade.fyi/blog/flakes-arent-real/)
-
-### My Nix, Flake, and mkAttr Gotchas
-
-- There is a lot of basic documentation and examples for nixos, flakes, and most modules. However, when introducing attribute sets, I found it more difficult to apply the published examples to the more complex approach. There was a lot of looking at other peoples repos, asking gemini for help, and a good bit of trial and error.
-- I tried to be pure, but quickly found out the variation between systems and packages didn't always allow it.
-  - For instance, I would have put all user secrets inside of `home/` instead of `system/`, but I kept having issues with [ryantm/agenix](https://github.com/ryantm/agenix) in home manager, and didn't want to use a custom activation script.
-- Rollback a build that successfuly failed by executing `nixos-rebuild switch --rollback` or `darwin-rebuild switch --rollback` or `nix-on-droid rollback`.
-  - I was frequently wiping and rebuilding the entire system before I knew this.
-- In regards to `nyx.modules`, `nyx.profiles`, and `nyx.secrets`
-  - In each `mk${system}Configuration`, the lines below actually create the root options (`config.nyx.profiles`, `config.nyx.modules`,  and `config.nyx.secrets`).
-  - These options are set in `system/$system/hosts/$hostname/default.nix`.
-  - These options are applied from various subdirectories:
-    - Secrets (`config.nyx.secrets`) are applied from `system/shared/secrets`
-    - Profiles (`config.nyx.profiles`) are applied from `system/shared/profiles`
-    - Modules (these are applied by home-manager)
-      - App Modules (`config.nyx.modules.app`) are applied from `home/shared/modules/app`
-      - Dev Modules (`config.nyx.modules.dev`) are applied from `home/shared/modules/dev`
-      - Shell Modules (`config.nyx.modules.shell`) are applied from `home/shared/modules/shell`
-      - Desktop Modules (`config.nyx.modules.desktop`) are applied from `home/shared/modules/desktop` (hypr, kanshi, rofi, quickshell, cava, etc.)
-      - Theme Modules (`config.nyx.modules.theme`) are applied from `home/shared/modules/theme` (gtk, pywal)
-      - AI Modules (`config.nyx.modules.ai`) are applied from `home/shared/modules/ai` (claude, chatgpt, gemini, ollama)
-      - Gaming Modules (`config.nyx.modules.gaming`) are applied from `home/shared/modules/gaming` (steam, retroarch)
-
-Example from `lib/default.nix`:
-
-```nix
-  (import ../system/nixos/shared/modules)
-  (import ../system/shared/profiles)
-  (import ../system/shared/secrets)
-  (import (strToPath config ../in/hosts))
-```
-
-Example from `system/$system/hosts/$hostname/default.nix`:
-
-```nix
-  nyx = {
-    modules = {
-      user.home = ./home.nix;
-    };
-    secrets = {
-      awsSSHKeys.enable = true;
-      awsConfig.enable = true;
-      userSSHKeys.enable = true;
-      userPGPKeys.enable = true;
-    };
-    profiles = {
-      desktop = {
-        enable = true;
-      };
-    };
-  };
-```
+- [Flakes aren't real and cannot hurt you](https://jade.fyi/blog/flakes-arent-real/)
