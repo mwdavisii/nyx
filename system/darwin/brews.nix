@@ -1,6 +1,9 @@
 _:
 [
     "blueutil"
+    "colima"
+    "docker"
+    "docker-compose"
     "sketchybar"
     "jmeter"
     "pam-reattach"

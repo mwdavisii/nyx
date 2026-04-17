@@ -6,7 +6,6 @@ _:
   "sublime-text"
 
   # Development Tools
-  "homebrew/cask/docker"
   "powershell@preview"
   "iterm2"
 
@@ -34,6 +33,6 @@ _:
   "diffusionbee"
   
   #AI"
-  "ollama" 
+  "ollama-app"
   "codex"
 ]
