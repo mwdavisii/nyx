@@ -9,6 +9,7 @@ _:
 
   # Development Tools
   "iterm2"
+  "wezterm"
 
 
   # Communication Tools
