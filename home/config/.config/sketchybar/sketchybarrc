@@ -118,6 +118,14 @@ sketchybar --add item clock right \
     script="$PLUGIN_DIR/clock.sh" \
     click_script="$PLUGIN_DIR/clock_click.sh"
 
+# --- Cloudflare WARP (click to toggle) ---
+sketchybar --add item warp right \
+  --set warp \
+    icon="󰒄" \
+    update_freq=10 \
+    script="$PLUGIN_DIR/warp.sh" \
+    click_script="$PLUGIN_DIR/warp_click.sh"
+
 # --- Battery ---
 sketchybar --add item battery right \
   --set battery \
