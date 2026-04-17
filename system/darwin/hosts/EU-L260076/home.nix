@@ -50,11 +50,11 @@
       #firefox.enable = true;
       obs.enable = false;
       scrcpy.enable = true;
-      #wezterm = {
-      #  enable = true;
-      #  package = null;
-      #  fontSize = 14;
-      #};
+      wezterm = {
+        enable = true;
+        package = null;
+        fontSize = 14;
+      };
       vscode.enable = true;
     };
     dev = {
@@ -81,6 +81,7 @@
         enable = true;
         signing.signByDefault = false;
       };
+      glow.enable = true;
       gnupg = {
         enable = true;
         enableService = pkgs.stdenv.hostPlatform.isLinux;
@@ -92,17 +93,31 @@
       k8sTooling.enable = true;
       lf.enable = true;
       lorri.enable = false;
-      mcfly.enable = true;
+      mcfly.enable = false;        # replaced by atuin
       fastfetch.enable = true;
       nixvim.enable = true;
       networking.enable = true;
+      openssl.enable = true;
+      ranger.enable = true;
       starship.enable = true;
       terraform.enable = true;
       tmux.enable = true;
       wal.enable = true;
       xdg.enable = true;
+      yq.enable = true;
       zellij.enable = true;
+      zoxide.enable = true;
       zsh.enable = true;
+      # New shell tools
+      astroterm.enable = true;
+      atuin.enable = true;
+      bandwhich.enable = true;
+      bottom.enable = true;
+      dysk.enable = true;
+      lazygit.enable = true;
+      navi.enable = true;
+      ncdu.enable = true;
+      weechat.enable = true;
     };
   };
 }
