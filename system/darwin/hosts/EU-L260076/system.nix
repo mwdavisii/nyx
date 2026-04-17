@@ -77,6 +77,10 @@ with lib;
                     TrackpadThreeFingerDrag = true;
                 };
 
+                universalaccess = {
+                    reduceTransparency = true;
+                };
+
                 # Disable Mission Control shortcuts that conflict with AeroSpace
                 # 32 = Mission Control (Ctrl+Up), 33 = App Windows (Ctrl+Down)
                 # 79/80 = Move left a space (Ctrl+Left), 81/82 = Move right a space (Ctrl+Right)
