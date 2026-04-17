@@ -2,7 +2,9 @@ _:
 
 [
   #desktop tools
+  "aerospace"
   "hammerspoon"
+  "karabiner-elements"
   "sublime-text"
 
   # Development Tools
