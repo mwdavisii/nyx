@@ -6,12 +6,138 @@ local function font_with_fallback(name, params)
 end
 
 local font_name = "JetBrainsMonoNL NF"
+local is_darwin = wezterm.target_triple:find("darwin") ~= nil
 
 -- Load pywal colors if available; falls back to WezTerm defaults if not
 local wal_colors = nil
 local wal_path = os.getenv("HOME") .. "/.cache/wal/colors-wezterm.lua"
 local ok, result = pcall(dofile, wal_path)
 if ok then wal_colors = result end
+
+-- Build keys table
+local keys = {
+	{
+		key = [[\]],
+		mods = "CTRL|ALT",
+		action = wezterm.action({
+			SplitHorizontal = { domain = "CurrentPaneDomain" },
+		}),
+	},
+	{
+		key = [[\]],
+		mods = "CTRL",
+		action = wezterm.action({
+			SplitVertical = { domain = "CurrentPaneDomain" },
+		}),
+	},
+	{
+		key = "q",
+		mods = "CTRL",
+		action = wezterm.action({ CloseCurrentPane = { confirm = false } }),
+	},
+	{
+		key = "h",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action({ ActivatePaneDirection = "Left" }),
+	},
+	{
+		key = "l",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action({ ActivatePaneDirection = "Right" }),
+	},
+	{
+		key = "k",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action({ ActivatePaneDirection = "Up" }),
+	},
+	{
+		key = "j",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action({ ActivatePaneDirection = "Down" }),
+	},
+	{
+		key = "h",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action({ AdjustPaneSize = { "Left", 1 } }),
+	},
+	{
+		key = "l",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action({ AdjustPaneSize = { "Right", 1 } }),
+	},
+	{
+		key = "k",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action({ AdjustPaneSize = { "Up", 1 } }),
+	},
+	{
+		key = "j",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action({ AdjustPaneSize = { "Down", 1 } }),
+	},
+	{ -- browser-like bindings for tabbing
+		key = "t",
+		mods = "CTRL",
+		action = wezterm.action({ SpawnTab = "CurrentPaneDomain" }),
+	},
+	{
+		key = "w",
+		mods = "CTRL",
+		action = wezterm.action({ CloseCurrentTab = { confirm = false } }),
+	},
+	{
+		key = "Tab",
+		mods = "CTRL",
+		action = wezterm.action({ ActivateTabRelative = 1 }),
+	},
+	{
+		key = "Tab",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action({ ActivateTabRelative = -1 }),
+	},
+	-- copy/paste
+	{
+		key = "x",
+		mods = "CTRL",
+		action = "ActivateCopyMode",
+	},
+	{
+		key = "c",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }),
+	},
+	{
+		key = "v",
+		mods = "CTRL|SHIFT",
+		action = is_darwin
+			and wezterm.action({ PasteFrom = "Clipboard" })
+			or wezterm.action_callback(function(_, pane)
+				local success, stdout = wezterm.run_child_process({ "/usr/bin/wl-paste", "--no-newline" })
+				if success and stdout and #stdout > 0 then
+					pane:paste(stdout)
+				end
+			end),
+	},
+	-- Ctrl+C copies only if text is selected, otherwise sends interrupt
+	{
+		key = "c",
+		mods = "CTRL",
+		action = wezterm.action_callback(function(window, pane)
+			if window:get_selection_text_for_pane(pane) ~= "" then
+				window:perform_action(wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }), pane)
+			else
+				window:perform_action(wezterm.action({ SendKey = { key = "c", mods = "CTRL" } }), pane)
+			end
+		end),
+	},
+}
+
+-- macOS: add Cmd+C/V and pass hyper+Q to Aerospace
+if is_darwin then
+	table.insert(keys, { key = "c", mods = "CMD", action = wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }) })
+	table.insert(keys, { key = "v", mods = "CMD", action = wezterm.action({ PasteFrom = "Clipboard" }) })
+	table.insert(keys, { key = "q", mods = "CMD|CTRL|ALT", action = wezterm.action.QuitApplication })
+end
 
 return {
 	-- OpenGL for GPU acceleration, Software for CPU
@@ -45,120 +171,7 @@ return {
 
 	-- Keybinds
 	disable_default_key_bindings = true,
-	keys = {
-		{
-			key = [[\]],
-			mods = "CTRL|ALT",
-			action = wezterm.action({
-				SplitHorizontal = { domain = "CurrentPaneDomain" },
-			}),
-		},
-		{
-			key = [[\]],
-			mods = "CTRL",
-			action = wezterm.action({
-				SplitVertical = { domain = "CurrentPaneDomain" },
-			}),
-		},
-		{
-			key = "q",
-			mods = "CTRL",
-			action = wezterm.action({ CloseCurrentPane = { confirm = false } }),
-		},
-		{
-			key = "h",
-			mods = "CTRL|SHIFT",
-			action = wezterm.action({ ActivatePaneDirection = "Left" }),
-		},
-		{
-			key = "l",
-			mods = "CTRL|SHIFT",
-			action = wezterm.action({ ActivatePaneDirection = "Right" }),
-		},
-		{
-			key = "k",
-			mods = "CTRL|SHIFT",
-			action = wezterm.action({ ActivatePaneDirection = "Up" }),
-		},
-		{
-			key = "j",
-			mods = "CTRL|SHIFT",
-			action = wezterm.action({ ActivatePaneDirection = "Down" }),
-		},
-		{
-			key = "h",
-			mods = "CTRL|SHIFT|ALT",
-			action = wezterm.action({ AdjustPaneSize = { "Left", 1 } }),
-		},
-		{
-			key = "l",
-			mods = "CTRL|SHIFT|ALT",
-			action = wezterm.action({ AdjustPaneSize = { "Right", 1 } }),
-		},
-		{
-			key = "k",
-			mods = "CTRL|SHIFT|ALT",
-			action = wezterm.action({ AdjustPaneSize = { "Up", 1 } }),
-		},
-		{
-			key = "j",
-			mods = "CTRL|SHIFT|ALT",
-			action = wezterm.action({ AdjustPaneSize = { "Down", 1 } }),
-		},
-		{ -- browser-like bindings for tabbing
-			key = "t",
-			mods = "CTRL",
-			action = wezterm.action({ SpawnTab = "CurrentPaneDomain" }),
-		},
-		{
-			key = "w",
-			mods = "CTRL",
-			action = wezterm.action({ CloseCurrentTab = { confirm = false } }),
-		},
-		{
-			key = "Tab",
-			mods = "CTRL",
-			action = wezterm.action({ ActivateTabRelative = 1 }),
-		},
-		{
-			key = "Tab",
-			mods = "CTRL|SHIFT",
-			action = wezterm.action({ ActivateTabRelative = -1 }),
-		}, -- copy/paste bindings
-		{
-			key = "x",
-			mods = "CTRL",
-			action = "ActivateCopyMode",
-		},
-		-- Ctrl+Shift+C / Ctrl+Shift+V (classic terminal style)
-		{
-			key = "c",
-			mods = "CTRL|SHIFT",
-			action = wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }),
-		},
-		{
-			key = "v",
-			mods = "CTRL|SHIFT",
-			action = wezterm.action_callback(function(_, pane)
-				local success, stdout = wezterm.run_child_process({ "/usr/bin/wl-paste", "--no-newline" })
-				if success and stdout and #stdout > 0 then
-					pane:paste(stdout)
-				end
-			end),
-		},
-		-- Ctrl+C copies only if text is selected, otherwise sends interrupt
-		{
-			key = "c",
-			mods = "CTRL",
-			action = wezterm.action_callback(function(window, pane)
-				if window:get_selection_text_for_pane(pane) ~= "" then
-					window:perform_action(wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }), pane)
-				else
-					window:perform_action(wezterm.action({ SendKey = { key = "c", mods = "CTRL" } }), pane)
-				end
-			end),
-		},
-	},
+	keys = keys,
 
 	-- Aesthetic Night Colorscheme
 	bold_brightens_ansi_colors = true,
@@ -181,5 +194,5 @@ return {
 	inactive_pane_hsb = { saturation = 1.0, brightness = 1.0 },
 	window_background_opacity = 0.5,
 	window_close_confirmation = "NeverPrompt",
-        window_frame = { active_titlebar_bg = "#45475a", font = font_with_fallback(font_name, { bold = true }) },
+	window_frame = { active_titlebar_bg = "#45475a", font = font_with_fallback(font_name, { bold = true }) },
 }

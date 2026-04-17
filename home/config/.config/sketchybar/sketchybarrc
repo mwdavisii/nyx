@@ -180,6 +180,15 @@ sketchybar --add item disk right \
     script="$PLUGIN_DIR/disk.sh" \
     click_script="open -a 'Disk Utility'"
 
+# --- Wallpaper (click=random, right-click=default, scroll=cycle) ---
+sketchybar --add item wallpaper right \
+  --set wallpaper \
+    icon="󰸉" \
+    icon.color=$ACCENT \
+    update_freq=0 \
+    script="$PLUGIN_DIR/wallpaper.sh" \
+    click_script="$PLUGIN_DIR/wallpaper_click.sh"
+
 # ──────────────────────────────────────────────
 # Finalize
 # ──────────────────────────────────────────────

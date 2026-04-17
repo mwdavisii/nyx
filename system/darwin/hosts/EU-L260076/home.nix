@@ -56,6 +56,7 @@
         fontSize = 14;
       };
       vscode.enable = true;
+      ytfzf.enable = true;
     };
     dev = {
       androidSDK.enable = true;
@@ -108,6 +109,7 @@
       zellij.enable = true;
       zoxide.enable = true;
       zsh.enable = true;
+      #ytmPlayer.enable = true; # python3-mpv fails to build on Darwin (needs Xvfb)
       # New shell tools
       astroterm.enable = true;
       atuin.enable = true;

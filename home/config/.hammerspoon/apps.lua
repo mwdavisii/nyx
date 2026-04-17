@@ -23,6 +23,17 @@ function open_app(name)
       ]])
       return
     end
+    if app and name == 'WezTerm' then
+      hs.applescript([[
+        tell application "WezTerm"
+          activate
+        end tell
+      ]])
+      hs.timer.doAfter(0.3, function()
+        hs.eventtap.keyStroke({"cmd"}, "n")
+      end)
+      return
+    end
     hs.application.launchOrFocus(name)
     if name == 'Finder' then
       app:activate()
@@ -35,7 +46,7 @@ hs.hotkey.bind(super, "C",            open_app("Visual Studio Code"))
 hs.hotkey.bind(super, "B",            open_app("Google Chrome"))
 hs.hotkey.bind(super, "O",            open_app("Microsoft Outlook"))
 hs.hotkey.bind(super, "T",            open_app("Microsoft Teams"))
-hs.hotkey.bind(super, "return",       open_app("iterm"))
+hs.hotkey.bind(super, "return",       open_app("WezTerm"))
 hs.hotkey.bind(superShift, "return",  open_app("Alacritty"))
 hs.hotkey.bind(super, "K",            open_app("Kitty"))
 hs.hotkey.bind(super, "F",            open_app("Finder"))
