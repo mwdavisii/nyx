@@ -6,7 +6,6 @@ _:
   "sublime-text"
 
   # Development Tools
-  "powershell@preview"
   "iterm2"
 
 
