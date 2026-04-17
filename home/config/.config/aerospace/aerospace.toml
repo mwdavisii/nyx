@@ -13,10 +13,10 @@ exec-on-workspace-change = ['/bin/bash', '-c',
   'sketchybar --trigger aerospace_workspace_change']
 
 [gaps]
-outer.left = 20
-outer.right = 20
+outer.left = 10
+outer.right = 10
 outer.top = 44
-outer.bottom = 20
+outer.bottom = 10
 inner.horizontal = 5
 inner.vertical = 5
 
