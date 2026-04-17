@@ -25,7 +25,7 @@ with lib;
               autoUpdate = true;
               upgrade = true;
             };
-            taps = [ "FelixKratz/formulae" ];
+            taps = [ "FelixKratz/formulae" "nikitabobko/tap" ];
             casks = pkgs.callPackage ../../casks.nix {};
             brews = pkgs.callPackage ../../brews.nix {};
 

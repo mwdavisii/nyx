@@ -2,7 +2,7 @@ _:
 
 [
   #desktop tools
-  "aerospace"
+  "nikitabobko/tap/aerospace"
   "hammerspoon"
   "karabiner-elements"
   "sublime-text"
