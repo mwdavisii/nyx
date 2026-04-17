@@ -8,6 +8,10 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # Keep intentional splits so your tree shape persists
 enable-normalization-flatten-containers = false
 
+# Notify sketchybar on workspace changes
+exec-on-workspace-change = ['/bin/bash', '-c',
+  'sketchybar --trigger aerospace_workspace_change']
+
 [gaps]
 outer.left = 20
 outer.right = 20
@@ -15,10 +19,6 @@ outer.top = 44
 outer.bottom = 20
 inner.horizontal = 5
 inner.vertical = 5
-
-# Notify sketchybar on workspace changes
-exec-on-workspace-change = ['/bin/bash', '-c',
-  'sketchybar --trigger aerospace_workspace_change']
 
 # ---------- Main keybinds (Hyper = cmd+ctrl+alt) ----------
 [mode.main.binding]
