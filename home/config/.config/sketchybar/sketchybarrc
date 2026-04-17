@@ -6,7 +6,7 @@ NERD_FONT="Hack Nerd Font:Regular:14.0"
 AEROSPACE="/opt/homebrew/bin/aerospace"
 
 # --- Colors: source pywal if available, else use defaults ---
-BAR_COLOR=0xff1a1b26
+BAR_COLOR=0x80000000
 FOREGROUND=0xffffffff
 INACTIVE=0xff928374
 ACCENT=0xfff4d9e1
