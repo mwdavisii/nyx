@@ -7,6 +7,11 @@ _:
   "karabiner-elements"
   "sublime-text"
 
+  # Fonts
+  "font-jetbrains-mono-nerd-font"
+  "font-hack-nerd-font"
+  "font-caskaydia-cove-nerd-font"
+
   # Development Tools
   "iterm2"
   "wezterm"
