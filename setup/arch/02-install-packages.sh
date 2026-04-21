@@ -475,7 +475,7 @@ if [[ "$(hostname)" == "L242731" ]]; then
   while IFS= read -r conn; do
     sudo nmcli connection modify "$conn" connection.autoconnect no
     info "  autoconnect disabled: $conn"
-  done < <(nmcli -t -f NAME,TYPE connection show | awk -F: '$2=="ethernet"{print $1}')
+  done < <(nmcli -t -f NAME,TYPE connection show | awk -F: '$2 ~ /ethernet$/ {print $1}')
 else
   info "Skipping ethernet autoconnect config (not L242731)."
 fi
