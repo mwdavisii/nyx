@@ -2,6 +2,15 @@ osName=$(uname -s)
 hostName=$(uname -n)
 userName=$(whoami)
 
+# Keep git-lfs objects (wallpapers, etc.) in sync on every rebuild. The
+# home-manager git module only configures the lfs filter after a switch has
+# run at least once, so freshly cloned repos need this to replace pointer
+# stubs with the real files before home-manager symlinks them into $HOME.
+if command -v git-lfs &>/dev/null; then
+  git lfs install --local &>/dev/null || true
+  git lfs pull || true
+fi
+
 if [[ $osName == "Darwin" ]]; then
   if [ -f /usr/local/bin/warp-cli ]; then
     # disable because nixos.org certs aren't trusted.

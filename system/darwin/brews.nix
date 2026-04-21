@@ -5,6 +5,7 @@ _:
     "docker"
     "docker-compose"
     "sketchybar"
+    "git-lfs"
     "jmeter"
     "pam-reattach"
     "nvm"

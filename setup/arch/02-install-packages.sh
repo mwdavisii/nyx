@@ -327,6 +327,7 @@ _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   quickshell-git \
   app2unit \
+  claude-code \
   ttf-material-symbols-variable \
   ttf-rubik-vf \
   swww \
