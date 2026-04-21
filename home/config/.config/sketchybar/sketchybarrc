@@ -52,9 +52,8 @@ sketchybar --default \
 # LEFT: AeroSpace workspaces with app icons
 # ══════════════════════════════════════════════
 for sid in $($AEROSPACE list-workspaces --all 2>/dev/null); do
-  sketchybar --add space space.$sid left \
+  sketchybar --add item space.$sid left \
     --set space.$sid \
-      space=$sid \
       icon=$sid \
       icon.font="$FONT_FACE:Bold:13.0" \
       icon.color=$INACTIVE \
@@ -64,8 +63,10 @@ for sid in $($AEROSPACE list-workspaces --all 2>/dev/null); do
       label.font="$NERD_FONT" \
       label.font.size=12.0 \
       label.color=$INACTIVE \
+      label.highlight_color=$ACCENT \
       label.padding_left=0 \
       label.padding_right=8 \
+      drawing=off \
       background.drawing=off \
       click_script="$AEROSPACE workspace $sid" \
       script="$PLUGIN_DIR/spaces.sh"

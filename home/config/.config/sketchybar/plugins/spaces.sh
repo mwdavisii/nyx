@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # AeroSpace workspace indicator for sketchybar
-# Highlights focused space, shows app icons per space
+# Shows focused + occupied workspaces, hides empty ones
 
 AEROSPACE="/opt/homebrew/bin/aerospace"
 
@@ -35,10 +35,21 @@ for sid in $($AEROSPACE list-workspaces --all 2>/dev/null); do
   done < <($AEROSPACE list-windows --workspace "$sid" --format '%{app-name}' 2>/dev/null)
 
   LABEL="${ICONS# }"
+  HAS_WINDOWS=$( [ -n "$LABEL" ] && echo 1 || echo 0 )
 
   if [ "$sid" = "$FOCUSED" ]; then
-    sketchybar --set space."$sid" icon.highlight=on label="$LABEL"
+    sketchybar --set space."$sid" \
+      drawing=on \
+      icon.highlight=on \
+      label.highlight=on \
+      label="$LABEL"
+  elif [ "$HAS_WINDOWS" = "1" ]; then
+    sketchybar --set space."$sid" \
+      drawing=on \
+      icon.highlight=off \
+      label.highlight=off \
+      label="$LABEL"
   else
-    sketchybar --set space."$sid" icon.highlight=off label="$LABEL"
+    sketchybar --set space."$sid" drawing=off
   fi
 done
