@@ -80,6 +80,23 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# Step 3b — Initialize git-lfs and fetch LFS objects
+# ---------------------------------------------------------------------------
+# Wallpapers under home/config/.config/wallpapers are tracked via git-lfs.
+# Home-manager's git module registers the lfs filter, but that only runs
+# AFTER the clone above — so without this step the initial checkout lands as
+# pointer stubs and home-manager symlinks the stubs into ~/.config/wallpapers.
+
+if command -v git-lfs &>/dev/null; then
+  echo "==> Initializing git-lfs and fetching LFS objects..."
+  git -C "$NYX_DIR" lfs install --local
+  git -C "$NYX_DIR" lfs pull
+else
+  echo "WARNING: git-lfs not found — LFS files (wallpapers) will remain as pointer stubs."
+  echo "         Install git-lfs and re-run: git -C $NYX_DIR lfs install --local && git -C $NYX_DIR lfs pull"
+fi
+
+# ---------------------------------------------------------------------------
 # Step 4 — Remove bash skeleton files that collide with home-manager
 # ---------------------------------------------------------------------------
 # useradd creates .bash_profile, .bashrc, .bash_logout stubs. home-manager

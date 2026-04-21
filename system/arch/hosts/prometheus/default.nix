@@ -156,7 +156,6 @@
       lorri.enable = false;
       mcfly.enable = false;        # replaced by atuin
       fastfetch.enable = true;
-      nvtop = { enable = true; package = pkgs.nvtopPackages.amd; };
       ambxstColorBridge.enable = true;
       ytmPlayer = { enable = true; package = null; }; # installed via pacman (has python-dbus-next MPRIS support)
       nixvim.enable = true;

@@ -226,14 +226,27 @@ in
 
     # Seed wallpapers into ~/Pictures/wallpapers/ as real files so ambxst's
     # `find` scan works (it doesn't follow Nix store directory symlinks).
-    # Uses -n so user-added wallpapers are preserved and existing files aren't overwritten.
+    # User-added wallpapers are preserved (different basenames are never touched).
+    # Files whose basename matches a source wallpaper are replaced when the size
+    # differs — this catches the case where a previous activation seeded ~130-byte
+    # git-lfs pointer stubs before `git lfs pull` ran, and later runs need to
+    # swap them out for the real images. Also busts the ambxst thumbnail cache
+    # so previews regenerate.
     home.activation.seedWallpapers = lib.hm.dag.entryAfter ["writeBoundary"] ''
       $DRY_RUN_CMD mkdir -p "$HOME/Pictures/wallpapers"
+      _changed=0
       for f in "${../../../../config/.config/wallpapers}"/*; do
         [ -f "$f" ] || continue
         dst="$HOME/Pictures/wallpapers/$(basename "$f")"
-        [ -e "$dst" ] || $DRY_RUN_CMD cp "$f" "$dst"
+        if [ ! -e "$dst" ] || [ "$(stat -c%s "$f")" != "$(stat -c%s "$dst")" ]; then
+          $DRY_RUN_CMD cp --remove-destination "$f" "$dst"
+          $DRY_RUN_CMD chmod 644 "$dst"
+          _changed=1
+        fi
       done
+      if [ "$_changed" = 1 ] && [ -d "$HOME/.cache/ambxst/thumbnails" ]; then
+        $DRY_RUN_CMD rm -rf "$HOME/.cache/ambxst/thumbnails"
+      fi
     '';
 
     # Seed ambxst config files as real writable copies (not symlinks) so ambxst
