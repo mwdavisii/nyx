@@ -19,10 +19,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.kitty = {
-      enable = true;
-      package = cfg.package;
-    };
+    home.packages = lib.optionals (cfg.package != null) [
+      cfg.package
+    ];
     xdg.configFile."kitty".source = ../../../../config/.config/kitty;
   };
 }
