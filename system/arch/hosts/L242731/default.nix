@@ -48,7 +48,14 @@
     ai = {
       chatgpt.enable = true;
       gemini.enable = true;
-      claude = { enable = true; package = null; };
+      claude = {
+        enable = true;
+        package = null;
+        settings = {
+          model = "sonnet";
+          effortLevel = "high";
+        };
+      };
       ollama.enable = false;
     };
     app = {      
