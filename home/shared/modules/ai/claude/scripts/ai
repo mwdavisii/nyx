@@ -110,8 +110,15 @@ if (( session_type == 1 )); then
   done
 fi
 
-# --- Step 2c (Personal): Discord channel ---
+# --- Step 2c (Personal): Model + Discord channel ---
 if (( session_type == 2 )); then
+  prompt_choice "Which model?" "Default (settings.json)" "sonnet" "opus" "haiku"
+  case $REPLY_IDX in
+    1) claude_args+=(--model sonnet) ;;
+    2) claude_args+=(--model opus) ;;
+    3) claude_args+=(--model haiku) ;;
+  esac
+
   prompt_choice "Connect to Discord?" "No" "Yes"
   if (( REPLY_IDX == 1 )); then
     claude_args+=(--channels plugin:discord@claude-plugins-official)
