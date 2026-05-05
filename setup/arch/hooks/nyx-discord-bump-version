@@ -1,27 +1,29 @@
 #!/usr/bin/env bash
-# Patch /usr/share/discord/resources/build_info.json so Discord reports an
-# artificially-high client version. Triggered automatically by the pacman
-# hook /etc/pacman.d/hooks/discord-version-bump.hook after any install or
-# upgrade of discord_arch_electron, so the gate stays bypassed across
-# updates.
+# Bypass the Discord forced-upgrade gate on discord_arch_electron.
+# Triggered automatically by the pacman hook
+# /etc/pacman.d/hooks/discord-version-bump.hook after any install or
+# upgrade of discord_arch_electron.
 #
-# Why: discord_arch_electron lags upstream Discord by hours-to-days. When
-# the Discord server requires a newer client than the AUR package, the
-# app shows a forced "Update Required" screen with no way past it.
-# `--skip-host-update` only suppresses the (Linux-irrelevant) auto-update
-# downloader; it does NOT bypass the server-side version check. The only
-# durable fix is to change what version the client reports.
+# discord_arch_electron lags upstream Discord by hours-to-days. When the
+# Discord server requires a newer client, the app shows a forced
+# "Update Required" splash and refuses to load.
+#
+# The fix is SKIP_HOST_UPDATE in each user's settings.json, which tells
+# the updater module to skip the host-version comparison entirely.
+#
+# DO NOT patch build_info.json to a fake version (e.g. "9.9.9"). That
+# breaks module loading: Discord creates a versioned module directory
+# (~/.config/discord/<version>/modules/) and fetches native modules from
+# its CDN keyed by that version. A fake version has no modules on the
+# CDN, so discord_desktop_core never downloads and the app crashes.
 set -euo pipefail
 
-build_info=/usr/share/discord/resources/build_info.json
-target_version="9.9.9"
-
-if [[ ! -f "$build_info" ]]; then
-  echo "nyx-discord-bump-version: $build_info not found, skipping" >&2
-  exit 0
-fi
-
-printf '{\n  "releaseChannel": "stable",\n  "version": "%s"\n}\n' "$target_version" \
-  > "$build_info"
-
-echo "nyx-discord-bump-version: patched $build_info to version $target_version"
+for settings in /home/*/".config/discord/settings.json"; do
+  [[ -f "$settings" ]] || continue
+  if grep -q '"SKIP_HOST_UPDATE"' "$settings" 2>/dev/null; then
+    echo "nyx-discord-bump-version: SKIP_HOST_UPDATE already set in $settings"
+    continue
+  fi
+  sed -i 's/}$/,\n  "SKIP_HOST_UPDATE": true\n}/' "$settings"
+  echo "nyx-discord-bump-version: added SKIP_HOST_UPDATE to $settings"
+done
