@@ -17,9 +17,33 @@ echo "=== Streaming pipeline system setup ==="
 echo ""
 echo "[1/4] Configuring v4l2loopback (OBS Virtual Camera)..."
 
-if ! pacman -Q v4l2loopback-dkms &>/dev/null; then
-    echo "  Installing v4l2loopback-dkms..."
-    sudo pacman -S --noconfirm v4l2loopback-dkms
+# Ensure DKMS toolchain is present before pulling in the dkms package.
+missing_pkgs=()
+for pkg in linux-headers dkms v4l2loopback-dkms; do
+    if ! pacman -Q "$pkg" &>/dev/null; then
+        missing_pkgs+=("$pkg")
+    fi
+done
+if (( ${#missing_pkgs[@]} > 0 )); then
+    echo "  Installing: ${missing_pkgs[*]}"
+    sudo pacman -S --needed --noconfirm "${missing_pkgs[@]}"
+fi
+
+# If the running kernel doesn't match the installed kernel, modprobe will fail
+# because the running kernel's /lib/modules dir was removed on upgrade. Bail
+# with a clear message instead of letting modprobe emit a cryptic error.
+running_kernel=$(uname -r)
+if [[ ! -d "/lib/modules/${running_kernel}" ]]; then
+    echo ""
+    echo "  ERROR: running kernel ${running_kernel} has no /lib/modules directory."
+    echo "  You likely upgraded the kernel without rebooting. Reboot, then re-run this script."
+    exit 1
+fi
+
+# Build the module for the running kernel if DKMS hasn't already.
+if ! dkms status v4l2loopback 2>/dev/null | grep -q "${running_kernel}.*installed"; then
+    echo "  Building v4l2loopback via DKMS for ${running_kernel}..."
+    sudo dkms autoinstall -k "${running_kernel}"
 fi
 
 sudo tee /etc/modprobe.d/v4l2loopback.conf > /dev/null <<'EOF'

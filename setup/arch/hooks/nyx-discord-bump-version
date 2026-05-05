@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Patch /usr/share/discord/resources/build_info.json so Discord reports an
+# artificially-high client version. Triggered automatically by the pacman
+# hook /etc/pacman.d/hooks/discord-version-bump.hook after any install or
+# upgrade of discord_arch_electron, so the gate stays bypassed across
+# updates.
+#
+# Why: discord_arch_electron lags upstream Discord by hours-to-days. When
+# the Discord server requires a newer client than the AUR package, the
+# app shows a forced "Update Required" screen with no way past it.
+# `--skip-host-update` only suppresses the (Linux-irrelevant) auto-update
+# downloader; it does NOT bypass the server-side version check. The only
+# durable fix is to change what version the client reports.
+set -euo pipefail
+
+build_info=/usr/share/discord/resources/build_info.json
+target_version="9.9.9"
+
+if [[ ! -f "$build_info" ]]; then
+  echo "nyx-discord-bump-version: $build_info not found, skipping" >&2
+  exit 0
+fi
+
+printf '{\n  "releaseChannel": "stable",\n  "version": "%s"\n}\n' "$target_version" \
+  > "$build_info"
+
+echo "nyx-discord-bump-version: patched $build_info to version $target_version"

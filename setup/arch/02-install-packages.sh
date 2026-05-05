@@ -119,6 +119,8 @@ info "Installing core desktop packages..."
 sudo pacman -S --needed --noconfirm \
   \
   foot kitty alacritty \
+  linux-headers \
+  dkms \
   v4l2loopback-dkms \
   \
   hyprland \
@@ -226,8 +228,6 @@ if [[ "$INSTALL_AMD_GAMING" == "y" ]]; then
 
   info "Installing AMD graphics drivers and gaming packages..."
   sudo pacman -S --needed --noconfirm \
-    linux-headers \
-    dkms \
     mesa \
     vulkan-radeon \
     libva-mesa-driver \
@@ -341,6 +341,10 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   ytm-player \
   python-dbus-next \
   asciinema-agg-bin \
+  obs-backgroundremoval \
+  obs-face-tracker \
+  obs-face-tracker-dlib-models-git \
+  obs-source-clone \
 
 # Rebuild quickshell-git if the system Qt was updated since the last build.
 # --needed skips reinstall even when Qt changes, causing ABI crashes at runtime.
@@ -427,6 +431,25 @@ fi
 info "Configuring Flatpak and installing apps..."
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak install --user -y flathub com.github.iwalton3.jellyfin-media-player || warn "jellyfin-media-player Flatpak install failed — skipping"
+
+# ---------------------------------------------------------------------------
+# Step 8d — Discord forced-upgrade bypass (pacman hook)
+# ---------------------------------------------------------------------------
+# discord_arch_electron lags upstream Discord by hours-to-days. When the
+# Discord server requires a newer client than the AUR package, the app
+# shows a forced "Update Required" screen and refuses to load. Patching
+# build_info.json to report a high version satisfies the server check.
+# The pacman hook re-applies the patch after every install/upgrade so the
+# fix survives package updates.
+
+info "Installing Discord version-bump pacman hook..."
+
+_HOOK_SRC="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/hooks"
+sudo install -Dm755 "${_HOOK_SRC}/nyx-discord-bump-version" /usr/local/bin/nyx-discord-bump-version
+sudo install -Dm644 "${_HOOK_SRC}/discord-version-bump.hook" /etc/pacman.d/hooks/discord-version-bump.hook
+
+# Apply once now — the hook only fires on future install/upgrade transactions.
+sudo /usr/local/bin/nyx-discord-bump-version || warn "Discord version bump failed — discord_arch_electron may not be installed yet"
 
 # ---------------------------------------------------------------------------
 # Step 9 — Work security tools (interactive only)
