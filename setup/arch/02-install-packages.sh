@@ -437,10 +437,10 @@ flatpak install --user -y flathub com.github.iwalton3.jellyfin-media-player || w
 # ---------------------------------------------------------------------------
 # discord_arch_electron lags upstream Discord by hours-to-days. When the
 # Discord server requires a newer client than the AUR package, the app
-# shows a forced "Update Required" screen and refuses to load. Patching
-# build_info.json to report a high version satisfies the server check.
-# The pacman hook re-applies the patch after every install/upgrade so the
-# fix survives package updates.
+# shows a forced "Update Required" screen and refuses to load. Setting
+# SKIP_HOST_UPDATE in each user's settings.json bypasses the host-update
+# gate. The pacman hook re-applies the setting after every install/upgrade
+# so the fix survives package updates.
 
 info "Installing Discord version-bump pacman hook..."
 
