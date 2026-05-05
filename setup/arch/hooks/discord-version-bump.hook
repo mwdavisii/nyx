@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = discord_arch_electron
+
+[Action]
+Description = Bumping Discord client version to bypass forced upgrade gate...
+When = PostTransaction
+Exec = /usr/local/bin/nyx-discord-bump-version
