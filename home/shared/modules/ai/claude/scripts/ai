@@ -49,6 +49,7 @@ prompt_choice "What kind of session?" "Work" "Productivity (work)" "Personal"
 session_type=$REPLY_IDX
 
 claude_args=()
+work_tool=-1
 
 # --- Helper: load work env file ---
 load_work_env() {
@@ -77,9 +78,14 @@ load_work_env() {
   claude_args+=(--model "${model_names[$(( model_idx + 1 ))]}")
 }
 
-# --- Step 2 (Work): Pick model from env files ---
+# --- Step 2 (Work): Pick tool, then model ---
 if (( session_type == 0 )); then
-  load_work_env
+  prompt_choice "Which tool?" "Claude Code" "OpenAI Codex"
+  work_tool=$REPLY_IDX
+
+  if (( work_tool == 0 )); then
+    load_work_env
+  fi
 fi
 
 # --- Step 2b (Productivity): auto-load opus, pick skill, launch ---
@@ -125,19 +131,35 @@ if (( session_type == 2 )); then
   fi
 fi
 
+# --- Codex: permission + launch, then exit ---
+if (( session_type == 0 )) && (( work_tool == 1 )); then
+  codex_args=()
+
+  prompt_choice "Approval policy?" \
+    "Untrusted (default — safe commands only)" \
+    "On-request (model decides)" \
+    "YOLO (bypass all approvals + sandbox)"
+  case $REPLY_IDX in
+    0) codex_args+=(--ask-for-approval untrusted) ;;
+    1) codex_args+=(--ask-for-approval on-request) ;;
+    2) codex_args+=(--dangerously-bypass-approvals-and-sandbox) ;;
+  esac
+
+  echo "\n${bold}${green}Launching codex${reset} ${codex_args[*]}"
+  exec codex "${codex_args[@]}"
+fi
+
 # --- Step 3: Permission level (Work / Personal only) ---
 prompt_choice "Permission level?" \
   "Normal (default)" \
-  "Auto-accept edits" \
   "Auto mode" \
   "YOLO (bypass all permissions)"
 perm_choice=$REPLY_IDX
 
 case $perm_choice in
   0) claude_args+=(--permission-mode default) ;;
-  1) claude_args+=(--permission-mode acceptEdits) ;;
-  2) claude_args+=(--permission-mode auto) ;;
-  3) claude_args+=(--dangerously-skip-permissions) ;;
+  1) claude_args+=(--permission-mode auto) ;;
+  2) claude_args+=(--dangerously-skip-permissions) ;;
 esac
 
 # --- Launch ---
