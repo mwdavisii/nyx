@@ -16,7 +16,9 @@ elif [[ $userName == "nix-on-droid" ]]; then
 elif [ -f /etc/arch-release ]; then
   sudo pacman -Syu --noconfirm
   if command -v yay &>/dev/null; then
-    yay -Syu --noconfirm
+    _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+    _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
+    PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -Syu --noconfirm
   fi
   setup/arch/02-install-packages.sh --sync
   _HM_CMD="home-manager switch --show-trace --flake .#$hostName"
