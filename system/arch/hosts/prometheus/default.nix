@@ -52,6 +52,7 @@
       };
     };
     ai = {
+      launcher.enable = true;
       chatgpt.enable = true;
       gemini.enable = true;
       claude = { enable = true; package = null; };
