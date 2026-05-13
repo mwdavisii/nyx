@@ -214,7 +214,8 @@ sudo pacman -S --needed --noconfirm \
   flatpak \
   \
   calibre \
-  python-msgpack
+  python-msgpack \
+  openai-codex
 
 # ---------------------------------------------------------------------------
 # Step 3 — AMD gaming (interactive only)

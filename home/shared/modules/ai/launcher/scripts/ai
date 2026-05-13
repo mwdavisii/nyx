@@ -1,0 +1,191 @@
+#!/usr/bin/env zsh
+
+# Claude Code wrapper — interactive launcher with environment and permission selection
+# Env File Locations: ~/.claude_<mode>_env
+# Env file format:
+# # export ANTHROPIC_BASE_URL=<api endpoint>
+# # export ANTHROPIC_API_KEY=<redacted>
+# # ANTHROPIC_DEFAULT_<OPUS | SONNET | HAIKU>_MODEL=<model-name><model-name>
+
+set -euo pipefail
+
+# Colors
+bold='\033[1m'
+cyan='\033[36m'
+yellow='\033[33m'
+green='\033[32m'
+reset='\033[0m'
+
+REPLY_IDX=0
+prompt_choice() {
+  local prompt="$1"
+  shift
+  local -a options=("$@")
+
+  echo ""
+  echo "${bold}${cyan}${prompt}${reset}"
+  for i in {1..${#options[@]}}; do
+    echo "  ${yellow}${i})${reset} ${options[$i]}"
+  done
+
+  local key
+  while true; do
+    printf "${green}> ${reset}"
+    read -rk1 key
+    echo ""
+    if [[ "$key" == "0" ]]; then
+      return 1
+    fi
+    if [[ "$key" =~ ^[0-9]$ ]] && (( key >= 1 && key <= ${#options[@]} )); then
+      REPLY_IDX=$(( key - 1 ))
+      return 0
+    fi
+    echo "  Invalid choice. Press 1-${#options[@]}."
+  done
+}
+
+# --- Step 1: Session type ---
+prompt_choice "What kind of session?" "Work" "Productivity (work)" "Personal"
+session_type=$REPLY_IDX
+
+claude_args=()
+work_tool=-1
+
+# --- Helper: load work env file ---
+load_work_env() {
+  env_files=( ~/.claude_*_env(N) )
+
+  if (( ${#env_files[@]} == 0 )); then
+    echo "\n${yellow}No env files found matching ~/.claude_*_env${reset}"
+    exit 1
+  fi
+
+  local -a model_names=()
+  for f in "${env_files[@]}"; do
+    name="${f:t}"
+    name="${name#.claude_}"
+    name="${name%_env}"
+    model_names+=("$name")
+  done
+
+  prompt_choice "Which model?" "${model_names[@]}"
+  model_idx=$REPLY_IDX
+
+  chosen_file="${env_files[$(( model_idx + 1 ))]}"
+  echo "  Loading ${bold}${chosen_file:t}${reset}"
+  source "$chosen_file"
+
+  claude_args+=(--model "${model_names[$(( model_idx + 1 ))]}")
+}
+
+# --- Step 2 (Work): Pick tool, then model ---
+if (( session_type == 0 )); then
+  prompt_choice "Which tool?" "Claude Code" "OpenAI Codex"
+  work_tool=$REPLY_IDX
+
+  if (( work_tool == 0 )); then
+    load_work_env
+  fi
+fi
+
+# --- Step 2b (Productivity): auto-load opus, pick skill, launch ---
+if (( session_type == 1 )); then
+  opus_env="$HOME/.claude_opus_env"
+  if [[ ! -f "$opus_env" ]]; then
+    echo "\n${yellow}Opus env not found: ${opus_env}${reset}"
+    exit 1
+  fi
+  echo "\n  Loading ${bold}.claude_opus_env${reset}"
+  source "$opus_env"
+  local -a base_args=(--model opus --dangerously-skip-permissions)
+  local -a skill_names=("inbox" "daily-sync" "prep-1on1" "prep-meetings" "teams-catchup" "week")
+  cd "$HOME/vault/04_AI_Projects/productivity"
+
+  while prompt_choice "Which workflow? (0 to quit)" \
+      "inbox" \
+      "daily-sync" \
+      "prep-1on1" \
+      "prep-meetings" \
+      "teams-catchup" \
+      "week"; do
+    chosen_skill="${skill_names[$(( REPLY_IDX + 1 ))]}"
+
+    echo "\n${bold}${green}Running:${reset} run ${chosen_skill}"
+    claude "${base_args[@]}" "Read and follow the instructions in skills/${chosen_skill}.md"
+    echo "\n${bold}${cyan}Workflow complete.${reset}"
+  done
+fi
+
+# --- Step 2c (Personal): Pick tool ---
+personal_tool=-1
+if (( session_type == 2 )); then
+  prompt_choice "Which tool?" "Claude Code" "Gemini CLI"
+  personal_tool=$REPLY_IDX
+
+  if (( personal_tool == 0 )); then
+    prompt_choice "Which model?" "Default (settings.json)" "sonnet" "opus" "haiku"
+    case $REPLY_IDX in
+      1) claude_args+=(--model sonnet) ;;
+      2) claude_args+=(--model opus) ;;
+      3) claude_args+=(--model haiku) ;;
+    esac
+
+    prompt_choice "Connect to Discord?" "No" "Yes"
+    if (( REPLY_IDX == 1 )); then
+      claude_args+=(--channels plugin:discord@claude-plugins-official)
+    fi
+  fi
+fi
+
+# --- Gemini: approval + launch, then exit ---
+if (( session_type == 2 )) && (( personal_tool == 1 )); then
+  gemini_args=()
+
+  prompt_choice "Approval mode?" \
+    "Default (prompt for approval)" \
+    "Auto-edit (auto-approve edits)" \
+    "YOLO (auto-approve everything)"
+  case $REPLY_IDX in
+    0) gemini_args+=(--approval-mode default) ;;
+    1) gemini_args+=(--approval-mode auto_edit) ;;
+    2) gemini_args+=(--approval-mode yolo) ;;
+  esac
+
+  echo "\n${bold}${green}Launching gemini${reset} ${gemini_args[*]}"
+  exec gemini "${gemini_args[@]}"
+fi
+
+# --- Codex: permission + launch, then exit ---
+if (( session_type == 0 )) && (( work_tool == 1 )); then
+  codex_args=()
+
+  prompt_choice "Approval policy?" \
+    "Untrusted (default — safe commands only)" \
+    "On-request (model decides)" \
+    "YOLO (bypass all approvals + sandbox)"
+  case $REPLY_IDX in
+    0) codex_args+=(--ask-for-approval untrusted) ;;
+    1) codex_args+=(--ask-for-approval on-request) ;;
+    2) codex_args+=(--dangerously-bypass-approvals-and-sandbox) ;;
+  esac
+
+  echo "\n${bold}${green}Launching codex${reset} ${codex_args[*]}"
+  exec codex "${codex_args[@]}"
+fi
+
+# --- Step 3: Permission level (Work / Personal only) ---
+prompt_choice "Permission level?" \
+  "Normal (default)" \
+  "Auto mode" \
+  "YOLO (bypass all permissions)"
+perm_choice=$REPLY_IDX
+
+case $perm_choice in
+  0) claude_args+=(--permission-mode default) ;;
+  1) claude_args+=(--permission-mode auto) ;;
+  2) claude_args+=(--dangerously-skip-permissions) ;;
+esac
+
+# --- Launch ---
+echo "\n${bold}${green}Launching claude${reset} ${claude_args[*]}"
+exec claude "${claude_args[@]}"
