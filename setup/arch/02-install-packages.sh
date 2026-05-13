@@ -340,7 +340,7 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   lc0 \
   wezterm-git \
   ytm-player \
-  python-dbus-next \
+  python-dbus-fast \
   asciinema-agg-bin \
   obs-backgroundremoval \
   obs-face-tracker \
