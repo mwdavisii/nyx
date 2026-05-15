@@ -161,7 +161,7 @@
       mcfly.enable = false;        # replaced by atuin
       fastfetch.enable = true;
       ambxstColorBridge.enable = true;
-      ytmPlayer = { enable = true; package = null; }; # installed via pacman (has python-dbus-next MPRIS support)
+      ytmPlayer = { enable = true; package = null; }; # installed via pacman (needs python-dbus-fast for MPRIS support)
       nixvim.enable = true;
       networking.enable = true;
       openssl.enable = true;
