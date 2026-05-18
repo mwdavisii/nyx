@@ -336,6 +336,7 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   obsidian \
   sublime-text-4 \
   discord_arch_electron \
+  signal-desktop \
   stockfish \
   lc0 \
   wezterm-git \
@@ -343,8 +344,6 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   python-dbus-fast \
   asciinema-agg-bin \
   obs-backgroundremoval \
-  obs-face-tracker \
-  obs-face-tracker-dlib-models-git \
   obs-source-clone \
 
 # Rebuild quickshell-git if the system Qt was updated since the last build.

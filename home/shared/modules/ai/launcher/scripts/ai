@@ -88,15 +88,8 @@ if (( session_type == 0 )); then
   fi
 fi
 
-# --- Step 2b (Productivity): auto-load opus, pick skill, launch ---
+# --- Step 2b (Productivity): pick skill, launch ---
 if (( session_type == 1 )); then
-  opus_env="$HOME/.claude_opus_env"
-  if [[ ! -f "$opus_env" ]]; then
-    echo "\n${yellow}Opus env not found: ${opus_env}${reset}"
-    exit 1
-  fi
-  echo "\n  Loading ${bold}.claude_opus_env${reset}"
-  source "$opus_env"
   local -a base_args=(--model opus --dangerously-skip-permissions)
   local -a skill_names=("inbox" "daily-sync" "prep-1on1" "prep-meetings" "teams-catchup" "week")
   cd "$HOME/vault/04_AI_Projects/productivity"

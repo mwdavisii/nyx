@@ -105,6 +105,10 @@
         enable = true;
         package = null;
       };
+      signal = {
+        enable = true;
+        package = null; # installed via pacman
+      };
       vscode.enable = true;
       pearDesktop.enable = true;
     };
