@@ -329,6 +329,7 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   quickshell-git \
   app2unit \
   claude-code \
+  claude-desktop-bin \
   ttf-material-symbols-variable \
   ttf-rubik-vf \
   swww \
