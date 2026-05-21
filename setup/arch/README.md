@@ -112,7 +112,7 @@ The script will prompt for optional extras:
 1. **Installs yay** — AUR helper (can't build packages as root in chroot, so this runs post-boot)
 2. **Core desktop packages** — Hyprland, PipeWire, Bluetooth, fonts, terminals, file manager, Wayland utilities, etc.
 3. **AMD gaming** (optional) — enables multilib, installs Mesa/Vulkan/Steam/Lutris
-4. **AUR packages** — kmonad-bin, swww, nwg-displays
+4. **AUR packages** — Claude Code, Claude Desktop, kmonad-bin, swww, nwg-displays
 5. **Security tools** (optional) — CrowdStrike Falcon, Cisco Secure Client
 6. **Cloudflare WARP** (optional) — DNS/VPN via AUR
 7. **Enables** bluetooth service
