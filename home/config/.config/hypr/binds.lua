@@ -53,7 +53,7 @@ hl.bind(main_mod .. " + L", hl.dsp.exec_cmd("ambxst lock"))
 hl.bind(main_mod .. " + SHIFT + L", hl.dsp.exec_cmd("ambxst run powermenu"))
 hl.bind(main_mod .. " + P", hl.dsp.exec_cmd("ambxst run dashboard"))
 
-hl.bind(main_mod .. " + Q", hl.dsp.window.kill())
+hl.bind(main_mod .. " + Q", hl.dsp.window.close())
 hl.bind(main_mod .. " + END", hl.dsp.exit())
 
 hl.bind(main_mod .. " + G", hl.dsp.window.fullscreen())
