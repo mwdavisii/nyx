@@ -1,4 +1,4 @@
-local main_mod = "SUPER_CTRL_ALT"
+local main_mod = "SUPER + CTRL + ALT"
 
 hl.bind("CTRL + left", hl.dsp.layout("focus l"))
 hl.bind("CTRL + right", hl.dsp.layout("focus r"))
