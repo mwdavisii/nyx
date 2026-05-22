@@ -30,9 +30,6 @@ hl.window_rule({
   size = "55% 55%",
   center = true,
 })
-hl.window_rule({ match = { class = "^(kitty-bg)$" }, float = true })
-hl.window_rule({ match = { class = "^(kitty-bg)$" }, maximize = true })
-hl.window_rule({ match = { class = "^(kitty-bg)$" }, no_focus = true })
 hl.window_rule({ match = { fullscreen = true }, idle_inhibit = "always" })
 hl.window_rule({ match = { class = "^(obs)$" }, idle_inhibit = "always" })
 hl.window_rule({ match = { class = "^(mpv)$" }, idle_inhibit = "focus" })
