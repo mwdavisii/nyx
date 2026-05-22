@@ -27,14 +27,6 @@ hl.config({
     column_width = 0.5,
     fullscreen_on_one_column = true,
   },
-  plugin = {
-    hyprtrails = {
-      color = "rgba(ffaa00ff)",
-    },
-    hyprwinwrap = {
-      class = "kitty-bg",
-    },
-  },
 })
 
 hl.curve("ease", { type = "bezier", points = { { 0.4, 0.02 }, { 0.21, 1 } } })
