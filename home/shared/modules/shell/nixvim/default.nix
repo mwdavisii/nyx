@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 with lib;
 let
@@ -37,6 +37,7 @@ in
   config = mkIf cfg.enable {
     programs.nixvim = {
       enable = true;
+      nixpkgs.source = inputs.nixpkgs;
 
       # basic editor feel
       opts = {
