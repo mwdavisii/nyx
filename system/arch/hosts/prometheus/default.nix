@@ -56,7 +56,7 @@
       chatgpt.enable = true;
       gemini.enable = true;
       claude = { enable = true; package = null; };
-      ollama.enable = true;
+      ollama.enable = false; # using pacman ollama-rocm system service instead (see /etc/systemd/system/ollama.service.d/override.conf)
     };
     app = {
       alacritty = {

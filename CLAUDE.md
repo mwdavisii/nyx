@@ -143,7 +143,7 @@ Secrets are encrypted with `age` and stored in `secrets/encrypted/`. The `secret
 | `livecd` | NixOS | Bootable installer ISO |
 | `virtualbox` | NixOS | VirtualBox VM image |
 | `L242731` | Arch Linux | Work Dell |
-| `prometheus` | Arch Linux | Home desktop |
+| `prometheus` | Arch Linux | Home desktop (i7-12700F / AMD RX 6900 XT) |
 | `mwdavis-workm1` | Darwin | Work MacBook M1 16" |
 | `L241729` | Darwin | Additional Darwin host |
 | `default` | Nix-on-Droid | Google Pixel Fold |
