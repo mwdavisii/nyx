@@ -1,11 +1,16 @@
 #!/usr/bin/env zsh
 
 # Claude Code wrapper — interactive launcher with environment and permission selection
-# Env File Locations: ~/.claude_<mode>_env
+# Env File Locations: ~/.claude_<mode>_env  (mode = haiku|sonnet|opus|...; also used as --model)
 # Env file format:
-# # export ANTHROPIC_BASE_URL=<api endpoint>
-# # export ANTHROPIC_API_KEY=<redacted>
-# # ANTHROPIC_DEFAULT_<OPUS | SONNET | HAIKU>_MODEL=<model-name><model-name>
+#   export ANTHROPIC_BASE_URL=<api endpoint>
+#   export ANTHROPIC_API_KEY=<redacted>
+#   export ANTHROPIC_MODEL=<haiku|sonnet|opus>        # alias keyword, so capabilities resolve
+#   # Optional: extra settings merged via `claude --settings` (JSON string). Useful for
+#   # gateway/APIM deployments where the wire model name differs from the alias — e.g.
+#   # rewrite the canonical Haiku id to an Azure APIM deployment name so `effort`/`thinking`
+#   # (which the alias strips) aren't sent while APIM still gets the name it expects:
+#   export CLAUDE_EXTRA_SETTINGS='{"modelOverrides":{"claude-haiku-4-5-20251001":"<deployment>"}}'
 
 set -euo pipefail
 
@@ -73,9 +78,17 @@ load_work_env() {
 
   chosen_file="${env_files[$(( model_idx + 1 ))]}"
   echo "  Loading ${bold}${chosen_file:t}${reset}"
+  # Clear any inherited value so it can't leak from a manually-sourced env file.
+  unset CLAUDE_EXTRA_SETTINGS
   source "$chosen_file"
 
   claude_args+=(--model "${model_names[$(( model_idx + 1 ))]}")
+
+  # Optional per-mode settings, merged (not replaced) via `claude --settings`.
+  # See header for the CLAUDE_EXTRA_SETTINGS convention.
+  if [[ -n "${CLAUDE_EXTRA_SETTINGS:-}" ]]; then
+    claude_args+=(--settings "$CLAUDE_EXTRA_SETTINGS")
+  fi
 }
 
 # --- Step 2 (Work): Pick tool, then model ---

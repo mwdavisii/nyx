@@ -55,6 +55,10 @@
       launcher.enable = true;
       chatgpt.enable = true;
       gemini.enable = true;
+      # Haiku-via-Azure-APIM model override is scoped to the APIM session only, applied at
+      # launch via `claude --settings` from ~/.claude_haiku_env (CLAUDE_EXTRA_SETTINGS) by the
+      # ai launcher. Kept out of settings.json so plain `--model haiku` against the real
+      # Anthropic API isn't rewritten to a deployment name it doesn't know.
       claude = { enable = true; package = null; };
       ollama.enable = false; # using pacman ollama-rocm system service instead (see /etc/systemd/system/ollama.service.d/override.conf)
     };
