@@ -54,7 +54,6 @@
         package = null;
         settings = {
           model = "sonnet";
-          effortLevel = "high";
         };
       };
       ollama.enable = false;
