@@ -214,6 +214,7 @@ sudo pacman -S --needed --noconfirm \
   flatpak \
   \
   calibre \
+  telegram-desktop \
   python-msgpack \
   openai-codex
 
