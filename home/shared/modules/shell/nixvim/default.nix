@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 with lib;
 let
@@ -37,6 +37,7 @@ in
   config = mkIf cfg.enable {
     programs.nixvim = {
       enable = true;
+      nixpkgs.source = inputs.nixpkgs;
 
       # basic editor feel
       opts = {
@@ -218,8 +219,8 @@ in
         { mode = "n"; key = "<leader>rn"; action = "<cmd>lua vim.lsp.buf.rename()<cr>";           options.desc = "Rename symbol"; }
         { mode = "n"; key = "<leader>ca"; action = "<cmd>lua vim.lsp.buf.code_action()<cr>";      options.desc = "Code action"; }
         { mode = "n"; key = "<leader>d";  action = "<cmd>lua vim.diagnostic.open_float()<cr>";    options.desc = "Line diagnostics"; }
-        { mode = "n"; key = "[d";         action = "<cmd>lua vim.diagnostic.goto_prev()<cr>";     options.desc = "Prev diagnostic"; }
-        { mode = "n"; key = "]d";         action = "<cmd>lua vim.diagnostic.goto_next()<cr>";     options.desc = "Next diagnostic"; }
+        { mode = "n"; key = "[d";         action = "<cmd>lua vim.diagnostic.jump({count=-1, float=true})<cr>"; options.desc = "Prev diagnostic"; }
+        { mode = "n"; key = "]d";         action = "<cmd>lua vim.diagnostic.jump({count=1, float=true})<cr>";  options.desc = "Next diagnostic"; }
 
         # Gitsigns
         { mode = "n"; key = "]c";         action = "<cmd>Gitsigns next_hunk<cr>";                options.desc = "Next hunk"; }

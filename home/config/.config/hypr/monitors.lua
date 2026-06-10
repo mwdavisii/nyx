@@ -1,0 +1,6 @@
+hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1 })
+hl.monitor({ output = "DP-1", mode = "3840x1600@144S", position = "0x0", scale = 1 })
+hl.monitor({ output = "desc:BOE 0x0BAA", mode = "1920x1080@60", position = "0x0", scale = 1 })
+hl.monitor({ output = "desc:Dell Inc. DELL P3424WE", mode = "3440x1440@59.97", position = "1920x0", scale = 1 })
+hl.monitor({ output = "DVI-I-1", mode = "4096x2160@30.00", position = "auto", scale = 1 })
+hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@60", position = "3840x0", scale = 1 })

@@ -213,10 +213,13 @@ in
         # can persist preset selections. Seeded via home.activation.seedAmbxstConfig below.
         # Symlink individual hypr files rather than the whole directory so that
         # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
-        "hypr/hyprland.conf".source = ../../../../config/.config/hypr/hyprland.conf;
+        "hypr/hyprland.lua".source = ../../../../config/.config/hypr/hyprland.lua;
         "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
-        "hypr/monitors.conf".source = ../../../../config/.config/hypr/monitors.conf;
-        "hypr/startup.conf".source = ../../../../config/.config/hypr/startup.conf;
+        "hypr/monitors.lua".source = ../../../../config/.config/hypr/monitors.lua;
+        "hypr/startup.lua".source = ../../../../config/.config/hypr/startup.lua;
+        "hypr/options.lua".source = ../../../../config/.config/hypr/options.lua;
+        "hypr/binds.lua".source = ../../../../config/.config/hypr/binds.lua;
+        "hypr/rules.lua".source = ../../../../config/.config/hypr/rules.lua;
       }
       (lib.mkIf cfg.gpuPackages {
         "waybar".source = ../../../../config/.config/waybar;
@@ -328,13 +331,6 @@ in
         variables = ["--all"];
       };
       xwayland.enable = true;
-      # Home-manager (>=25.05) defaults to writing ~/.config/hypr/hyprland.lua,
-      # which Hyprland prefers over .conf. Our hand-written hyprland.conf (with
-      # keybinds, exec-once, windowrules) is symlinked via xdg.configFile above,
-      # so force HM to use the legacy hyprlang format. HM still writes its
-      # systemd-activation snippet into .conf, but our xdg.configFile.source
-      # for hypr/hyprland.conf wins, so net effect is no .lua at all.
-      configType = "hyprlang";
     };
 
     services.swaync = {
