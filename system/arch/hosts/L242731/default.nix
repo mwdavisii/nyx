@@ -52,9 +52,6 @@
       claude = {
         enable = true;
         package = null;
-        settings = {
-          model = "sonnet";
-        };
       };
       ollama.enable = false;
     };
