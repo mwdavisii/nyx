@@ -50,6 +50,7 @@
         enable = true;
         package = inputs.kmonad.packages.${pkgs.stdenv.hostPlatform.system}.default;
       };
+      vial.enable = true;
     };
     ai = {
       launcher.enable = true;

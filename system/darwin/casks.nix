@@ -7,6 +7,7 @@ _:
   "karabiner-elements"
   "scroll-reverser"
   "sublime-text"
+  "vial"
 
   # Fonts
   "font-jetbrains-mono-nerd-font"

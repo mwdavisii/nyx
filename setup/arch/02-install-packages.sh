@@ -512,6 +512,17 @@ fi
 info "Enabling services..."
 sudo systemctl enable --now bluetooth 2>/dev/null || true
 
+# Vial udev rule — grants user access to /dev/hidraw for any Vial-firmware keyboard
+# Mirrors the NixOS module at system/shared/modules/system/vial/default.nix.
+# The serial substring "vial:f64c2b3c" is the standard Vial magic, not a per-board id.
+info "Installing Vial udev rule..."
+sudo tee /etc/udev/rules.d/99-vial.rules > /dev/null <<'EOF'
+# Vial user access to /dev/hidraw
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+EOF
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+
 # ---------------------------------------------------------------------------
 # Step 13 — SDR
 # ---------------------------------------------------------------------------

@@ -130,7 +130,6 @@
         hephaestus = { hostname = "hephaestus"; user = "mwdavisii"; buildTarget = "nixos"; }; #home machine
         livecd = { hostname = "worklt"; user = "mwdavisii"; buildTarget = "iso"; }; #nix build .#nixosConfigurations.livecd.config.system.build.isoImage
         nixos = { user = "nixos"; hostname = "nixos"; buildTarget = "nixos"; }; #WSL
-        olenos = { hostname = "olenos"; user = "mwdavisii"; buildTarget = "nixos"; }; #Lenovo laptop
         virtualbox = { hostname = "virtualBoxOVA"; user = "mwdavisii"; buildTarget = "vm"; }; #nix build .#nixosConfigurations.virtualbox.config.system.build.isoImage
         #L242731 = { hostname = "L242731"; system = "x86_64-linux"; user = "mdavis67"; buildTarget = "nixos"; }; #work dell, nixos
         hydra = { hostname = "hydra"; system = "x86_64-linux"; user = "mwdavisii"; buildTarget = "nixos"; }; #HP Proddesk 400 G6
