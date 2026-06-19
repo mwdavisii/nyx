@@ -115,7 +115,6 @@ Module options are defined in `home/shared/modules/` and applied by home-manager
 system/
 ├── nixos/hosts/
 │   ├── hephaestus/     # Home desktop — i9 / AMD 7900XT / dual-boot NixOS+Win
-│   ├── olenos/         # ThinkPad X13 laptop
 │   ├── hydra/          # Home lab k3s VM on Proxmox
 │   ├── ares/           # Personal WSL2 instance
 │   ├── nixos/          # Generic WSL2

@@ -41,7 +41,6 @@ Or just run `./switch.sh` which auto-detects and runs the right command.
 | Hostname | Platform | buildTarget |
 |---|---|---|
 | `hephaestus` | NixOS | nixos |
-| `olenos` | NixOS | nixos |
 | `hydra` | NixOS | nixos |
 | `ares` | NixOS WSL | wsl |
 | `nixos` | NixOS WSL | wsl |

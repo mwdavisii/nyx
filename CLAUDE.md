@@ -138,7 +138,6 @@ Secrets are encrypted with `age` and stored in `secrets/encrypted/`. The `secret
 | `hephaestus` | NixOS | Home desktop (i9 / AMD 7900xt) |
 | `ares` | NixOS (WSL) | Personal WSL2 instance |
 | `nixos` | NixOS (WSL) | Generic WSL2 |
-| `olenos` | NixOS | ThinkPad X13 laptop |
 | `hydra` | NixOS | Home lab k3s VM on Proxmox |
 | `livecd` | NixOS | Bootable installer ISO |
 | `virtualbox` | NixOS | VirtualBox VM image |

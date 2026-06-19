@@ -13,6 +13,7 @@
         opengl.enable = true;
         centraltimezone.enable = true;
         yubilogin.enable = false;
+        vial.enable = true;
       };
     };
     

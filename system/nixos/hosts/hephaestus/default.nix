@@ -16,6 +16,7 @@
         kmonad.enable = true;
         hyprland.enable = true;
         steam.enable = true;
+        vial.enable = true;
       };
     };
     

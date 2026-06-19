@@ -37,6 +37,7 @@
 
         cava.enable = true;
         kmonad.enable = true;
+        vial.enable = true;
       };
       app = {
         chromium.enable = true;
