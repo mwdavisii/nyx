@@ -45,7 +45,7 @@ prompt_choice() {
 }
 
 # --- Step 1: Session type ---
-prompt_choice "What kind of session?" "Work" "Productivity (work)" "Personal"
+prompt_choice "What kind of session?" "Work" "Personal"
 session_type=$REPLY_IDX
 
 claude_args=()
@@ -88,30 +88,9 @@ if (( session_type == 0 )); then
   fi
 fi
 
-# --- Step 2b (Productivity): use default Anthropic account (cloud MCPs), pick skill, launch ---
-if (( session_type == 1 )); then
-  local -a base_args=(--model sonnet --dangerously-skip-permissions)
-  local -a skill_names=("inbox" "daily-sync" "prep-1on1" "prep-meetings" "teams-catchup" "week")
-  cd "$HOME/vault/04_AI_Projects/productivity"
-
-  while prompt_choice "Which workflow? (0 to quit)" \
-      "inbox" \
-      "daily-sync" \
-      "prep-1on1" \
-      "prep-meetings" \
-      "teams-catchup" \
-      "week"; do
-    chosen_skill="${skill_names[$(( REPLY_IDX + 1 ))]}"
-
-    echo "\n${bold}${green}Running:${reset} run ${chosen_skill}"
-    claude "${base_args[@]}" "Read and follow the instructions in skills/${chosen_skill}.md"
-    echo "\n${bold}${cyan}Workflow complete.${reset}"
-  done
-fi
-
-# --- Step 2c (Personal): Pick tool ---
+# --- Step 2b (Personal): Pick tool ---
 personal_tool=-1
-if (( session_type == 2 )); then
+if (( session_type == 1 )); then
   prompt_choice "Which tool?" "Claude Code" "Gemini CLI"
   personal_tool=$REPLY_IDX
 
@@ -131,7 +110,7 @@ if (( session_type == 2 )); then
 fi
 
 # --- Gemini: approval + launch, then exit ---
-if (( session_type == 2 )) && (( personal_tool == 1 )); then
+if (( session_type == 1 )) && (( personal_tool == 1 )); then
   gemini_args=()
 
   prompt_choice "Approval mode?" \
