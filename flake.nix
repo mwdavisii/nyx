@@ -15,7 +15,9 @@
       inputs.hyprland.follows = "hyprland";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-26.05";
+      # Track main: it follows nixpkgs-unstable, matching our nixpkgs input.
+      # Switch back to nixos-26.11 once that branch exists upstream.
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     #hardware
