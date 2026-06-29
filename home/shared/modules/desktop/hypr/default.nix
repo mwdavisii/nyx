@@ -125,10 +125,13 @@ let
     set -euo pipefail
     SETTINGS="$HOME/ES-DE/settings/es_settings.xml"
 
-    # Hyprland connector name -> ES-DE DisplayIndex. ES-DE/SDL display ordering
-    # does NOT match Hyprland monitor IDs; these are the observed mappings.
-    # Update here if monitors change (run `hyprctl monitors` for names).
-    declare -A IDX=( [DP-1]=2 [HDMI-A-1]=1 )
+    # Hyprland connector name -> ES-DE DisplayIndex (the SDL display number).
+    # ES-DE renders at the resolution SDL reports for that index, so a wrong
+    # index means a wrong render size (e.g. a 1080p surface painted in the
+    # corner of the ultrawide). Verified: index 1 = DP-1 @ 3840x1600,
+    # index 2 = HDMI-A-1 @ 1920x1080. If monitors change, launch ES-DE and check
+    # the "Display resolution" line in ~/ES-DE/logs/es_log.txt for the index.
+    declare -A IDX=( [DP-1]=1 [HDMI-A-1]=2 )
 
     target_mon="''${1:-DP-1}"
     target="''${IDX[$target_mon]:-}"
