@@ -37,6 +37,7 @@ local apps = {
   { key = "D", cmd = "discord" },
   { key = "J", cmd = "flatpak run com.github.iwalton3.jellyfin-media-player" },
   { key = "Y", cmd = "wezterm start --class kitty-ytm -- ytm" },
+  { key = "E", cmd = "es-de-here" },
 }
 
 for _, app in ipairs(apps) do
@@ -46,6 +47,8 @@ end
 hl.bind(main_mod .. " + SHIFT + B", hl.dsp.exec_cmd("firefox"))
 hl.bind(main_mod .. " + SHIFT + S", hl.dsp.exec_cmd("show_desktop"))
 hl.bind(main_mod .. " + SHIFT + Y", hl.dsp.exec_cmd("pear-desktop"))
+-- ES-DE on the secondary monitor (plain " + E" launches on the main ultrawide)
+hl.bind(main_mod .. " + SHIFT + E", hl.dsp.exec_cmd("es-de-here HDMI-A-1"))
 
 hl.bind(main_mod .. " + SPACE", hl.dsp.exec_cmd("ambxst run launcher"))
 hl.bind(main_mod .. " + R", hl.dsp.exec_cmd("ambxst run launcher"))
