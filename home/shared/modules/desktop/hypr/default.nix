@@ -115,36 +115,43 @@ let
     fi
   '';
   es_de_here = pkgs.writeShellScriptBin "es-de-here" ''
-    #!/usr/bin/env bash
-    # Launch ES-DE fullscreen on a chosen monitor.
-    # ES-DE locks onto its SDL display at startup and refuses to be moved
-    # afterward (Hyprland can't relocate it), so the ONLY lever is to set
-    # DisplayIndex *before* launching. Default target is the main ultrawide.
-    #   es-de-here            -> DP-1 (main ultrawide, default)
-    #   es-de-here HDMI-A-1   -> secondary 1080p
+    # Launch ES-DE on a chosen monitor, at that monitor's resolution.
+    #
+    # Two independent levers decide where ES-DE ends up:
+    #   * PLACEMENT (which monitor)  -> Hyprland focus. Reliable.
+    #   * RENDER SIZE                -> forced here with `es-de --resolution W H`.
+    #
+    # We deliberately do NOT use ES-DE's DisplayIndex setting. That value is an
+    # SDL *display index*, and under Wayland the index -> physical-output
+    # mapping is not stable between launches (it follows the order the
+    # compositor advertises outputs, which changes after a monitor is focused).
+    # A hardcoded index therefore worked intermittently and would sometimes
+    # render at the wrong monitor's resolution -- e.g. a 3840x1600 surface
+    # crammed onto the 1080p panel. Pulling the resolution from `hyprctl
+    # monitors` and forcing it makes the size immune to that ordering.
+    #
+    #   es-de-here              -> DP-1 (main ultrawide, default)
+    #   es-de-here HDMI-A-1     -> secondary 1080p
     set -euo pipefail
-    SETTINGS="$HOME/ES-DE/settings/es_settings.xml"
-
-    # Hyprland connector name -> ES-DE DisplayIndex. ES-DE/SDL display ordering
-    # does NOT match Hyprland monitor IDs; these are the observed mappings.
-    # Update here if monitors change (run `hyprctl monitors` for names).
-    declare -A IDX=( [DP-1]=2 [HDMI-A-1]=1 )
 
     target_mon="''${1:-DP-1}"
-    target="''${IDX[$target_mon]:-}"
-    if [ -z "$target" ]; then
-      echo "es-de-here: unknown monitor '$target_mon'. Known: ''${!IDX[*]}" >&2
+
+    # Authoritative pixel size for the target monitor, straight from Hyprland.
+    res="$(hyprctl monitors -j \
+      | ${pkgs.jq}/bin/jq -r --arg m "$target_mon" \
+          '.[] | select(.name == $m) | "\(.width) \(.height)"')"
+    read -r W H <<< "$res"
+    if [ -z "''${W:-}" ]; then
+      echo "es-de-here: monitor '$target_mon' not found (run: hyprctl monitors)" >&2
       exit 1
     fi
 
-    if [ -f "$SETTINGS" ]; then
-      ${pkgs.gnused}/bin/sed -i -E \
-        "s#(<int name=\"DisplayIndex\" value=\")[0-9]+(\" />)#\1''${target}\2#" \
-        "$SETTINGS"
-      echo "es-de-here: $target_mon -> DisplayIndex ''${target}"
+    # Focus the target monitor so Hyprland opens the window there.
+    if command -v hyprctl >/dev/null 2>&1; then
+      hyprctl dispatch "hl.dsp.focus({ monitor = \"$target_mon\" })" >/dev/null 2>&1 || true
     fi
 
-    exec es-de
+    exec es-de --resolution "$W" "$H"
   '';
 in
 {
