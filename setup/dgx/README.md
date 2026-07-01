@@ -1,6 +1,9 @@
 # DGX (Castor & Pollux) Install Guide
 
-Two-phase setup: **01-install-packages.sh** installs the apt packages nyx assumes are present, **02-setup-nix.sh** bootstraps Nix and home-manager. DGX OS ships pre-installed — there is no Phase 0 disk-partition step (unlike `setup/arch/`).
+Three-phase setup on a pre-installed DGX OS box:
+1. **01-install-packages.sh** — validate GB10 hardware, install apt prereqs (including docker + hf CLI for the `gb10_cluster` platform), ensure `/models` exists.
+2. **02-setup-nix.sh** — bootstrap Nix and run the first `home-manager switch`.
+3. **`gb10_cluster` runbook** (peer's repo) — deploy the vLLM / observability platform.
 
 ## Prerequisites
 
@@ -11,7 +14,7 @@ Two-phase setup: **01-install-packages.sh** installs the apt packages nyx assume
 
 ## Phase 1 — Vendor state (no-op)
 
-DGX OS is already installed. NVIDIA drivers, CUDA, and (if enabled) `nvidia-container-toolkit` are managed by NVIDIA's apt repos. **Nyx does not touch them.**
+DGX OS is already installed. NVIDIA drivers, CUDA, and `nvidia-container-toolkit` are managed by NVIDIA's apt repos. **Nyx does not touch them.**
 
 Confirm:
 
@@ -21,7 +24,9 @@ nvidia-smi
 
 If this doesn't work, fix the vendor install first — nothing in nyx will help.
 
-## Phase 2 — Core apt packages
+**Driver check:** Nyx will hard-fail Phase 2 if `nvidia-smi` reports driver `590.x` — that series has a CUDAGraph deadlock on the GB10 UMA architecture (finding from peer's `gb10_cluster`). Downgrade to `580.x` first.
+
+## Phase 2 — apt prereqs + GB10 validation
 
 ```bash
 curl -LO https://raw.githubusercontent.com/mwdavisii/nyx/main/setup/dgx/01-install-packages.sh
@@ -29,7 +34,14 @@ chmod +x 01-install-packages.sh
 ./01-install-packages.sh
 ```
 
-Installs a small core set: `git curl ca-certificates xz-utils zsh build-essential libfido2-1 unzip`.
+Runs GB10 hardware validation up front (arch, driver, docker nvidia runtime), then installs:
+
+- **Core** (dev/shell prereqs): `git curl ca-certificates xz-utils zsh build-essential libfido2-1 unzip`
+- **`gb10_cluster` platform prereqs**: `docker.io docker-buildx docker-compose-v2 pipx`
+
+Also:
+- Creates `/models` owned by your user (peer's vLLM containers mount it read-only).
+- Installs HuggingFace CLI (`hf`) into `~/.local/bin` via pipx, so peer's `models/download-*.sh` scripts work.
 
 Optional prompt (interactive mode only):
 
@@ -58,6 +70,19 @@ Steps:
 
 After it finishes, log out and log back in (or run `exec zsh -l`) so zsh becomes your login shell.
 
+## Phase 4 — Application platform (`gb10_cluster`)
+
+Nyx does not manage the LLM inference stack. Peer's `gb10_cluster` repo owns the compose files, vLLM configs, LiteLLM routing, model downloads, and observability.
+
+```bash
+cd ~/code
+git clone git@github.com:<peer-org>/gb10_cluster.git   # replace with the actual URL
+cd gb10_cluster
+# Follow docs/RUNBOOK.md from there.
+```
+
+Everything nyx installs in Phase 2 (docker, `hf`, `/models`) is what `gb10_cluster` expects to already be present.
+
 ## Ongoing use
 
 ```bash
@@ -76,12 +101,13 @@ cd ~/code/nyx
 
 `update.sh` adds `sudo apt-get update && sudo apt-get -y upgrade` before the same sync + switch sequence. It does **not** run `apt-get autoremove` (foot-gun on a vendor-tuned box) and does not run `full-upgrade` / `dist-upgrade`.
 
-## What nyx manages vs. what DGX OS manages
+## Ownership boundaries
 
-| Layer | Owner |
+| Concern | Owner |
 |---|---|
-| Kernel, NVIDIA drivers, CUDA, container runtime, `docker*` | DGX OS (NVIDIA apt repos) |
-| Core apt packages listed above | `setup/dgx/01-install-packages.sh` |
-| Shell, dev tooling, editor, CLI AI, home dotfiles | home-manager (this repo) |
+| Kernel, NVIDIA drivers, CUDA, `nvidia-container-toolkit` | DGX OS (NVIDIA apt repos) |
+| Docker daemon, `hf` CLI, `/models` mount target | nyx (`setup/dgx/01-install-packages.sh`) |
+| Shell, dev tooling, editor, CLI AI, home dotfiles | home-manager (this repo, via `headless.nix`) |
+| vLLM containers, LiteLLM, Prometheus/Grafana, model weights | `gb10_cluster` (peer) |
 | Anything under `nyx.modules.desktop.*` / `app.*` / `sdr.*` | Not enabled — headless profile |
 | `nyx.secrets.*` (agenix) | Not wired for standalone home-manager |
