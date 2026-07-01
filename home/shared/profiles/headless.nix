@@ -16,6 +16,12 @@
 
   home = {
     stateVersion = "26.05";
+
+    # pipx installs into ~/.local/bin (e.g. HuggingFace CLI `hf` on DGX,
+    # provisioned by setup/dgx/01-install-packages.sh). Adding the path
+    # here avoids touching shell rc files, which home-manager owns.
+    sessionPath = [ "$HOME/.local/bin" ];
+
     packages = with pkgs; [
       rustup
       vhs
