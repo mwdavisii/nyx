@@ -27,6 +27,11 @@ elif [ -f /etc/arch-release ]; then
   else
     eval "$_HM_CMD"
   fi
+elif [ -f /etc/dgx-release ] || grep -qi 'dgx' /etc/os-release 2>/dev/null; then
+  sudo apt-get update
+  sudo apt-get -y upgrade
+  setup/dgx/01-install-packages.sh --sync
+  home-manager switch --show-trace --flake .#$hostName
 else
   sudo nixos-rebuild switch --show-trace --flake .#$hostName
 fi
