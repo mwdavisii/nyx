@@ -92,13 +92,21 @@ rec {
       ];
     };
 
-  ################################## ARCH ##################################
-  mkArchConfiguration = name: { config ? name, user, system ? "x86_64-linux" }:
+  ################################## STANDALONE LINUX ##################################
+  # Standalone home-manager builder used by Arch (prometheus, L242731) and
+  # Ubuntu-derived hosts (DGX: castor, pollux). `hostsDir` selects the host
+  # tree; default preserves the historical Arch behavior.
+  mkStandaloneLinuxConfiguration = name: {
+    config ? name,
+    user,
+    system ? "x86_64-linux",
+    hostsDir ? ../system/arch/hosts,
+  }:
     let
       pkgs = inputs.self.legacyPackages."${system}";
       userConf = import (strToFile user ../users);
       homeDirectory = "/home/${userConf.userName}";
-      userOptions = strToPath config ../system/arch/hosts;
+      userOptions = strToPath config hostsDir;
     in
     nameValuePair name (
       inputs.home-manager.lib.homeManagerConfiguration {
@@ -124,6 +132,9 @@ rec {
           { inherit inputs name self system user; };
       }
     );
+
+  # Back-compat alias. Do not remove without auditing call sites.
+  mkArchConfiguration = mkStandaloneLinuxConfiguration;
 
   mkNixSystemConfiguration = name: { config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? { }, }:
     nameValuePair name (
