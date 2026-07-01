@@ -104,7 +104,7 @@ fi
 # --- Step 2b (Personal): Pick tool ---
 personal_tool=-1
 if (( session_type == 1 )); then
-  prompt_choice "Which tool?" "Claude Code" "Gemini CLI"
+  prompt_choice "Which tool?" "Claude Code" "Gemini CLI" "Ollama (Claude Code)"
   personal_tool=$REPLY_IDX
 
   if (( personal_tool == 0 )); then
@@ -120,6 +120,23 @@ if (( session_type == 1 )); then
       claude_args+=(--channels plugin:discord@claude-plugins-official)
     fi
   fi
+fi
+
+# --- Ollama: permission + launch claude via ollama, then exit ---
+if (( session_type == 1 )) && (( personal_tool == 2 )); then
+  prompt_choice "Permission level?" \
+    "Normal (default)" \
+    "Auto mode" \
+    "YOLO (bypass all permissions)"
+  ollama_claude_args=()
+  case $REPLY_IDX in
+    0) ollama_claude_args+=(--permission-mode default) ;;
+    1) ollama_claude_args+=(--permission-mode auto) ;;
+    2) ollama_claude_args+=(--dangerously-skip-permissions) ;;
+  esac
+
+  echo "\n${bold}${green}Launching ollama launch claude${reset} -- ${ollama_claude_args[*]}"
+  exec ollama launch claude -- "${ollama_claude_args[@]}"
 fi
 
 # --- Gemini: approval + launch, then exit ---
