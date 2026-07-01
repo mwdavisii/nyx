@@ -122,12 +122,12 @@
         };
         castor = {
           user = "mwdavisii";
-          system = "x86_64-linux";
+          system = "aarch64-linux";
           hostsDir = ./system/dgx/hosts;
         };
         pollux = {
           user = "mwdavisii";
-          system = "x86_64-linux";
+          system = "aarch64-linux";
           hostsDir = ./system/dgx/hosts;
         };
       };
