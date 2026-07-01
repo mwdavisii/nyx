@@ -1,9 +1,9 @@
 # DGX (Castor & Pollux) Install Guide
 
 Three-phase setup on a pre-installed DGX OS box:
-1. **01-install-packages.sh** — validate GB10 hardware, install apt prereqs (including docker + hf CLI for the `gb10_cluster` platform), ensure `/models` exists.
+1. **01-install-packages.sh** — validate GB10 hardware, install apt prereqs (docker + hf CLI), ensure `/models` exists.
 2. **02-setup-nix.sh** — bootstrap Nix and run the first `home-manager switch`.
-3. **`gb10_cluster` runbook** (peer's repo) — deploy the vLLM / observability platform.
+3. **vLLM containers** — run `timothystewart6/vllm-gb10` against your model weights, exposed to the LAN. The control plane (LiteLLM, Langfuse, observability, etc.) lives elsewhere.
 
 ## Prerequisites
 
@@ -37,11 +37,11 @@ chmod +x 01-install-packages.sh
 Runs GB10 hardware validation up front (arch, driver, docker nvidia runtime), then installs:
 
 - **Core** (dev/shell prereqs): `git curl ca-certificates xz-utils zsh build-essential libfido2-1 unzip`
-- **`gb10_cluster` platform prereqs**: `docker.io docker-buildx docker-compose-v2 pipx`
+- **vLLM prereqs**: `docker.io docker-buildx docker-compose-v2 pipx`
 
 Also:
-- Creates `/models` owned by your user (peer's vLLM containers mount it read-only).
-- Installs HuggingFace CLI (`hf`) into `~/.local/bin` via pipx, so peer's `models/download-*.sh` scripts work.
+- Creates `/models` owned by your user (the vLLM container mounts it read-only).
+- Installs HuggingFace CLI (`hf`) into `~/.local/bin` via pipx for downloading model weights.
 
 Optional prompt (interactive mode only):
 
@@ -70,18 +70,51 @@ Steps:
 
 After it finishes, log out and log back in (or run `exec zsh -l`) so zsh becomes your login shell.
 
-## Phase 4 — Application platform (`gb10_cluster`)
+## Phase 4 — vLLM (application layer, out of nyx scope)
 
-Nyx does not manage the LLM inference stack. Peer's `gb10_cluster` repo owns the compose files, vLLM configs, LiteLLM routing, model downloads, and observability.
+Nyx does not manage the inference stack. Everything nyx installs in Phase 2 (docker, `hf`, `/models`) is what a vLLM container needs to already be present.
+
+The image that works on GB10's aarch64 + sm_121 (Blackwell) is `timothystewart6/vllm-gb10:latest` — a known-good combination of vLLM + PyTorch + CUDA + flash-attn compiled for this architecture, courtesy of a peer's work. Reusing that image is what makes vLLM boot on GB10 without rebuilding the entire stack from source.
+
+Download a model:
 
 ```bash
-cd ~/code
-git clone git@github.com:<peer-org>/gb10_cluster.git   # replace with the actual URL
-cd gb10_cluster
-# Follow docs/RUNBOOK.md from there.
+hf download nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4 \
+    --local-dir /models/nemotron-super-120b-a12b-nvfp4
 ```
 
-Everything nyx installs in Phase 2 (docker, `hf`, `/models`) is what `gb10_cluster` expects to already be present.
+Minimal per-host compose file (write once, per box):
+
+```yaml
+# ~/vllm.yml
+services:
+  vllm:
+    image: timothystewart6/vllm-gb10:latest
+    shm_size: '4g'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - /models/<model-dir>:/model:ro
+    ports:
+      - "0.0.0.0:8001:8000"
+    command: >-
+      vllm serve /model
+      --served-model-name <name>
+      --enforce-eager --dtype auto --max-model-len 32768
+      --gpu-memory-utilization 0.85
+      --enable-prefix-caching --trust-remote-code
+      --kv-cache-dtype fp8
+    restart: unless-stopped
+```
+
+Run: `docker compose -f ~/vllm.yml up -d`. Point your LAN LiteLLM (running in PVE) at `http://<host>:8001/v1`.
+
+The LiteLLM, Langfuse, Prometheus, Grafana, Caddy, Open WebUI, n8n, and Postgres containers you may have seen in a colleague's `gb10_cluster` repo — those are a self-contained platform stack. **You already run those services elsewhere; skip them.**
 
 ## Ongoing use
 
@@ -108,6 +141,7 @@ cd ~/code/nyx
 | Kernel, NVIDIA drivers, CUDA, `nvidia-container-toolkit` | DGX OS (NVIDIA apt repos) |
 | Docker daemon, `hf` CLI, `/models` mount target | nyx (`setup/dgx/01-install-packages.sh`) |
 | Shell, dev tooling, editor, CLI AI, home dotfiles | home-manager (this repo, via `headless.nix`) |
-| vLLM containers, LiteLLM, Prometheus/Grafana, model weights | `gb10_cluster` (peer) |
+| vLLM container + model weights | You (hand-rolled compose file, see Phase 4) |
+| LiteLLM, Langfuse, Prometheus, Grafana | Already running in your PVE lab |
 | Anything under `nyx.modules.desktop.*` / `app.*` / `sdr.*` | Not enabled — headless profile |
 | `nyx.secrets.*` (agenix) | Not wired for standalone home-manager |
