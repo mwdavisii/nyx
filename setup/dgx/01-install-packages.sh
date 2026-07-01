@@ -22,14 +22,16 @@ set -euo pipefail
 # - git curl ca-certificates xz-utils: bootstrap prereqs
 # - zsh build-essential: home-manager login shell + treesitter/native builds
 # - libfido2-1 unzip: yubikey, occasional dev tooling
-# - docker.io docker-buildx docker-compose-v2: gb10_cluster platform prereqs
-#   (idempotent no-op if DGX OS already provides them)
 # - pipx: user-scope Python tool installer (used below for `hf` CLI)
+#
+# DELIBERATELY NOT LISTED: docker.io / docker-compose-v2 / docker-buildx.
+# DGX OS ships NVIDIA's own docker stack (containerd.io + docker-ce), and
+# installing Ubuntu's docker.io tries to pull vanilla `containerd`, which
+# conflicts with `containerd.io`. We verify docker is present below instead.
 CORE_PKGS=(
   git curl ca-certificates xz-utils
   zsh build-essential
   libfido2-1 unzip
-  docker.io docker-buildx docker-compose-v2
   pipx
 )
 
@@ -37,7 +39,7 @@ CORE_PKGS=(
 # is a hard error because it corrupts CUDAGraph state on this unified-
 # memory architecture (peer's gb10_cluster finding).
 validate_gb10_hardware() {
-  local arch driver_version runtimes
+  local arch driver_version
 
   arch="$(uname -m)"
   if [[ "$arch" != "aarch64" ]]; then
@@ -56,12 +58,18 @@ validate_gb10_hardware() {
     echo "WARN: nvidia-smi not found. Not on a DGX box, or the driver is broken."
   fi
 
-  if command -v docker &>/dev/null; then
-    runtimes="$(docker info 2>/dev/null | grep -E '^ Runtimes:' || true)"
-    if ! echo "$runtimes" | grep -q 'nvidia'; then
-      echo "WARN: NVIDIA container runtime not registered with docker. GPU containers will fail."
-      echo "      DGX OS owns nvidia-container-toolkit; fix on the vendor side, not here."
-    fi
+  # Docker + NVIDIA runtime are vendor-provided on DGX OS. Verify, don't install.
+  if ! command -v docker &>/dev/null; then
+    echo "WARN: docker not found. DGX OS should ship it — fix on the vendor side."
+    return
+  fi
+
+  # Modern docker info wraps the Runtimes list across multiple lines and
+  # sometimes emits ANSI color; match anywhere in the output rather than
+  # a specific line prefix.
+  if ! docker info 2>/dev/null | grep -q 'nvidia'; then
+    echo "WARN: NVIDIA container runtime not visible in \`docker info\`. GPU containers will fail."
+    echo "      DGX OS owns nvidia-container-toolkit; fix on the vendor side, not here."
   fi
 }
 
