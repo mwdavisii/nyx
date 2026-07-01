@@ -84,6 +84,19 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# Step 4b — Verify flakes are enabled in /etc/nix/nix.conf (idempotent)
+# ---------------------------------------------------------------------------
+# The Determinate Systems installer writes this by default, but future
+# installer versions could drop it. We rely on flakes in Step 7, so guard
+# against a confusing later failure by warning up front.
+
+if ! sudo grep -qE '^experimental-features.*(nix-command|flakes)' /etc/nix/nix.conf 2>/dev/null; then
+  echo "WARNING: 'experimental-features = nix-command flakes' not found in /etc/nix/nix.conf."
+  echo "         The Nix installer should have set this — home-manager switch may fail."
+  echo "         To fix: sudo tee -a /etc/nix/nix.conf <<< 'experimental-features = nix-command flakes'"
+fi
+
+# ---------------------------------------------------------------------------
 # Step 5 — Clone the nyx repo (SSH with HTTPS fallback)
 # ---------------------------------------------------------------------------
 
