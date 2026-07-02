@@ -88,6 +88,9 @@ echo "  - User:      $USER"
 if [[ ! -f "$USER_NIX" ]]; then
   echo "  - New file:  $USER_NIX"
 fi
+if [[ ! -d "system/dgx/hosts/${HOST}" ]]; then
+  echo "  - New file:  system/dgx/hosts/${HOST}/default.nix"
+fi
 echo "  - flake.nix: reduced to a single homeConfigurations entry ($HOST)"
 echo "  - .git:      DELETED (checkout becomes yours, no upstream)"
 echo "  - Then run:  setup/dgx/01-install-packages.sh"
