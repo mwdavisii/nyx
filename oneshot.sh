@@ -51,6 +51,33 @@ if [[ ! -f setup/dgx/01-install-packages.sh || ! -f setup/dgx/02-setup-nix.sh ]]
   error "setup/dgx/01-install-packages.sh or 02-setup-nix.sh missing. Wrong checkout?"
 fi
 
+# ── DGX-only guard ───────────────────────────────────────────────────
+# oneshot.sh only makes sense on an NVIDIA DGX box. The flake.nix
+# rewrite hardcodes system = "aarch64-linux", hostsDir = ./system/dgx/hosts,
+# and enableHyprland = false — none of which apply to an Arch desktop
+# or a random x86_64 Ubuntu VM. Rather than fail confusingly later,
+# refuse up front unless the operator explicitly overrides.
+is_dgx=false
+if [[ -f /etc/dgx-release ]] || grep -qi 'dgx' /etc/os-release 2>/dev/null; then
+  is_dgx=true
+fi
+# Belt: also check for aarch64 + nvidia-smi. Either alone is not enough
+# (a random ARM VM has aarch64; a workstation has nvidia-smi), but the
+# combination together with DGX markers is what we actually need.
+if ! $is_dgx; then
+  echo -e "${RED}[oneshot]${NC} This box does not look like an NVIDIA DGX host."
+  echo "         Checked: /etc/dgx-release (missing) and /etc/os-release (no 'dgx')."
+  echo ""
+  echo "  oneshot.sh is only for DGX boxes (ASUS GB10 / Project DIGITS)."
+  echo "  For other hosts, edit flake.nix by hand and run switch.sh manually."
+  echo ""
+  read -rp "  Override the guard and continue anyway? [y/N] " override
+  if [[ ! "$override" =~ ^[Yy]$ ]]; then
+    error "Aborted (not a DGX host)."
+  fi
+  warn "Continuing on non-DGX host at operator's request. You are on your own."
+fi
+
 # ── Prompts ──────────────────────────────────────────────────────────
 
 info "Setting up nyx for user: $USER"
@@ -81,9 +108,19 @@ else
   info "Reusing existing $USER_NIX."
 fi
 
+# Detect whether we need to rename the system hostname to match $HOST.
+CURRENT_HOST="$(hostname -s 2>/dev/null || hostname)"
+NEEDS_HOSTNAME_CHANGE=false
+if [[ "$CURRENT_HOST" != "$HOST" ]]; then
+  NEEDS_HOSTNAME_CHANGE=true
+fi
+
 echo ""
 info "About to transform this checkout:"
 echo "  - Hostname:  $HOST"
+if $NEEDS_HOSTNAME_CHANGE; then
+  echo "               (system hostname will change from '$CURRENT_HOST' via 'sudo hostnamectl set-hostname')"
+fi
 echo "  - User:      $USER"
 if [[ ! -f "$USER_NIX" ]]; then
   echo "  - New file:  $USER_NIX"
@@ -99,6 +136,26 @@ echo ""
 read -rp "Proceed? [y/N] " confirm
 if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
   error "Aborted."
+fi
+
+# ── Set system hostname ──────────────────────────────────────────────
+# Done BEFORE the destructive steps below so that if hostnamectl fails
+# (no sudo, no systemd, etc.) we haven't already blown away .git.
+# home-manager doesn't care what the box calls itself — but the peer's
+# vLLM setup + PVE routing DO care, so we align them here.
+
+if $NEEDS_HOSTNAME_CHANGE; then
+  info "Renaming system hostname: $CURRENT_HOST → $HOST"
+  if ! sudo hostnamectl set-hostname "$HOST"; then
+    error "hostnamectl set-hostname failed. Fix manually and re-run."
+  fi
+  # /etc/hosts often has an entry for the old hostname; update it too so
+  # 'sudo' doesn't complain about 'unable to resolve host <old-name>'
+  # on subsequent commands in this same shell.
+  if grep -qE "^127\.0\.1\.1\s+${CURRENT_HOST}\b" /etc/hosts 2>/dev/null; then
+    sudo sed -i.bak -E "s/^(127\.0\.1\.1\s+)${CURRENT_HOST}\b/\1${HOST}/" /etc/hosts
+    info "Updated /etc/hosts (backup at /etc/hosts.bak)"
+  fi
 fi
 
 # ── Write users/<USER>.nix ───────────────────────────────────────────
