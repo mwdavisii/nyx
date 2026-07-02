@@ -74,7 +74,15 @@
       fastfetch.enable    = true;
       fzf.enable          = true;
       gcp.enable          = true;
-      git                 = { enable = true; signing.signByDefault = false; };
+      git                 = {
+        enable = true;
+        signing.signByDefault = false;
+        # Peers cloning nyx to their own boxes generally won't have SSH
+        # keys registered against the maintainer's GitHub — leave HTTPS
+        # URLs as HTTPS so `git clone https://...` and `git pull` work
+        # out of the box.
+        rewriteToSSH = false;
+      };
       glow.enable         = true;
       homelabTools.enable = true;
       jq.enable           = true;

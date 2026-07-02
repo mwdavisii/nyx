@@ -42,6 +42,18 @@ in
       default = { };
       description = "Options related to signing commits using GnuPG.";
     };
+
+    rewriteToSSH = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Rewrite https://github.com/{uLabSystems,mwdavisii}/ URLs to
+        ssh://git@github.com/... via git's insteadOf. Convenient on
+        personal boxes with SSH keys set up; hostile on shared or
+        third-party boxes where peers may want plain HTTPS clones.
+        Set to false in profiles/headless.nix for DGX hosts.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -69,10 +81,11 @@ in
         defaultBranch = main
       [push]
         autoSetupRemote = true
+      ${if cfg.rewriteToSSH then ''
       [url "ssh://git@github.com/uLabSystems/"]
         insteadOf = https://github.com/uLabSystems/
       [url "ssh://git@github.com/mwdavisii/"]
-        insteadOf = https://github.com/mwdavisii/
+        insteadOf = https://github.com/mwdavisii/'' else ""}
       [user]
         name = "${username}"
         email = "${email}"
