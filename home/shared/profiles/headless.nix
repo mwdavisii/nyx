@@ -43,7 +43,10 @@
   nyx.modules = {
     ai = {
       launcher.enable = true;
-      claude = { enable = true; package = null; };
+      # Nix-installed on headless (aarch64 wheel available in nixpkgs).
+      # Arch hosts override package=null and pull from pacman/AUR instead.
+      claude.enable = true;
+      codex.enable  = true;
       chatgpt.enable = false;
       gemini.enable  = false;
       ollama.enable  = false;
