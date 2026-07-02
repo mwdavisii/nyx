@@ -124,11 +124,13 @@
           user = "mwdavisii";
           system = "aarch64-linux";
           hostsDir = ./system/dgx/hosts;
+          enableHyprland = false;
         };
         pollux = {
           user = "mwdavisii";
           system = "aarch64-linux";
           hostsDir = ./system/dgx/hosts;
+          enableHyprland = false;
         };
       };
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {

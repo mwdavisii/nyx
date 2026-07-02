@@ -101,6 +101,11 @@ rec {
     user,
     system ? "x86_64-linux",
     hostsDir ? ../system/arch/hosts,
+    # Hyprland's home-manager module is only needed on GUI hosts. Pulling
+    # it in on headless boxes (DGX) triggers a submodule fetch of
+    # hyprland-protocols, which fails on an already-shallow-cloned cache
+    # ("shallow roots are not allowed to be updated"). Arch hosts keep it.
+    enableHyprland ? true,
   }:
     let
       pkgs = inputs.self.legacyPackages."${system}";
@@ -113,7 +118,7 @@ rec {
         inherit pkgs;
         modules = [
           inputs.nixvim.homeModules.nixvim
-          (hyprland.homeManagerModules.default)
+        ] ++ (lib.optional enableHyprland hyprland.homeManagerModules.default) ++ [
           (agenix.homeManagerModules.default)
           (import ../home/arch/modules)
           (import userOptions)
