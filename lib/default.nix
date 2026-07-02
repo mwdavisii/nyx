@@ -92,20 +92,33 @@ rec {
       ];
     };
 
-  ################################## ARCH ##################################
-  mkArchConfiguration = name: { config ? name, user, system ? "x86_64-linux" }:
+  ################################## STANDALONE LINUX ##################################
+  # Standalone home-manager builder used by Arch (prometheus, L242731) and
+  # Ubuntu-derived hosts (DGX: castor, pollux). `hostsDir` selects the host
+  # tree; default preserves the historical Arch behavior.
+  mkStandaloneLinuxConfiguration = name: {
+    config ? name,
+    user,
+    system ? "x86_64-linux",
+    hostsDir ? ../system/arch/hosts,
+    # Hyprland's home-manager module is only needed on GUI hosts. Pulling
+    # it in on headless boxes (DGX) triggers a submodule fetch of
+    # hyprland-protocols, which fails on an already-shallow-cloned cache
+    # ("shallow roots are not allowed to be updated"). Arch hosts keep it.
+    enableHyprland ? true,
+  }:
     let
       pkgs = inputs.self.legacyPackages."${system}";
       userConf = import (strToFile user ../users);
       homeDirectory = "/home/${userConf.userName}";
-      userOptions = strToPath config ../system/arch/hosts;
+      userOptions = strToPath config hostsDir;
     in
     nameValuePair name (
       inputs.home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
           inputs.nixvim.homeModules.nixvim
-          (hyprland.homeManagerModules.default)
+        ] ++ (lib.optional enableHyprland hyprland.homeManagerModules.default) ++ [
           (agenix.homeManagerModules.default)
           (import ../home/arch/modules)
           (import userOptions)
@@ -124,6 +137,9 @@ rec {
           { inherit inputs name self system user; };
       }
     );
+
+  # Back-compat alias. Do not remove without auditing call sites.
+  mkArchConfiguration = mkStandaloneLinuxConfiguration;
 
   mkNixSystemConfiguration = name: { config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? { }, }:
     nameValuePair name (

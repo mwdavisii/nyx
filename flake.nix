@@ -111,7 +111,7 @@
         nix-on-droid = { user = "droid"; };
         default = { user = "droid"; };
       };
-      homeConfigurations = mapAttrs' lib.mkArchConfiguration {
+      homeConfigurations = mapAttrs' lib.mkStandaloneLinuxConfiguration {
         L242731 = {
           user = "mdavis67";
           system = "x86_64-linux";
@@ -119,6 +119,18 @@
         prometheus = {
           user = "mwdavisii";
           system = "x86_64-linux";
+        };
+        castor = {
+          user = "mwdavisii";
+          system = "aarch64-linux";
+          hostsDir = ./system/dgx/hosts;
+          enableHyprland = false;
+        };
+        pollux = {
+          user = "mwdavisii";
+          system = "aarch64-linux";
+          hostsDir = ./system/dgx/hosts;
+          enableHyprland = false;
         };
       };
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
