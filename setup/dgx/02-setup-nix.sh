@@ -41,21 +41,32 @@ fi
 # Step 2 — Get hostname (must be castor or pollux; prompt if not)
 # ---------------------------------------------------------------------------
 
-DEFAULT_HOST="$(hostname -s 2>/dev/null || hostname)"
-case "$DEFAULT_HOST" in
-  castor|pollux) ;;
-  *)
-    echo "==> Hostname '$DEFAULT_HOST' is not castor or pollux."
-    read -rp "    Enter DGX host to configure [castor]: " host_input
-    DEFAULT_HOST="${host_input:-castor}"
-    ;;
-esac
-HOST="$DEFAULT_HOST"
-echo "==> Using host: $HOST"
+# Two ways to run this step non-interactively (used by oneshot.sh):
+#   NYX_HOST=<name>       - preselects the host, skips the prompt
+#   NYX_SKIP_CLONE=1      - skips the repo clone in Step 5 (already in a checkout)
+#   NYX_SKIP_BRANCH=1     - skips the branch prompt (uses default: main)
+if [[ -n "${NYX_HOST:-}" ]]; then
+  HOST="$NYX_HOST"
+  echo "==> Using host: $HOST (from \$NYX_HOST)"
+else
+  DEFAULT_HOST="$(hostname -s 2>/dev/null || hostname)"
+  case "$DEFAULT_HOST" in
+    castor|pollux) ;;
+    *)
+      echo "==> Hostname '$DEFAULT_HOST' is not castor or pollux."
+      read -rp "    Enter DGX host to configure [castor]: " host_input
+      DEFAULT_HOST="${host_input:-castor}"
+      ;;
+  esac
+  HOST="$DEFAULT_HOST"
+  echo "==> Using host: $HOST"
+fi
 
-read -rp "==> Nyx branch to use [${NYX_BRANCH}]: " branch_input
-NYX_BRANCH="${branch_input:-$NYX_BRANCH}"
-echo "    Using branch: $NYX_BRANCH"
+if [[ -z "${NYX_SKIP_BRANCH:-}" ]]; then
+  read -rp "==> Nyx branch to use [${NYX_BRANCH}]: " branch_input
+  NYX_BRANCH="${branch_input:-$NYX_BRANCH}"
+  echo "    Using branch: $NYX_BRANCH"
+fi
 
 # ---------------------------------------------------------------------------
 # Step 3 — Install Nix (Determinate Systems)
@@ -100,7 +111,12 @@ fi
 # Step 5 — Clone the nyx repo (SSH with HTTPS fallback)
 # ---------------------------------------------------------------------------
 
-if [ ! -d "$NYX_DIR" ]; then
+if [[ -n "${NYX_SKIP_CLONE:-}" ]]; then
+  # Driven by oneshot.sh from inside an existing (possibly de-gitted) checkout.
+  # Use the current working directory as the repo instead of cloning.
+  NYX_DIR="$(pwd)"
+  echo "==> Skipping clone (\$NYX_SKIP_CLONE set); using $NYX_DIR"
+elif [ ! -d "$NYX_DIR" ]; then
   echo ""
   echo "==> Cloning nyx repo ($NYX_BRANCH) to $NYX_DIR..."
   mkdir -p "$(dirname "$NYX_DIR")"
