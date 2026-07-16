@@ -27,6 +27,9 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       python313
+      # pipenv works via the virtualenv-clone overlay in nix/overlays/
+      # (upstream test_clone_contents is broken against virtualenv 21.2.4;
+      # the overlay skips just that test).
       pipenv
     ] ++ cfg.extraPackages;
 
