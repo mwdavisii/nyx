@@ -223,6 +223,7 @@ sudo pacman -S --needed --noconfirm \
   unzip \
   flatpak \
   \
+  blender \
   calibre \
   telegram-desktop \
   python-msgpack \
