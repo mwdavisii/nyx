@@ -3,26 +3,28 @@
 with lib;
 let
   cfg = config.nyx.modules.app.chrome;
-  chromePath = "${pkgs.google-chrome}/bin/google-chrome-stable";
-  defaultPath = "${pkgs.qutebrowser}/bin/qutebrowser";
 in
 {
   options.nyx.modules.app.chrome = {
     enable = mkEnableOption "Google Chrome";
-    makeDefaultBrowser = mkOption{
+    package = mkOption {
+      description = ''
+        Package for Google Chrome. Set to `null` on hosts where Chrome is
+        installed outside Nix (e.g. Arch via `yay -S google-chrome`), because
+        Nix's Chrome build expects NixOS's /run/opengl-driver mechanism and
+        cannot find EGL/DRM userspace on non-NixOS systems (GPU accel breaks).
+      '';
+      type = with types; nullOr package;
+      default = pkgs.google-chrome;
+    };
+    makeDefaultBrowser = mkOption {
       type = types.bool;
       default = true;
     };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      google-chrome
-    ];
-
-   #home.sessionVariables = {
-   #   environment.sessionVariables.DEFAULT_BROWSER = if cfg.makeDefaultBrowser then "${chromePath}" else "${defaultPath}";
-   # };
+    home.packages = lib.optionals (cfg.package != null) [ cfg.package ];
 
     xdg.mimeApps = {
       enable = cfg.makeDefaultBrowser;

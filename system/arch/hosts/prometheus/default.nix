@@ -68,9 +68,13 @@
         enable = true;
         package = null;
       };
-      chromium.enable = true;
+      chromium = {
+        enable = true;
+        package = null; # installed via pacman (extra/chromium) — Nix build has no GPU accel on Arch
+      };
       chrome = {
         enable = true;
+        package = null; # installed via pacman (AUR/google-chrome) — Nix build has no GPU accel on Arch
         makeDefaultBrowser = true;
       };
       kitty = {

@@ -123,6 +123,7 @@ info "Installing core desktop packages..."
 sudo pacman -S --needed --noconfirm \
   \
   foot kitty alacritty \
+  chromium \
   linux-headers \
   dkms \
   v4l2loopback-dkms \
@@ -340,6 +341,7 @@ _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   quickshell-git \
   app2unit \
+  google-chrome \
   claude-code \
   claude-desktop-bin \
   ttf-material-symbols-variable \
