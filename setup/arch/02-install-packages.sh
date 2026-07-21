@@ -528,10 +528,26 @@ sudo systemctl enable --now bluetooth 2>/dev/null || true
 # Vial udev rule — grants user access to /dev/hidraw for any Vial-firmware keyboard
 # Mirrors the NixOS module at system/shared/modules/system/vial/default.nix.
 # The serial substring "vial:f64c2b3c" is the standard Vial magic, not a per-board id.
+#
+# Filename is 60-* (not 99-*) so it precedes systemd's 73-seat-late.rules — that rule
+# only runs the `uaccess` builtin for devices whose TAG is already set when it fires.
+# GROUP is `plugdev` (matching the rtl-sdr convention already used on Arch) rather
+# than `users`, since Arch doesn't put regular users in `users` by default.
+info "Ensuring plugdev group exists (needed by vial + rtl-sdr rules)..."
+if ! getent group plugdev &>/dev/null; then
+  sudo groupadd plugdev
+fi
+if ! groups "$USER" | grep -q '\bplugdev\b'; then
+  info "Adding '$USER' to plugdev group..."
+  sudo usermod -aG plugdev "$USER"
+  warn "Group change takes effect after logout/login."
+fi
+
 info "Installing Vial udev rule..."
-sudo tee /etc/udev/rules.d/99-vial.rules > /dev/null <<'EOF'
+sudo rm -f /etc/udev/rules.d/99-vial.rules
+sudo tee /etc/udev/rules.d/60-vial.rules > /dev/null <<'EOF'
 # Vial user access to /dev/hidraw
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
 EOF
 sudo udevadm control --reload-rules
 sudo udevadm trigger
