@@ -104,6 +104,7 @@
       nix.enable = true;
       node.enable = true;
       python.enable = true;
+      qmk.enable = true;
     };
     sdr = {
       sdrpp   = { enable = true; package = null; };
