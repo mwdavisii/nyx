@@ -120,6 +120,10 @@
       };
       vscode.enable = true;
       pearDesktop.enable = true;
+      opencode = {
+        enable = true;
+        package = null; # installed via pacman/AUR
+      };
     };
     dev = {
       androidSDK.enable = true;
