@@ -26,6 +26,7 @@ let
     "netdev"
     "k3s"
     "kvm"
+    "plugdev"  # required for nyx.modules.system.vial's udev rule
   ];
 in
 {

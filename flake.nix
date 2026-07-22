@@ -93,6 +93,44 @@
 
       devShell = foreachSystem (system: import ./shell.nix { pkgs = pkgsBySystem."${system}"; });
 
+      # Named dev shells: `nix develop .#<name>` from anywhere.
+      # `default` mirrors devShell (the base tooling); `qmk` provides the QMK/Vial-QMK
+      # firmware toolchain — ARM Cortex-M toolchain, QMK CLI, and RP2040 flashing helpers.
+      devShells = foreachSystem (
+        system:
+        let
+          pkgs = pkgsBySystem."${system}";
+        in
+        {
+          default = import ./shell.nix { inherit pkgs; };
+          qmk = pkgs.mkShell {
+            name = "nyx-qmk";
+            packages = with pkgs; [
+              qmk
+              gcc-arm-embedded
+              dfu-util
+              picotool
+              # AVR toolchain, in case an old Pro Micro build ever comes through.
+              avrdude
+              pkgsCross.avr.buildPackages.gcc
+              # udisksctl for command-line mounting of the RPI-RP2 bootloader volume.
+              udisks
+            ];
+            shellHook = ''
+              # Point QMK at ~/code/keyboards/vial-qmk if it exists, but don't
+              # invent a directory — the user might have the tree elsewhere.
+              if [ -d "$HOME/code/keyboards/vial-qmk" ]; then
+                export QMK_HOME="$HOME/code/keyboards/vial-qmk"
+                echo "QMK_HOME=$QMK_HOME"
+              else
+                echo "note: $HOME/code/keyboards/vial-qmk not found — set QMK_HOME manually or clone vial-kb/vial-qmk there."
+              fi
+              echo "qmk devShell ready. Try: qmk compile -kb sofle_choc -km vial"
+            '';
+          };
+        }
+      );
+
       legacyPackages = pkgsBySystem;
       packages = foreachSystem (system: import ./nix/pkgs self system);
       overlay = foreachSystem (system: _final: _prev: self.packages."${system}");
