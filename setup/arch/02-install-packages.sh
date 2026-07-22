@@ -344,6 +344,7 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   google-chrome \
   claude-code \
   claude-desktop-bin \
+  opencode-bin \
   ttf-material-symbols-variable \
   ttf-rubik-vf \
   swww \
