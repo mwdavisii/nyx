@@ -128,6 +128,7 @@
         enable = true;
         package = null; # installed via pacman/AUR
       };
+      remmina.enable = true;
     };
     dev = {
       androidSDK.enable = true;
