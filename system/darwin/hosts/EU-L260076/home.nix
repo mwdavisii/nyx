@@ -46,6 +46,7 @@
       finicky.enable = true;
       kitty.enable = true;
       discord.enable = true;
+      slack.enable = true;
       #signal.enable = true;
       #firefox.enable = true;
       obs.enable = false;

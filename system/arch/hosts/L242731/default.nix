@@ -74,6 +74,10 @@
         enable = true;
         package = null; # installed via pacman (discord_arch_electron)
       };
+      slack = {
+        enable = true;
+        package = null; # installed via pacman (AUR/slack-desktop)
+      };
       firefox.enable = true;
       obs = {
         enable = true;
