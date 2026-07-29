@@ -1,8 +1,15 @@
 scan_timeout = 10
+command_timeout = 15000
 add_newline = false
 
 # Define order to make prompt on one line
 # https://starship.rs/config/#default-prompt-order
+
+[azure]
+disabled = false
+format = "on [$symbol($subscription)]($style) "
+symbol = "󰠅 "
+style = "blue bold"
 
 [aws]
 format = "on [$symbol($profile )($region) )]($style)"
@@ -57,6 +64,16 @@ pyenv_version_name = true
 disabled = false
 threshold = 3
 format = "[$shlvl]($style) "
+
+[nix_shell]
+format = 'via [$symbol$state( \($name\))]($style) '
+style = 'bold blue'
+symbol = '❄️ '
+
+[sudo]
+disabled = false
+style = 'bold blue'
+symbol = '🧙 '
 
 [time]
 disabled = false
