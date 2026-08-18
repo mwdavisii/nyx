@@ -353,6 +353,7 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   sublime-text-4 \
   discord_arch_electron \
   signal-desktop \
+  nextcloud-client \
   slack-desktop \
   stockfish \
   lc0 \

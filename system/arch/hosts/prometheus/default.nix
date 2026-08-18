@@ -129,6 +129,10 @@
         package = null; # installed via pacman/AUR
       };
       remmina.enable = true;
+      nextcloud = {
+        enable = true;
+        package = null; # installed via pacman (nextcloud-client)
+      };
     };
     dev = {
       androidSDK.enable = true;
