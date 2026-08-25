@@ -79,6 +79,7 @@
         package = null; # installed via pacman (AUR/slack-desktop)
       };
       firefox.enable = true;
+      chess-tui.enable = true;
       obs = {
         enable = true;
         package = null;
