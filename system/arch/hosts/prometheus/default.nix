@@ -55,7 +55,6 @@
     ai = {
       launcher.enable = true;
       chatgpt.enable = true;
-      gemini.enable = true;
       # Haiku-via-Azure-APIM model override is scoped to the APIM session only, applied at
       # launch via `claude --settings` from ~/.claude_haiku_env (CLAUDE_EXTRA_SETTINGS) by the
       # ai launcher. Kept out of settings.json so plain `--model haiku` against the real

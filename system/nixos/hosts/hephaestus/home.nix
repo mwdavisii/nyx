@@ -19,7 +19,6 @@
     modules = {
       ai = {
         chatgpt.enable = true;
-        gemini.enable = true;
         claude.enable = true;
       };
       gaming = {

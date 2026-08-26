@@ -49,7 +49,6 @@
     ai = {
       launcher.enable = true;
       chatgpt.enable = true;
-      gemini.enable = true;
       ollama.enable = false;
     };
     app = {      

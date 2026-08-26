@@ -48,7 +48,6 @@
       claude.enable = true;
       codex.enable  = true;
       chatgpt.enable = false;
-      gemini.enable  = false;
       ollama.enable  = false;
     };
 

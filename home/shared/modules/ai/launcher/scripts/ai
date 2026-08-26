@@ -104,7 +104,7 @@ fi
 # --- Step 2b (Personal): Pick tool ---
 personal_tool=-1
 if (( session_type == 1 )); then
-  prompt_choice "Which tool?" "Claude Code" "Gemini CLI" "Ollama (Claude Code)"
+  prompt_choice "Which tool?" "Claude Code" "Ollama (Claude Code)"
   personal_tool=$REPLY_IDX
 
   if (( personal_tool == 0 )); then
@@ -123,7 +123,7 @@ if (( session_type == 1 )); then
 fi
 
 # --- Ollama: permission + launch claude via ollama, then exit ---
-if (( session_type == 1 )) && (( personal_tool == 2 )); then
+if (( session_type == 1 )) && (( personal_tool == 1 )); then
   prompt_choice "Permission level?" \
     "Normal (default)" \
     "Auto mode" \
@@ -137,24 +137,6 @@ if (( session_type == 1 )) && (( personal_tool == 2 )); then
 
   echo "\n${bold}${green}Launching ollama launch claude${reset} -- ${ollama_claude_args[*]}"
   exec ollama launch claude -- "${ollama_claude_args[@]}"
-fi
-
-# --- Gemini: approval + launch, then exit ---
-if (( session_type == 1 )) && (( personal_tool == 1 )); then
-  gemini_args=()
-
-  prompt_choice "Approval mode?" \
-    "Default (prompt for approval)" \
-    "Auto-edit (auto-approve edits)" \
-    "YOLO (auto-approve everything)"
-  case $REPLY_IDX in
-    0) gemini_args+=(--approval-mode default) ;;
-    1) gemini_args+=(--approval-mode auto_edit) ;;
-    2) gemini_args+=(--approval-mode yolo) ;;
-  esac
-
-  echo "\n${bold}${green}Launching gemini${reset} ${gemini_args[*]}"
-  exec gemini "${gemini_args[@]}"
 fi
 
 # --- Codex: permission + launch, then exit ---

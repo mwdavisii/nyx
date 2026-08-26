@@ -6,7 +6,7 @@ let
 in
 {
   options.nyx.modules.ai.launcher = {
-    enable = mkEnableOption "AI launcher script (wraps Claude, Codex, Gemini)";
+    enable = mkEnableOption "AI launcher script (wraps Claude, Codex, Ollama)";
   };
 
   config = mkIf cfg.enable {
