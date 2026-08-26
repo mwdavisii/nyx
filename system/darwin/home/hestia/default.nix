@@ -19,6 +19,67 @@
 
   home = {
     stateVersion = "26.05";
-    packages = with pkgs; [ ];
+    packages = with pkgs; [
+      ripgrep
+      fd
+      sd
+      dua
+      just
+      comma
+      wget
+      vim
+    ];
+  };
+
+  nyx.modules = {
+    app = {
+      alacritty = {
+        enable = true;
+        package = null;   # installed via Homebrew; nix manages config only
+      };
+      kitty = {
+        enable = true;
+        package = null;
+      };
+      wezterm = {
+        enable = true;
+        package = null;
+        fontSize = 14;
+      };
+      iterm2.enable = true;   # config-only module, no package
+    };
+
+    shell = {
+      atuin.enable = true;
+      bash.enable = true;
+      bat.enable = true;
+      bottom.enable = true;
+      direnv.enable = true;
+      dysk.enable = true;
+      eza.enable = true;
+      fastfetch.enable = true;
+      fzf.enable = true;
+      git = {
+        enable = true;
+        signing.signByDefault = false;
+      };
+      glow.enable = true;
+      jq.enable = true;
+      lazygit.enable = true;
+      lf.enable = true;
+      navi.enable = true;
+      ncdu.enable = true;
+      networking.enable = true;
+      nixvim.enable = true;
+      openssl.enable = true;
+      ranger.enable = true;
+      starship.enable = true;
+      tmux.enable = true;
+      xdg.enable = true;
+      yq.enable = true;
+      zellij.enable = true;
+      zoxide.enable = true;
+      zsh.enable = true;
+    };
   };
 }
