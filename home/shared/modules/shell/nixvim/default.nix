@@ -191,9 +191,9 @@ in
         ripgrep      # live_grep
         fd           # file finder
         tree-sitter
-        wl-clipboard # system clipboard on Wayland
         imagemagick
       ] ++ lib.optionals pkgs.stdenv.isLinux [
+        wl-clipboard # system clipboard on Wayland (Darwin uses pbcopy/pbpaste)
         ueberzugpp   # image.nvim ueberzug backend
       ] ++ treeSitterGrammars;
 
