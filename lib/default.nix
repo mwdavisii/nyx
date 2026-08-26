@@ -143,13 +143,19 @@ rec {
 
   ################################## STANDALONE DARWIN ##################################
   # Standalone home-manager builder for macOS hosts that are NOT managed by nix-darwin.
-  # Differs from mkStandaloneLinuxConfiguration in three ways:
+  # Differs from mkStandaloneLinuxConfiguration in six ways:
   #   1. No Hyprland (macOS).
   #   2. No agenix home-manager module — this is deliberate. Hosts built here must not
   #      consume the encrypted secrets repository. `agenix` is still passed as a module
-  #      ARGUMENT because several home modules declare it in their signature without
-  #      using it; that is the flake input, not the secret store.
+  #      ARGUMENT (see 5) because several home modules declare it in their signature
+  #      without using it; that is the flake input, not the secret store. Do not
+  #      "restore" the module: its absence is what guarantees these hosts hold no
+  #      secrets.
   #   3. homeDirectory is /Users/<user> rather than /home/<user>.
+  #   4. Imports ../home/darwin/modules instead of ../home/arch/modules.
+  #   5. Adds `agenix` to extraSpecialArgs (the input, not the module — see 2).
+  #   6. Signature defaults differ: system ? "aarch64-darwin",
+  #      hostsDir ? ../system/darwin/home.
   mkStandaloneDarwinConfiguration = name: {
     config ? name,
     user,
