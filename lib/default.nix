@@ -141,6 +141,50 @@ rec {
   # Back-compat alias. Do not remove without auditing call sites.
   mkArchConfiguration = mkStandaloneLinuxConfiguration;
 
+  ################################## STANDALONE DARWIN ##################################
+  # Standalone home-manager builder for macOS hosts that are NOT managed by nix-darwin.
+  # Differs from mkStandaloneLinuxConfiguration in three ways:
+  #   1. No Hyprland (macOS).
+  #   2. No agenix home-manager module — this is deliberate. Hosts built here must not
+  #      consume the encrypted secrets repository. `agenix` is still passed as a module
+  #      ARGUMENT because several home modules declare it in their signature without
+  #      using it; that is the flake input, not the secret store.
+  #   3. homeDirectory is /Users/<user> rather than /home/<user>.
+  mkStandaloneDarwinConfiguration = name: {
+    config ? name,
+    user,
+    system ? "aarch64-darwin",
+    hostsDir ? ../system/darwin/home,
+  }:
+    let
+      pkgs = inputs.self.legacyPackages."${system}";
+      userConf = import (strToFile user ../users);
+      homeDirectory = "/Users/${userConf.userName}";
+      userOptions = strToPath config hostsDir;
+    in
+    nameValuePair name (
+      inputs.home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          inputs.nixvim.homeModules.nixvim
+          (import ../home/darwin/modules)
+          (import userOptions)
+          mkCommonHomeConfig
+          (mkStandaloneHomeConfig { inherit system; })
+          {
+            home.homeDirectory = homeDirectory;
+            home.username = userConf.userName;
+          }
+        ];
+        extraSpecialArgs =
+          let
+            self = inputs.self;
+            user = userConf;
+          in
+          { inherit inputs name self system user agenix; };
+      }
+    );
+
   mkNixSystemConfiguration = name: { config ? name, user ? "nixos", system ? "x86_64-linux", hostname ? "nixos", buildTarget, args ? { }, }:
     nameValuePair name (
       let
