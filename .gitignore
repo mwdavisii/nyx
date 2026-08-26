@@ -1,3 +1,5 @@
+.codegraph/*
+.gemini/*
 .omo/*
 quickshell-git/*
 results/*
@@ -13,3 +15,4 @@ docs*
 .worktrees/
 browser.json
 *.log
+mcp.json
