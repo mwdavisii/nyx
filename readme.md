@@ -47,7 +47,7 @@ flake.nix  →  lib/default.nix  →  system/<platform>/  +  home/
 .
 ├── home/                    # User-level (home-manager) configuration
 │   ├── shared/modules/      # Cross-platform modules
-│   │   ├── ai/              # claude, chatgpt, ollama
+│   │   ├── ai/              # claude, chatgpt, codex, launcher, ollama
 │   │   ├── app/             # browsers, terminals, editors, streaming, obs, discord
 │   │   ├── desktop/         # hypr, kanshi, rofi, cava, kmonad, vial, gtk
 │   │   ├── dev/             # go, rust, python, node, lua, nix, cpp, android
