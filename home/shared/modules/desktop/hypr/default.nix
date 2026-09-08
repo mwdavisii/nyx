@@ -115,43 +115,84 @@ let
     fi
   '';
   es_de_here = pkgs.writeShellScriptBin "es-de-here" ''
-    # Launch ES-DE on a chosen monitor, at that monitor's resolution.
-    #
-    # Two independent levers decide where ES-DE ends up:
-    #   * PLACEMENT (which monitor)  -> Hyprland focus. Reliable.
-    #   * RENDER SIZE                -> forced here with `es-de --resolution W H`.
-    #
-    # We deliberately do NOT use ES-DE's DisplayIndex setting. That value is an
-    # SDL *display index*, and under Wayland the index -> physical-output
-    # mapping is not stable between launches (it follows the order the
-    # compositor advertises outputs, which changes after a monitor is focused).
-    # A hardcoded index therefore worked intermittently and would sometimes
-    # render at the wrong monitor's resolution -- e.g. a 3840x1600 surface
-    # crammed onto the 1080p panel. Pulling the resolution from `hyprctl
-    # monitors` and forcing it makes the size immune to that ordering.
-    #
-    #   es-de-here              -> DP-1 (main ultrawide, default)
-    #   es-de-here HDMI-A-1     -> secondary 1080p
+    # Launch ES-DE on the currently focused monitor, scaled to that monitor's
+    # native resolution and aspect ratio. ES-DE reads both its display size and
+    # theme aspect ratio from its settings files at startup, so we patch them
+    # to match the active display before launching and restore the previous
+    # values on exit.
     set -euo pipefail
 
-    target_mon="''${1:-DP-1}"
-
-    # Authoritative pixel size for the target monitor, straight from Hyprland.
-    res="$(hyprctl monitors -j \
-      | ${pkgs.jq}/bin/jq -r --arg m "$target_mon" \
-          '.[] | select(.name == $m) | "\(.width) \(.height)"')"
-    read -r W H <<< "$res"
+    # Which monitor is currently focused?
+    mon_info="$(hyprctl monitors -j \
+      | ${pkgs.jq}/bin/jq -r '.[] | select(.focused == true) | "\(.name) \(.width) \(.height) \(.refreshRate | floor)"')"
+    read -r target_mon W H REFRESH <<< "$mon_info"
     if [ -z "''${W:-}" ]; then
-      echo "es-de-here: monitor '$target_mon' not found (run: hyprctl monitors)" >&2
+      echo "es-de-here: no focused monitor found (run: hyprctl monitors -j)" >&2
       exit 1
     fi
 
-    # Focus the target monitor so Hyprland opens the window there.
-    if command -v hyprctl >/dev/null 2>&1; then
-      hyprctl dispatch "hl.dsp.focus({ monitor = \"$target_mon\" })" >/dev/null 2>&1 || true
+    # Map the monitor resolution to the closest supported theme aspect ratio.
+    aspect_ratio="$(awk -v w="$W" -v h="$H" 'BEGIN {
+      r = w / h
+      # Distance to each supported ratio.
+      d["1:1"]    = (r - 1.0) ^ 2
+      d["4:3"]    = (r - 1.333333) ^ 2
+      d["16:10"]  = (r - 1.6) ^ 2
+      d["16:9"]   = (r - 1.777778) ^ 2
+      d["21:9"]   = (r - 2.333333) ^ 2
+      d["32:9"]   = (r - 3.555556) ^ 2
+      best = "16:9"; bestd = d["16:9"]
+      for (k in d) if (d[k] < bestd) { best = k; bestd = d[k] }
+      print best
+    }')"
+
+    es_settings="$HOME/ES-DE/settings/es_settings.xml"
+    original_aspect=""
+    original_display_idx=""
+    if [ -f "$es_settings" ]; then
+      original_aspect="$(grep -oP 'name="ThemeAspectRatio" value="\K[^"]+' "$es_settings" || true)"
+      if [ -n "$original_aspect" ] && [ "$original_aspect" != "$aspect_ratio" ]; then
+        sed -i "s|name=\"ThemeAspectRatio\" value=\"$original_aspect\"|name=\"ThemeAspectRatio\" value=\"$aspect_ratio\"|" "$es_settings"
+      fi
+
+      # SDL display index follows the order hyprctl advertises monitors (1-based).
+      display_idx="$(hyprctl monitors -j \
+        | ${pkgs.jq}/bin/jq -r --arg m "$target_mon" \
+            'to_entries | .[] | select(.value.name == $m) | (.key + 1)')"
+      original_display_idx="$(grep -oP 'name="DisplayIndex" value="\K[0-9]+' "$es_settings" || true)"
+      if [ -n "$original_display_idx" ] && [ "$original_display_idx" != "$display_idx" ]; then
+        sed -i "s|name=\"DisplayIndex\" value=\"$original_display_idx\"|name=\"DisplayIndex\" value=\"$display_idx\"|" "$es_settings"
+      fi
     fi
 
-    exec es-de --resolution "$W" "$H"
+    legacy_cfg="$HOME/.emulationstation/es_settings.cfg"
+    if [ -f "$legacy_cfg" ]; then
+      awk -v w="$W" -v h="$H" '
+        $1 == "Int" && $2 == "ScreenWidth"  { print "Int ScreenWidth "  w; next }
+        $1 == "Int" && $2 == "ScreenHeight" { print "Int ScreenHeight " h; next }
+        { print }
+      ' "$legacy_cfg" > "$legacy_cfg.tmp"
+      mv "$legacy_cfg.tmp" "$legacy_cfg"
+    fi
+
+    # Make sure only one instance runs at a time.
+    killall -q es-de 2>/dev/null || true
+    sleep 0.5
+
+    # Launch ES-DE bare. It will read the patched settings and open on the
+    # active monitor at the active monitor's resolution.
+    es-de &
+    es_pid=$!
+
+    wait "$es_pid" || true
+
+    # Restore the original aspect ratio and display index preferences.
+    if [ -n "$original_aspect" ]; then
+      sed -i "s|name=\"ThemeAspectRatio\" value=\"$aspect_ratio\"|name=\"ThemeAspectRatio\" value=\"$original_aspect\"|" "$es_settings" || true
+    fi
+    if [ -n "$original_display_idx" ]; then
+      sed -i "s|name=\"DisplayIndex\" value=\"$display_idx\"|name=\"DisplayIndex\" value=\"$original_display_idx\"|" "$es_settings" || true
+    fi
   '';
 in
 {

@@ -528,6 +528,28 @@ fi
 info "Enabling services..."
 sudo systemctl enable --now bluetooth 2>/dev/null || true
 
+# Wire gnome-keyring into the TTY login PAM stack so the `login` keyring is
+# unlocked with the user's login password at login. Without this, Chrome (via
+# libsecret/Secret Service) finds no unlocked keyring, prompts for a new one on
+# every launch, and logs the user out of everything when it can't decrypt its
+# stored cookies/passwords. `pam_gnome_keyring.so` ships with the gnome-keyring
+# package (installed above). Idempotent: only appends if not already present.
+info "Wiring gnome-keyring into PAM login stack..."
+if ! grep -q "pam_gnome_keyring.so" /etc/pam.d/login; then
+  sudo tee /etc/pam.d/login > /dev/null <<'EOF'
+#%PAM-1.0
+
+auth       requisite    pam_nologin.so
+auth       include      system-local-login
+auth       optional     pam_gnome_keyring.so
+account    include      system-local-login
+session    include      system-local-login
+session    optional     pam_gnome_keyring.so auto_start
+password   include      system-local-login
+password   optional     pam_gnome_keyring.so
+EOF
+fi
+
 # Vial udev rule — grants user access to /dev/hidraw for any Vial-firmware keyboard
 # Mirrors the NixOS module at system/shared/modules/system/vial/default.nix.
 # The serial substring "vial:f64c2b3c" is the standard Vial magic, not a per-board id.
