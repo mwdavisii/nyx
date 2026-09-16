@@ -91,6 +91,11 @@
       };
       firefox.enable = true;
       chess-tui.enable = true;
+      audio-recording = {
+        enable = true;
+        pwRecordPackage = null; # installed via pacman (pipewire)
+        helvumPackage = null;   # installed via pacman (helvum)
+      };
       obs = {
         enable = true;
         package = null;

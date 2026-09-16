@@ -159,6 +159,7 @@ sudo pacman -S --needed --noconfirm \
   pipewire-alsa \
   pipewire-pulse \
   pipewire-jack \
+  helvum \
   pavucontrol \
   pamixer \
   playerctl \
