@@ -35,10 +35,12 @@ flake.nix  →  lib/default.nix  →  system/<platform>/  +  home/
 
 **`flake.nix`** is the entry point. It defines all inputs (nixpkgs, home-manager, hyprland, agenix, nix-darwin, nixos-wsl, nix-on-droid, etc.) and maps hostnames to configurations via helper functions in `lib/default.nix`.
 
-**`lib/default.nix`** provides four builder functions:
+**`lib/default.nix`** provides these builder functions:
 - `mkNixSystemConfiguration` — NixOS and Darwin (handles `nixos`, `darwin`, `iso`, `vm`, `wsl` build targets)
-- `mkArchConfiguration` — standalone home-manager for Arch Linux hosts
-- `mkHome` — standalone home-manager configurations
+- `mkUserHome` — the system-level home-manager module wrapper used by nix-darwin and NixOS hosts
+- `mkStandaloneLinuxConfiguration` — standalone home-manager for Arch and Debian/Ubuntu-derived hosts
+- `mkArchConfiguration` — back-compat alias of `mkStandaloneLinuxConfiguration`
+- `mkStandaloneDarwinConfiguration` — standalone home-manager for macOS hosts not managed by nix-darwin
 - `mkNixOnDroidConfiguration` — Android configurations
 
 ### Directory Structure
@@ -47,7 +49,7 @@ flake.nix  →  lib/default.nix  →  system/<platform>/  +  home/
 .
 ├── home/                    # User-level (home-manager) configuration
 │   ├── shared/modules/      # Cross-platform modules
-│   │   ├── ai/              # claude, chatgpt, gemini, ollama
+│   │   ├── ai/              # claude, chatgpt, codex, launcher, ollama
 │   │   ├── app/             # browsers, terminals, editors, streaming, obs, discord
 │   │   ├── desktop/         # hypr, kanshi, rofi, cava, kmonad, vial, gtk
 │   │   ├── dev/             # go, rust, python, node, lua, nix, cpp, android
@@ -126,9 +128,15 @@ system/
 ├── darwin/hosts/
 │   ├── mwdavis-workm1/ # Work MacBook 2022 16" Pro M1
 │   └── L241729/        # Work MacBook
+├── darwin/home/
+│   └── hestia/         # Agent-run M1 MacBook — standalone home-manager, no nix-darwin
 └── droid/hosts/
     └── default/        # Google Pixel Fold (Nix-on-Droid)
 ```
+
+`darwin/hosts/` are nix-darwin hosts applied with `darwin-rebuild`; `darwin/home/` holds
+standalone home-manager hosts applied with `home-manager switch --flake .#<hostname>`.
+`./switch.sh` picks the right one automatically.
 
 ## Getting Started
 

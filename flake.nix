@@ -149,28 +149,32 @@
         nix-on-droid = { user = "droid"; };
         default = { user = "droid"; };
       };
-      homeConfigurations = mapAttrs' lib.mkStandaloneLinuxConfiguration {
-        L242731 = {
-          user = "mdavis67";
-          system = "x86_64-linux";
-        };
-        prometheus = {
-          user = "mwdavisii";
-          system = "x86_64-linux";
-        };
-        castor = {
-          user = "mwdavisii";
-          system = "aarch64-linux";
-          hostsDir = ./system/dgx/hosts;
-          enableHyprland = false;
-        };
-        pollux = {
-          user = "mwdavisii";
-          system = "aarch64-linux";
-          hostsDir = ./system/dgx/hosts;
-          enableHyprland = false;
-        };
-      };
+      homeConfigurations =
+        (mapAttrs' lib.mkStandaloneLinuxConfiguration {
+          L242731 = {
+            user = "mdavis67";
+            system = "x86_64-linux";
+          };
+          prometheus = {
+            user = "mwdavisii";
+            system = "x86_64-linux";
+          };
+          castor = {
+            user = "mwdavisii";
+            system = "aarch64-linux";
+            hostsDir = ./system/dgx/hosts;
+            enableHyprland = false;
+          };
+          pollux = {
+            user = "mwdavisii";
+            system = "aarch64-linux";
+            hostsDir = ./system/dgx/hosts;
+            enableHyprland = false;
+          };
+        })
+        // (mapAttrs' lib.mkStandaloneDarwinConfiguration {
+          hestia = { user = "mwdavisii"; system = "aarch64-darwin"; };
+        });
       darwinConfigurations = mapAttrs' mkNixSystemConfiguration {
         mwdavis-workm1 = { system = "aarch64-darwin"; user = "mwdavisii"; buildTarget = "darwin"; }; #macbook
         L241729 = { hostname = "L241729"; system = "aarch64-darwin"; user = "mdavis67"; buildTarget = "darwin"; };

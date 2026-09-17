@@ -16,9 +16,16 @@ if [[ $osName == "Darwin" ]]; then
     # disable because nixos.org certs aren't trusted.
     warp-cli disconnect
   fi
-  sudo --preserve-env=SSH_AUTH_SOCK darwin-rebuild switch --flake .
-  if [ $? -eq 0 ] && command -v sketchybar &>/dev/null; then
-    brew services restart sketchybar
+  if [ -e /run/current-system ] || command -v darwin-rebuild &>/dev/null; then
+    # nix-darwin host -> flake darwinConfigurations (mwdavis-workm1, L241729, EU-L260076).
+    sudo --preserve-env=SSH_AUTH_SOCK darwin-rebuild switch --flake .
+    if [ $? -eq 0 ] && command -v sketchybar &>/dev/null; then
+      brew services restart sketchybar
+    fi
+  else
+    # Standalone home-manager host without nix-darwin -> flake homeConfigurations
+    # (hestia). Requires an explicit .#$hostName; there is no default.
+    home-manager switch --show-trace -b backup --flake .#$hostName
   fi
 elif [[ $userName == "nix-on-droid" ]]; then
   nix-on-droid switch --show-trace --flake .
