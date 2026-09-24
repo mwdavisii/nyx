@@ -43,7 +43,8 @@ function main() {
   append_path "$HOME/.config/git/bin"
   append_path "$HOME/.local/share/cargo/bin"
   append_path "$HOME/.cargo/bin"
-  append_path "$HOME/.bun/bin"
+  [[ -d "$HOME/.bun/bin" ]] && append_path "$HOME/.bun/bin"
+  [[ -d "$HOME/.opencode/bin" ]] && append_path "$HOME/.opencode/bin"
 
   # adding system path back
   # Ending solution from https://stackoverflow.com/a/15988793
