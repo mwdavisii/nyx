@@ -13,7 +13,7 @@ in
     };
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.isLinux && cfg.package != null) {
+  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isLinux && cfg.package != null) {
     home.packages = [ cfg.package ];
   };
 }

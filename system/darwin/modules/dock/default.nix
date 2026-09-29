@@ -8,7 +8,7 @@ in
   options = {
     local.dock.enable = mkOption {
       description = "Enable dock";
-      default = stdenv.isDarwin;
+      default = stdenv.hostPlatform.isDarwin;
       example = false;
     };
     local.dock.spring-load-actions-on-all-items = mkOption {
