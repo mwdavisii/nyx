@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.nyx.secrets.workvpn;
-  homePath = if pkgs.stdenv.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
+  homePath = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${userConf.userName}" else "/home/${userConf.userName}";
 in
 {
   options.nyx.secrets.workvpn = {

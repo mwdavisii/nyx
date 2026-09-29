@@ -43,16 +43,16 @@ in
     # patches = patchFilter old.patches ++ [ ./0001-Add-nix-short-rev-to-pre-release-version-info.patch ];
     patches = old.patches ++ [ ./0001-Add-nix-short-rev-to-pre-release-version-info.patch ];
     NIX_SHORT_REV = inputs.neovim-flake.shortRev;
-    nativeBuildInputs = old.nativeBuildInputs ++ (prev.lib.optionals prev.stdenv.isDarwin [ liblpeg ]);
+    nativeBuildInputs = old.nativeBuildInputs ++ (prev.lib.optionals prev.stdenv.hostPlatform.isDarwin [ liblpeg ]);
   });
   neovim-debug = inputs.neovim-flake.packages.${prev.system}.neovim-debug.overrideAttrs (old: {
     patches = patchFilter old.patches ++ [ ./0001-Add-nix-short-rev-to-pre-release-version-info.patch ];
     NIX_SHORT_REV = inputs.neovim-flake.shortRev;
-    nativeBuildInputs = old.nativeBuildInputs ++ (prev.lib.optionals prev.stdenv.isDarwin [ liblpeg ]);
+    nativeBuildInputs = old.nativeBuildInputs ++ (prev.lib.optionals prev.stdenv.hostPlatform.isDarwin [ liblpeg ]);
   });
   neovim-developer = inputs.neovim-flake.packages.${prev.system}.neovim-developer.overrideAttrs (old: {
     patches = patchFilter old.patches ++ [ ./0001-Add-nix-short-rev-to-pre-release-version-info.patch ];
     NIX_SHORT_REV = inputs.neovim-flake.shortRev;
-    nativeBuildInputs = old.nativeBuildInputs ++ (prev.lib.optionals prev.stdenv.isDarwin [ liblpeg ]);
+    nativeBuildInputs = old.nativeBuildInputs ++ (prev.lib.optionals prev.stdenv.hostPlatform.isDarwin [ liblpeg ]);
   });
 }

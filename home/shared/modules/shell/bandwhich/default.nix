@@ -8,7 +8,7 @@ in
     enable = mkEnableOption "bandwhich network bandwidth monitor by process (Linux only)";
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.isLinux) {
+  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isLinux) {
     home.packages = [ pkgs.bandwhich ];
   };
 }

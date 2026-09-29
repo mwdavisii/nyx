@@ -192,7 +192,7 @@ in
         fd           # file finder
         tree-sitter
         imagemagick
-      ] ++ lib.optionals pkgs.stdenv.isLinux [
+      ] ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         wl-clipboard # system clipboard on Wayland (Darwin uses pbcopy/pbpaste)
         ueberzugpp   # image.nvim ueberzug backend
       ] ++ treeSitterGrammars;
@@ -286,7 +286,7 @@ in
             },
           },
         })
-      '' + lib.optionalString pkgs.stdenv.isLinux ''
+      '' + lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
         -- image.nvim: inline image rendering via kitty protocol (Linux only)
         local _ok, image = pcall(require, "image")
         if _ok then

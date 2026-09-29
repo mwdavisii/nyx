@@ -8,7 +8,7 @@ in
     enable = mkEnableOption "lm-sensors hardware monitoring CLI (Linux only)";
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.isLinux) {
+  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isLinux) {
     home.packages = [ pkgs.lm_sensors ];
   };
 }
