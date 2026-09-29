@@ -82,6 +82,24 @@ let
     sleep 0.2
     ambxst &
   '';
+
+  # Ambxst wrapper: the upstream install.sh now ships a compiled Go binary at
+  # ~/.local/src/ambxst/backend/ambxst instead of the old cli.sh. This wrapper
+  # replaces the stale /usr/local/bin/ambxst that still points at cli.sh, and
+  # sets the QML import paths quickshell needs.
+  #
+  # The committed backend/ambxst binary lags the Go source upstream (e.g. it
+  # still looks for the axctl socket in /tmp while current axctl binds it in
+  # $XDG_RUNTIME_DIR, leaving the shell with no focused monitor). Prefer the
+  # binary built from source by home.activation.buildAmbxstBackend.
+  ambxst_wrapper = pkgs.writeShellScriptBin "ambxst" ''
+    export PATH="$HOME/.local/bin:$PATH"
+    export QML2_IMPORT_PATH="$HOME/.local/lib/qml:$QML2_IMPORT_PATH"
+    export QML_IMPORT_PATH="$QML2_IMPORT_PATH"
+    bin="$HOME/.local/libexec/ambxst/ambxst"
+    [ -x "$bin" ] || bin="$HOME/.local/src/ambxst/backend/ambxst"
+    exec "$bin" "$@"
+  '';
   wallpaper_random = pkgs.writeShellScriptBin "wallpaper_random" ''
     #!/usr/bin/env bash
     paper=$(find ~/.config/wallpapers/ -name "*" -type f | shuf -n1)
@@ -371,6 +389,35 @@ in
         $DRY_RUN_CMD mkdir -p "$HOME/.cache/wal"
         $DRY_RUN_CMD cp --remove-destination "$HOME/.config/wal/templates/colors-hyprland" "$HOME/.cache/wal/colors-hyprland"
         $DRY_RUN_CMD chmod 644 "$HOME/.cache/wal/colors-hyprland"
+      fi
+    '';
+
+    # Ambxst's installed wrapper still points at the old cli.sh; override it in
+    # ~/.local/bin (which precedes /usr/local/bin in PATH) so no sudo is needed.
+    # Also keep the shell_repo marker current so the binary can locate shell sources.
+    home.file."${config.home.homeDirectory}/.local/bin/ambxst".source = "${ambxst_wrapper}/bin/ambxst";
+
+    home.activation.fixAmbxstRepoMarker = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      $DRY_RUN_CMD mkdir -p "$HOME/.local/share/ambxst"
+      $DRY_RUN_CMD printf '%s\n' "$HOME/.local/src/ambxst" > "$HOME/.local/share/ambxst/shell_repo"
+    '';
+
+    # Build the ambxst backend from source outside the upstream checkout (so
+    # `ambxst update` / git pull stay clean). Rebuilds only when HEAD moves.
+    home.activation.buildAmbxstBackend = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      src="$HOME/.local/src/ambxst"
+      out="$HOME/.local/libexec/ambxst"
+      if [ -d "$src/backend" ]; then
+        rev=$(${pkgs.git}/bin/git -C "$src" rev-parse HEAD 2>/dev/null || echo unknown)
+        if [ ! -x "$out/ambxst" ] || [ "$(cat "$out/rev" 2>/dev/null)" != "$rev" ]; then
+          $DRY_RUN_CMD mkdir -p "$out"
+          if $DRY_RUN_CMD env -C "$src/backend" CGO_ENABLED=0 ${pkgs.go}/bin/go build -mod=vendor -o "$out/ambxst.new" ./cmd/ambxst; then
+            $DRY_RUN_CMD mv -f "$out/ambxst.new" "$out/ambxst"
+            $DRY_RUN_CMD printf '%s\n' "$rev" > "$out/rev"
+          else
+            echo "warning: ambxst backend build failed; wrapper falls back to the committed binary" >&2
+          fi
+        fi
       fi
     '';
 
