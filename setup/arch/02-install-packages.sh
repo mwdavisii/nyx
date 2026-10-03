@@ -431,7 +431,8 @@ else
     PATH="$_SYSPATH" PKG_CONFIG_PATH="$_PKGCFG" bash <(curl -sL get.axeni.de/ambxst) || warn "Ambxst install failed — continuing"
   else
     info "Ambxst already installed. Updating source..."
-    git -C "$HOME/.local/src/ambxst" pull || warn "Ambxst git pull failed — continuing"
+    # Stash local shell edits (e.g. Brightness.qml) so upstream updates can land.
+    git -C "$HOME/.local/src/ambxst" pull --autostash || warn "Ambxst git pull failed — continuing"
     # axctl is a separate binary that must stay in sync with ambxst.
     # ambxst >= v1.1.3 requires axctl to support the -c <config> flag (added in
     # axctl v0.0.9+). Without it the axctl daemon never starts, AxctlService

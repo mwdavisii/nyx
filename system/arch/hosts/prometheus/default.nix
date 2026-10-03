@@ -29,6 +29,8 @@
       vim
       wl-clip-persist
       yubikey-manager
+      cameractrls
+      cameractrls-gtk4
     ];
   };
 

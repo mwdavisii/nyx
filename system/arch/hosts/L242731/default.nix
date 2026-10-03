@@ -23,6 +23,8 @@
       vim
       yubikey-manager
       libfido2
+      cameractrls
+      cameractrls-gtk4
     ];
   };
 

@@ -255,6 +255,10 @@ in
       XCURSOR_SIZE = "24";
     };
 
+    # The ambxst wrapper lives in ~/.local/bin and sets QML import paths that
+    # quickshell needs. Ensure it precedes /usr/local/bin and system paths.
+    home.sessionPath = [ "$HOME/.local/bin" ];
+
     home.packages = with pkgs; [
       hypridle
 
