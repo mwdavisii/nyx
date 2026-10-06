@@ -1,74 +1,82 @@
 profile undocked {
   output "BOE*" enable mode 1920x1080@60.0
-  exec hyprctl dispatch moveworkspacetomonitor 1 eDP-1
-  exec hyprctl dispatch moveworkspacetomonitor 2 eDP-1
-  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 eDP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 eDP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 eDP-1
 }
 
 profile work-dual {
   output "BOE*" enable position 0,0
   output "Dell Inc. DELL P3424WE*" enable position 1920,0
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 eDP-1
 }
 
 profile work {
   output "Dell Inc. DELL P3424WE*" enable
   output "BOE*" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 3 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 DP-5
+}
+
+profile home-dual {
+  output "Dell Inc. Dell AW3821DW*" enable mode 3840x1600@144 position 0,1440
+  output "Dell Inc. AW2725DM*" enable mode 2560x1440@143.97 position 1920,0
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 HDMI-A-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 HDMI-A-1
 }
 
 profile home-tv {
   output "Dell Inc. Dell AW3821DW*" enable
   output "VIZIO*" enable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-1
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-1
-  exec hyprctl dispatch moveworkspacetomonitor 3 HDMI-A-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 DP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 HDMI-A-1
 }
 
 profile home {
   output "Dell Inc. Dell AW3821DW*" enable
   output "VIZIO*" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-1
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-1
-  exec hyprctl dispatch moveworkspacetomonitor 3 DP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 DP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 DP-1
 }
 
 profile wall-off-closed {
   output "Dell Inc. DELL P3424WE*" enable
   output "Samsung*" disable
   output "BOE*" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 DP-5
 }
 
 profile wall-on-closed {
   output "Dell Inc. DELL P3424WE*" enable
   output "Samsung*" enable mode 4096x2160@30.00Hz
   output "BOE*" disable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 2 DVI-I-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 DVI-I-1
 }
 
 profile wall-on-open {
   output "Dell Inc. DELL P3424WE*" enable
   output "Samsung*" enable mode 4096x2160@30.00Hz
   output "BOE*" enable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 2 DVI-I-1
-  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 DVI-I-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 eDP-1
 }
 
 profile wall-off-open {
   output "Dell Inc. DELL P3424WE*" enable
   output "Samsung*" disable
   output "BOE*" enable
-  exec hyprctl dispatch moveworkspacetomonitor 1 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 2 DP-5
-  exec hyprctl dispatch moveworkspacetomonitor 3 eDP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 DP-5
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 eDP-1
 }
 
 profile room {
