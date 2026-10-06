@@ -1,0 +1,20 @@
+{
+  "manifestVersion": 1,
+  "id": "nyx.meeting-record-indicator",
+  "name": "Meeting record indicator",
+  "version": "1.0.0",
+  "description": "Shows a pulsing REC pill with elapsed time in the bar while meeting-record is running. Click to stop.",
+  "license": "MIT",
+  "author": "mwdavisii (nyx)",
+  "compatibility": {
+    "api": 1,
+    "ambxst": ">=1.3.0 <1.4.0",
+    "testedBaseCommits": ["3705f278f24a74718fc23772b47044e96701d53a"]
+  },
+  "commands": ["meeting-record"],
+  "permissions": ["Runs meeting-record to stop a recording when clicked"],
+  "operations": [
+    { "type": "overlay", "source": "payload/MeetingRecordIndicator.qml", "target": "modules/bar/MeetingRecordIndicator.qml" },
+    { "type": "patch", "source": "patches/bar-indicator.patch" }
+  ]
+}
