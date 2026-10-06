@@ -101,12 +101,31 @@
         enable = true;
         package = null;
       };
+      audio-devices = {
+        enable = true;
+        disabledCards = [
+          "alsa_card.pci-0000_03_00.1"     # GPU HDMI/DP audio (Dell monitor)
+          "alsa_card.usb-Generic_USB_Audio-00"
+        ];
+        disabledNodes = [
+          # Yeti's headphone jack; its mic input stays
+          "alsa_output.usb-Blue_Microphones_Yeti_Stereo_Microphone_797_2021_02_02_48276-00.analog-stereo"
+        ];
+        cardProfiles = {
+          "alsa_card.usb-Logitech_PRO_X_2_LIGHTSPEED_0000000000000000-00" = "output:analog-stereo+input:mono-fallback";
+          "alsa_card.pci-0000_0a_00.0" = "output:analog-stereo"; # AE-5 Plus
+        };
+        outputPriorities = {
+          "alsa_output.usb-Logitech_PRO_X_2_LIGHTSPEED_0000000000000000-00.analog-stereo" = 3000;
+          "~alsa_output.usb-Creative*" = 2000; # Pebble X Plus (unverified name)
+          "alsa_output.pci-0000_0a_00.0.analog-stereo" = 1000; # AE-5 Plus
+        };
+      };
       streaming = {
         enable = true;
         package = null; # installed via pacman
         primaryMic = "alsa_input.usb-Blue_Microphones_Yeti_Stereo_Microphone_797_2021_02_02_48276-00.analog-stereo";
         deprioritizeMic = "alsa_input.usb-046d_Logitech_StreamCam_2F9E86A5-02.analog-stereo";
-        outputDevice = "alsa_output.pci-0000_0a_00.0.iec958-ac3-surround-51";
         litra = {
           enable = true;
           brightness = 30;

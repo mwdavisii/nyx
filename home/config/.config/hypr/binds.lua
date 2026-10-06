@@ -51,7 +51,7 @@ hl.bind(main_mod .. " + SHIFT + Y", hl.dsp.exec_cmd("pear-desktop"))
 hl.bind(main_mod .. " + SHIFT + E", hl.dsp.exec_cmd("es-de-here HDMI-A-1"))
 
 hl.bind(main_mod .. " + SPACE", hl.dsp.exec_cmd("ambxst run launcher"))
-hl.bind(main_mod .. " + R", hl.dsp.exec_cmd("ambxst run launcher"))
+hl.bind(main_mod .. " + R", hl.dsp.exec_cmd("meeting-record"))
 hl.bind(main_mod .. " + L", hl.dsp.exec_cmd("ambxst lock"))
 hl.bind(main_mod .. " + SHIFT + L", hl.dsp.exec_cmd("ambxst run powermenu"))
 hl.bind(main_mod .. " + P", hl.dsp.exec_cmd("ambxst run dashboard"))

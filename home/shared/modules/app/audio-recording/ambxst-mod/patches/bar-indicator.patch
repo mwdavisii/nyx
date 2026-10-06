@@ -1,0 +1,32 @@
+diff --git a/modules/bar/BarContent.qml b/modules/bar/BarContent.qml
+index 5ae8d2eade00218db8fc25db6957539844ceb568..c8a2c8ccf41a38d5e34f5b080bc13f6846df6326 100644
+--- a/modules/bar/BarContent.qml
++++ b/modules/bar/BarContent.qml
+@@ -537,6 +537,13 @@ Item {
+                             endRadius: root.innerRadius
+                         }
+ 
++                        Bar.MeetingRecordIndicator {
++                            bar: root
++                            layerEnabled: root.shadowsEnabled
++                            startRadius: root.innerRadius
++                            endRadius: root.innerRadius
++                        }
++
+                         Bar.BatteryIndicator {
+                             id: batteryIndicator
+                             bar: root
+@@ -744,6 +751,13 @@ Item {
+                             endRadius: root.innerRadius
+                         }
+ 
++                        Bar.MeetingRecordIndicator {
++                            bar: root
++                            layerEnabled: root.shadowsEnabled
++                            startRadius: root.innerRadius
++                            endRadius: root.innerRadius
++                        }
++
+                         Bar.BatteryIndicator {
+                             id: batteryIndicatorVert
+                             bar: root
