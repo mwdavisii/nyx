@@ -159,6 +159,10 @@
             user = "mwdavisii";
             system = "x86_64-linux";
           };
+          aether = {
+            user = "mwdavisii";
+            system = "x86_64-linux";
+          };
           castor = {
             user = "mwdavisii";
             system = "aarch64-linux";
