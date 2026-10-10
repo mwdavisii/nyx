@@ -9,7 +9,7 @@ let
     version = "0.5.1";
     src = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/weechat/scripts/main/python/soju.py";
-      sha256 = "0lbsm6qcks7ispi3drp5qcj2ixkzlaq83fq474mxw7cbylxjg9kl";
+      sha256 = "sha256-ZN6Cf56dhSCWuuRJxt3utuoKg/UZi6Srzy10SxCKUnE=";
     };
     dontUnpack = true;
     installPhase = ''
