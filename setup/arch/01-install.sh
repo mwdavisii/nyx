@@ -166,8 +166,14 @@ pacman-key --populate archlinux
 
 info "Installing minimal base system via pacstrap..."
 
+case "$(grep -m1 '^vendor_id' /proc/cpuinfo | awk '{print $3}')" in
+  GenuineIntel) UCODE=intel-ucode ;;
+  AuthenticAMD) UCODE=amd-ucode ;;
+  *)            UCODE="" ;;
+esac
+
 pacstrap /mnt \
-  base linux linux-firmware btrfs-progs \
+  base linux linux-firmware btrfs-progs ${UCODE} \
   sudo vim git curl zsh base-devel \
   networkmanager
 
@@ -202,8 +208,8 @@ echo "LANG=${LOCALE}" > /etc/locale.conf
 # --- Hostname ---
 echo "${HOSTNAME}" > /etc/hostname
 
-# --- mkinitcpio — add encrypt hook ---
-sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block encrypt btrfs filesystems fsck)/' /etc/mkinitcpio.conf
+# --- mkinitcpio — add encrypt hook (microcode hook early-loads the ucode package) ---
+sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block encrypt btrfs filesystems fsck)/' /etc/mkinitcpio.conf
 mkinitcpio -P
 
 # --- systemd-boot ---
@@ -222,7 +228,7 @@ cat > /boot/loader/entries/arch.conf <<ENTRY
 title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /initramfs-linux.img
-options cryptdevice=UUID=${LUKS_UUID}:${CRYPT_NAME} root=/dev/mapper/${CRYPT_NAME} rootflags=subvol=@ rw
+options cryptdevice=UUID=${LUKS_UUID}:${CRYPT_NAME}:allow-discards root=/dev/mapper/${CRYPT_NAME} rootflags=subvol=@ rw
 ENTRY
 
 # --- Root password ---

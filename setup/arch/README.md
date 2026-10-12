@@ -60,10 +60,10 @@ All prompts are collected before any destructive action.
    - `@` mounted at `/`
    - `@home` mounted at `/home`
    - `@snapshots` mounted at `/.snapshots`
-3. **Pacstraps** a minimal base system (base, linux, linux-firmware, btrfs-progs, sudo, vim, git, curl, zsh, base-devel, networkmanager)
+3. **Pacstraps** a minimal base system (base, linux, linux-firmware, btrfs-progs, CPU microcode, sudo, vim, git, curl, zsh, base-devel, networkmanager)
 4. **Configures** timezone (America/Chicago), locale (en_US.UTF-8), hostname (defaults to L242731)
-5. **Sets up** mkinitcpio with the `encrypt` hook for LUKS
-6. **Installs** systemd-boot with an entry that unlocks the encrypted root
+5. **Sets up** mkinitcpio with the `encrypt` and `microcode` hooks
+6. **Installs** systemd-boot with an entry that unlocks the encrypted root (`allow-discards` so TRIM reaches the SSD)
 7. **Creates** user `mdavis67` (wheel group, sudo access)
 8. **Enables** NetworkManager
 
@@ -116,6 +116,7 @@ The script will prompt for optional extras:
 5. **Security tools** (optional) — CrowdStrike Falcon, Cisco Secure Client
 6. **Cloudflare WARP** (optional) — DNS/VPN via AUR
 7. **Enables** bluetooth service
+8. **System tuning** (always, including `--sync`) — CPU microcode + `microcode` hook, `allow-discards` on the LUKS boot entry + `fstrim.timer`, zram swap (zstd, RAM/2), zram-tuned VM sysctls and `kernel.split_lock_mitigate=0` (`/etc/sysctl.d/90-nyx-tuning.conf`), `systemd-oomd`, `intel-media-driver` on Intel iGPUs, and snapper for `/` on the `@snapshots` layout
 
 This script is idempotent — safe to re-run at any time. It uses `--needed` to skip already-installed packages. It also runs automatically (in `--sync` mode, core packages only) via `./switch.sh`.
 

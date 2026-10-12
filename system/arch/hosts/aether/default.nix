@@ -1,0 +1,248 @@
+{ config, pkgs, lib, inputs, ... }:
+
+{
+  programs.home-manager.enable = true;
+  programs.man.enable = true;
+  manual.manpages.enable = true;
+
+  home = {
+    stateVersion = "26.05";
+
+    packages = with pkgs; [
+      # Wrapper to launch calibre with system Python (Nix python shadows /usr/bin/python3
+      # and lacks python-msgpack which calibre needs)
+      (writeShellScriptBin "calibre" ''exec /usr/bin/python3 /usr/bin/calibre "$@"'')
+      (writeShellScriptBin "calibredb" ''exec /usr/bin/python3 /usr/bin/calibredb "$@"'')
+      (writeShellScriptBin "calibre-server" ''exec /usr/bin/python3 /usr/bin/calibre-server "$@"'')
+      rustup
+      vhs
+      gnupg
+      ripgrep
+      fd
+      sd
+      dua
+      just
+      comma
+      nix-index
+      tuxmux
+      wget
+      vim
+      wl-clip-persist
+      yubikey-manager
+      cameractrls
+      cameractrls-gtk4
+    ];
+  };
+
+  nyx.modules = {
+    desktop = {
+      cava = {
+        enable = true;
+        package = null; # installed via pacman
+      };
+      gtk = { enable = true; dconf.enable = false; };
+      kanshi.enable = true;
+      hypr = {
+        enable = true;
+        gpuPackages = false;
+        plugins = false;
+        ttyLaunch = true;
+      };
+      kmonad = {
+        enable = true;
+        package = inputs.kmonad.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      };
+      vial.enable = true;
+    };
+    ai = {
+      launcher.enable = true;
+      chatgpt.enable = true;
+      # Haiku-via-Azure-APIM model override is scoped to the APIM session only, applied at
+      # launch via `claude --settings` from ~/.claude_haiku_env (CLAUDE_EXTRA_SETTINGS) by the
+      # ai launcher. Kept out of settings.json so plain `--model haiku` against the real
+      # Anthropic API isn't rewritten to a deployment name it doesn't know.
+      claude = { enable = true; package = null; };
+      ollama.enable = false; # using pacman ollama-rocm system service instead (see /etc/systemd/system/ollama.service.d/override.conf)
+    };
+    app = {
+      alacritty = {
+        enable = true;
+        package = null;
+      };
+      chromium = {
+        enable = true;
+        package = null; # installed via pacman (extra/chromium) — Nix build has no GPU accel on Arch
+      };
+      chrome = {
+        enable = true;
+        package = null; # installed via pacman (AUR/google-chrome) — Nix build has no GPU accel on Arch
+        makeDefaultBrowser = true;
+      };
+      kitty = {
+        enable = true;
+        package = null;
+      };
+      discord = {
+        enable = true;
+        package = null; # installed via pacman (discord_arch_electron)
+      };
+      slack = {
+        enable = true;
+        package = null; # installed via pacman (AUR/slack-desktop)
+      };
+      firefox.enable = true;
+      chess-tui.enable = true;
+      audio-recording = {
+        enable = true;
+        pwRecordPackage = null; # installed via pacman (pipewire)
+        helvumPackage = null;   # installed via pacman (helvum)
+      };
+      obs = {
+        enable = true;
+        package = null;
+      };
+      audio-devices = {
+        enable = true;
+        disabledCards = [
+          "alsa_card.pci-0000_03_00.1"     # GPU HDMI/DP audio (Dell monitor)
+          "alsa_card.usb-Generic_USB_Audio-00"
+        ];
+        disabledNodes = [
+          # Yeti's headphone jack; its mic input stays
+          "alsa_output.usb-Blue_Microphones_Yeti_Stereo_Microphone_797_2021_02_02_48276-00.analog-stereo"
+        ];
+        cardProfiles = {
+          "alsa_card.usb-Logitech_PRO_X_2_LIGHTSPEED_0000000000000000-00" = "output:analog-stereo+input:mono-fallback";
+          "alsa_card.pci-0000_0a_00.0" = "output:analog-stereo"; # AE-5 Plus
+        };
+        outputPriorities = {
+          "alsa_output.usb-Logitech_PRO_X_2_LIGHTSPEED_0000000000000000-00.analog-stereo" = 3000;
+          "~alsa_output.usb-Creative*" = 2000; # Pebble X Plus (unverified name)
+          "alsa_output.pci-0000_0a_00.0.analog-stereo" = 1000; # AE-5 Plus
+        };
+      };
+      streaming = {
+        enable = true;
+        package = null; # installed via pacman
+        primaryMic = "alsa_input.usb-Blue_Microphones_Yeti_Stereo_Microphone_797_2021_02_02_48276-00.analog-stereo";
+        deprioritizeMic = "alsa_input.usb-046d_Logitech_StreamCam_2F9E86A5-02.analog-stereo";
+        litra = {
+          enable = true;
+          brightness = 30;
+          temperature = 4000;
+        };
+      };
+      obsidian = {
+        enable = true;
+        package = null;
+      };
+      scrcpy = {
+        enable = true;
+        package = null;
+      };
+      wezterm = {
+        enable = true;
+        package = null;
+      };
+      signal = {
+        enable = true;
+        package = null; # installed via pacman
+      };
+      vscode.enable = true;
+      pearDesktop.enable = true;
+      opencode = {
+        enable = true;
+        package = null; # installed via pacman/AUR
+      };
+      remmina.enable = true;
+      nextcloud = {
+        enable = true;
+        package = null; # installed via pacman (nextcloud-client)
+      };
+    };
+    dev = {
+      androidSDK.enable = true;
+      cc.enable = true;
+      rust.enable = true;
+      go.enable = true;
+      dhall.enable = true;
+      lua.enable = true;
+      nix.enable = true;
+      node.enable = true;
+      python.enable = true;
+      qmk.enable = true;
+    };
+    sdr = {
+      sdrpp   = { enable = true; package = null; };
+      gqrx    = { enable = true; package = null; };
+      rtl433.enable  = true;
+      readsb.enable  = true;
+      analysis.enable = true;
+    };
+    shell = {
+      awscliv2.enable = false;
+      azurecli = {
+        enable = true;
+        loginBrowser = "firefox";
+      };
+      bash.enable = true;
+      bat.enable = true;
+      direnv.enable = true;
+      etcd.enable= true;
+      eza.enable = true;
+      fzf.enable = true;
+      gcp.enable = true;
+      git = {
+        enable = true;
+        signing.signByDefault = false;
+      };
+      glow.enable = true;
+      gnupg = {
+        enable = true;
+        enableService = pkgs.stdenv.hostPlatform.isLinux;
+        publicKeys = [{
+          key = ../../../../home/config/.gnupg/public.key;
+        }];
+      };
+      jq.enable = true;
+      k8sTooling.enable = true;
+      lf = {
+        enable = true;
+        ueberzugppPackage = null;
+      };
+      lorri.enable = false;
+      mcfly.enable = false;        # replaced by atuin
+      fastfetch.enable = true;
+      ambxstColorBridge.enable = true;
+      ytmPlayer = { enable = true; package = null; }; # installed via pacman (needs python-dbus-fast for MPRIS support)
+      nixvim.enable = true;
+      networking.enable = true;
+      openssl.enable = true;
+      ranger.enable = true;
+      starship.enable = true;
+      terraform.enable = true;
+      tmux.enable = true;
+      wal.enable = true;
+      usbutils.enable = true;
+      xdg.enable = true;
+      yq.enable = true;
+      zellij.enable = true;
+      zoxide.enable = true;
+      zsh.enable = true;
+      # New shell tools
+      astroterm.enable = true;
+      atuin.enable = true;
+      bandwhich.enable = true;
+      bottom.enable = true;
+      dysk.enable = true;
+      lazygit.enable = true;
+      lmSensors.enable = true;
+      navi.enable = true;
+      ncdu.enable = true;
+      homelabTools.enable = true;
+      weechat.enable = true;
+    };
+  };
+
+  services.swaync.enable = lib.mkForce false;
+}
