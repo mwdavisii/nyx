@@ -156,7 +156,7 @@
       pearDesktop.enable = true;
       opencode = {
         enable = true;
-        package = null; # installed via pacman/AUR
+        package = null; # installed via pacman
       };
       remmina.enable = true;
       nextcloud = {
