@@ -37,7 +37,11 @@ in
   config = mkIf cfg.enable {
     programs.nixvim = {
       enable = true;
-      nixpkgs.source = inputs.nixpkgs;
+      # Reuse the host pkgs (self.legacyPackages) so nixvim sees the repo's
+      # overlays — including the typescript-language-server pnpmDeps hash fix in
+      # nix/overlays/typescript-language-server. Otherwise nixvim builds its own
+      # nixpkgs from `inputs.nixpkgs` and bypasses every local overlay.
+      nixpkgs.useGlobalPackages = true;
 
       # basic editor feel
       opts = {
