@@ -120,6 +120,14 @@ fi
 
 info "Installing core desktop packages..."
 
+# Migrate opencode from the AUR package (opencode-bin) to the official repo
+# package (opencode). The two packages conflict, so the AUR build must be
+# removed before the pacman install below can add the official package.
+if pacman -Q opencode-bin &>/dev/null && ! pacman -Q opencode &>/dev/null; then
+  info "Migrating opencode from AUR (opencode-bin) to official repo (opencode)..."
+  sudo pacman -R --noconfirm opencode-bin
+fi
+
 sudo pacman -S --needed --noconfirm \
   \
   foot kitty alacritty \
@@ -229,7 +237,8 @@ sudo pacman -S --needed --noconfirm \
   calibre \
   telegram-desktop \
   python-msgpack \
-  openai-codex
+  openai-codex \
+  opencode
 
 # ---------------------------------------------------------------------------
 # Step 3 — AMD gaming (interactive only)
@@ -347,7 +356,6 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   google-chrome \
   claude-code \
   claude-desktop-bin \
-  opencode-bin \
   ttf-material-symbols-variable \
   ttf-rubik-vf \
   swww \
