@@ -137,6 +137,7 @@ sudo pacman -S --needed --noconfirm \
   v4l2loopback-dkms \
   \
   hyprland \
+  hyprpm \
   hyprlock \
   \
   xdg-desktop-portal-hyprland \
