@@ -41,12 +41,16 @@
         package = null; # installed via pacman
       };
       gtk = { enable = true; dconf.enable = false; };
-      kanshi.enable = true;
+      kanshi = {
+        enable = true;
+        config = ../../../../home/config/.config/kanshi/config;
+      };
       hypr = {
         enable = true;
         gpuPackages = false;
         plugins = false;
         ttyLaunch = true;
+        monitors = ../../../../home/config/.config/hypr/monitors.lua;
       };
       kmonad = {
         enable = true;

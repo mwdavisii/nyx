@@ -234,6 +234,16 @@ in
       default = false;
       description = "Auto-launch Hyprland from zsh on TTY1 (for systems without a display manager).";
     };
+
+    monitors = mkOption {
+      type = with types; nullOr (either path str);
+      default = null;
+      description = ''
+        Content (string) or path to a monitors.lua file. When null, falls back
+        to the shared config/.config/hypr/monitors.lua. Set per-host to
+        override monitor definitions and workspace rules.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -319,7 +329,15 @@ in
         # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
         "hypr/hyprland.lua".source = ../../../../config/.config/hypr/hyprland.lua;
         "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
-        "hypr/monitors.lua".source = ../../../../config/.config/hypr/monitors.lua;
+        "hypr/monitors.lua" =
+          let m = cfg.monitors;
+          in
+          if m == null then
+            { source = ../../../../config/.config/hypr/monitors.lua; }
+          else if builtins.isString m then
+            { text = m; }
+          else
+            { source = m; };
         "hypr/startup.lua".source = ../../../../config/.config/hypr/startup.lua;
         "hypr/options.lua".source = ../../../../config/.config/hypr/options.lua;
         "hypr/binds.lua".source = ../../../../config/.config/hypr/binds.lua;
