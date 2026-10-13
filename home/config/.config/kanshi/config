@@ -24,25 +24,25 @@ profile work {
 profile home-dual {
   output "Dell Inc. Dell AW3821DW*" enable mode 3840x1600@144 position 0,1440
   output "Dell Inc. AW2725DM*" enable mode 2560x1440@143.97 position 1920,0
-  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-1
-  exec ~/.config/kanshi/ws-to-monitor.sh 2 HDMI-A-1
-  exec ~/.config/kanshi/ws-to-monitor.sh 3 HDMI-A-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 "desc:Dell Inc. Dell AW3821DW"
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 "desc:Dell Inc. AW2725DM"
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 "desc:Dell Inc. AW2725DM"
 }
 
 profile home-tv {
   output "Dell Inc. Dell AW3821DW*" enable
   output "VIZIO*" enable
-  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-1
-  exec ~/.config/kanshi/ws-to-monitor.sh 2 DP-1
-  exec ~/.config/kanshi/ws-to-monitor.sh 3 HDMI-A-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 "desc:Dell Inc. Dell AW3821DW"
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 "desc:Dell Inc. Dell AW3821DW"
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 "desc:VIZIO"
 }
 
 profile home {
   output "Dell Inc. Dell AW3821DW*" enable
   output "VIZIO*" disable
-  exec ~/.config/kanshi/ws-to-monitor.sh 1 DP-1
-  exec ~/.config/kanshi/ws-to-monitor.sh 2 DP-1
-  exec ~/.config/kanshi/ws-to-monitor.sh 3 DP-1
+  exec ~/.config/kanshi/ws-to-monitor.sh 1 "desc:Dell Inc. Dell AW3821DW"
+  exec ~/.config/kanshi/ws-to-monitor.sh 2 "desc:Dell Inc. Dell AW3821DW"
+  exec ~/.config/kanshi/ws-to-monitor.sh 3 "desc:Dell Inc. Dell AW3821DW"
 }
 
 profile wall-off-closed {

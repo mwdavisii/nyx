@@ -261,7 +261,9 @@ if [[ "$INSTALL_GAMES" == "y" ]]; then
   info "Installing gaming packages..."
   sudo pacman -S --needed --noconfirm \
     steam \
-    lutris
+    lutris \
+    gamemode \
+    lib32-gamemode
 
   info "Installing AUR gaming packages..."
   yay -S --needed --noconfirm \
@@ -641,6 +643,110 @@ if [[ "$INSTALL_3DPRINTING" == "y" ]]; then
     orca-slicer \
     bambu-studio \
     openscad
+fi
+
+# ---------------------------------------------------------------------------
+# Step 16 — System tuning (always runs, idempotent)
+# ---------------------------------------------------------------------------
+# Microcode, zram swap, VM sysctls, OOM handling, TRIM through LUKS, and
+# snapper. Every change checks current state first, so --sync re-runs are
+# no-ops once a host is converged.
+
+info "Applying system tuning..."
+_REBUILD_INITRAMFS=false
+
+# --- CPU microcode (early-loaded via the mkinitcpio `microcode` hook) ---
+case "$(grep -m1 '^vendor_id' /proc/cpuinfo | awk '{print $3}')" in
+  GenuineIntel) _UCODE=intel-ucode ;;
+  AuthenticAMD) _UCODE=amd-ucode ;;
+  *)            _UCODE="" ;;
+esac
+if [[ -n "$_UCODE" ]] && ! pacman -Q "$_UCODE" &>/dev/null; then
+  info "Installing $_UCODE..."
+  sudo pacman -S --needed --noconfirm "$_UCODE"
+  _REBUILD_INITRAMFS=true
+fi
+if ! grep -qE '^HOOKS=\(.*\bmicrocode\b' /etc/mkinitcpio.conf; then
+  info "Adding microcode hook to mkinitcpio..."
+  sudo sed -i -E '/^HOOKS=\(/s/\bautodetect\b/autodetect microcode/' /etc/mkinitcpio.conf
+  _REBUILD_INITRAMFS=true
+fi
+if [[ "$_REBUILD_INITRAMFS" == true ]]; then
+  info "Rebuilding initramfs..."
+  sudo mkinitcpio -P
+fi
+
+# --- TRIM through dm-crypt ---
+# btrfs auto-enables discard=async on SSDs, but only if dm-crypt passes
+# discards through. The free-space-pattern leak is an accepted trade-off.
+for _entry in /boot/loader/entries/*.conf; do
+  [[ -f "$_entry" ]] || continue
+  if grep -qE 'cryptdevice=[^ :]+:[^ :]+( |$)' "$_entry"; then
+    info "Enabling allow-discards in $(basename "$_entry")..."
+    sudo cp "$_entry" "${_entry}.bak"
+    sudo sed -i -E 's/(cryptdevice=[^ :]+:[^ :]+)( |$)/\1:allow-discards\2/' "$_entry"
+  fi
+done
+sudo systemctl enable --now fstrim.timer
+
+# --- zram swap ---
+sudo pacman -S --needed --noconfirm zram-generator
+if [[ ! -f /etc/systemd/zram-generator.conf ]]; then
+  info "Configuring zram swap (zstd, RAM/2)..."
+  sudo tee /etc/systemd/zram-generator.conf >/dev/null <<'EOF'
+[zram0]
+zram-size = ram / 2
+compression-algorithm = zstd
+swap-priority = 100
+EOF
+  sudo systemctl daemon-reload
+  sudo systemctl start systemd-zram-setup@zram0.service
+fi
+
+# --- VM / kernel sysctls ---
+# zram-tuned values from the Arch wiki (swap is cheap, so prefer it over
+# dropping page cache; no readahead clustering on a RAM-backed device).
+# split_lock_mitigate=0 stops the kernel from throttling games (Steam, Proton)
+# that trigger split-lock traps — same default as SteamOS.
+sudo rm -f /etc/sysctl.d/99-swappiness.conf  # legacy swappiness=10, wrong for zram
+sudo tee /etc/sysctl.d/90-nyx-tuning.conf >/dev/null <<'EOF'
+vm.swappiness = 180
+vm.page-cluster = 0
+vm.watermark_boost_factor = 0
+vm.watermark_scale_factor = 125
+kernel.split_lock_mitigate = 0
+EOF
+sudo sysctl --quiet --system
+
+# --- OOM handling ---
+sudo systemctl enable --now systemd-oomd.service
+
+# --- Intel iGPU media driver (QuickSync / VA-API for OBS encoding) ---
+if lspci | grep -iE '(vga|display).*intel' >/dev/null; then
+  sudo pacman -S --needed --noconfirm intel-media-driver
+fi
+
+# --- snapper (root only, when the @snapshots layout from 01-install.sh exists) ---
+if [[ "$(findmnt -n -o FSTYPE /)" == btrfs ]] \
+   && findmnt -n /.snapshots &>/dev/null \
+   && [[ ! -f /etc/snapper/configs/root ]]; then
+  info "Setting up snapper for / ..."
+  sudo pacman -S --needed --noconfirm snapper snap-pac
+  # create-config wants to create /.snapshots as a nested subvolume; swap it
+  # back out for the flat @snapshots subvolume mounted by fstab.
+  sudo umount /.snapshots
+  sudo rmdir /.snapshots
+  sudo snapper --no-dbus -c root create-config /
+  sudo btrfs subvolume delete /.snapshots
+  sudo mkdir /.snapshots
+  sudo mount /.snapshots
+  sudo chmod 750 /.snapshots
+  # /nix lives in @, so keep retention short to avoid pinning GC'd store paths.
+  sudo snapper --no-dbus -c root set-config \
+    TIMELINE_LIMIT_HOURLY=5 TIMELINE_LIMIT_DAILY=7 \
+    TIMELINE_LIMIT_WEEKLY=0 TIMELINE_LIMIT_MONTHLY=0 TIMELINE_LIMIT_YEARLY=0 \
+    NUMBER_LIMIT=10 NUMBER_LIMIT_IMPORTANT=5
+  sudo systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
 fi
 
 # ---------------------------------------------------------------------------

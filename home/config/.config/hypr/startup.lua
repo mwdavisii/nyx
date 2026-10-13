@@ -1,6 +1,6 @@
-hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-hl.exec_cmd("systemctl --user restart kanshi")
+-- One chained command: as separate exec_cmds these race, and kanshi can restart before
+-- WAYLAND_DISPLAY lands in the systemd env ("failed to connect to display" -> start-limit-hit).
+hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP; dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP; systemctl --user reset-failed kanshi; systemctl --user restart kanshi")
 hl.exec_cmd("hyprctl keyword source ~/.cache/wal/colors-hyprland")
 
 hl.on("hyprland.start", function()
