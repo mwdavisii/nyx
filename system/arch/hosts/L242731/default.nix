@@ -42,7 +42,6 @@
       hypr = {
         enable = true;
         gpuPackages = false;
-        plugins = false;
         ttyLaunch = true;
         monitors = ./monitors.lua;
       };

@@ -419,13 +419,15 @@ else
   info "bun already installed: $(bun --version)"
 fi
 
-info "Installing Hyprland plugins via hyprpm..."
+info "Updating Hyprland plugin manager (hyprpm)..."
 # Use system cmake/pkg-config, not Nix's, which can't find system packages
 _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
 _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
 PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm update || warn "hyprpm update failed, skipping plugins"
-PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" hyprpm add https://github.com/hyprwm/hyprland-plugins || true
-hyprpm enable hyprwinwrap || true
+# hyprwinwrap (and hyprexpo) were dropped from hyprland-plugins upstream as
+# unmaintained (hyprwm/hyprland-plugins#663). Remaining plugins are
+# borders-plus-plus, csgo-vulkan-fix, hyprbars, and hyprfocus. Nothing in the
+# Hyprland config references a plugin by name, so nothing is enabled here.
 # ---------------------------------------------------------------------------
 # Step 8b — Ambxst shell
 # ---------------------------------------------------------------------------

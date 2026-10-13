@@ -2,7 +2,6 @@
 with lib;
 let
   cfg = config.nyx.modules.desktop.hypr;
-  hyprPlugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
   km_ka_restart = pkgs.writeShellScriptBin "km_ka_restart" ''
     killall -q -9 -r kmonad
     killall -q -9 -r kanshi
@@ -223,11 +222,6 @@ in
       type = types.bool;
       default = true;
       description = "Install GPU-dependent packages (waybar, swww, etc.) via Nix. Set false on non-NixOS where system GPU drivers are used.";
-    };
-    plugins = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Install Hyprland plugins from hyprland-plugins input. Set false on Arch where plugins come from AUR.";
     };
     ttyLaunch = mkOption {
       type = types.bool;
@@ -471,10 +465,11 @@ in
     '';
 
     wayland.windowManager.hyprland = {
-      plugins = if cfg.plugins then [
-        hyprPlugins.hyprexpo
-        hyprPlugins.hyprwinwrap
-      ] else [];
+      # hyprexpo and hyprwinwrap were dropped from hyprland-plugins upstream as
+      # unmaintained (hyprwm/hyprland-plugins#663). hyprexpo now ships in Hyprland
+      # core; hyprwinwrap has no replacement. Nothing else is referenced by name,
+      # so no external plugins are installed.
+      plugins = [];
       package = null;
       enable = true;
       systemd = {
