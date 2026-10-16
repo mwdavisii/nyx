@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Keep a copy of the kernel/initramfs/ucode inside the root subvolume so every
+# snapper snapshot carries a matching kernel (the ESP at /boot is not part of
+# any snapshot), then regenerate systemd-boot entries for the newest snapshots.
+#
+# Runs from /etc/pacman.d/hooks/95-nyx-boot-backup.hook — after mkinitcpio (90)
+# and before snap-pac's post snapshot (zz), so each pre snapshot holds the
+# kernel that was working before the transaction.
+set -uo pipefail
+
+KEEP=3
+BACKUP=/.bootbackup
+FILES=(vmlinuz-linux initramfs-linux.img intel-ucode.img amd-ucode.img)
+
+mountpoint -q /boot || exit 0
+mkdir -p "$BACKUP"
+for f in "${FILES[@]}"; do
+  [[ -f /boot/$f ]] && cp -p "/boot/$f" "$BACKUP/$f"
+done
+
+# --- snapshot boot entries -------------------------------------------------
+command -v snapper &>/dev/null || exit 0
+template=/boot/loader/entries/arch.conf
+[[ -f $template ]] || exit 0
+options=$(sed -n 's/^options[[:space:]]*//p' "$template")
+[[ $options == *rootflags=subvol=@* ]] || exit 0
+
+wanted=()
+while IFS=, read -r num type; do
+  [[ $type == pre || $type == single ]] || continue
+  [[ -f /.snapshots/$num/snapshot/.bootbackup/vmlinuz-linux ]] || continue
+  wanted+=("$num")
+done < <(snapper --csvout --no-headers list --columns number,type 2>/dev/null | sort -t, -k1,1nr)
+wanted=("${wanted[@]:0:KEEP}")
+
+mkdir -p /boot/nyx-snap
+for num in "${wanted[@]}"; do
+  src=/.snapshots/$num/snapshot/.bootbackup
+  dst=/boot/nyx-snap/$num
+  # Reuse the live kernel files when identical; copy only when they differ.
+  img_dir() { cmp -s "$src/$1" "/boot/$1" && echo "" || { mkdir -p "$dst"; cp -f "$src/$1" "$dst/$1"; echo "/nyx-snap/$num"; }; }
+  k=$(img_dir vmlinuz-linux); i=$(img_dir initramfs-linux.img)
+  {
+    echo "title   Arch Linux (snapshot $num, read-only)"
+    echo "linux   $k/vmlinuz-linux"
+    for u in intel-ucode.img amd-ucode.img; do
+      [[ -f $src/$u ]] && echo "initrd  /$u"
+    done
+    echo "initrd  $i/initramfs-linux.img"
+    echo "options ${options//rootflags=subvol=@/rootflags=subvol=@snapshots/$num/snapshot} ro"
+  } | sed 's/ rw / /' > "/boot/loader/entries/nyx-snap-$num.conf"
+done
+
+# Prune entries and copied kernels for snapshots no longer in the keep set.
+for e in /boot/loader/entries/nyx-snap-*.conf; do
+  [[ -e $e ]] || continue
+  n=${e##*/nyx-snap-}; n=${n%.conf}
+  [[ " ${wanted[*]} " == *" $n "* ]] || rm -f "$e"
+done
+for d in /boot/nyx-snap/*/; do
+  [[ -d $d ]] || continue
+  n=$(basename "$d")
+  [[ " ${wanted[*]} " == *" $n "* ]] || rm -rf "$d"
+done
+exit 0
