@@ -662,29 +662,61 @@ fi
 # openrgb-git tracks upstream for newer device support. It provides/conflicts
 # with the repo `openrgb`, and --noconfirm answers the conflict prompt "no",
 # so remove the repo package first. i2c-dev is needed for SMBus RAM/motherboard
-# RGB; the package's udev rules cover USB/HID devices.
+# RGB; the package's udev rules cover USB/HID devices. It tracks HEAD, but is
+# only installed/updated when the build succeeds, so a broken upstream HEAD
+# keeps the last working build rather than downgrading or uninstalling.
 
 if [[ "$(hostname)" == "aether" ]]; then
-  if ! pacman -Q openrgb-git &>/dev/null; then
-    info "Building openrgb-git..."
-    _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
-    _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
-    # Build only (--mflags --noinstall isn't enough with yay; use --builddir
-    # output). The repo package is removed only after the build succeeds, so
-    # a broken upstream HEAD can't leave the host without OpenRGB.
-    if PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
-         --answerclean None --answerdiff None --mflags "--noinstall" openrgb-git \
-       && _pkg=$(ls -t ~/.cache/yay/openrgb-git/openrgb-git-*.pkg.tar.* 2>/dev/null | head -1) \
-       && [[ -n "$_pkg" ]]; then
+  info "Building openrgb-git..."
+  _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+  _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
+
+  # Build only (--mflags --noinstall). Install only after the build succeeds,
+  # so a broken upstream HEAD never leaves the host without OpenRGB and never
+  # clobbers a working openrgb-git. When openrgb-git is already installed and
+  # HEAD hasn't moved, yay --needed skips the build and we keep the package.
+  if PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
+       --answerclean None --answerdiff None --mflags "--noinstall" openrgb-git; then
+    _pkg=$(ls -t ~/.cache/yay/openrgb-git/openrgb-git-*.pkg.tar.* 2>/dev/null | head -1)
+  else
+    _pkg=""
+  fi
+
+  if [[ -n "$_pkg" ]] && pacman -Qp "$_pkg" &>/dev/null; then
+    _pkg_ver=$(pacman -Qp "$_pkg" | awk '{print $2}')
+    _inst_ver=$(pacman -Q openrgb-git 2>/dev/null | awk '{print $2}')
+    if [[ "$_pkg_ver" != "$_inst_ver" ]]; then
       pacman -Q openrgb &>/dev/null && sudo pacman -Rdd --noconfirm openrgb
       sudo pacman -U --noconfirm "$_pkg"
+      info "openrgb-git installed ($_pkg_ver)."
     else
-      warn "openrgb-git build failed (upstream HEAD broken?) — falling back to repo openrgb."
-      pacman -Q openrgb &>/dev/null || sudo pacman -S --needed --noconfirm openrgb
+      info "openrgb-git already up to date ($_inst_ver)."
     fi
+  elif pacman -Q openrgb-git &>/dev/null; then
+    warn "openrgb-git build failed (upstream HEAD broken?) — keeping existing openrgb-git."
   else
-    info "openrgb-git already installed."
+    warn "openrgb-git build failed (upstream HEAD broken?) — falling back to repo openrgb."
+    pacman -Q openrgb &>/dev/null || sudo pacman -S --needed --noconfirm openrgb
   fi
+
+  # Effects plugin (effects engine, audio visualizer, shaders, ambient light).
+  # The release package builds the release_1.1 tag for OpenRGB's Plugin API v5
+  # and installs to /usr/lib/openrgb/plugins, where OpenRGB scans on startup.
+  # openrgb-git provides `openrgb`, so the AUR dependency does not pull the
+  # repo package. A broken build must not abort provisioning or remove a
+  # working plugin, so failures only warn.
+  if PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
+       --answerclean None --answerdiff None openrgb-plugin-effects; then
+    info "openrgb-plugin-effects installed."
+  elif pacman -Q openrgb-plugin-effects &>/dev/null; then
+    warn "openrgb-plugin-effects build failed — keeping existing plugin."
+  else
+    warn "openrgb-plugin-effects build failed — effects plugin unavailable."
+  fi
+  # The plugin's legacy-profile migration iterates this directory on every
+  # start and logs an exception when it is missing. It never creates it itself.
+  mkdir -p "$HOME/.config/OpenRGB/plugins/settings/effect-profiles"
+
   echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf >/dev/null
   sudo modprobe i2c-dev 2>/dev/null || true
   sudo udevadm control --reload-rules
