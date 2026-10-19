@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Backing up /boot kernel files into the root subvolume and refreshing snapshot boot entries...
+When = PostTransaction
+Exec = /usr/local/bin/nyx-boot-backup

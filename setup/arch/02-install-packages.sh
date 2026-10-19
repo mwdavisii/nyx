@@ -657,6 +657,43 @@ if [[ "$INSTALL_3DPRINTING" == "y" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# Step 15b — OpenRGB (aether only)
+# ---------------------------------------------------------------------------
+# openrgb-git tracks upstream for newer device support. It provides/conflicts
+# with the repo `openrgb`, and --noconfirm answers the conflict prompt "no",
+# so remove the repo package first. i2c-dev is needed for SMBus RAM/motherboard
+# RGB; the package's udev rules cover USB/HID devices.
+
+if [[ "$(hostname)" == "aether" ]]; then
+  if ! pacman -Q openrgb-git &>/dev/null; then
+    info "Building openrgb-git..."
+    _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+    _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
+    # Build only (--mflags --noinstall isn't enough with yay; use --builddir
+    # output). The repo package is removed only after the build succeeds, so
+    # a broken upstream HEAD can't leave the host without OpenRGB.
+    if PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
+         --answerclean None --answerdiff None --mflags "--noinstall" openrgb-git \
+       && _pkg=$(ls -t ~/.cache/yay/openrgb-git/openrgb-git-*.pkg.tar.* 2>/dev/null | head -1) \
+       && [[ -n "$_pkg" ]]; then
+      pacman -Q openrgb &>/dev/null && sudo pacman -Rdd --noconfirm openrgb
+      sudo pacman -U --noconfirm "$_pkg"
+    else
+      warn "openrgb-git build failed (upstream HEAD broken?) — falling back to repo openrgb."
+      pacman -Q openrgb &>/dev/null || sudo pacman -S --needed --noconfirm openrgb
+    fi
+  else
+    info "openrgb-git already installed."
+  fi
+  echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf >/dev/null
+  sudo modprobe i2c-dev 2>/dev/null || true
+  sudo udevadm control --reload-rules
+  sudo udevadm trigger
+else
+  info "Skipping OpenRGB (not aether)."
+fi
+
+# ---------------------------------------------------------------------------
 # Step 16 — System tuning (always runs, idempotent)
 # ---------------------------------------------------------------------------
 # Microcode, zram swap, VM sysctls, OOM handling, TRIM through LUKS, and
@@ -758,6 +795,23 @@ if [[ "$(findmnt -n -o FSTYPE /)" == btrfs ]] \
     TIMELINE_LIMIT_WEEKLY=0 TIMELINE_LIMIT_MONTHLY=0 TIMELINE_LIMIT_YEARLY=0 \
     NUMBER_LIMIT=10 NUMBER_LIMIT_IMPORTANT=5
   sudo systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
+fi
+
+# --- boot rollback: kernel backup inside @, snapshot boot entries, nyx-rollback ---
+# /boot is a separate ESP, so snapshots don't contain the kernel. The hook keeps
+# a matching copy in /.bootbackup (inside @) and adds systemd-boot entries for
+# the newest snapshots; nyx-rollback makes a chosen snapshot the new root.
+if [[ -f /etc/snapper/configs/root ]] && [[ -d /boot/loader/entries ]]; then
+  _HOOK_SRC="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/hooks"
+  sudo install -Dm755 "${_HOOK_SRC}/nyx-boot-backup" /usr/local/bin/nyx-boot-backup
+  sudo install -Dm755 "${_HOOK_SRC}/nyx-rollback" /usr/local/bin/nyx-rollback
+  sudo install -Dm644 "${_HOOK_SRC}/nyx-boot-backup.hook" /etc/pacman.d/hooks/95-nyx-boot-backup.hook
+  if [[ ! -d /.bootbackup ]]; then
+    info "Creating baseline snapshot with boot backup..."
+    sudo /usr/local/bin/nyx-boot-backup
+    sudo snapper -c root create -t single -d "nyx boot rollback baseline"
+  fi
+  sudo /usr/local/bin/nyx-boot-backup
 fi
 
 # ---------------------------------------------------------------------------

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Make snapper snapshot N the new root (@), restoring its matching kernel.
+#
+#   sudo nyx-rollback <snapshot-number>
+#
+# Typical flow: pick "Arch Linux (snapshot N, read-only)" in the boot menu,
+# confirm it is the good state, run this, reboot. Also works from a live ISO
+# after `cryptsetup open` (pass the btrfs device as the 2nd argument).
+# The replaced root is kept as @.broken-<timestamp>; delete it once happy:
+#   sudo btrfs subvolume delete /mnt/@.broken-*   (with top-level mounted)
+set -euo pipefail
+
+num=${1:?usage: nyx-rollback <snapshot-number> [btrfs-device]}
+[[ $EUID -eq 0 ]] || { echo "run as root" >&2; exit 1; }
+dev=${2:-$(findmnt -no SOURCE / | sed 's/\[.*//')}
+
+top=$(mktemp -d)
+esp=$(mktemp -d)
+trap 'umount "$esp" 2>/dev/null; umount "$top" 2>/dev/null; rmdir "$esp" "$top"' EXIT
+mount -o subvolid=5 "$dev" "$top"
+
+snap=$top/@snapshots/$num/snapshot
+[[ -d $snap ]] || { echo "snapshot $num not found at @snapshots/$num/snapshot" >&2; exit 1; }
+[[ -d $snap/.bootbackup ]] || { echo "snapshot $num has no .bootbackup (taken before this tooling) — kernel may not match; aborting" >&2; exit 1; }
+
+stamp=$(date +%Y%m%d-%H%M%S)
+echo "Replacing @ with snapshot $num (old root kept as @.broken-$stamp)..."
+mv "$top/@" "$top/@.broken-$stamp"
+btrfs subvolume snapshot "$snap" "$top/@"
+
+mount "$(awk '$2=="/boot"{print $1}' "$top/@/etc/fstab")" "$esp"
+for f in "$top"/@/.bootbackup/*; do
+  cp -p "$f" "$esp/$(basename "$f")"
+done
+echo "Restored kernel/initramfs/ucode from snapshot $num. Reboot to finish."
