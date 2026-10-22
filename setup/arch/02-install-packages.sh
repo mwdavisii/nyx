@@ -592,6 +592,22 @@ EOF
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
+# ROG Falchion Ace 75 HE udev rule — grants user access to /dev/hidraw so ASUS
+# Gear Link (WebHID, Chromium-only) can reach the keyboard for RGB / hall-effect
+# config on Linux. Matched by vendor:product (0b05:1c7d) since the board has no
+# distinctive serial. Reuses the plugdev group + 60-* + uaccess pattern from the
+# Vial rule above (plugdev is already ensured to exist by that block).
+info "Installing ROG Falchion Ace 75 HE udev rule..."
+sudo rm -f /etc/udev/rules.d/99-falchion-he.rules
+sudo tee /etc/udev/rules.d/60-falchion-he.rules > /dev/null <<'EOF'
+# ROG Falchion Ace 75 HE user access to /dev/hidraw (Gear Link / WebHID)
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0b05", ATTRS{idProduct}=="1c7d", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
+EOF
+sudo udevadm control --reload-rules
+# Scoped change trigger: a bare `udevadm trigger` does not reliably re-apply
+# rules to an already-bound hidraw device, so target the subsystem explicitly.
+sudo udevadm trigger --subsystem-match=hidraw --action=change
+
 # ---------------------------------------------------------------------------
 # Step 13 — SDR
 # ---------------------------------------------------------------------------
