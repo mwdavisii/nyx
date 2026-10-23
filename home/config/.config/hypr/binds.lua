@@ -54,7 +54,11 @@ hl.bind(main_mod .. " + SPACE", hl.dsp.exec_cmd("ambxst run launcher"))
 hl.bind(main_mod .. " + R", hl.dsp.exec_cmd("meeting-record"))
 hl.bind(main_mod .. " + L", hl.dsp.exec_cmd("ambxst lock"))
 hl.bind(main_mod .. " + SHIFT + L", hl.dsp.exec_cmd("ambxst run powermenu"))
-hl.bind(main_mod .. " + P", hl.dsp.exec_cmd("ambxst run dashboard"))
+hl.bind(main_mod .. " + X", hl.dsp.exec_cmd("ambxst run dashboard"))
+
+-- Screenshot on Hyper + P (keyboard has no Print key)
+hl.bind(main_mod .. " + P", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))
+hl.bind(main_mod .. " + SHIFT + P", hl.dsp.exec_cmd([[mkdir -p ~/Pictures && grim -g "$(slurp)" ~/Pictures/$(date +%Y%m%d_%H%M%S).png]]))
 
 hl.bind(main_mod .. " + Q", hl.dsp.window.close())
 hl.bind(main_mod .. " + END", hl.dsp.exit())
