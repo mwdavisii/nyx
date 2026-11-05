@@ -27,6 +27,10 @@ hl.config({
     column_width = 0.5,
     fullscreen_on_one_column = true,
   },
+  render = {
+    -- auto HDR on fullscreen video forces a modeset; the Alienware panels drop signal
+    cm_auto_hdr = 0,
+  },
 })
 
 hl.curve("ease", { type = "bezier", points = { { 0.4, 0.02 }, { 0.21, 1 } } })
