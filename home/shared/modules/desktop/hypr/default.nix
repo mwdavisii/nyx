@@ -319,23 +319,11 @@ in
         "wallpapers".source = ../../../../config/.config/wallpapers;
         # ambxst/config is NOT symlinked here — it must be writable so ambxst
         # can persist preset selections. Seeded via home.activation.seedAmbxstConfig below.
-        # Symlink individual hypr files rather than the whole directory so that
-        # ~/.config/hypr/ is a real writable directory (Ambxst may write there)
-        "hypr/hyprland.lua".source = ../../../../config/.config/hypr/hyprland.lua;
+        # The Hyprland Lua modules are declared through
+        # wayland.windowManager.hyprland.extraLuaFiles below, which also generates
+        # hyprland.lua, so ~/.config/hypr/ stays a real writable directory
+        # (Ambxst may write there).
         "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
-        "hypr/monitors.lua" =
-          let m = cfg.monitors;
-          in
-          if m == null then
-            { source = ../../../../config/.config/hypr/monitors.lua; }
-          else if builtins.isString m then
-            { text = m; }
-          else
-            { source = m; };
-        "hypr/startup.lua".source = ../../../../config/.config/hypr/startup.lua;
-        "hypr/options.lua".source = ../../../../config/.config/hypr/options.lua;
-        "hypr/binds.lua".source = ../../../../config/.config/hypr/binds.lua;
-        "hypr/rules.lua".source = ../../../../config/.config/hypr/rules.lua;
       }
       (lib.mkIf cfg.gpuPackages {
         "waybar".source = ../../../../config/.config/waybar;
@@ -465,6 +453,23 @@ in
     '';
 
     wayland.windowManager.hyprland = {
+      # The repo config is Lua (home/config/.config/hypr/*.lua). Declaring the
+      # modules here lets the Home Manager module generate hyprland.lua itself
+      # (package.path + require calls + the systemd activation hook). Installing
+      # a hand-written entrypoint behind Home Manager's back made it think no
+      # configuration existed and shadowed its generated startup hooks.
+      configType = "lua";
+      extraLuaFiles = {
+        monitors.content =
+          if cfg.monitors == null then
+            ../../../../config/.config/hypr/monitors.lua
+          else
+            cfg.monitors;
+        startup = ../../../../config/.config/hypr/startup.lua;
+        options = ../../../../config/.config/hypr/options.lua;
+        binds = ../../../../config/.config/hypr/binds.lua;
+        rules = ../../../../config/.config/hypr/rules.lua;
+      };
       # hyprexpo and hyprwinwrap were dropped from hyprland-plugins upstream as
       # unmaintained (hyprwm/hyprland-plugins#663). hyprexpo now ships in Hyprland
       # core; hyprwinwrap has no replacement. Nothing else is referenced by name,
