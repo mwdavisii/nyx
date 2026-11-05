@@ -7,7 +7,8 @@ in
     enable = mkEnableOption "AMD Env Vars"; 
   };
   config = mkIf cfg.enable {
-    programs.hyprland.nvidiaPatches = true;
+    # programs.hyprland.nvidiaPatches was removed from nixpkgs ("patches are no
+    # longer needed"), so nothing to set here any more.
     environment.variables = {
       #NIXOS_OZONE_WL = "1";
       GBM_BACKEND= "nvidia-drm";

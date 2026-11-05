@@ -24,8 +24,12 @@ local keys = {
 		}),
 	},
 	{
-		key = [[\]],
-		mods = "CTRL",
+		-- Ctrl+Alt+- mirrors tmux's `prefix -` for a stacked split.
+		-- Ctrl+\ is deliberately left unbound here so it reaches tmux
+		-- (`bind -n C-\` = last pane) and vim instead of being swallowed
+		-- by WezTerm.
+		key = "-",
+		mods = "CTRL|ALT",
 		action = wezterm.action({
 			SplitVertical = { domain = "CurrentPaneDomain" },
 		}),

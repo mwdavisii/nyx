@@ -29,7 +29,6 @@
         hypr.enable = false;
         rofi.enable = false;
         gtk.enable = false;
-        wlogout.enable = false;
         cava.enable = false;
         kmonad.enable = false;
       };
@@ -90,7 +89,7 @@
         lorri.enable = true;
         mcfly.enable = true;
         fastfetch.enable = true;
-        neovim.enable = true;
+        nixvim.enable = true;
         networking.enable = true;
         openssl.enable = true;
         ranger.enable = true;

@@ -9,7 +9,7 @@
         bluetooth.enable = true;
         garbagecollection.enable = true;
         hyprlogin.enable = true;
-        opengl.enable = true;
+        acceleratedgraphics.enable = true;
         centraltimezone.enable = true;
         yubilogin.enable = true;
       };
