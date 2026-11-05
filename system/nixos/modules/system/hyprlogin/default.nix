@@ -10,7 +10,7 @@ in
   };
   config = mkIf cfg.enable {
     programs.dconf.enable = true;
-    programs.regreet.enable = true;
+    services.displayManager.regreet.enable = true;
     services.greetd = {
       enable = true;
       settings = {

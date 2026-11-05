@@ -16,7 +16,9 @@ let
 
   # Shared home-manager config used by both mkUserHome (system-level) and mkArchConfiguration (standalone).
   mkCommonHomeConfig = {
-    home.stateVersion = "26.05";
+    # Default only: hosts that carry an older home-manager state version (e.g.
+    # hydra) set their own value in their home.nix and must win.
+    home.stateVersion = mkDefault "26.05";
 
     # For compatibility with nix-shell, nix-build, etc.
     home.file.".nixpkgs".source = inputs.nixpkgs;
@@ -223,7 +225,9 @@ rec {
           )
           (
             { ... }: {
-              system.stateVersion = "26.05";
+              # Default only: host modules (e.g. the WSL2 module) pin their own
+              # stateVersion and must not conflict with this blanket default.
+              system.stateVersion = mkDefault "26.05";
             }
           )
           (inputs.nixos-wsl.nixosModules.wsl)

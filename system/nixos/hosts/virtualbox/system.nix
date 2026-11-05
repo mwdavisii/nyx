@@ -5,7 +5,7 @@
         ./hardware.nix
         ];
 
-    nixpkgs.stdenv.hostPlatform = lib.mkDefault "x86_64-linux";
+    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     
     # Bootloader.
     boot.loader.grub.enable = true;
@@ -86,8 +86,6 @@
         tumbler.enable = true; # Thumbnail support for images
     };
     # Enable sound with pipewire.
-    sound.enable = true;
-    hardware.pulseaudio.enable = false;
     security.rtkit.enable = true;
     services.pipewire = {
         enable = true;

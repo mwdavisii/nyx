@@ -29,7 +29,6 @@
         hypr.enable = false;
         rofi.enable = false;
         gtk.enable = false;
-        wlogout.enable = false;
         cava.enable = false;
         kmonad.enable = false;
       };

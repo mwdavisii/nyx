@@ -12,7 +12,7 @@ in
   config = mkIf cfg.enable {
     # go ahead and install adb here since it's required
     home.packages = with pkgs; [
-      retroarchFull
+      retroarch-full
       retroarch-joypad-autoconfig
       retroarch-assets
     ];
