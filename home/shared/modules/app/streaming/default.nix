@@ -163,6 +163,20 @@ let
         sleep "$POLL_INTERVAL"
     done
   '';
+
+  # golive / endlive: Home Assistant guest-room lights + OBS Virtual Camera.
+  # The scripts find obs-vcam.mjs next to themselves, so they stay together in
+  # share/golive and bin/ gets wrappers that supply curl, jq and node.
+  golivePackage = pkgs.runCommand "golive" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+    mkdir -p $out/share/golive $out/bin
+    cp ${./golive}/golive.sh ${./golive}/endlive.sh ${./golive}/obs-vcam.mjs $out/share/golive/
+    chmod +x $out/share/golive/*
+    patchShebangs $out/share/golive
+    for s in golive endlive; do
+      makeWrapper $out/share/golive/$s.sh $out/bin/$s \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.curl pkgs.jq pkgs.nodejs ]}
+    done
+  '';
 in
 {
   options.nyx.modules.app.streaming = {
@@ -220,10 +234,19 @@ in
         description = "Litra color temperature in Kelvin when active.";
       };
     };
+
+    golive.enable = mkEnableOption "golive/endlive commands (HA lights + OBS Virtual Camera) bound to SUPER+T / SUPER+SHIFT+T in Hyprland";
   };
 
   config = mkIf cfg.enable {
-    home.packages = mkIf (cfg.package != null) [ cfg.package ];
+    home.packages = optional (cfg.package != null) cfg.package
+      ++ optional cfg.golive.enable golivePackage;
+
+    # Home Manager writes hypr/golive.lua and requires it from the generated hyprland.lua
+    wayland.windowManager.hyprland.extraLuaFiles.golive = mkIf cfg.golive.enable ''
+      hl.bind("SUPER + T", hl.dsp.exec_cmd("golive"))
+      hl.bind("SUPER + SHIFT + T", hl.dsp.exec_cmd("endlive"))
+    '';
 
     # WirePlumber: prioritize primary mic over webcam mic
     xdg.configFile."wireplumber/wireplumber.conf.d/50-default-input.conf" = {

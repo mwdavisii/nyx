@@ -134,6 +134,7 @@
           brightness = 30;
           temperature = 4000;
         };
+        golive.enable = true;
       };
       obsidian = {
         enable = true;
