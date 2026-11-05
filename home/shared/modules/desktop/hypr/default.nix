@@ -221,7 +221,7 @@ in
     gpuPackages = mkOption {
       type = types.bool;
       default = true;
-      description = "Install GPU-dependent packages (waybar, swww, etc.) via Nix. Set false on non-NixOS where system GPU drivers are used.";
+      description = "Install GPU-dependent packages (swww, mesa, xwayland, etc.) via Nix. Set false on non-NixOS where system GPU drivers are used.";
     };
     ttyLaunch = mkOption {
       type = types.bool;
@@ -325,9 +325,6 @@ in
         # (Ambxst may write there).
         "hypr/hyprlock.conf".source = ../../../../config/.config/hypr/hyprlock.conf;
       }
-      (lib.mkIf cfg.gpuPackages {
-        "waybar".source = ../../../../config/.config/waybar;
-      })
       # Ambxst shell config is seeded via home.activation.seedAmbxstConfig (writable copy, not symlink)
     ];
 
