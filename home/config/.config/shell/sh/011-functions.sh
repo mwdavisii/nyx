@@ -267,6 +267,23 @@ function rgl() {
   rg --color always -n $@ | less
 }
 
+# Attach to (or create) a tmux session named after the current directory.
+#   t            -> session named after $PWD
+#   t <name>     -> session named <name>
+# Inside tmux this switches the current client instead of nesting sessions.
+function t() {
+  local name="${1:-$(basename "$PWD")}"
+  name="${name//[.:]/_}"
+
+  if [ -n "${TMUX:-}" ]; then
+    command tmux has-session -t "=$name" 2>/dev/null ||
+      command tmux new-session -ds "$name" -c "$PWD"
+    command tmux switch-client -t "=$name"
+  else
+    command tmux new-session -A -s "$name" -c "$PWD"
+  fi
+}
+
 # function tmux()
 # {
 #     # Checking if the first argument passed to tmux is either `a` or `at`. If this is the case then will use fzf to list

@@ -9,7 +9,8 @@ alias g=git
 alias j=just
 alias m=make
 alias n=nix
-alias t=tux
+# `t` is the tmux session helper (011-functions.sh); keep tuxmux on `tx`.
+alias tx=tux
 alias v=nvim
 alias vim=nvim
 
