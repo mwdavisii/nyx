@@ -26,7 +26,7 @@ local apps = {
   { key = "RETURN", cmd = "wezterm" },
   { key = "A", cmd = "alacritty" },
   { key = "K", cmd = "kitty" },
-  { key = "B", cmd = "google-chrome-stable" },
+  { key = "B", cmd = "firefox" },
   { key = "F", cmd = "thunar" },
   { key = "T", cmd = "google-chrome-stable --profile-directory=Default --app-id=cifhbcnohmdccbgoicgdjpfamggdegmo" },
   { key = "O", cmd = "google-chrome-stable --profile-directory=Default --app-id=faolnafnngnfdaknnbpnkhgohbobgegn" },
@@ -44,7 +44,7 @@ for _, app in ipairs(apps) do
   hl.bind(main_mod .. " + " .. app.key, hl.dsp.exec_cmd(app.cmd))
 end
 
-hl.bind(main_mod .. " + SHIFT + B", hl.dsp.exec_cmd("firefox"))
+hl.bind(main_mod .. " + SHIFT + B", hl.dsp.exec_cmd("google-chrome-stable"))
 hl.bind(main_mod .. " + SHIFT + S", hl.dsp.exec_cmd("show_desktop"))
 hl.bind(main_mod .. " + SHIFT + Y", hl.dsp.exec_cmd("pear-desktop"))
 -- ES-DE on the secondary monitor (plain " + E" launches on the main ultrawide)

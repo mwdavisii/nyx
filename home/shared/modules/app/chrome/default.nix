@@ -26,8 +26,8 @@ in
   config = mkIf cfg.enable {
     home.packages = lib.optionals (cfg.package != null) [ cfg.package ];
 
-    xdg.mimeApps = {
-      enable = cfg.makeDefaultBrowser;
+    xdg.mimeApps = mkIf cfg.makeDefaultBrowser {
+      enable = true;
       defaultApplications = {
         "text/html" = "google-chrome.desktop";
         "x-scheme-handler/http" = "google-chrome.desktop";

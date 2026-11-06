@@ -19,6 +19,11 @@ in
 {
   options.nyx.modules.app.firefox = {
     enable = mkEnableOption "firefox configuration";
+    makeDefaultBrowser = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Register Firefox as the default handler for web links via xdg mimeapps.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -53,6 +58,17 @@ in
           };
         };
       };
+
+    xdg.mimeApps = mkIf cfg.makeDefaultBrowser {
+      enable = true;
+      defaultApplications = {
+        "text/html" = "firefox.desktop";
+        "x-scheme-handler/http" = "firefox.desktop";
+        "x-scheme-handler/https" = "firefox.desktop";
+        "x-scheme-handler/about" = "firefox.desktop";
+        "x-scheme-handler/unknown" = "firefox.desktop";
+      };
+    };
   };
   # config = mkIf cfg.enable {
   #   programs.firefox = {
