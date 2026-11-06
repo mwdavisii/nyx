@@ -99,6 +99,7 @@
         makeDefaultBrowser = true;
       };
       chess-tui.enable = true;
+      bambu-studio.enable = true; # launcher override only; package comes from setup/arch (AUR)
       audio-recording = {
         enable = true;
         pwRecordPackage = null; # installed via pacman (pipewire)
