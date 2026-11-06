@@ -93,7 +93,7 @@ if [[ "$SYNC_MODE" == false ]]; then
   read -rp "Install Docker & Docker Compose? [y/N] " docker_input
   INSTALL_DOCKER="${docker_input,,}"
 
-  read -rp "Install 3D printing tools (OrcaSlicer + Bambu Studio + OpenSCAD)? [y/N] " printing_input
+  read -rp "Install 3D printing tools (Bambu Studio + OpenSCAD)? [y/N] " printing_input
   INSTALL_3DPRINTING="${printing_input,,}"
 
   echo ""
@@ -655,19 +655,17 @@ fi
 # ---------------------------------------------------------------------------
 # Step 15 — 3D printing (interactive only)
 # ---------------------------------------------------------------------------
-# OrcaSlicer is the daily driver — community fork of Bambu Studio with extra
-# calibration tests and faster updates. Bambu Studio is kept around for
-# firmware pushes and cloud features OrcaSlicer doesn't mirror yet.
-# OpenSCAD is the script-based CAD modeler for authoring parametric parts to
-# slice. Network slicing (LAN-only mode on the P2S) needs no extra driver: the
-# slicer talks MQTT/HTTPS directly to the printer.
+# Bambu Studio is the slicer — cloud features (device list, print history,
+# firmware pushes) and LAN-only network slicing to the P2S. OpenSCAD is the
+# script-based CAD modeler for authoring parametric parts to slice. Network
+# slicing (LAN-only mode on the P2S) needs no extra driver: the slicer talks
+# MQTT/HTTPS directly to the printer.
 
 if [[ "$INSTALL_3DPRINTING" == "y" ]]; then
-  info "Installing 3D printing tools (OrcaSlicer + Bambu Studio + OpenSCAD)..."
+  info "Installing 3D printing tools (Bambu Studio + OpenSCAD)..."
   _SYSPATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
   _PKGCFG=/usr/lib/pkgconfig:/usr/share/pkgconfig
   PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
-    orca-slicer \
     bambu-studio \
     openscad
 fi

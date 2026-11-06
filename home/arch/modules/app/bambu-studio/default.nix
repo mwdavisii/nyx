@@ -9,9 +9,8 @@ in
     enable = mkEnableOption "Bambu Studio desktop entry override (XWayland backend + CA bundle)";
   };
 
-  # The AUR bambu-studio package is installed by setup/arch/02-install-packages.sh
-  # (kept for firmware pushes and cloud features OrcaSlicer doesn't mirror yet),
-  # so this module only ships the launcher fix — no package option.
+  # Installed by setup/arch/02-install-packages.sh, so this module only ships
+  # the launcher fixes — no package option.
   config = mkIf cfg.enable {
     # Two independent workarounds, both only expressible through the launcher
     # because the AUR build ignores them otherwise:
