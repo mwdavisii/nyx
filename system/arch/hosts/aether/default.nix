@@ -50,6 +50,7 @@
         gpuPackages = false;
         ttyLaunch = true;
         monitors = ../../../../home/config/.config/hypr/monitors.lua;
+        browser = "firefox";
       };
       kmonad = {
         enable = true;
@@ -79,7 +80,7 @@
       chrome = {
         enable = true;
         package = null; # installed via pacman (AUR/google-chrome) — Nix build has no GPU accel on Arch
-        makeDefaultBrowser = true;
+        makeDefaultBrowser = false;
       };
       kitty = {
         enable = true;
@@ -93,7 +94,10 @@
         enable = true;
         package = null; # installed via pacman (AUR/slack-desktop)
       };
-      firefox.enable = true;
+      firefox = {
+        enable = true;
+        makeDefaultBrowser = true;
+      };
       chess-tui.enable = true;
       audio-recording = {
         enable = true;

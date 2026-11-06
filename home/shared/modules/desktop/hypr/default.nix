@@ -238,12 +238,18 @@ in
         override monitor definitions and workspace rules.
       '';
     };
+
+    browser = mkOption {
+      type = types.str;
+      default = "google-chrome-stable";
+      description = "Browser launched for web links; exported as $BROWSER.";
+    };
   };
 
   config = mkIf cfg.enable {
     home.sessionVariables = {
       EDITOR = "nvim";
-      BROWSER = "google-chrome-stable";
+      BROWSER = cfg.browser;
       TERMINAL = "kitty";
       SDL_JOYSTICK_HIDAPI_XBOX_ONE = "0";
       SDL_JOYSTICK_HIDAPI_XBOX = "0";
