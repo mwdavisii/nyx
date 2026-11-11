@@ -103,7 +103,7 @@ The script will prompt for optional extras:
 
 | Prompt | Notes |
 |---|---|
-| AMD gaming | Mesa, Vulkan, Steam, Lutris, 32-bit libs (enables multilib) |
+| AMD gaming | Mesa, Vulkan, Steam, Lutris, ES-DE, 32-bit libs (enables multilib) |
 | Security tools | CrowdStrike Falcon, Cisco Secure Client |
 | Cloudflare WARP | DNS/VPN client |
 

@@ -279,6 +279,17 @@ if [[ "$INSTALL_GAMES" == "y" ]]; then
   yay -S --needed --noconfirm \
     xpadneo-dkms \
     heroic-games-launcher-bin
+
+  # ES-DE (EmulationStation Desktop Edition) — launched by `es-de-here` from
+  # the hypr module. Builds from source and pulls AUR-only `freeimage`, so use
+  # the system PATH (Nix cmake/pkg-config breaks these builds) and keep it in
+  # its own call so a failed build is reported loudly without aborting the run.
+  info "Installing ES-DE (emulationstation-de) from AUR..."
+  if ! PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/share/pkgconfig \
+       PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin \
+       yay -S --needed --noconfirm emulationstation-de; then
+    warn "emulationstation-de build FAILED — es-de-here (Super+E) will do nothing until it is installed"
+  fi
 fi
 
 # ---------------------------------------------------------------------------
