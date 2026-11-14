@@ -1,0 +1,30 @@
+# On-device mapping for the 3-button + 1-knob macro pad (CH552G, USB 1189:8890).
+#
+# The stock firmware sends a bare "C" for every button and every knob click, so
+# no host-side tool can tell the controls apart. This mapping is flashed into
+# the pad's own flash with ch57x-keyboard-tool (Rust CLI, not in nixpkgs):
+#
+#   sudo ch57x-keyboard-tool upload home/config/.config/macrokeyboard/3x1-knob.yaml
+#
+# Verify / inspect keys with:  ch57x-keyboard-tool show-keys
+#
+# Layout, left to right in normal orientation:
+#   button 1  -> f13   (go live)      bound in hypr/golive.lua
+#   button 2  -> f14   (end live)     bound in hypr/golive.lua
+#   button 3  -> f24   (spare, unbound)
+#   knob ccw  -> volumedown           media_binds in hypr/binds.lua (pamixer)
+#   knob cw   -> volumeup
+#   knob push -> mute
+
+model: ch57x-2
+orientation: normal
+rows: 1
+columns: 3
+knobs: 1
+layers:
+  - buttons:
+      - ["f13", "f14", "f24"]
+    knobs:
+      - ccw: "volumedown"
+        press: "mute"
+        cw: "volumeup"
