@@ -243,9 +243,26 @@ in
       ++ optional cfg.golive.enable golivePackage;
 
     # Home Manager writes hypr/golive.lua and requires it from the generated hyprland.lua
+    #
+    # The macro pad (3 buttons + 1 knob, CH57x chip, USB 1189:8890) is programmed
+    # on the device itself with ch57x-keyboard-tool -- the stock firmware sends
+    # the same bare "C" for every button and knob click, so it cannot be told
+    # apart host-side. Its mapping lives in
+    # home/config/.config/macrokeyboard/3x1-knob.yaml and is re-flashed from the
+    # repo with:
+    #   sudo ch57x-keyboard-tool upload home/config/.config/macrokeyboard/3x1-knob.yaml
+    # Buttons emit KEY_F13 (left, go live), KEY_F14 (right, end live) and KEY_F24
+    # (middle, spare); the knob emits volumedown/volumeup plus mute on press,
+    # which the media_binds table in hypr/binds.lua already handles.
+    #
+    # The buttons fire XF86Tools and XF86Launch5, not F13/F14: the pad sends
+    # KEY_F13/KEY_F14 (evdev 183/184), but the xkb "us" keymap maps <FK13>/<FK14>
+    # to those XF86 keysyms, so hl.bind("F13", ...) would never match.
     wayland.windowManager.hyprland.extraLuaFiles.golive = mkIf cfg.golive.enable ''
       hl.bind("SUPER + T", hl.dsp.exec_cmd("golive"))
       hl.bind("SUPER + SHIFT + T", hl.dsp.exec_cmd("endlive"))
+      hl.bind("XF86Tools", hl.dsp.exec_cmd("golive"))
+      hl.bind("XF86Launch5", hl.dsp.exec_cmd("endlive"))
     '';
 
     # WirePlumber: prioritize primary mic over webcam mic
