@@ -1,0 +1,35 @@
+
+(defcfg
+  ;; ** For Linux **
+  ;; Razer Huntsman Mini (60%) -- USB 1532:0257
+  input  (device-file "/dev/input/by-id/usb-Razer_Razer_Huntsman_Mini_00000000001A-event-kbd")
+  output (uinput-sink "KMonad output")
+
+  fallthrough true
+  allow-cmd true
+)
+
+;; 60% layout: no F-row, no numpad, no dedicated arrows (those live on the
+;; keyboard's own Fn layer, which never reaches the host).
+(defsrc
+  grv     1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab     q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps    a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft    z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl    lmet lalt           spc                 ralt fn   menu rctl
+)
+
+
+;; Same treatment as the ROG Falchion: the caps key becomes a momentary
+;; ctrl+alt+super (hyper) so it can drive the Hyprland `main_mod` binds.
+(
+  defalias hyp (around lctl (around lmet lalt))
+)
+
+(deflayer qwerty
+  grv     1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab     q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @hyp    a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft    z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl    lmet lalt           spc                 ralt fn   menu rctl
+)
