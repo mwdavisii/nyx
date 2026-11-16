@@ -190,7 +190,10 @@
     };
     shell = {
       awscliv2.enable = false;
-      azurecli.enable = false;
+      azurecli = {
+        enable = true;
+        loginBrowser = "firefox";
+      };
       bash.enable = true;
       bat.enable = true;
       direnv.enable = true;
