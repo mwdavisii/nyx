@@ -399,7 +399,9 @@ in
     '';
 
     xdg.portal = {
-      enable = true;
+      # Forced: the hyprland HM module sets enable = false when portalPackage
+      # is null (non-NixOS hosts, see wayland.windowManager.hyprland below).
+      enable = mkForce true;
       extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       config = {
         common = {
@@ -449,6 +451,11 @@ in
       # so no external plugins are installed.
       plugins = [];
       package = null;
+      # On non-NixOS hosts the system (pacman) portal is used. The Nix build of
+      # hyprland-share-picker looks for /run/opengl-driver, fails GBM init and
+      # aborts — and since ~/.nix-profile/bin precedes /usr/bin, the pacman
+      # portal would launch the Nix picker, breaking all screen sharing.
+      portalPackage = mkIf (!cfg.gpuPackages) null;
       enable = true;
       systemd = {
         enable = true;
