@@ -11,7 +11,10 @@
  *   OBS_WS_PASSWORD  default: server_password read from OBS_WS_CONFIG
  *   OBS_WS_CONFIG    default ~/.config/obs-studio/plugin_config/obs-websocket/config.json
  *
- * Exit: 0 = done (also when already in the requested state), 1 = failure, 2 = usage.
+ * Exit: 0 = done (also when already in the requested state), 1 = OBS unreachable /
+ * authentication rejected / timeout, 2 = usage, 3 = OBS answered but the request
+ * failed (typically "VirtualCam is not available." - the v4l2loopback module is
+ * missing; see README troubleshooting).
  */
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -42,6 +45,15 @@ function password() {
 const fail = (msg) => {
   console.error(`obs: ${msg}`);
   process.exit(1);
+};
+
+// OBS is up and answered, but refused the request itself. Distinct exit code so
+// callers know relaunching OBS cannot help.
+const failVcam = (msg) => {
+  console.error(
+    `obs: virtual camera unavailable: ${msg} (v4l2loopback module missing? see README troubleshooting)`,
+  );
+  process.exit(3);
 };
 
 const timer = setTimeout(() => fail(`timeout talking to ${url}`), 8000);
@@ -108,7 +120,7 @@ ws.addEventListener("message", (ev) => {
   if (msg.op === 7) {
     const { requestId, requestStatus, responseData } = msg.d ?? {};
     if (requestStatus?.result === false) {
-      fail(`${requestId}: ${requestStatus.comment || `error ${requestStatus.code}`}`);
+      failVcam(requestStatus.comment || `error ${requestStatus.code}`);
     }
     const active = responseData?.outputActive;
 

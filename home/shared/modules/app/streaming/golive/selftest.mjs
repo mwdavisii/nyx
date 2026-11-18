@@ -3,12 +3,12 @@
 // No network, no OBS, no HA instance, no token needed.
 import http from "node:http";
 import crypto from "node:crypto";
-import { execFile } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 const execFileP = promisify(execFile);
 
 import { fileURLToPath } from "node:url";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, copyFileSync, chmodSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const DIR = fileURLToPath(new URL(".", import.meta.url)).replace(/\/$/, "");
@@ -19,6 +19,10 @@ const CHALLENGE = "challenge-xyz";
 
 const states = { "light.guest_room_lamp_3": "off", "light.guest_room_floor_lamp": "off" };
 let obsActive = false;
+// Per-run switches for the mock OBS server. connections counts WebSocket
+// upgrades, so a poll storm is observable from the test.
+let vcamUnavailable = false;
+let obsConnections = 0;
 const calls = [];
 
 // ---------- mock Home Assistant ----------
@@ -93,6 +97,7 @@ function parse(buf) {
 
 const obs = http.createServer();
 obs.on("upgrade", (req, socket) => {
+  obsConnections++;
   const key = req.headers["sec-websocket-key"];
   socket.write(
     "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n" +
@@ -120,6 +125,23 @@ obs.on("upgrade", (req, socket) => {
       if (msg.op === 6) {
         const { requestType, requestId } = msg.d;
         calls.push(`obs: ${requestType}`);
+        if (
+          vcamUnavailable &&
+          ["GetVirtualCamStatus", "StartVirtualCam", "StopVirtualCam"].includes(requestType)
+        ) {
+          socket.write(
+            frame(
+              JSON.stringify({
+                op: 7,
+                d: {
+                  requestId,
+                  requestStatus: { result: false, code: 501, comment: "VirtualCam is not available." },
+                },
+              }),
+            ),
+          );
+          continue;
+        }
         if (requestType === "GetVirtualCamStatus")
           socket.write(frame(JSON.stringify({ op: 7, d: { requestId, requestStatus: { result: true, code: 100 }, responseData: { outputActive: obsActive } } })));
         else if (requestType === "StartVirtualCam" || requestType === "StopVirtualCam") {
@@ -138,24 +160,43 @@ const env = (extra = {}) => ({
   HA_URL: `http://127.0.0.1:${ha.address().port}`,
   OBS_WS_URL: `ws://127.0.0.1:${obs.address().port}`,
   OBS_WS_PASSWORD: PASSWORD,
+  // Never let a real OBS on the test machine trip the "already running" guard.
+  OBS_PROCESS_NAME: "golive-selftest-no-such-process",
   ...extra,
 });
 
 const run = async (script, extraEnv = {}, args = []) => {
   calls.length = 0;
-  const r = await execFileP(`${DIR}/${script}`, args, { encoding: "utf8", env: env(extraEnv), timeout: 15000 }).then(
+  obsConnections = 0;
+  // Test-only switch: OBS_MOCK_VCAM_UNAVAILABLE makes the in-process mock report
+  // the virtual camera as unavailable. It is not passed to the child.
+  const { OBS_MOCK_VCAM_UNAVAILABLE: mockVcam, ...childEnv } = extraEnv;
+  vcamUnavailable = mockVcam === "1" || mockVcam === true;
+  const started = Date.now();
+  const r = await execFileP(`${DIR}/${script}`, args, { encoding: "utf8", env: env(childEnv), timeout: 15000 }).then(
     (x) => ({ status: 0, out: x.stdout + x.stderr }),
     (e) => ({ status: e.code ?? 1, out: `${e.stdout ?? ""}${e.stderr ?? ""}${e.message ?? ""}` }),
   );
-  return { code: r.status, out: r.out.trim(), calls: [...calls], states: { ...states }, obs: obsActive };
+  vcamUnavailable = false;
+  return {
+    code: r.status,
+    out: r.out.trim(),
+    calls: [...calls],
+    states: { ...states },
+    obs: obsActive,
+    connections: obsConnections,
+    ms: Date.now() - started,
+  };
 };
 
 const runNode = async (args, extraEnv = {}) => {
+  calls.length = 0;
+  obsConnections = 0;
   const r = await execFileP("node", args, { encoding: "utf8", env: env(extraEnv), timeout: 15000 }).then(
     (x) => ({ status: 0, out: x.stdout + x.stderr }),
     (e) => ({ status: e.code ?? 1, out: `${e.stdout ?? ""}${e.stderr ?? ""}${e.message ?? ""}` }),
   );
-  return { status: r.status, out: r.out.trim(), calls: [] };
+  return { status: r.status, out: r.out.trim(), calls: [], connections: obsConnections };
 };
 
 await new Promise((r) => ha.listen(0, "127.0.0.1", r));
@@ -178,19 +219,21 @@ results["8 no OBS listening"] = await runNode([`${DIR}/obs-vcam.mjs`, "status"],
 
 // OBS closed: golive.sh should launch it (OBS_LAUNCH_CMD) and wait for the
 // WebSocket server instead of failing.
-const freePort = await new Promise((res) => {
-  const s = http.createServer();
-  s.listen(0, "127.0.0.1", () => {
-    const p = s.address().port;
-    s.close(() => res(p));
+const freePort = () =>
+  new Promise((res) => {
+    const s = http.createServer();
+    s.listen(0, "127.0.0.1", () => {
+      const p = s.address().port;
+      s.close(() => res(p));
+    });
   });
-});
+const port9 = await freePort();
 const pidDir = mkdtempSync(join(tmpdir(), "golive-selftest-"));
 const pidFile = join(pidDir, "mock-obs.pid");
 results["9 launches OBS when closed"] = await run("golive.sh", {
-  OBS_WS_URL: `ws://127.0.0.1:${freePort}`,
+  OBS_WS_URL: `ws://127.0.0.1:${port9}`,
   OBS_WS_PASSWORD: "",
-  OBS_LAUNCH_CMD: `node ${DIR}/mock-obs.mjs ${freePort} ${pidFile}`,
+  OBS_LAUNCH_CMD: `node ${DIR}/mock-obs.mjs ${port9} ${pidFile}`,
   OBS_START_TIMEOUT: "10",
 });
 try {
@@ -205,13 +248,65 @@ results["10 launch that never comes up"] = await run("golive.sh", {
   OBS_START_TIMEOUT: "1",
 });
 
+// OBS is up and answers, but reports "VirtualCam is not available." (as it does
+// when the v4l2loopback module is missing after a kernel/DKMS update). golive
+// must fail fast, must NOT launch another OBS, and must not poll-storm.
+results["11 go-live with vcam unavailable"] = await run("golive.sh", {
+  OBS_MOCK_VCAM_UNAVAILABLE: "1",
+  OBS_LAUNCH_CMD: "echo SHOULD-NOT-LAUNCH",
+  OBS_START_TIMEOUT: "25",
+});
+
+// Same failure on the way out: the camera half fails, but the lights must still
+// be switched off before the script exits nonzero.
+states["light.guest_room_lamp_3"] = "on";
+states["light.guest_room_floor_lamp"] = "on";
+results["12 end-live with vcam unavailable"] = await run("endlive.sh", {
+  OBS_MOCK_VCAM_UNAVAILABLE: "1",
+});
+
+// Launch path where the launched OBS comes up but cannot provide a camera: the
+// first poll that reaches it must fail immediately, not keep polling.
+const port13 = await freePort();
+const pidDir13 = mkdtempSync(join(tmpdir(), "golive-selftest-"));
+const pidFile13 = join(pidDir13, "mock-obs.pid");
+results["13 launched OBS with vcam unavailable"] = await run("golive.sh", {
+  OBS_WS_URL: `ws://127.0.0.1:${port13}`,
+  OBS_WS_PASSWORD: "",
+  OBS_LAUNCH_CMD: `OBS_MOCK_VCAM_UNAVAILABLE=1 node ${DIR}/mock-obs.mjs ${port13} ${pidFile13}`,
+  OBS_START_TIMEOUT: "10",
+});
+try {
+  process.kill(Number(readFileSync(pidFile13, "utf8")), "SIGTERM");
+} catch {}
+rmSync(pidDir13, { recursive: true, force: true });
+
+// An "obs" process exists but its socket is dead: never launch a second one.
+const guardDir = mkdtempSync(join(tmpdir(), "golive-selftest-obs-"));
+const fakeObs = join(guardDir, "obs");
+const sleepBin = existsSync("/bin/sleep") ? "/bin/sleep" : "/usr/bin/sleep";
+copyFileSync(sleepBin, fakeObs);
+chmodSync(fakeObs, 0o755);
+const fakeObsProc = spawn(fakeObs, ["30"], { stdio: "ignore" });
+results["14 OBS process running but socket dead"] = await run("golive.sh", {
+  OBS_WS_URL: "ws://127.0.0.1:1",
+  OBS_WS_PASSWORD: "",
+  OBS_PROCESS_NAME: "obs",
+  OBS_LAUNCH_CMD: "echo SHOULD-NOT-LAUNCH",
+  OBS_START_TIMEOUT: "5",
+});
+fakeObsProc.kill();
+rmSync(guardDir, { recursive: true, force: true });
+
 for (const [name, r] of Object.entries(results)) {
   console.log(`\n=== ${name} ===`);
   if (r.code !== undefined) {
-    console.log(`exit=${r.code} obs=${r.obs} lights=${JSON.stringify(r.states)}`);
+    console.log(
+      `exit=${r.code} obs=${r.obs} lights=${JSON.stringify(r.states)} connections=${r.connections} ms=${r.ms}`,
+    );
     console.log(`calls: ${r.calls.join(" -> ")}`);
   } else {
-    console.log(`exit=${r.status}`);
+    console.log(`exit=${r.status} connections=${r.connections}`);
   }
   console.log(`out: ${(r.out ?? `${r.stdout}${r.stderr}`).trim()}`);
 }
@@ -250,6 +345,65 @@ const checks = [
   ["golive launches OBS when closed", results["9 launches OBS when closed"].code === 0 && /launching:/.test(results["9 launches OBS when closed"].out) && /OBS ready/.test(results["9 launches OBS when closed"].out)],
   ["launched OBS gets the camera", /virtual camera on/.test(results["9 launches OBS when closed"].out)],
   ["dead launch times out loudly", results["10 launch that never comes up"].code === 1 && /did not become reachable/.test(results["10 launch that never comes up"].out)],
+  ["dead launch makes few connections", results["10 launch that never comes up"].connections <= 5],
+  [
+    "go-live with a broken virtual camera fails",
+    results["11 go-live with vcam unavailable"].code === 1,
+  ],
+  [
+    "broken-camera failure mentions v4l2loopback",
+    /v4l2loopback/.test(results["11 go-live with vcam unavailable"].out) &&
+      /virtual camera unavailable/i.test(results["11 go-live with vcam unavailable"].out),
+  ],
+  [
+    "broken camera never launches a second OBS",
+    !/launching:/.test(results["11 go-live with vcam unavailable"].out) &&
+      !/SHOULD-NOT-LAUNCH/.test(results["11 go-live with vcam unavailable"].out),
+  ],
+  [
+    "broken-camera go-live makes at most 3 connections",
+    results["11 go-live with vcam unavailable"].connections <= 3,
+  ],
+  [
+    "broken-camera go-live finishes fast (no 25s poll storm)",
+    results["11 go-live with vcam unavailable"].ms < 5000,
+  ],
+  [
+    "end-live with a broken camera exits nonzero",
+    results["12 end-live with vcam unavailable"].code === 1,
+  ],
+  [
+    "broken-camera end-live still POSTs lights off",
+    results["12 end-live with vcam unavailable"].calls.includes("POST /api/services/script/turn_on") &&
+      results["12 end-live with vcam unavailable"].calls.includes("script=script.go_live_off"),
+  ],
+  [
+    "broken-camera end-live leaves both lights off",
+    Object.values(results["12 end-live with vcam unavailable"].states).every((v) => v === "off"),
+  ],
+  [
+    "end-live reports the camera failure",
+    /v4l2loopback/.test(results["12 end-live with vcam unavailable"].out),
+  ],
+  [
+    "launched OBS with a broken camera dies immediately",
+    results["13 launched OBS with vcam unavailable"].code === 1 &&
+      /v4l2loopback/.test(results["13 launched OBS with vcam unavailable"].out) &&
+      !/did not become reachable/.test(results["13 launched OBS with vcam unavailable"].out),
+  ],
+  [
+    "launched broken camera dies without a poll storm",
+    results["13 launched OBS with vcam unavailable"].code === 1 &&
+      results["13 launched OBS with vcam unavailable"].connections <= 3 &&
+      results["13 launched OBS with vcam unavailable"].ms < 5000,
+  ],
+  [
+    "existing OBS process is never duplicated",
+    results["14 OBS process running but socket dead"].code === 1 &&
+      /is running/.test(results["14 OBS process running but socket dead"].out) &&
+      !/SHOULD-NOT-LAUNCH/.test(results["14 OBS process running but socket dead"].out) &&
+      !/launching:/.test(results["14 OBS process running but socket dead"].out),
+  ],
 ];
 
 console.log("\n=== assertions ===");

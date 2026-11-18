@@ -40,8 +40,10 @@ so nothing on the feed sees the change.
 server, launches `obs` when nothing answers, and polls until the server responds
 (`OBS_START_TIMEOUT`, default 25 s) before starting the camera. A closed OBS is
 the one failure a macro key cannot fix by retrying, so it is worth the wait.
-`endlive.sh` never launches anything — stopping a camera that is already off is
-fine.
+It does not launch a second copy: if an `obs` process already exists
+(`OBS_PROCESS_NAME`) but its WebSocket server does not answer, it fails and
+tells you to check OBS's WebSocket settings. `endlive.sh` never launches
+anything — stopping a camera that is already off is fine.
 
 Launching needs a graphical session: `obs` is started with the environment the
 script inherits, so DISPLAY / WAYLAND_DISPLAY must be set wherever the macro key
@@ -64,8 +66,10 @@ Both are idempotent: pressing the key twice does not re-run anything silly.
 `obs-vcam.mjs` asks OBS for the current virtual-camera state first and only
 sends `StartVirtualCam` / `StopVirtualCam` when it would change something.
 
-Exit codes: `0` done (including "already in that state"), `1` failure,
-`2` usage error.
+Exit codes: `0` done (including "already in that state"), `1` failure (OBS
+unreachable, authentication rejected, timeout), `2` usage error, `3` OBS is
+reachable but its virtual camera is unavailable — typically the `v4l2loopback`
+module is missing (see [Troubleshooting](#troubleshooting)).
 
 ## Configuration
 
@@ -80,6 +84,7 @@ Exit codes: `0` done (including "already in that state"), `1` failure,
 | `FLOOR_LAMP` | `light.guest_room_floor_lamp` | polled after the call (warn-only) |
 | `OBS_VCAM_ON` / `OBS_VCAM_OFF` | — | shell command to run instead of `obs-vcam.mjs` |
 | `OBS_LAUNCH_CMD` | `obs` | command `golive.sh` runs when OBS is not reachable |
+| `OBS_PROCESS_NAME` | `obs` | process name checked before launching, so a dead socket never starts a second OBS |
 | `OBS_START_TIMEOUT` | `25` | seconds to wait for the launched OBS to answer |
 | `OBS_WS_URL` | `ws://127.0.0.1:4455` | OBS WebSocket endpoint |
 | `OBS_WS_PASSWORD` | from OBS config | overrides the password read from disk |
@@ -96,10 +101,14 @@ OBS_VCAM_ON='obs-cli virtualcam start' OBS_VCAM_OFF='obs-cli virtualcam stop' ./
 ## What has and has not been tested
 
 `node selftest.mjs` runs the whole pair against a mock Home Assistant REST API
-and a mock OBS WebSocket v5 server (auth handshake included), 17 assertions: the
+and a mock OBS WebSocket v5 server (auth handshake included), 30 assertions: the
 normal cycle, ordering, idempotency, dry-run, and every failure path — wrong
-password, no server, and `OBS_LAUNCH_CMD` both succeeding (via `mock-obs.mjs`)
-and never coming up. No OBS, no HA, no token needed.
+password, no server, `OBS_LAUNCH_CMD` both succeeding (via `mock-obs.mjs`) and
+never coming up, an OBS that answers but has no virtual camera (both on the way
+in and on the way out, including after a launch), and the "existing `obs`
+process, dead socket" guard. The mock counts WebSocket upgrades, so the tests
+also assert that the failure paths cost only a handful of connections instead of
+a 100-probe storm. No OBS, no HA, no token needed.
 
 The Home Assistant half has also been run against the real instance, with both
 scripts installed via `POST /api/config/script/config/{id}`:
@@ -134,6 +143,49 @@ from whatever session the macro key runs in.
 
 A bad light id only produces a warning (the stream must not fail because a lamp
 is unreachable); a bad script id fails the run before the camera is touched.
+
+## Troubleshooting
+
+### `obs: virtual camera unavailable: VirtualCam is not available.`
+
+OBS answered the WebSocket request, but it has no virtual camera to start: the
+`v4l2loopback` kernel module is not loaded, or was never built for the running
+kernel. This is typical after a kernel update or an `obs-studio` / DKMS upgrade,
+where DKMS removes the module built for the old kernel and then fails to rebuild
+it (`ERROR: Missing <version>-arch1-1 kernel modules tree`). Symptoms:
+
+- `/var/lib/dkms/v4l2loopback` is gone, `modinfo v4l2loopback` fails, and
+  `/dev/video10` does not exist;
+- OBS logs `v4l2loopback not installed, virtual camera not registered` at
+  startup, and its Virtual Camera button stays unavailable;
+- `node obs-vcam.mjs status` exits `3` even though OBS is running.
+
+Fix, then reboot into the kernel whose headers are installed:
+
+```sh
+sudo pacman -S v4l2loopback-dkms
+sudo dkms autoinstall
+# reboot
+lsmod | grep v4l2loopback
+ls -l /dev/video10
+```
+
+`golive` / `endlive` report this as exit code `3` and stop immediately: OBS is
+already up, so relaunching it cannot help. `golive` still turns the lights on
+first, and `endlive` still turns them off, but both exit nonzero.
+
+### The screen fills with "New WebSocket Connection" notifications
+
+OBS → Tools → WebSocket Server Settings has *Enable WebSocket notifications*
+(`alerts_enabled` in
+`~/.config/obs-studio/plugin_config/obs-websocket/config.json`). Every client
+connection produces a desktop notification, and every `status` probe is a new
+connection, so a script that polls the socket sprays notifications across the
+screen. Turn that checkbox off (or set `alerts_enabled` to `false`) — unless you
+are debugging the connection path, the notifications are pure noise. The
+scripts now back off while waiting for a launched OBS (0.25 s for the first two
+seconds, then 1 s) and never launch a second OBS, which caps a failed run at a
+couple of dozen connections instead of a hundred.
 
 ## Known limits
 

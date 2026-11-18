@@ -5,7 +5,9 @@
  *   node mock-obs.mjs <port> <pidfile> [password]
  *
  * Accepts any password if none is given. Writes its pid to <pidfile> so a test
- * can shut it down. Not used by golive.sh; only by selftest.mjs.
+ * can shut it down. Set OBS_MOCK_VCAM_UNAVAILABLE=1 to make it answer the
+ * virtual-camera requests like OBS does when v4l2loopback is missing
+ * (requestStatus.result = false). Not used by golive.sh; only by selftest.mjs.
  */
 import http from "node:http";
 import crypto from "node:crypto";
@@ -62,6 +64,7 @@ function parse(buf) {
 }
 
 let active = false;
+const vcamUnavailable = process.env.OBS_MOCK_VCAM_UNAVAILABLE === "1";
 const server = http.createServer();
 server.on("upgrade", (req, socket) => {
   const accept = crypto
@@ -95,6 +98,23 @@ server.on("upgrade", (req, socket) => {
       }
       if (msg.op === 6) {
         const { requestType, requestId } = msg.d;
+        if (
+          vcamUnavailable &&
+          ["GetVirtualCamStatus", "StartVirtualCam", "StopVirtualCam"].includes(requestType)
+        ) {
+          socket.write(
+            frame(
+              JSON.stringify({
+                op: 7,
+                d: {
+                  requestId,
+                  requestStatus: { result: false, code: 501, comment: "VirtualCam is not available." },
+                },
+              }),
+            ),
+          );
+          continue;
+        }
         if (requestType === "GetVirtualCamStatus") {
           socket.write(
             frame(JSON.stringify({ op: 7, d: { requestId, requestStatus: { result: true, code: 100 }, responseData: { outputActive: active } } })),
