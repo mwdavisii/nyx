@@ -7,7 +7,9 @@
 #
 # If OBS is not running (or its WebSocket server is unreachable) it is launched
 # first and waited for, so the macro key works from a cold desktop. Set
-# OBS_LAUNCH_CMD to change how it is launched.
+# OBS_LAUNCH_CMD to change how it is launched. A second OBS is never started: if
+# an "obs" process already exists (OBS_PROCESS_NAME) but its socket does not
+# answer, the run fails instead of launching a duplicate.
 #
 # The lighting half runs the Home Assistant script "Go Live"
 # (script.go_live) - it sets the Guest Room lamp to whatever brightness it is
@@ -23,7 +25,7 @@
 #
 # Toggles: SKIP_LIGHTS=1, SKIP_OBS=1. Overrides: HA_URL, HA_TOKEN, HA_TOKEN_FILE,
 # LIVE_SCRIPT, GUEST_LAMP, FLOOR_LAMP, OBS_WS_URL, OBS_WS_PASSWORD,
-# OBS_LAUNCH_CMD, OBS_START_TIMEOUT.
+# OBS_LAUNCH_CMD, OBS_START_TIMEOUT, OBS_PROCESS_NAME.
 
 set -euo pipefail
 
@@ -34,6 +36,7 @@ SCRIPT="${LIVE_SCRIPT:-script.go_live}"
 GUEST_LAMP="${GUEST_LAMP:-light.guest_room_lamp_3}"
 FLOOR_LAMP="${FLOOR_LAMP:-light.guest_room_floor_lamp}"
 OBS_LAUNCH_CMD="${OBS_LAUNCH_CMD:-obs}"
+OBS_PROCESS_NAME="${OBS_PROCESS_NAME:-obs}"
 OBS_START_TIMEOUT="${OBS_START_TIMEOUT:-25}"
 
 DRY_RUN=0
@@ -83,31 +86,62 @@ wait_state() {
 }
 
 # OBS closed is the one failure a macro key cannot fix by retrying, so launch it
-# and wait for the WebSocket server rather than dying. A server that is up but
-# rejects the password is NOT a closed OBS - launching a second copy would be
-# useless, so that case fails with the real reason.
+# and wait for the WebSocket server rather than dying. Everything else fails
+# with the real reason: auth rejection, and "OBS is up but its virtual camera is
+# unavailable" (exit 3) both mean launching a second OBS is useless.
 ensure_obs() {
-  local out
-  if out="$(node "$HERE/obs-vcam.mjs" status 2>&1)"; then
-    return 0
-  fi
-  case "$out" in
-    *"authentication failed"*) die "OBS is running but rejected the WebSocket password: $out" ;;
+  local out rc=0
+
+  out="$(node "$HERE/obs-vcam.mjs" status 2>&1)" || rc=$?
+  case "$rc" in
+    0) return 0 ;;
+    1) ;;
+    3) die "OBS is running but cannot provide a virtual camera: ${out#obs: }" ;;
+    *) die "OBS status check failed (exit $rc): $out" ;;
   esac
+  case "$out" in
+    *"authentication failed"*)
+      die "OBS is running but rejected the WebSocket password: $out"
+      ;;
+    *"cannot reach"*) ;;
+    *)
+      die "OBS status check failed: $out"
+      ;;
+  esac
+
+  # The socket is dead but the process may still be alive with its WebSocket
+  # server disabled - launching again would just create a second OBS.
+  if command -v pgrep >/dev/null && pgrep -x "$OBS_PROCESS_NAME" >/dev/null 2>&1; then
+    die "OBS is running (${OBS_PROCESS_NAME}, pid $(pgrep -x "$OBS_PROCESS_NAME" | tr '\n' ' ' | sed 's/ $//')) but its WebSocket server is unreachable - check Tools > WebSocket Server Settings in OBS"
+  fi
 
   say "OBS not reachable, launching: $OBS_LAUNCH_CMD"
   nohup bash -c "$OBS_LAUNCH_CMD" >/dev/null 2>&1 &
 
-  local i
-  for i in $(seq 1 $((OBS_START_TIMEOUT * 4))); do
-    if out="$(node "$HERE/obs-vcam.mjs" status 2>&1)"; then
+  # Backoff: probe hard for the first two seconds, then once a second, so a
+  # timeout costs a couple of dozen connections instead of a hundred (every one
+  # of them is a desktop notification when obs-websocket alerts are on).
+  local i=0 delay deadline=$((SECONDS + OBS_START_TIMEOUT))
+  while ((SECONDS < deadline)); do
+    rc=0
+    out="$(node "$HERE/obs-vcam.mjs" status 2>&1)" || rc=$?
+    if ((rc == 0)); then
       say "OBS ready"
       return 0
     fi
-    case "$out" in
-      *"authentication failed"*) die "OBS is running but rejected the WebSocket password: $out" ;;
+    case "$rc" in
+      3) die "OBS is running but cannot provide a virtual camera: ${out#obs: }" ;;
+      1) ;;
+      *) die "OBS status check failed (exit $rc): $out" ;;
     esac
-    sleep 0.25
+    case "$out" in
+      *"authentication failed"*)
+        die "OBS is running but rejected the WebSocket password: $out"
+        ;;
+    esac
+    if ((i < 8)); then delay=0.25; else delay=1; fi
+    i=$((i + 1))
+    sleep "$delay"
   done
   die "OBS did not become reachable within ${OBS_START_TIMEOUT}s (launched: $OBS_LAUNCH_CMD)"
 }
@@ -122,7 +156,8 @@ obs_on() {
     return 0
   fi
   ensure_obs
-  node "$HERE/obs-vcam.mjs" start
+  node "$HERE/obs-vcam.mjs" start ||
+    die "the virtual camera could not be started (see the error above)"
 }
 
 command -v node >/dev/null || die "node not found (needed for $HERE/obs-vcam.mjs)"

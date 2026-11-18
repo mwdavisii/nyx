@@ -384,7 +384,6 @@ PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --needed --noconfirm \
   ytm-player \
   python-dbus-fast \
   asciinema-agg-bin \
-  obs-backgroundremoval \
   obs-source-clone \
 
 # Rebuild quickshell-git if the system Qt was updated since the last build.
@@ -421,6 +420,41 @@ if [[ -n "$_QS_BUILT_QT" && -n "$_SYS_QT" && "$_QS_BUILT_QT" != "$_SYS_QT" ]]; t
   fi
 else
   info "quickshell Qt version OK (${_QS_BUILT_QT:-unknown})"
+fi
+
+# obs-backgroundremoval: AUR build that breaks in two ways --
+#   1. opencv/onnxruntime soname bumps (e.g. opencv 5.0 -> 5.1 renamed
+#      libopencv_*.so.500 -> .so.501) leave it linked against missing libs, and
+#      --needed won't rebuild it.
+#   2. makepkg's default LTO drops fetchStringFromUrl() from the static
+#      CurlClient archive, so the rebuilt .so has an undefined symbol and OBS
+#      refuses to load it ("not able to load all third-party plugins").
+# Build it with a makepkg.conf that disables LTO, and rebuild whenever the
+# installed plugin has unresolved libraries or the missing symbol.
+_OBR_SO=/usr/lib/obs-plugins/obs-backgroundremoval.so
+_obr_broken() {
+  [[ ! -f "$_OBR_SO" ]] && return 0
+  ldd "$_OBR_SO" 2>/dev/null | grep -q "not found" && return 0
+  nm -D --undefined-only "$_OBR_SO" 2>/dev/null | grep -q fetchStringFromUrl && return 0
+  return 1
+}
+if _obr_broken; then
+  info "Building obs-backgroundremoval (LTO disabled)..."
+  _OBR_CONF=$(mktemp --suffix=.makepkg.conf)
+  cat > "$_OBR_CONF" <<'CONF'
+source /etc/makepkg.conf
+for _c in /etc/makepkg.conf.d/*.conf; do [[ -r "$_c" ]] && source "$_c"; done
+OPTIONS=("${OPTIONS[@]/#lto/!lto}")
+CONF
+  if PKG_CONFIG_PATH="$_PKGCFG" PATH="$_SYSPATH" yay -S --rebuild --noconfirm \
+       --makepkgconf "$_OBR_CONF" obs-backgroundremoval && ! _obr_broken; then
+    info "obs-backgroundremoval built and links cleanly"
+  else
+    warn "obs-backgroundremoval build FAILED or still broken — OBS background removal will be unavailable"
+  fi
+  rm -f "$_OBR_CONF"
+else
+  info "obs-backgroundremoval OK"
 fi
 
 info "Installing bun (JavaScript runtime)..."

@@ -37,6 +37,7 @@ done
 
 die() { echo "endlive: $*" >&2; exit 1; }
 say() { echo "endlive: $*"; }
+warn() { echo "endlive: $*" >&2; }
 
 run() {
   if ((DRY_RUN)); then
@@ -74,14 +75,21 @@ obs_off() {
   if [[ -n "${OBS_VCAM_OFF:-}" ]]; then
     run bash -c "$OBS_VCAM_OFF"
   else
-    command -v node >/dev/null || die "node not found (needed for $HERE/obs-vcam.mjs)"
+    command -v node >/dev/null ||
+      { warn "node not found (needed for $HERE/obs-vcam.mjs)"; return 1; }
     run node "$HERE/obs-vcam.mjs" stop
   fi
 }
 
-# 1. Camera off first, so nothing on the feed sees the lights snap off.
+# 1. Camera off first, so nothing on the feed sees the lights snap off. A
+#    camera that will not stop must not leave the room lit: the lights half
+#    always runs, and the script then exits 1 to say the camera half failed.
+camera_failed=0
 if [[ "${SKIP_OBS:-0}" != 1 ]]; then
-  obs_off
+  if ! obs_off; then
+    warn "the virtual camera could not be stopped (continuing to lights)"
+    camera_failed=1
+  fi
 fi
 
 # 2. Lights off.
@@ -94,6 +102,10 @@ if [[ "${SKIP_LIGHTS:-0}" != 1 ]]; then
     wait_state "$GUEST_LAMP" off
     say "lights off ($SCRIPT)"
   fi
+fi
+
+if ((camera_failed)); then
+  die "lights are off, but the virtual camera could not be stopped"
 fi
 
 say "off air"
